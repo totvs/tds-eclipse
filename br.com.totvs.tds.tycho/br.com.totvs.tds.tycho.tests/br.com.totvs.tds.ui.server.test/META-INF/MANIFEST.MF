@@ -1,0 +1,37 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TDS Servidores (teste)
+Bundle-SymbolicName: br.com.totvs.tds.ui.server.test;singleton:=true
+Bundle-Version: 11.4.0.qualifier
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: 
+ TOTVS S.A.
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.swtbot.go,
+ org.junit,
+ org.junit.jupiter.engine,
+ org.junit.jupiter.migrationsupport,
+ org.junit.jupiter.params,
+ org.junit.platform.commons,
+ org.junit.platform.engine,
+ org.junit.platform.launcher,
+ org.junit.platform.runner,
+ org.junit.platform.suite.api,
+ org.junit.vintage.engine,
+ org.hamcrest.core,
+ org.opentest4j,
+ org.apiguardian,
+ org.eclipse.debug.core,
+ org.eclipse.debug.ui,
+ br.com.totvs.tds.lsp,
+ org.eclipse.lsp4e
+Automatic-Module-Name: br.com.totvs.tds.server.ui.test
+Import-Package: br.com.totvs.tds.server,
+ br.com.totvs.tds.server.interfaces,
+ br.com.totvs.tds.server.launcher,
+ org.eclipse.lsp4j
+Export-Package: br.com.totvs.tds.ui,
+ br.com.totvs.tds.ui.scenario,
+ br.com.totvs.tds.ui.sdk,
+ br.com.totvs.tds.ui.server,
+ br.com.totvs.tds.ui.server.wizards.path

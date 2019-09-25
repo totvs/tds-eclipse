@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: br.com.totvs.tds.lsp.linux;singleton:=true
+Bundle-Version: 11.4.0.qualifier
+Bundle-Vendor: %Bundle-Vendor
+Fragment-Host: br.com.totvs.tds.lsp;bundle-version="11.4.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: br.com.totvs.tds.lsp.linux
+Eclipse-PlatformFilter: (& (osgi.os=linux))

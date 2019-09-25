@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="br.com.totvs.tds.feature.sdk"
+      label="TDS Kit de Desenvolvimento (para desenvolvedores)"
+      version="11.4.0.qualifier"
+      provider-name="TOTVS S.A."
+      plugin="br.com.totvs.tds.ui.sdk"
+      license-feature="br.com.totvs.tds.feature.license"
+      license-feature-version="11.4.0.qualifier">
+
+   <description url="https://github.com/totvs/tds-eclipse.git/wiki/sdk">
+      TOTVS Developer Studio 11.4
+
+Kit de Desenvolvimento contém as ferramentas para o desenvolvimento nas linguagens suportadas pela plataforma Protheus.
+
+Ideal para quem desenvolve e administrada na plataforma TOTVS.
+   </description>
+
+   <copyright>
+      TOTVS 2010-2019 Todos os direitos reservados.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="br.com.totvs.tds.feature.tds"
+         version="0.0.0"/>
+
+   <requires>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="com.google.gson"/>
+      <import plugin="org.eclipse.lsp4j.jsonrpc"/>
+      <import plugin="org.eclipse.lsp4j.debug"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.lsp4e.debug"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="br.com.totvs.tds.ui.server"/>
+      <import plugin="br.com.totvs.tds.server"/>
+      <import plugin="br.com.totvs.tds.lsp"/>
+      <import plugin="br.com.totvs.tds.ui"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.debug.ui" version="3.14.100" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.genericeditor" version="1.1.400" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.11.500" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="br.com.totvs.tds.ui.editor" version="11.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="br.com.totvs.tds.ui.sdk" version="11.4.0" match="greaterOrEqual"/>
+      <import feature="br.com.totvs.tds.feature.server" version="11.4.0.qualifier"/>
+   </requires>
+
+   <plugin
+         id="br.com.totvs.tds.ui.debug"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="br.com.totvs.tds.ui.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="br.com.totvs.tds.ui.editor.advpl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="br.com.totvs.tds.ui.sdk"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="br.com.totvs.tds.ui.sdk.advpl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+</feature>

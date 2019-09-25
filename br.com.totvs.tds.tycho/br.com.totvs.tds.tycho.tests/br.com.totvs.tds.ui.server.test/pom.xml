@@ -1,0 +1,13 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>br.com.totvs.tds.tycho.tests</groupId>
+		<artifactId>br.com.totvs.tds.tycho.tests</artifactId>
+		<version>11.4.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>br.com.totvs.tds.ui.server.test</artifactId>
+	<version>11.4.0-SNAPSHOT</version>
+	<packaging>eclipse-test-plugin</packaging>
+	
+</project>

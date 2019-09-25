@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="br.com.totvs.tds.feature.server">
+      <category name="tds"/>
+   </feature>
+   <feature id="br.com.totvs.tds.feature.sdk">
+      <category name="tds"/>
+   </feature>
+   <category-def name="tds" label="TOTVS Developer Studio">
+      <description>
+         Ambiente de desenvolvimto utilizando a plataforma Protheus e as linguagens por ele suportadas. Também permite a administração de servidores Protheus.
+      </description>
+   </category-def>
+   <repository-reference location="http://https://download.eclipse.org/lsp4j/updates/milestones/" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/tm4e/snapshots/" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/lsp4e/releases/latest/" enabled="true" />
+</site>

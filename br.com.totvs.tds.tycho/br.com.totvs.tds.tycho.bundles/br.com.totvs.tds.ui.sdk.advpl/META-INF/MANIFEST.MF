@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: br.com.totvs.tds.ui.sdk.advpl;singleton:=true
+Bundle-Version: 11.4.0.qualifier
+Bundle-Vendor: %Bundle-Vendor
+Fragment-Host: br.com.totvs.tds.ui.sdk;bundle-version="11.4.0"
+Automatic-Module-Name: br.com.totvs.tds.ui.sdk.advpl
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: br.com.totvs.tds.ui.sdk.advpl;
+  uses:="org.eclipse.ui,
+   org.eclipse.jface.util,
+   org.eclipse.swt.widgets,
+   org.eclipse.jface.preference"

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.lsp4e.languageServer">
+      <server
+            class="br.com.totvs.tds.lsp.server.model.LSConnectionProvider"
+            clientImpl="br.com.totvs.tds.lsp.server.model.protocol.ClientImpl"
+            id="br.com.totvs.tds.lsp.server"
+            label="TOTVS Servidor de Linguagem"
+            serverInterface="br.com.totvs.tds.lsp.server.model.protocol.ServerInterface"
+            singleton="true">
+      </server>
+      <contentTypeMapping
+            contentType="br.com.totvs.tds.lsp.advplSource"
+            id="br.com.totvs.tds.lsp.server"
+            languageId="AdvPL">
+      </contentTypeMapping>
+      <contentTypeMapping
+            contentType="br.com.totvs.tds.lsp.advplAspSource"
+            id="br.com.totvs.tds.lsp.server"
+            languageId="AdvPL.asp">
+      </contentTypeMapping>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            default-charset="cp1252"
+            id="br.com.totvs.tds.ls.protheus"
+            name="%content-type.name"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="br.com.totvs.tds.ls.protheus"
+            file-extensions="PRW, PRG, PRX, PPP, CH"
+            id="br.com.totvs.tds.lsp.advplSource"
+            name="%content-type.name.0"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="br.com.totvs.tds.ls.protheus"
+            default-charset="cp1252"
+            file-extensions="APH, AHU, APL, APW"
+            id="br.com.totvs.tds.lsp.advplAspSource"
+            name="%content-type.name.1"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="br.com.totvs.tds.ls.protheus"
+            file-patterns="*.PPX_*, *.ERX_*"
+            id="br.com.totvs.tds.lsp.advplWorkfile"
+            name="%content-type.name.2"
+            priority="normal">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.services">
+      <serviceFactory
+            factoryClass="br.com.totvs.tds.lsp.server.LsFactory">
+         <service
+               serviceClass="br.com.totvs.tds.lsp.server.ILanguageServerService"></service>
+      </serviceFactory>
+   </extension>
+
+
+
+<!--
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            default-charset="cp1252"
+            file-extensions="PDOC"
+            id="br.com.totvs.tds.server.pdoc.contenttype"
+            name="Protheus DOC">
+      </content-type>
+   </extension>
+
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            default-charset="cp1252"
+            file-extensions="APH, AHU, APL, APW"
+            id="br.com.totvs.tds.server.advplasp.contenttype"
+            name="Adv/PL ASP">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            base-type="org.eclipse.core.runtime.text"
+            default-charset="cp1252"
+            file-extensions="PER, 4GL"
+            id="br.com.totvs.tds.server.fourgl.contenttype"
+            name="4GL">
+      </content-type>
+   </extension>
+-->
+</plugin>

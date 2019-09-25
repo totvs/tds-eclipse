@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="br.com.totvs.tds.feature.tds"
+      label="TDS Núcleo"
+      version="11.4.0.qualifier"
+      provider-name="TOTVS S.A."
+      license-feature="br.com.totvs.tds.feature.license"
+      license-feature-version="11.4.0.qualifier">
+
+   <description>
+TOTVS Developer Studio 11.4
+
+Núcleo de apoio.
+
+Instalação e atualização sincronizadas com demais adicionais TDS.
+Não é necessário sua instalação.
+   </description>
+
+   <copyright>
+      TOTVS 2010-2019 Todos os direitos reservados.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="br.com.totvs.tds.feature.license"
+         version="11.4.0.qualifier"
+         name="TDS License"/>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.console"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.text"/>
+      <import plugin="org.eclipse.mylyn.commons.notifications.ui"/>
+      <import plugin="org.eclipse.mylyn.commons.notifications.core"/>
+   </requires>
+
+   <plugin
+         id="br.com.totvs.tds.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

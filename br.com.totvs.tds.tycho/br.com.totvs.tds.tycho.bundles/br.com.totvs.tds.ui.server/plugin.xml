@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+		 point="org.eclipse.ui.views">
+		<view
+        allowMultiple="false"
+        category="br.com.totvs.tds"
+        class="br.com.totvs.tds.ui.server.views.ServerView"
+        icon="icons/server.png"
+        id="br.com.totvs.tds.ui.server.views.serverView"
+        name="%view.name"
+        restorable="true">
+		</view>
+	</extension>
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="popup:br.com.totvs.tds.ui.server.views.serverView">
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.newItemCommand"
+             icon="icons/newGroup.png"
+             label="%command.label">
+          <parameter
+                name="wizard"
+                value="br.com.totvs.tds.ui.server.wizards.group.NewGroupWizard">
+          </parameter>
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+          </visibleWhen>
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.newItemCommand"
+             icon="icons/newServer.png"
+             label="%command.label.0">
+          <parameter
+                name="wizard"
+                value="br.com.totvs.tds.ui.server.wizards.server.ServerSelectionWizard">
+          </parameter>
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+          </visibleWhen>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.editItemCommand"
+             icon="icons/editGroup.png"
+             label="Editar">
+          <parameter
+                name="dialog"
+                value="br.com.totvs.tds.ui.server.dialog.GroupEditDialog">
+          </parameter>
+          <visibleWhen checkEnabled="false">
+          	<and>
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+				<not>
+					<reference definitionId="br.com.totvs.tds.ui.server.isRoot" />
+				</not>
+			</and>
+          </visibleWhen>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.editItemCommand"
+             icon="icons/editServer.png"
+             label="Editar">
+          <parameter
+                name="dialog"
+                value="br.com.totvs.tds.ui.server.dialog.ServerEditDialog">
+          </parameter>
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+          </visibleWhen>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.connectCommand"
+             tooltip="%command.tooltip">
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+          </visibleWhen>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.disconnectCommand"
+             tooltip="%command.tooltip.0">
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+          </visibleWhen>
+       </command>
+       
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.removeCommand"
+             icon="icons/removeServer.png"
+             tooltip="%command.tooltip.1">
+          <visibleWhen
+                checkEnabled="false">
+                <and>
+	                <not>
+						<reference definitionId="br.com.totvs.tds.ui.server.isSlave" />
+	                </not>
+	                <not>
+						<reference definitionId="br.com.totvs.tds.ui.server.isRoot" />
+	                </not>
+                </and>
+          </visibleWhen>
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.slaveRegisterCommand"
+             icon="icons/registerSlave.png"
+             tooltip="%command.tooltip.2">
+			<visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isSlave" />
+			</visibleWhen>
+       </command>
+       <menu
+             label="Pacote de Atualização">
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.buildPatchCommand"
+                icon="icons/patch_build.png"
+                label="Gerar"
+                tooltip="Gera pacotes de atualização">
+          </command>
+			<visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+			</visibleWhen>
+       </menu>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.startServerCommand"
+             icon="icons/start_server.png"
+             style="push">
+           <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+			</visibleWhen>
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.stopServerCommand"
+             icon="icons/stop_server.png"
+             style="push">
+           <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+			</visibleWhen>
+       </command>
+
+    </menuContribution>
+    <menuContribution
+          allPopups="false"
+          locationURI="toolbar:br.com.totvs.tds.ui.server.views.serverView">
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.sortTreeCommand"
+             icon="icons/sort_abc.png"
+             style="toggle">
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.monitorSelectionCommand"
+             icon="icons/selection.png"
+             style="toggle">
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.newItemCommand"
+             icon="icons/newGroup.png"
+             label="%command.label.1"
+             style="push"
+             tooltip="%command.tooltip.3">
+          <parameter
+                name="wizard"
+                value="br.com.totvs.tds.ui.server.wizards.group.NewGroupWizard">
+          </parameter>
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+          </visibleWhen>
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.newItemCommand"
+             icon="icons/newServer.png"
+             label="%command.label.2">
+          <parameter
+                name="wizard"
+                value="br.com.totvs.tds.ui.server.wizards.server.NewServerWizard">
+          </parameter>
+          <visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+          </visibleWhen>
+       </command>
+    </menuContribution>
+	<menuContribution
+    	allPopups="false"
+		locationURI="toolbar:org.eclipse.ui.trim.status">
+		
+		<toolbar
+                   id="br.com.totvs.tds.server.ui.toolbar.status"
+                   label="TDS">
+                   <!-- contorno devido a um bug no eclipse, que corta a contribuição-->
+        	<command
+                      commandId="dummy"
+                      icon="icons/img1x24.png"
+                      style="push">
+                </command>
+			    <control
+			          class="br.com.totvs.tds.ui.server.status.StatusLineControl">
+			    </control>
+			    </toolbar>
+          </menuContribution>
+    
+ </extension>
+
+ <extension
+       point="org.eclipse.ui.commands">
+    <category
+          id="br.com.totvs.tds.ui.server.commands.category"
+          name="%category.name">
+    </category>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.SortTreeHandler"
+          description="%command.description"
+          id="br.com.totvs.tds.ui.server.commands.sortTreeCommand"
+          name="%command.name">
+          <state
+             class="org.eclipse.ui.handlers.RegistryToggleState:true"
+             id="org.eclipse.ui.commands.toggleState">
+          </state>
+    </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.NewItemHandler"
+          description="%command.description.newItem"
+          id="br.com.totvs.tds.ui.server.commands.newItemCommand"
+          name="%command.name.newItem">
+       <commandParameter
+             id="wizard"
+             name="%commandParameter.name"
+             optional="false">
+       </commandParameter>
+       
+    </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.EditItemHandler"
+          description="%command.description.editItem"
+          id="br.com.totvs.tds.ui.server.commands.editItemCommand"
+          name="%command.name.editItem">
+       <commandParameter
+             id="dialog"
+             name="Diálogo"
+             optional="false">
+       </commandParameter>
+    </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.ConnectHandler"
+          id="br.com.totvs.tds.ui.server.commands.connectCommand"
+          name="%command.name.1">
+       <commandParameter
+             id="loginDialog"
+             name="%commandParameter.name.1"
+             optional="true">
+       </commandParameter>
+    </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.DisconnectHandler"
+          id="br.com.totvs.tds.ui.server.commands.disconnectCommand"
+          name="%command.name.2">
+       <commandParameter
+             id="server"
+             name="%commandParameter.name.2"
+             optional="true">
+       </commandParameter>
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.LoginHandler"
+          id="br.com.totvs.tds.ui.server.commands.loginCommand"
+          name="%command.name.3">
+       <commandParameter
+             id="loginDialog"
+             name="%commandParameter.name.3">
+       </commandParameter>
+       <commandParameter
+             id="server"
+             name="%commandParameter.name.4">
+       </commandParameter>
+       <commandParameter
+             id="environment"
+             name="%commandParameter.name.5"
+             optional="true">
+       </commandParameter>
+    </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.RemoveItemHandler"
+          id="br.com.totvs.tds.ui.server.commands.removeCommand"
+          name="%command.name.remove">
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.MonitorSelectionHandler"
+          id="br.com.totvs.tds.ui.server.commands.monitorSelectionCommand"
+          name="%command.name.monitor">
+          <state
+             class="org.eclipse.ui.handlers.RegistryToggleState:true"
+             id="org.eclipse.ui.commands.toggleState">
+          </state>
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.SlaveRegisterHandler"
+          id="br.com.totvs.tds.ui.server.commands.slaveRegisterCommand"
+          name="%command.name.6">
+    </command>
+    <command
+    	defaultHandler="br.com.totvs.tds.ui.server.handlers.BuildPatchHandler"
+        id="br.com.totvs.tds.ui.server.commands.buildPatchCommand"
+        name="Gerar Pacote de Atualização">
+     </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.StartServerHandler"
+          description="Inicia execução de AppServer local"
+          id="br.com.totvs.tds.ui.server.commands.startServerCommand"
+          name="Iniciar">
+       <commandParameter
+             id="dialog"
+             name="Diálogo"
+             optional="false">
+       </commandParameter>
+    </command>
+    <command
+          categoryId="br.com.totvs.tds.ui.server.commands.category"
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.StopServerHandler"
+          description="Para a execução de AppServer local"
+          id="br.com.totvs.tds.ui.server.commands.stopServerCommand"
+          name="Parar">
+       <commandParameter
+             id="dialog"
+             name="Diálogo"
+             optional="false">
+       </commandParameter>
+    </command>
+    
+ </extension>
+ <extension
+       point="org.eclipse.ui.decorators">
+    <decorator
+          class="br.com.totvs.tds.ui.server.views.ServerViewDecorator"
+          icon="icons/server.png"
+          id="br.com.totvs.tds.ui.server.serverViewDecorator"
+          label="%decorator.label"
+          lightweight="true"
+          state="true">
+       <enablement>
+          <objectClass
+                name="br.com.totvs.tds.server.interfaces.IItemInfo">
+          </objectClass>
+       </enablement>
+    </decorator>
+ </extension>
+ 
+ <extension
+       point="org.eclipse.ui.startup">
+    <startup
+          class="br.com.totvs.tds.ui.server.Startup">
+    </startup>
+    
+ </extension>
+ 
+ <extension
+       point="org.eclipse.core.expressions.definitions">
+    <definition
+          id="br.com.totvs.tds.ui.server.isAppServer">
+		<and>
+			<count value="1" />
+				<iterate ifEmpty="false">
+					<instanceof value="br.com.totvs.tds.server.interfaces.IAppServerInfo">
+				</instanceof>
+			</iterate>
+		</and>
+    </definition>
+    <definition
+          id="br.com.totvs.tds.ui.server.isSlave">
+		<and>
+			<count value="1" />
+				<iterate ifEmpty="false">
+					<instanceof value="br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo">
+				</instanceof>
+			</iterate>
+		</and>
+    </definition>
+    <definition
+          id="br.com.totvs.tds.ui.server.isGroup">
+		<and>
+			<count value="1" />
+			<iterate ifEmpty="false">
+				<and>
+					<instanceof value="br.com.totvs.tds.server.interfaces.IGroupInfo" />
+				</and>
+			</iterate>
+		</and>
+    </definition>
+    <definition
+          id="br.com.totvs.tds.ui.server.isRoot">
+		<and>
+			<count value="1" />
+			<iterate ifEmpty="false">
+				<and>
+					<instanceof value="br.com.totvs.tds.server.interfaces.IRootInfo" />
+				</and>
+			</iterate>
+		</and>
+    </definition>
+ </extension>
+	
+</plugin>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="br.com.totvs.tds.feature.license"
+      label="TDS Termo de Licenciamento"
+      version="11.4.0.qualifier"
+      provider-name="TOTVS S.A.">
+
+   <description>
+      TOTVS Developer Studio 11.4
+
+Termo de Licenciamento.
+
+Instalação e atualização sincronizadas com demais adicionais TDS.
+
+Não é necessário sua instalação.
+   </description>
+
+   <copyright>
+      TOTVS 2010-2019 Todos os direitos reservados.
+   </copyright>
+
+   <license url="http://ds.totvs.com/license.html">
+      Este adicional (plugin) é parte integrante do TOTVS Developer Studio.
+
+CONTRATO DE LICENCIAMENTO TOTVS Developer Studio
+
+
+Por este instrumento (“Contrato”), você (“Você”) e a TOTVS S.A. (“TOTVS”) constituem um contrato válido e exeqüível o qual outorgará à Você o direito de usar o aplicativo de desenvolvimento denominado TOTVS Developer Studio (“TDS”). O TDS, que por este ato é licenciado à Você nos termos e condições deste Contrato, permite que Você se torne um Terceiro Desenvolvedor de novos aplicativos construídos com a plataforma tecnológica TOTVS.
+
+
+CAPÍTULO 1 - ACEITAÇÃO
+
+1.1. Aceitação. Leia este Contrato com atenção. Este Contrato constitui um instrumento vinculante entre Você e a TOTVS em relação ao licenciamento do TDS. Ao clicar o botão “Eu Aceito” ou, ainda, pelo downloading, pela instalação ou pelo uso do TDS, Você está manifestando sua aceitação deste Contrato.
+
+1.2. Aceitação em nome de Empregador ou de Terceiro. Se Você está aceitando este Contrato em nome de seu Empregador ou de Terceiro, Você declara e garante que Você tem capacidade e poderes para representar seu Empregador ou de Terceiro. Se você não tem capacidade ou poderes de representação, Você não deve usar o TDS em nome de seu Empregador ou de Terceiro.
+
+1.3. Cadastro TDS. Com o intuito de cadastrá-lo como um desenvolvedor na plataforma TOTVS (“TOTVS Developer”), Você deve ter preenchido o formulário de cadastro que lhe foi colocado à disposição neste site. Sem tal cadastro, não será possível ter acesso ao TDS. Você é responsável pelas informações prestadas no cadastro, de modo que qualquer tentativa de criar falsa identidade, idade, endereço eletrônico, será considerada como infração à lei e aos termos do presente instrumento, ensejando sua imediata e automática rescisão, respondendo, inclusive, perante a TOTVS ou terceiros caso estas informações venham a causar prejuízos à própria TOTVS ou terceiros, podendo ainda a TOTVS, a seu exclusivo critério, notificar as autoridades competentes do ocorrido e colaborar de todas as formas para apuração e danos ou delitos praticados.
+
+1.4. Serviços de Assistência Técnica.
+
+    1.4.1. Por este Contrato, em razão de sua gratuidade, Você aceita e concorda que a TOTVS não está obrigada a prestar qualquer serviço de assistência técnica, de qualquer natureza. Não obstante, Você poderá contatar a TOTVS, através do endereço http:/totvs.com.br/byYou/dúvidas, reportando eventuais questionamentos, dúvidas e/ou inconformidades em relação ao TDS. A seu critério, a TOTVS encaminhará respostas a todos os questionamentos e dúvidas registradas, as quais ficarão disponíveis para consulta de todos os TOTVS Developers.
+
+    1.4.2. Você declara e concorda que a TOTVS e as suas sociedades controladas e/ou coligadas não são responsáveis por qualquer reclamação, perda, dano decorrentes do uso do TDS. Você é exclusivamente responsável pelo uso e destinação do TDS, inclusive pelas escolhas e decisões em relação a forma que Você utilizará o TDS.
+
+
+CAPÍTULO 2 - LICENÇA
+
+2.1. Propriedade. A TOTVS é titular única e exclusiva dos direitos autorais do TDS, inclusive dos direitos marcários decorrentes do nome “TOTVS” (“Propriedade Intelectual’). Este Contrato não cede à Você qualquer dos direitos sobre a Propriedade Intelectual do TDS. Você concorda que tomará todas as medidas necessárias para assegurar e proteger os direitos de Propriedade Intelectual do TDS, incluindo, mas não se limitando, às necessárias para cientificar a TOTVS imediatamente a partir da ciência da possibilidade de infração aos referidos direitos de Propriedade Intelectual.
+
+2.2. Licença. Enquanto vigente este Contrato, a TOTVS outorga à Você uma licença revogável, mundial, não transferível, que não poderá ser objeto de sublicenciamento,  para o único propósito de uso do TDS para o desenvolvimento de programas de computador (“Aplicativos TOTVS”). 
+
+2.3. Restrições.
+
+    2.3.1. Você pode instalar e usar o TDS como fornecido pela TOTVS apenas na forma de códigos objeto e apenas em um ambiente computacional (computador pessoal ou servidor corporativo) de sua propriedade. Você pode usar o TDS e qualquer Aplicativo TOTVS para uso e benefício pessoal. Se você deseja usar um Aplicativo TOTVS para propósito comercial (distribuição e comercialização de licenças do Aplicativo TOTVS), você precisará firmar um contrato comercial com a TOTVS que regule tal condição. Não obstante, Você aceita e concorda que este Contrato não lhe outorga nenhum direito de uso do nome “TOTVS” para qualquer propósito.
+
+    2.3.2. Você não deve copiar (exceto uma única cópia para propósito de salvaguarda – backup), modificar, adaptar, distribuir, redistribuir, decompilar, fazer engenharia reversa, ceder, transferir, locar, emprestar, criar derivações (na forma da Lei 9.609/98) do TDS ou de partes do TDS. Você não pode integrar o TDS ou qualquer parte do TDS com qualquer outro programa de computador. Você não pode incorporar o TDS como ferramenta integrante de qualquer dispositivo eletrônico ou computador, especialmente, mas a tanto não se limitando, no modelo denominado OEM (Original Equipment Manufacturer).
+
+2.4. Você concorda que Você não deve remover, omitir ou de qualquer outra forma alterar os avisos de propriedade que são inseridos no TDS pela TOTVS.
+
+2.5. Nada neste Contrato deve ser interpretado ou considerado como fator de restrição ou de impedimento para que a TOTVS não possa (i) desenvolver, comercializar ou distribuir programas de computador que sejam similares ao seu Aplicativo TOTVS ou, (ii) firmar contratos com outros TOTVS Developers ou Terceiros que desenvolvam, comercializem ou distribuam programas de computador similares ao seu Aplicativo TOTVS.
+
+
+CAPÍTULO 3 – USO DO TDS POR VOCÊ
+
+3.1. Uso do TDS; Propriedade dos Aplicativos TOTVS. Sujeito aos termos e condições deste Contrato, Você pode usar o TDS para desenvolver Aplicativos TOTVS. Sujeito aos direitos da TOTVS sobre a Propriedade Intelectual do TDS, a TOTVS aceita que não será titular de qualquer propriedade ou direitos sobre qualquer Aplicativo TOTVS desenvolvido por Você.
+
+3.2. Licença dos Aplicativos TOTVS. Por este Contrato, Você outorga à TOTVS uma licença perpétua, irrevogável, livre de royalties, não exclusiva e mundial para comercializar, distribuir, sublicenciar e de qualquer outra forma promover o comércio de seu(s) Aplicativo(s) TOTVS.
+
+3.3. Você pode voluntariamente fornecer sugestões, comentários e outras opiniões (em conjunto, as “Sugestões”) para a TOTVS com relação ao TDS. A TOTVS poderá livremente utilizar, copiar, revelar, licenciar, distribuir e explorar  as Sugestões, sob qualquer forma, livre de custos, sem quaisquer restrições decorrentes de direitos de propriedade intelectual. A TOTVS será a proprietária de toda e qualquer Sugestão fornecida por Você. 
+
+3.4. Você declara e garante que a TOTVS e suas sociedades controladas e/ou coligadas não são e nem deverão ser responsabilizadas contra quaisquer prejuízos, perdas, danos, reclamações administrativas e/ou judiciais decorrentes de quaisquer Aplicativos TOTVS. Você aceita e concorda que deverá manter a TOTVS e suas sociedades controladas e/ou coligadas indenes de toda e qualquer responsabilidade em decorrência do desenvolvimento, comercialização e distribuição de um Aplicativo TOTVS.
+
+3.5. Uso Proibido. Você não deve usar o TDS ou um Aplicativo TOTVS de forma ilícita, para qualquer propósito ilícito ou, ainda, de maneira não prevista neste Contrato, incluindo, mas a tanto não se limitando:
+
+    3.5.1. a difamação, calúnia, abuso ou qualquer outra forma de ameaça a direitos de privacidade de terceiros ou que cause constrangimento ilegal a terceiros;
+
+    3.5.2. a transmissão eletrônica por e-mail, uploading ou de qualquer outra forma torne disponível conteúdo de natureza difamatória, obscena, ofensiva ou ilegal; ou, ainda, conteúdo que seja de natureza preconceituosa contra quaisquer terceiros ou minorias;
+
+    3.5.3. que restrinja ou iniba qualquer terceiro de se tornar um TOTVS Developer;
+
+    3.5.4. que intercepte ou monitore qualquer comunicação que não tenha sido enviada à Você;
+
+    3.5.5. que use qualquer material ou conteúdo que esteja sujeito à direitos de terceiros, salvo se você tiver previamente autorização para uso de tais materiais ou conteúdo de terceiros;
+
+    3.5.6. usar qualquer OSS (Open Source Software) de forma tal que causaria aos códigos não abertos do TDS a obrigação de se sujeitar aos termos de uma licença OSS, ou seja, de licença que obrigue a abrir os códigos fontes de um determinado programa de computador;
+
+    3.5.7. usar, executar, criar, armazenar ou implementar  qualquer tipo de programa de computador malicioso (“Vírus”) que tenha como propósito distorcer, deletar, prejudicar ou desconstruir o TDS; e
+
+    3.5.8. que cause qualquer forma de comprometimento da performance do TDS.
+
+3.6. Você concorda que Você é única e exclusivamente responsável por quaisquer dados ou conteúdo que Você criar, transmitir ou apresentar através de um Aplicativo TOTVS e pelas conseqüências de suas ações (incluindo, mas a tanto não se limitando, quaisquer perdas e/ou danos que TDS venha a sofrer).
+
+3.7. Se Você usar o TDS para desenvolver um Aplicativo TOTVS que funcione ou opere em conjunto com outros aplicativos desenvolvidos por uma terceira parte ou que acesse dados, conteúdo ou recursos fornecidos por uma terceira parte, Você entende e concorda que a TOTVS não é nem deve ser considerada como responsável por quaisquer aplicativos de terceiros, dados, conteúdo ou recursos, e que tais aplicativos de terceiros, dados, conteúdo ou recursos são de exclusiva responsabilidade de tal(is) terceira(s) parte(s).
+
+3.8. Você concorda que se Você usar o TDS para desenvolver qualquer Aplicativo TOTVS para ser licenciado para terceiros, Você deverá zelar pela privacidade de tais terceiros. Você não pode obter quaisquer informações ou dados pessoais de terceiros de forma não autorizada. Na hipótese de qualquer terceiro fornecer à Você informações de natureza pessoal, tais como, nomes, endereços, senhas e/ou outras informações de login, informações financeiras (incluindo cartões de crédito ou de débito), ou qualquer outra informação pessoal, Você deve (i) garantir que o terceiro tenha ciência que você está obtendo e registrando tais informações, e (ii) usar tais informações de forma legalmente permitida e com o zelo adequado. Se o seu Aplicativo TOTVS armazena dados pessoais ou confidenciais fornecidos por qualquer terceiro, o Aplicativo TOTVS deve fazê-lo de maneira segura. 
+
+3.9. Você reconhece os direitos de propriedade intelectual da TOTVS sobre o TDS objeto do presente contrato. Dessa forma, Você não deverá: (i) contestar a propriedade nem a validade da propriedade Intelectual da TOTVS sobre o TDS, nem sua utilização pela TOTVS; (ii) tentar adotar ou registrar qualquer software, patente ou marca idêntico ou essencialmente semelhante aos de propriedade da TOTVS ou de outros licenciadores; (iii) remover, alterar ou fazer adições a qualquer uma das marcas ou softwares da TOTVS ou de terceiros licenciadores; (iv) incorporar, salvo nos casos expressamente autorizados, qualquer uma das marcas da TOTVS em suas marcas, bem como nomes de produtos, nomes comerciais de serviços, slogans, nomes de domínio ou qualquer outra designação semelhante para utilização em ou em conexão com hardware, software, tecnologias ou serviços relacionados com o computador e internet ou quaisquer outros produtos ou serviços que possam causar confusão com as marcas, sistemas ou produtos da TOTVS ou terceiros licenciadores.
+
+3.10. O software TDS fornecido pela TOTVS à Você faz uso de tecnologias  pertencentes à Eclipse Foundation, Inc, (Eclipse) para as quais Você desde já se obriga a respeitar os termos e condições estabelecidos no instrumento denominado “Eclipse Public License – v 1.0”, que poderá ser localizado por Você através do acesso ao seguinte endereço eletrônico: http://www.eclipse.org/org/documents/epl-v10.php
+
+
+CAPÍTULO 4 – RESCISÃO
+
+4.1. A TOTVS pode rescindir este Contrato imediatamente, a qualquer tempo, com ou sem causa, mediante notificação prévia à Você. 
+
+4.2. Você pode rescindir este Contrato imediatamente, a qualquer tempo, com ou sem causa, mediante notificação prévia à TOTVS.
+
+4.3. Mediante o término deste Contrato, Você concorda em imediatamente interromper o uso do TDS, de forma isolada ou em conexão com o Aplicativo TOTVS, e destruir todas as licenças TDS bem como todo e qualquer material correlato ao TDS (inclusive manuais e documentação).
+
+
+CAPÍTULO 5 – LIMITAÇÃO DE RESPONSABILIDADE
+
+5.1. NA MÁXIMA MEDIDA PERMITIDA PELA LEGISLAÇÃO APLICÁVEL, EM HIPÓTESE ALGUMA A TOTVS, SEUS PARCEIROS, LICENCIADORES OU PREPOSTOS, TERÃO RESPONSABILIDADE PERANTE VOCÊ POR QUAISQUER LUCROS CESSANTES OU POR QUAISQUER DANOS INDIRETOS, ESPECIAIS, INCIDENTAIS, PUNITIVOS OU CONSEQÜENTES, SEJA QUAL FOR A RESPECTIVA CAUSA, SEJA ELA DE NATUREZA CONTRATUAL, POR ATO ILÍCITO OU BASEADO EM QUALQUER OUTRA TEORIA DE RESPONSABILIDADE, INDEPENDENTEMENTE DO FATO DE VOCÊ TER SIDO ADVERTIDO SOBRE A POSSIBILIDADE DE OCORRÊNCIA DE TAIS DANOS, ASSIM COMO SOBRE EVENTUAIS TERCEIROS, PESSOAS FÍSICAS OU JURÍDICAS QUE TENHAM ACESSO AO APLICATIVO TOTVS POR VOCÊ DESENVOLVIMENTO. A TOTVS SE RESERVA O DIREITO DE REGRESSO CONTRA VOCÊ.
+
+5.2. Nos termos deste Contrato, VOCÊ defenderá, indenizará e eximirá a TOTVS e demais licenciadores de responsabilidade contra quaisquer perdas, danos ou custos (inclusive honorários advocatícios razoáveis) incorridos em relação a reivindicações realizadas ou apresentadas contra a TOTVS ou demais licenciadores por terceiro sob a alegação de que o Aplicativo TOTVS por VOCÊ desenvolvido viola o direito de propriedade intelectual desse terceiro, ou a este prejudica de qualquer forma, responsabilizando-se, ainda a indenizar a TOTVS ou terceiros por danos decorrentes da utilização do TDS em desacordo com os termos deste instrumento.
+
+
+CAPÍTULO 6 – DISPOSIÇÕES GERAIS
+
+6.1. Você concorda que todos os códigos de programas de computador, em forma de fonte ou de objeto, invenções, know-how, negócios, informações técnicas, financeiras e outras informações proprietárias da TOTVS constituem informação confidencial da TOTVS e não devem ser reveladas a terceiros, salvo com autorização prévia e expressa da TOTVS.
+
+6.2. Você não deve dar qualquer publicidade sobre a existência deste Contrato, salvo mediante autorização prévia e expressa da TOTVS e na forma como a TOTVS lhe orientar. Essa obrigação permanecerá em vigor por até 2 (dois) anos após o término deste Contrato.
+
+6.3. Você não está autorizado a ceder ou transferir os direitos e obrigações deste Contrato a qualquer terceiro.
+
+6.4. Notificações. A TOTVS poderá efetuar notificações à Você mediante o envio de e-mail no endereço eletrônico registrado por você no formulário de cadastro do TOTVS Developer. Tal notificação será considerada entregue após a expiração de 48 (quarenta e oito) horas depois do envio da mensagem por e-mail. Desta forma, Você obriga-se a manter seu cadastro e, em especial, seu correio eletrônico, devidamente atualizado junto à TOTVS.
+
+
+CAPÍTULO 7 – FORO
+
+7.1. O presente contrato será regido pelas leis brasileiras, ficando eleito o Foro da Comarca de São Paulo, Estado de São Paulo para dirimir eventuais dúvidas oriundas do presente instrumento, com expressa renúncia de qualquer outro, por mais privilegiado que seja.
+   </license>
+
+</feature>

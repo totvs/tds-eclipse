@@ -1,0 +1,15 @@
+* Processos faltantes
+- Inspeção de objetos/funções (interface usuário)
+- Aplicação de pacote de atualização
+- Geração de pacote por seleção da área de trabalho
+- Geração de pacote por comparação
+
+* Problemas conhecidos
+- Lentidão na autenticação quando server P17 (em resoluçaõ/contorno)
+- Diálogos e mensagens com código de página errado (caracteres estranhos) (em andamento conforme detecto fonte errado)
+- Erro ao lançar a execução do SC (não reproduzido)
+- Uso de servidor local as vezes falha no encerramento ficando intância em execução (intermitente)
+- Em quedas bruscas do appServer o LS fica com instância presa (intermitente)
+- Compilação por atalho (conflito com comando eclipse pré-existente). Erro na identificação do contexto.
+- Sintaxe destacada não funciona (não reproduzido)
+- Reconexão na inicialização falha (intermitente)

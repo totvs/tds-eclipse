@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+
+<extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="br.com.totvs.tds.lsp.advplSource"
+            path="tmlanguage/advpl/language-configuration.json">
+      </languageConfiguration>
+      <languageConfiguration
+            contentTypeId="br.com.totvs.tds.lsp.advplAspSource"
+            path="tmlanguage/advpl/language-configuration.json">
+      </languageConfiguration>
+   </extension>
+
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="tmlanguage/advpl/grammar_advpl.json"
+            scopeName="source.advpl">
+      </grammar>
+      <grammar
+            path="tmlanguage/advpl/grammar_advpl_asp.json"
+            scopeName="source.advpl.asp">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="br.com.totvs.tds.lsp.advplSource"
+            scopeName="source.advpl">
+      </scopeNameContentTypeBinding>
+      <scopeNameContentTypeBinding
+            contentTypeId="br.com.totvs.tds.lsp.advplAspSource"
+            scopeName="source.advpl.asp">
+      </scopeNameContentTypeBinding>
+<!--
+      <injection
+            injectTo="source.advpl.asp"
+            scopeName="source.advpl">
+      </injection>
+
+  	    <injection scopeName="styles.ng" injectTo="source.ts"/>
+  	  -->
+   </extension>
+
+	<extension
+	     point="org.eclipse.ui.editors">
+	  <editor
+	        name="%editor.name"
+	        icon="icons/source.png"
+	        class="org.eclipse.ui.internal.genericeditor.ExtensionBasedTextEditor"
+	        id="br.com.totvs.tds.sdk.ui.editor.advpl.sourceEditor">
+	        <contentTypeBinding
+	              contentTypeId="br.com.totvs.tds.lsp.advplSource">
+	        </contentTypeBinding>
+	  </editor>
+	  
+	  <editor
+	        name="%editor.name.f0"
+	        icon="icons/source_asp.png"
+	        class="org.eclipse.ui.internal.genericeditor.ExtensionBasedTextEditor"
+	        id="br.com.totvs.tds.sdk.ui.editor.advpl.sourceAspEditor">
+	        <contentTypeBinding
+	              contentTypeId="br.com.totvs.tds.lsp.advplAspSource">
+	        </contentTypeBinding>
+	  </editor>
+	  
+	</extension>
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="popup:br.com.totvs.tds.sdk.ui.editor.advpl.sourceEditor.EditorContext?after=additions">
+          >
+<!--          locationURI="popup:#TextEditorContext?after=additions">-->
+       <separator
+             name="br.com.totvs.tds.ui.editor.advpl.separator1" visible="true">
+       </separator>
+       <command
+             commandId="br.com.totvs.tds.ui.editor.command.compile"
+             label="%command.label"
+             style="push">
+          <parameter
+                name="recompile"
+                value="true">
+          </parameter>
+       </command>
+       <separator
+             name="br.com.totvs.tds.ui.editor.advpl.separator4"
+             visible="true">
+       </separator>
+    </menuContribution>
+   </extension>
+   
+      <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            targetID="br.com.totvs.tds.sdk.ui.editor.advpl.sourceEditor"
+            id="br.com.totvs.tds.sdk.ui.editor.advpl.rulerActions">
+         <action
+               label="%action.label"
+               class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+               style="push"
+               actionID="RulerDoubleClick"
+               id="br.com.totvs.tds.sdk.ui.editor.advpl.doubleClickBreakpointAction"/>
+      </editorContribution>
+   </extension>
+    
+</fragment>

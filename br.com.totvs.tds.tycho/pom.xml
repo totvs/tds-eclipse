@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>br.com.totvs.tds.tycho.root</artifactId>
+	<packaging>pom</packaging>
+	<parent>
+		<groupId>br.com.totvs.tds.tycho</groupId>
+		<artifactId>br.com.totvs.tds.tycho.configuration</artifactId>
+		<version>11.4.0-SNAPSHOT</version>
+		<relativePath>releng/br.com.totvs.tds.tycho.configuration</relativePath>
+	</parent>
+
+	<name>TOTVS Developer Studio 11.4</name>
+	<url>http://ds.totvs.com/tds114</url>
+	<description>TOTVS Developer Studio 11.4</description>
+	<organization>
+		<name>TOTVS S.A.</name>
+		<url>http://www.totvs.com</url>
+	</organization>
+	<scm>
+		<url>https://github.com/totvs/tds-eclipse</url>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/totvs/tds-eclipse/issues</url>
+	</issueManagement>
+
+	<profiles>
+		<profile>
+			<!--  Para atualizar os binários do LS e DA            -->
+			<!--  No executor maven, informe '-P updbin' (profile) -->
+			<!--  Execute-o e envie para o repositório (commit)    -->
+			<id>updbin</id>
+			<modules>
+				<module>br.com.totvs.tds.tycho.updbin</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<modules>
+				<module>br.com.totvs.tds.tycho.bundles</module>
+				<module>br.com.totvs.tds.tycho.features</module>
+				<module>releng</module>
+			</modules>
+		</profile>
+	</profiles>
+</project>
+

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="br.com.totvs.tds.ui.debug.launcher.DebugLaunchDelegate"
+            id="br.com.totvs.tds.ui.debug.debugLaunchConfigurationType"
+            modes="debug, coverage, run"
+            name="%launchConfigurationType.name"
+            sourceLocatorId="br.com.totvs.tds.ui.debug.sourceLocator"
+            sourcePathComputerId="br.com.totvs.tds.ui.debug.sourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            class="br.com.totvs.tds.ui.debug.launcher.tab.TDSLaunchTabGroup"
+            id="br.com.totvs.tds.ui.debug.debugLaunchConfigurationTabGroup"
+            type="br.com.totvs.tds.ui.debug.debugLaunchConfigurationType">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="br.com.totvs.tds.ui.debug.debugLaunchConfigurationType"
+            icon="icons/run.png"
+            id="br.com.totvs.tds.ui.debug.debugLaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            class="br.com.totvs.tds.ui.debug.helper.PersistableSourceLocator"
+            id="br.com.totvs.tds.ui.debug.sourceLocator"
+            name="%sourceLocator.name">
+      </sourceLocator>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.sourcePathComputers">
+      <sourcePathComputer
+            class="br.com.totvs.tds.ui.debug.helper.SourcePathComputerDelegate"
+            id="br.com.totvs.tds.ui.debug.sourcePathComputer">
+      </sourcePathComputer>
+   </extension>
+<!--
+   <extension
+         point="org.eclipse.debug.core.sourceLocators">
+      <sourceLocator
+            class="br.com.totvs.tds.ui.debug.PersistableSourceLocator"
+            id="br.com.totvs.tds.ui.debug.sourceLocator"
+            name="Projetos e fontes Protheus">
+      </sourceLocator>
+   </extension>
+-->
+<!--
+	<extension point="org.eclipse.ui.editorActions">
+		<editorContribution
+			id="AdvPL.rulerActions"
+			targetID="br.com.totvs.tds.sdk.advpl.ui.editor.AdvplEditor">
+			<action
+         actionID="RulerDoubleClick"
+         class="org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+         id="AdvPL.doubleClickBreakpointAction"
+         label="%action.label"
+         style="push">
+   </action>
+-->
+</plugin>
