@@ -50,7 +50,7 @@ public class NewServerScreen extends AbstractTest {
 		bot.button("Next >").click();
 
 		// diálogo 'Novo Servidor'
-		final SWTBotShell shell = AbstractTest.openShell("Novo Servidor");
+		final SWTBotShell shell = AbstractTest.waitShell("Novo Servidor");
 		shell.bot().textWithLabel("Nome").setText(name);
 		shell.bot().textWithLabel("SmartClient").setText(smartClient);
 		shell.bot().button("Validar").click();

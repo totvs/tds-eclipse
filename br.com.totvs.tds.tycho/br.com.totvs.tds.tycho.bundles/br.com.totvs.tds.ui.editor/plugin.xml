@@ -87,7 +87,7 @@
             point="org.eclipse.ui.bindings">
          <key
                commandId="br.com.totvs.tds.ui.editor.command.compile"
-               contextId="br.com.totvs.tds.ui.editor.context"
+               contextId="org.eclipse.ui.genericeditor.genericEditorContext"
                schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
                sequence="M1+F9">
             <parameter
@@ -95,14 +95,15 @@
                   value="true">
             </parameter>
          </key>
-      </extension>
-      <extension
-            point="org.eclipse.ui.contexts">
-         <context
-               id="br.com.totvs.tds.ui.editor.context"
-               name="%context.name"
-               parentId="org.eclipse.ui.genericeditor.genericEditorContext">
-         </context>
+         <key
+               commandId="br.com.totvs.tds.ui.editor.command.compile"
+               schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+               sequence="M3+F9">
+            <parameter
+                  id="recompile"
+                  value="true">
+            </parameter>
+         </key>
       </extension>
 
 

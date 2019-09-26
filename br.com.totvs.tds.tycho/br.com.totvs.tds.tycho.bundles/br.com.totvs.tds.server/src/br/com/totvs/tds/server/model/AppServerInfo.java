@@ -424,8 +424,10 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		// 2L
 		out.writeObject(activeCompany);
 		// 3L
-		out.writeBoolean(isConnected());
-		out.writeBoolean(getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false).equals(true));
+		final boolean isSecureStorage = getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
+				.equals(true);
+		out.writeBoolean(isSecureStorage && isConnected());
+		out.writeBoolean(isSecureStorage);
 	}
 
 	@Override

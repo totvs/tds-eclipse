@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import br.com.totvs.tds.ui.AbstractTest;
 import br.com.totvs.tds.ui.ITestProperties;
 import br.com.totvs.tds.ui.bot.ConsoleBot;
+import br.com.totvs.tds.ui.bot.PerspectiveBot;
 import br.com.totvs.tds.ui.bot.ServerBot;
 import br.com.totvs.tds.ui.screen.LoginScreen;
 
@@ -24,15 +25,12 @@ public class ServerConnectionTest extends AbstractTest {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		beginTest();
-
-		openPlatform("Plataforma (TOTVS)");
+		PerspectiveBot.openTotvsPlatform();
 		ServerBot.addLocalServer();
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		endTest();
 		ServerBot.removeLocalServer();
 	}
 
@@ -46,7 +44,7 @@ public class ServerConnectionTest extends AbstractTest {
 
 		final SWTBotTreeItem node = bot.tree().getTreeItem("Servidores").getNode(ITestProperties.LOCAL_SERVER).select();
 		final SWTBotMenu disconnect = node.contextMenu("Desconectar");
-		final boolean resultLog = ConsoleBot.isTest("User authenticated succesfully.");
+		final boolean resultLog = ConsoleBot.test("User authenticated succesfully.");
 		assertTrue("Conexão não efetuada.", resultLog && disconnect.isEnabled());
 
 		ServerBot.disconnectLocalServer();
@@ -65,11 +63,11 @@ public class ServerConnectionTest extends AbstractTest {
 
 		final SWTBotTreeItem node = bot.tree().getTreeItem("Servidores").getNode(ITestProperties.LOCAL_SERVER).select();
 		final SWTBotMenu disconnect = node.contextMenu("Desconectar");
-		final boolean resultLog = ConsoleBot.isTest("User authenticated succesfully.");
+		final boolean resultLog = ConsoleBot.test("User authenticated succesfully.");
 		assertTrue("Conexão não efetuada.", resultLog && disconnect.isEnabled());
 
 		bot.menu("Window").menu("Preferences").click();
-		final SWTBotShell prefsShell = openShell("Preferences");
+		final SWTBotShell prefsShell = waitShell("Preferences");
 
 		final SWTBotTreeItem generalItem = bot.tree().getTreeItem("General").click().expand();
 		final SWTBotTreeItem securityItem = generalItem.getNode("Security").click().expand();

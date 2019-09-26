@@ -69,8 +69,8 @@ public abstract class EditorHandler extends AbstractHandler {
 		final String username = server.getUsername();
 
 		if (!server.canPermission("COMPILE")) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Permissï¿½o",
-					"usuÃ¡rio [%s] sem Permissï¿½o para compilar em [%s/%s].", username, server.getName(), environment);
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Permissão",
+					"Usuário [%s] sem permissão para compilar em [%s/%s].", username, server.getName(), environment);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}
@@ -92,7 +92,7 @@ public abstract class EditorHandler extends AbstractHandler {
 		}
 		if (!server.isConnected()) {
 			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
-					"Servidor [%s] nÃ£o conectado.", server.getName());
+					"Servidor [%s] não conectado.", server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}

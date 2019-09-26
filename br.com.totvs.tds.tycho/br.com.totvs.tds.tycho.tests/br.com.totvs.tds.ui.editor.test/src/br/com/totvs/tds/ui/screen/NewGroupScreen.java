@@ -38,7 +38,7 @@ public class NewGroupScreen extends AbstractTest {
 		parentNode.select();
 		parentNode.contextMenu("Novo Grupo").click();
 
-		final SWTBotShell shell = AbstractTest.openShell("Novo Grupo");
+		final SWTBotShell shell = AbstractTest.waitShell("Novo Grupo");
 		shell.bot().textWithLabel("Nome").setText(name);
 
 		waitFinish().click();

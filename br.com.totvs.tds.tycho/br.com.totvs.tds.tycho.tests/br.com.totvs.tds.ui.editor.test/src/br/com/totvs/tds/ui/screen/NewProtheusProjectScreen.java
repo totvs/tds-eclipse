@@ -32,7 +32,7 @@ public class NewProtheusProjectScreen extends AbstractTest {
 
 	public void finish() throws Exception {
 		bot.menu("File").menu("New").menu("Project...").click();
-		final SWTBotShell shell = openShell("New Project");
+		final SWTBotShell shell = waitShell("New Project");
 		shell.activate();
 
 		bot.tree().getTreeItem("TOTVS").select();

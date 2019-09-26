@@ -32,7 +32,7 @@ public class NewFileScreen extends AbstractTest {
 
 	public void finish() throws Exception {
 		bot.menu("File").menu("New").menu("Other...").click();
-		final SWTBotShell shell = openShell("New");
+		final SWTBotShell shell = waitShell("New");
 		shell.activate();
 
 		bot.textWithLabel("Wizards:").setText("File");
