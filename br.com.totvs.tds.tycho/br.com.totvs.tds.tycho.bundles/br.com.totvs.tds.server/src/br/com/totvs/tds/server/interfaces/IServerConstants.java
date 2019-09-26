@@ -28,7 +28,7 @@ public interface IServerConstants {
 	public static final String GENERATE_PPO_FILE_SERVER = "server.generate.ppo"; //$NON-NLS-1$
 
 	/**
-	 * O id da p�gina de configuração do servidor nas prefer�ncias do sistema.
+	 * O id da página de configuração do servidor nas prefer�ncias do sistema.
 	 */
 	public static final String __ID_SERVER_CONFIG_PREFERENCE = "br.com.totvs.tds.server.ui.configuracao"; //$NON-NLS-1$
 

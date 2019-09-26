@@ -63,6 +63,7 @@ public class CompileHandler extends EditorHandler {
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
 			monitor.beginTask("Compilação", compileMap.size() + 1);
+
 			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 			final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
@@ -112,8 +113,8 @@ public class CompileHandler extends EditorHandler {
 				final IStatusLineManager statusLineManager = bars.getStatusLineManager();
 				final IProgressMonitor monitor = statusLineManager.getProgressMonitor();
 				editor.doSave(monitor);
-				EditorActivator.logStatus(IStatus.INFO, "Compilação", "Arquivo [%s] salvo automaticamente.",
-						editor.getTitleToolTip());
+				EditorActivator.logStatus(IStatus.INFO, "Compilação",
+						"Alterações salvas automaticamente.\n\tArquivo: %s", editor.getTitleToolTip());
 			}
 
 			try {

@@ -40,7 +40,7 @@ public class NewGroupWizardPage extends WizardPage {
 	/**
 	 * Create contents of the wizard.
 	 *
-	 * @param parent container da p�gina.
+	 * @param parent container da página.
 	 */
 	@Override
 	public void createControl(final Composite parent) {

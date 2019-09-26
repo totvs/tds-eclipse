@@ -47,7 +47,7 @@ public class DeveloperStudioPreferencePage extends PreferencePage
 	/**
 	 * Construtor.
 	 *
-	 * @param title T�tulo da p�gina.
+	 * @param title T�tulo da página.
 	 * @wbp.parser.constructor
 	 * @wbp.eval.method.parameter title "TOTVS Developer Studio"
 	 */
@@ -61,7 +61,7 @@ public class DeveloperStudioPreferencePage extends PreferencePage
 	/**
 	 * Construtor.
 	 *
-	 * @param title T�tulo da p�gina.
+	 * @param title T�tulo da página.
 	 * @param image �cone.
 	 */
 	public DeveloperStudioPreferencePage(final String title, final ImageDescriptor image) {
