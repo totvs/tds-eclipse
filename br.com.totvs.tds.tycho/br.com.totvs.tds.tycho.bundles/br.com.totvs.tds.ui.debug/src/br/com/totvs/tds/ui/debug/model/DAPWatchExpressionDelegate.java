@@ -45,6 +45,7 @@ public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 		try {
 			final EvaluateResponse res = frame.getDebugProtocolServer().evaluate(args).get();
 			final DSPDebugElement parent = null;
+
 			final DSPValue value = new DSPValue(getFrame(), res.getVariablesReference(), expression, res.getResult());
 
 			listener.watchEvaluationFinished(new IWatchExpressionResult() {

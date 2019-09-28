@@ -252,6 +252,11 @@
           defaultHandler="br.com.totvs.tds.ui.server.handlers.ConnectHandler"
           id="br.com.totvs.tds.ui.server.commands.connectCommand"
           name="%command.name.1">
+          <commandParameter
+             id="server"
+             name="%commandParameter.name.4"
+             optional="true">
+          </commandParameter>
     </command>
     <command
           categoryId="br.com.totvs.tds.ui.server.commands.category"

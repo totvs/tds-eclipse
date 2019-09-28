@@ -79,17 +79,28 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		return getActiveServers(IServerInfo.class);
 	}
 
-	@Override
-	public List<IServerInfo> getActiveServers(final Class<? extends IServerInfo> clazzServerInfo) {
+	private List<IServerInfo> getServers(final Class<? extends IServerInfo> clazz, final boolean connected) {
 		final List<IServerInfo> list = new ArrayList<IServerInfo>();
 		//
-		for (final IServerInfo server : getServers(clazzServerInfo)) {
-			if (server.isConnected()) {
+		for (final IServerInfo server : getServers(clazz)) {
+			if (server.isConnected() == connected) {
 				list.add(server);
 			}
 		}
 		//
 		return list;
+	}
+
+	@Override
+	public List<IServerInfo> getInactiveServers(final Class<? extends IServerInfo> clazz) {
+		//
+		return getServers(clazz, false);
+	}
+
+	@Override
+	public List<IServerInfo> getActiveServers(final Class<? extends IServerInfo> clazz) {
+		//
+		return getServers(clazz, true);
 	}
 
 	/*
@@ -348,7 +359,11 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 						ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
 					}
 
-					ServerManagerImpl.this.setCurrentServer(auxCurrentServer);
+					if (auxCurrentServer.isConnected()) {
+						ServerManagerImpl.this.setCurrentServer(auxCurrentServer);
+					} else {
+						ServerManagerImpl.this.setCurrentServer(null);
+					}
 					monitor.done();
 
 					return Status.OK_STATUS;

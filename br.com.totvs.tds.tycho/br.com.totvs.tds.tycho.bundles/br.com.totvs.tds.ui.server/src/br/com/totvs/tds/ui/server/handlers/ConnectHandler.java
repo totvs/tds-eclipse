@@ -15,6 +15,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.nl.Messages;
 
 /**
@@ -26,8 +27,15 @@ public class ConnectHandler extends ServerHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) {
+		String serverName = event.getParameter("server"); //$NON-NLS-1$
+		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
+		IAppServerInfo server = (IAppServerInfo) serverManager.getServer(serverName);
+
+		if (server == null) {
+			server = (IAppServerInfo) getSelection();
+		}
+
 		try {
-			IAppServerInfo server = (IAppServerInfo) getSelection();
 			String loginDialog = server.getServerType().getLoginDialog();
 
 			if (loginDialog != null) {

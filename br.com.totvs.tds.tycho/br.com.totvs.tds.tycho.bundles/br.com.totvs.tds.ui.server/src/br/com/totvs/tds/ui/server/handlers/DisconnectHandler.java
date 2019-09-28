@@ -19,20 +19,6 @@ import br.com.totvs.tds.ui.server.nl.Messages;
  */
 public class DisconnectHandler extends ServerHandler {
 
-	/**
-	 * Desconexão do servidor.
-	 *
-	 * @throws Exception
-	 */
-	private void disconnect(final IAppServerInfo connector) throws Exception {
-		IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-		ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-
-		if (!lsService.disconnect(connector.getName(), connector.getToken())) {
-			throw new Exception(Messages.DisconnectHandler_disconnect_forced);
-		}
-	}
-
 	@Override
 	public Object execute(final ExecutionEvent event) {
 		String server = event.getParameter("server"); //$NON-NLS-1$
@@ -41,14 +27,15 @@ public class DisconnectHandler extends ServerHandler {
 		if (server != null) {
 			IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 			item = (IAppServerInfo) serverManager.getServer(server);
-		}
-
-		if ((item == null) && (getSelection() instanceof IAppServerInfo)) {
+		} else if (getSelection() instanceof IAppServerInfo) {
 			item = (IAppServerInfo) getSelection();
 		}
 
 		try {
-			disconnect(item);
+			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+			ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+
+			lsService.disconnect(item.getName(), item.getToken());
 			ServerActivator.logStatus(IStatus.INFO, Messages.DisconnectHandler_discconect,
 					Messages.DisconnectHandler_disconect_ok, item.getName());
 		} catch (Exception e) {

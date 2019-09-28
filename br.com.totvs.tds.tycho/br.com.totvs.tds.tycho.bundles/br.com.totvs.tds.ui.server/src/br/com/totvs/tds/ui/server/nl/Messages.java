@@ -219,6 +219,8 @@ public class Messages extends NLS {
 
 	public static String StatusLineControl_connecteds;
 
+	public static String StatusLineControl_not_connecteds;
+
 	public static String StatusLineControl_invalid_operation;
 
 	public static String StatusLineControl_no_connected_server;

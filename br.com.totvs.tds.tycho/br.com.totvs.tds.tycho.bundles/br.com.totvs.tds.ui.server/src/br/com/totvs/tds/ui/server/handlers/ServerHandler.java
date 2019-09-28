@@ -27,8 +27,10 @@ public abstract class ServerHandler extends AbstractHandler {
 		ISelection selection = selectionService.getSelection();
 		IItemInfo element = null;
 
-		if ((selection != null) && (selection instanceof IStructuredSelection)) {
-			element = (IItemInfo) ((IStructuredSelection) selection).getFirstElement();
+		if (selection != null) {
+			if (selection instanceof IStructuredSelection) {
+				element = (IItemInfo) ((IStructuredSelection) selection).getFirstElement();
+			}
 		}
 
 		return element;

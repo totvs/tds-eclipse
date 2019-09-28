@@ -5,7 +5,7 @@
 <booleanAttribute key="automaticAdd" value="true"/>
 <booleanAttribute key="automaticValidate" value="false"/>
 <stringAttribute key="bootstrap" value=""/>
-<stringAttribute key="checked" value="org.eclipse.lsp4e.debug"/>
+<stringAttribute key="checked" value="org.eclipse.lsp4e,org.eclipse.lsp4e.debug"/>
 <booleanAttribute key="clearConfig" value="true"/>
 <booleanAttribute key="clearws" value="false"/>
 <booleanAttribute key="clearwslog" value="false"/>
@@ -302,9 +302,9 @@
 <mapEntry key="org.eclipse.jface/newlook/preferences/showNewLook" value="false"/>
 <mapEntry key="org.eclipse.jface/trace/actions" value="false"/>
 <mapEntry key="org.eclipse.jface/trace/toolbarDisposal" value="false"/>
-<mapEntry key="org.eclipse.lsp4e.debug/debug" value="true"/>
-<mapEntry key="org.eclipse.lsp4e.debug/trace/io" value="true"/>
-<mapEntry key="org.eclipse.lsp4e.debug/trace/messages" value="true"/>
+<mapEntry key="org.eclipse.lsp4e.debug/debug" value="false"/>
+<mapEntry key="org.eclipse.lsp4e.debug/trace/io" value="false"/>
+<mapEntry key="org.eclipse.lsp4e.debug/trace/messages" value="false"/>
 <mapEntry key="org.eclipse.lsp4e/debug" value="true"/>
 <mapEntry key="org.eclipse.ltk.core.refactoring/perf/participants/checkConditions" value="300"/>
 <mapEntry key="org.eclipse.ltk.core.refactoring/perf/participants/createChanges" value="300"/>

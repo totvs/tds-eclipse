@@ -6,9 +6,17 @@ import java.rmi.ServerException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
+import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -24,7 +32,11 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
+import org.eclipse.ui.services.IServiceLocator;
 import org.eclipse.wb.swt.ResourceManager;
 
 import br.com.totvs.tds.server.ServerActivator;
@@ -46,7 +58,7 @@ import br.com.totvs.tds.ui.server.nl.Messages;
  */
 public class StatusLineControl extends WorkbenchWindowControlContribution implements PropertyChangeListener {
 	/**
-	 * Item de menu para seleção de servidor.
+	 * Item de menu para seleção de ambiente.
 	 *
 	 * @author acandido
 	 */
@@ -72,6 +84,59 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		}
 	}
 
+	/**
+	 * Item de menu para seleção de ambiente.
+	 *
+	 * @author acandido
+	 */
+	private class ServerMenuItemAction implements SelectionListener {
+
+		@Override
+		public void widgetDefaultSelected(final SelectionEvent e) {
+		}
+
+		@Override
+		public void widgetSelected(final SelectionEvent e) {
+			final MenuItem menuItem = ((MenuItem) e.getSource());
+			final IAppServerInfo server = (IAppServerInfo) menuItem.getData("server"); //$NON-NLS-1$
+
+			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+			ICommandService commandService = serviceLocator.getService(ICommandService.class);
+
+			Command command = null;
+			if (server.isConnected()) {
+				command = commandService.getCommand("br.com.totvs.tds.ui.server.commands.disconnectCommand"); //$NON-NLS-1$
+			} else {
+				command = commandService.getCommand("br.com.totvs.tds.ui.server.commands.connectCommand"); //$NON-NLS-1$
+			}
+
+			// FIX: ativar o comando
+			// command.setEnabled(server); << não resolveu a indisponibilidade
+			// acho que será necessário "mandar" para SelecionService
+			// ou via handler forçando a habilitação ou
+			// separar o handler do processamento.
+
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("server", server.getName()); //$NON-NLS-1$
+
+			ParameterizedCommand pc = ParameterizedCommand.generateCommand(command, parameters);
+			IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
+
+			try {
+				handlerService.executeCommand(pc, null);
+			} catch (ExecutionException e1) {
+				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+			} catch (NotDefinedException e1) {
+				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+			} catch (NotEnabledException e1) {
+				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+			} catch (NotHandledException e1) {
+				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+			}
+
+		}
+	}
+
 	private Composite composite;
 	private Menu popupMenu;
 
@@ -82,6 +147,8 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 	private ToolItem tbCompileKeyItem;
 	private ToolItem tbServerItem;
 	private ToolItem tbOrganizationItem;
+	private SelectionListener serverMenuItemAction = new ServerMenuItemAction();
+	private SelectionListener environmentMenuItemAction = new EnvironmentMenuItemAction();
 
 	/**
 	 * @wbp.parser.constructor
@@ -99,30 +166,41 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		final IServerInfo activeServer = serverManager.getCurrentServer();
 		final MenuItem menuItem = new MenuItem(popupMenu, SWT.CASCADE);
 
-		menuItem.setText("  " + server.getName()); //$NON-NLS-1$
+		menuItem.setText(" " + server.getName()); //$NON-NLS-1$
 		menuItem.setData("server", server); //$NON-NLS-1$
 
 		if (activeServer != null && server.getName().equals(activeServer.getName())) {
 			menuItem.setImage(ServerUIIcons.getOk().createImage());
+		} else if (server.isConnected()) {
+			menuItem.setImage(ServerUIIcons.getConnected().createImage());
 		} else {
 			menuItem.setImage(ServerUIIcons.getServer().createImage());
 		}
+
 		try {
-			final Menu menuEnvironment = new Menu(menuItem);
-			final List<String> listEnvironments = getEnvironmentsNameList(server.getEnvironments());
-			if (server.isConnected() && listEnvironments != null) {
+			if (server.isConnected()) {
+
+				final Menu menuEnvironment = new Menu(menuItem);
+				final List<String> listEnvironments = getEnvironmentsNameList(server.getEnvironments());
+				final MenuItem disconnectMenuItem = new MenuItem(menuEnvironment, SWT.PUSH);
+				disconnectMenuItem.setText("Desconectar");
+				disconnectMenuItem.setMenu(menuEnvironment);
+				disconnectMenuItem.addSelectionListener(serverMenuItemAction);
+
 				Collections.sort(listEnvironments);
 				for (final String environment : listEnvironments) {
 					final MenuItem itemEnvironment = new MenuItem(menuEnvironment, SWT.PUSH);
 					itemEnvironment.setText(environment);
 					menuItem.setMenu(menuEnvironment);
 
-					itemEnvironment.addSelectionListener(new EnvironmentMenuItemAction());
+					itemEnvironment.addSelectionListener(environmentMenuItemAction);
 					if (activeServer != null && server.getName().equals(activeServer.getName()) && environment != null
 							&& environment.equals(activeEnvironment)) {
 						itemEnvironment.setImage(ServerUIIcons.getOk().createImage());
 					}
 				}
+			} else {
+				menuItem.addSelectionListener(serverMenuItemAction);
 			}
 		} catch (final Exception e) {
 			ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_status, e.getMessage(), e);
@@ -146,7 +224,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		this.tbServerItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				fillMenuWithActiveServers();
+				fillMenuWithServers();
 				popupMenu.setVisible(true);
 			}
 		});
@@ -202,33 +280,39 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 	 *
 	 * @throws ServerException
 	 */
-	private void fillMenuWithActiveServers() {
+	private void fillMenuWithServers() {
 		popupMenu = new Menu(tbServerItem.getParent());
 		tbServerItem.getParent().setMenu(popupMenu);
 
-		final List<IServerInfo> connectedServers = serverManager.getActiveServers(IAppServerInfo.class);
-
-		if (connectedServers.isEmpty()) {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_status,
-					Messages.StatusLineControl_no_connected_server);
-			return;
-		}
-
 		final IAppServerInfo activerServer = serverManager.getCurrentServer();
-
-		connectedServers.remove(activerServer);
-		getOrderedActiveServers(connectedServers);
-
 		if ((activerServer != null) && activerServer.isConnected()) {
-			final MenuItem activerServerTitle = new MenuItem(popupMenu, SWT.PUSH);
-			activerServerTitle.setText(Messages.StatusLineControl_active);
+			final MenuItem serverItems = new MenuItem(popupMenu, SWT.PUSH);
+			serverItems.setEnabled(false);
+			serverItems.setText(Messages.StatusLineControl_active);
 			addServerIntoMenuList(activerServer);
 		}
 
-		if (connectedServers != null && connectedServers.size() > 0) {
+		List<IServerInfo> servers = serverManager.getActiveServers(IAppServerInfo.class);
+		servers.remove(activerServer);
+
+		if (!servers.isEmpty()) {
+			getOrderedActiveServers(servers);
+			final MenuItem serverItems = new MenuItem(popupMenu, SWT.PUSH);
+			serverItems.setText(Messages.StatusLineControl_connecteds);
+			serverItems.setEnabled(false);
+			for (final IServerInfo server : servers) {
+				if (server instanceof IAppServerInfo)
+					addServerIntoMenuList((IAppServerInfo) server);
+			}
+		}
+
+		servers = serverManager.getInactiveServers(IAppServerInfo.class);
+		if (!servers.isEmpty()) {
+			getOrderedActiveServers(servers);
 			final MenuItem connectedServersTitle = new MenuItem(popupMenu, SWT.PUSH);
-			connectedServersTitle.setText(Messages.StatusLineControl_connecteds);
-			for (final IServerInfo server : connectedServers) {
+			connectedServersTitle.setEnabled(false);
+			connectedServersTitle.setText(Messages.StatusLineControl_not_connecteds);
+			for (final IServerInfo server : servers) {
 				if (server instanceof IAppServerInfo)
 					addServerIntoMenuList((IAppServerInfo) server);
 			}
@@ -238,6 +322,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 
 	private List<String> getEnvironmentsNameList(final List<IEnvironmentInfo> environments) {
 		final List<String> envNameList = new ArrayList<String>();
+
 		for (final IEnvironmentInfo envInfo : environments) {
 			envNameList.add(envInfo.getName());
 		}
