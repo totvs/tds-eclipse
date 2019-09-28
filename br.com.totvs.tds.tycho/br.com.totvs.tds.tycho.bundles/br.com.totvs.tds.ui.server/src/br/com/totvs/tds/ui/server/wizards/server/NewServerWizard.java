@@ -28,7 +28,7 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 	/**
 	 * Construtor.
 	 *
-	 * @param subTitle Sub-t�tulo indicando o tipo de servidor.
+	 * @param subTitle Sub-título indicando o tipo de servidor.
 	 * @param serverVO VO com informações para uso pelo assistente.
 	 */
 	/**
@@ -37,7 +37,7 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 	 * @param newServerVO
 	 * @param name
 	 */
-	public NewServerWizard(String name, NewServerVO newServerVO) {
+	public NewServerWizard(NewServerVO newServerVO) {
 		super();
 
 		setWindowTitle(Messages.NewServerWizard_new_server_wizard_title);
@@ -47,7 +47,7 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 
 	@Override
 	public void addPages() {
-		newServerPage = new NewServerWizardPage(getWindowTitle(), newServer);
+		newServerPage = new NewServerWizardPage(newServer);
 		addPage(newServerPage);
 	}
 
@@ -81,8 +81,7 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 					finish = true;
 
 					ServerUIActivator.logStatus(IStatus.INFO, Messages.NewServerWizard_server,
-							Messages.NewServerWizard_server_added_warning, server.getName(),
-							server.getAddress());
+							Messages.NewServerWizard_server_added_warning, server.getName(), server.getAddress());
 
 				} catch (RuntimeException e) {
 					ServerUIActivator.logStatus(IStatus.ERROR, Messages.NewServerWizard_server, e.getMessage(), e);

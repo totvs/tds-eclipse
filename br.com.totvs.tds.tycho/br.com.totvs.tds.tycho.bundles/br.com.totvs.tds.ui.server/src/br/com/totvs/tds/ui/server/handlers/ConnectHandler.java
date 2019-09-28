@@ -13,6 +13,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.server.ServerActivator;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.ui.server.nl.Messages;
 
@@ -26,26 +27,24 @@ public class ConnectHandler extends ServerHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) {
 		try {
-			IServerInfo server = (IServerInfo) getSelection();
-			String loginDialog = event.getParameter("loginDialog"); //$NON-NLS-1$
+			IAppServerInfo server = (IAppServerInfo) getSelection();
+			String loginDialog = server.getServerType().getLoginDialog();
 
-			if (loginDialog == null) {
-				loginDialog = String.format("br.com.totvs.tds.ui.server.tools.%sLoginDialog", server.getServerType()); //$NON-NLS-1$
+			if (loginDialog != null) {
+				IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+				ICommandService commandService = serviceLocator.getService(ICommandService.class);
+
+				Command command = commandService.getCommand("br.com.totvs.tds.ui.server.commands.loginCommand"); //$NON-NLS-1$
+
+				Map<String, Object> parameters = new HashMap<String, Object>();
+				parameters.put("loginDialog", loginDialog); //$NON-NLS-1$
+				parameters.put("server", server.getName()); //$NON-NLS-1$
+
+				ParameterizedCommand pc = ParameterizedCommand.generateCommand(command, parameters);
+
+				IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
+				handlerService.executeCommand(pc, null);
 			}
-
-			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-			ICommandService commandService = serviceLocator.getService(ICommandService.class);
-
-			Command command = commandService.getCommand("br.com.totvs.tds.ui.server.commands.loginCommand"); //$NON-NLS-1$
-
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("loginDialog", loginDialog); //$NON-NLS-1$
-			parameters.put("server", server.getName()); //$NON-NLS-1$
-
-			ParameterizedCommand pc = ParameterizedCommand.generateCommand(command, parameters);
-
-			IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
-			handlerService.executeCommand(pc, null);
 		} catch (Exception e) {
 			ServerActivator.logStatus(IStatus.ERROR, Messages.ConnectHandler_connect, e.getMessage(), e);
 		}

@@ -131,15 +131,6 @@ public class ProtheusLoginDialog extends LoginDialog implements ILoginDialog {
 		return true;
 	}
 
-	@Override
-	public void initialize(final String title, final Map<String, Object> inputData) {
-		this.title = title;
-
-		this.getDataMap().clear();
-		this.getDataMap().putAll(inputData);
-
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -174,7 +165,7 @@ public class ProtheusLoginDialog extends LoginDialog implements ILoginDialog {
 		txtPassword.setText((String) getDataMap().getOrDefault(PASSWORD, Messages.EMPTY_STRING));
 		txtServer.setText((String) getDataMap().getOrDefault(SERVER_ADDRESS, Messages.EMPTY_STRING));
 
-		setSaveSecure(true);
+		setSaveSecure(getDataMap().getOrDefault(USE_SECURE_STORAGE, false).equals(true));
 	}
 
 }

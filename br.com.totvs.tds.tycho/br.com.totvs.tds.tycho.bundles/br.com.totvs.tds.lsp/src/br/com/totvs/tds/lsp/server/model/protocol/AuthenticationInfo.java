@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package br.com.totvs.tds.lsp.server.model.protocol;
 
@@ -18,12 +18,13 @@ public class AuthenticationInfo {
 	private int port;
 	private String server;
 	private String user;
+	private int serverType;
 
 	/*
-	 * 
+	 *
 	 */
 	public AuthenticationInfo() {
-		
+
 	}
 
 	/**
@@ -92,107 +93,78 @@ public class AuthenticationInfo {
 	/**
 	 * @param autoReconnect the autoReconnect to set
 	 */
-	public void setAutoReconnect(boolean autoReconnect) {
+	public void setAutoReconnect(final boolean autoReconnect) {
 		this.autoReconnect = autoReconnect;
 	}
 
 	/**
 	 * @param buildVersion the buildVersion to set
 	 */
-	public void setBuildVersion(String buildVersion) {
+	public void setBuildVersion(final String buildVersion) {
 		this.buildVersion = buildVersion;
 	}
 
 	/**
 	 * @param connType the connType to set
 	 */
-	public void setConnType(int connType) {
+	public void setConnType(final int connType) {
 		this.connType = connType;
 	}
 
 	/**
 	 * @param environment the environment to set
 	 */
-	public void setEnvironment(String environment) {
+	public void setEnvironment(final String environment) {
 		this.environment = environment;
 	}
 
 	/**
 	 * @param identification the identification to set
 	 */
-	public void setIdentification(String identification) {
+	public void setIdentification(final String identification) {
 		this.identification = identification;
 	}
 
 	/**
 	 * @param password the password to set
 	 */
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
 	/**
 	 * @param port the port to set
 	 */
-	public void setPort(int port) {
+	public void setPort(final int port) {
 		this.port = port;
 	}
 
 	/**
 	 * @param server the server to set
 	 */
-	public void setServer(String server) {
+	public void setServer(final String server) {
 		this.server = server;
 	}
 
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(String user) {
+	public void setUser(final String user) {
 		this.user = user;
 	}
-	
+
+	/**
+	 * @return the serverType
+	 */
+	public int getServerType() {
+		return serverType;
+	}
+
+	/**
+	 * @param serverType the serverType to set
+	 */
+	public void setServerType(final int serverType) {
+		this.serverType = serverType;
+	}
+
 }
-
-//languageClient.sendRequest('$totvsserver/authentication', {
-//authenticationInfo: {
-//	connType: 1,
-//	identification: serverItem.id,
-//	server: serverItem.address,
-//	port: serverItem.port,
-//	buildVersion: serverItem.buildVersion,
-//	environment: environment,
-//	user: user,
-//	password: password,
-//	autoReconnect: true
-//}
-//}).then((authenticationNode: AuthenticationNode) => {
-//let token: string = authenticationNode.connectionToken;
-//if (token) {
-//	//vscode.window.showInformationMessage('Server ' + serverItem.label + ' connected!');
-//	Utils.saveSelectServer(serverItem.id, token, serverItem.label, environment, user);
-//	Utils.saveConnectionToken(serverItem.id, token, environment);
-//	if (treeDataProvider !== undefined) {
-//		connectedServerItem = serverItem;
-//		connectedServerItem.currentEnvironment = environment;
-//		connectedServerItem.token = token;
-//		treeDataProvider.refresh();
-//	}
-//	return true;
-//} else {
-//	vscode.window.showErrorMessage(localize("tds.webview.serversView.errorConnServer", 'Error connecting server'));
-//	return false;
-//}
-//}, err => {
-//vscode.window.showErrorMessage(err);
-//});
-//}
-//
-//export class AuthenticationNode {
-//// These properties come directly from the language server.
-//id: any;
-//osType: number;
-//connectionToken: string;
-//}
-//}
-

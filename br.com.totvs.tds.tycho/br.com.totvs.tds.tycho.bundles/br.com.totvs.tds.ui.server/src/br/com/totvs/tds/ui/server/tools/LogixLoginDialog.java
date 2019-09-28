@@ -2,134 +2,121 @@ package br.com.totvs.tds.ui.server.tools;
 
 import java.util.Map;
 
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+
+import br.com.totvs.tds.ui.server.ServerUIActivator;
+import br.com.totvs.tds.ui.server.nl.Messages;
 
 /**
  * diálogo para identificação (login) em aplicação servidora.
- * 
+ *
  * @author acandido
  */
 public class LogixLoginDialog extends LoginDialog implements ILoginDialog {
 
-	public static final String ID_CMB_ENVIRONMENT = LogixLoginDialog.class.getName().concat("cmbEnvironment"); //$NON-NLS-1$
-
 	private Combo cmbEnvironment;
+	private Label lblEnvironment;
 
-	public LogixLoginDialog(final Shell parent) {
-		super(parent);
+	/**
+	 * Create the dialog.
+	 *
+	 * @param shell
+	 * @wbp.parser.constructor
+	 */
+	public LogixLoginDialog(Shell shell) {
+		super(shell);
 	}
 
 	@Override
-	public void initialize(final String title, final Map<String, Object> inputData) {
-		this.title = title;
+	protected Control createDataArea(final Composite container) {
+		super.createDataArea(container);
 
-		this.getDataMap().clear();
-		this.getDataMap().putAll(inputData);
+		createEnvironment(container);
+
+		return container;
 	}
 
-	@Override
-	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return false;
+	private void createEnvironment(final Composite container) {
+		lblEnvironment = new Label(container, SWT.NONE);
+		lblEnvironment.setText(Messages.ProtheusLoginDialog_environment);
+
+		getPreferenceStore().setDefault(ID_BTN_USESECURESTORAGE, false);
+
+		cmbEnvironment = new Combo(container, SWT.NONE);
+		cmbEnvironment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		cmbEnvironment.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(final ModifyEvent e) {
+				dialogChanged();
+			}
+		});
 	}
 
-	@Override
-	public void loadData() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected Control createDataArea(Composite parent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.ui.server.tools.LoginDialog#doDialogChanged()
+	 */
 	@Override
 	protected void doDialogChanged() {
-		// TODO Auto-generated method stub
-		
+		String enviroment = cmbEnvironment.getText().trim();
+
+		if (enviroment.isEmpty()) {
+			setErrorMessage(Messages.ProtheusLoginDialog_environment_required);
+		} else {
+			getDataMap().put(ENVIRONMENT, enviroment);
+		}
+	}
+
+	private IPreferenceStore getPreferenceStore() {
+		return ServerUIActivator.getDefault().getPreferenceStore();
 	}
 
 	@Override
 	protected boolean hasUseSecureStorageButton() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see br.com.totvs.tds.ui.server.tools.LoginDialog#createDataArea(org.eclipse .swt.widgets.Composite)
-//	 */
-//	@Override
-//	protected Control createDataArea(final Composite container) {
-//		Label lblAmbiente = new Label(container, SWT.NONE);
-//		lblAmbiente.setText(Messages.LogixLoginDialog_1);
-//
-//		cmbEnvironment = new Combo(container, SWT.NONE);
-//		cmbEnvironment.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-//		cmbEnvironment.setItems((String[]) getDataMap().getOrDefault(LAST_ENVIRONMENTS, new String[0]));
-//
-//		cmbEnvironment.addModifyListener(new ModifyListener() {
-//			@Override
-//			public void modifyText(final ModifyEvent e) {
-//				doDialogChanged();
-//			}
-//		});
-//
-//		if (dataMap != null) {
-//			String environmentName = (String) dataMap.get("environment"); //$NON-NLS-1$
-//
-//			if (environmentName != null && !environmentName.isEmpty()) {
-//				cmbEnvironment.setText(environmentName);
-//				dataMap.put(ENVIRONMENT, environmentName);
-//			}
-//
-//			String[] environments = (String[]) dataMap.get(LAST_ENVIRONMENTS);
-//			if (environments != null) {
-//				for (String environment : environments) {
-//					cmbEnvironment.add(environment);
-//				}
-//			}
-//		}
-//
-//		container.pack(true);
-//		return container;
-//	}
-//
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see br.com.totvs.tds.ui.server.tools.LoginDialog#doDialogChanged()
-//	 */
-//	@Override
-//	protected void doDialogChanged() {
-//		dataMap.put(ENVIRONMENT, cmbEnvironment.getText());
-//		dataMap.put(LAST_ENVIRONMENTS, dataMap.get(LAST_ENVIRONMENTS));
-//		isValid();
-//	}
-//
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see br.com.totvs.tds.ui.server.tools.ILoginDialog#isValid()
-//	 */
-//	@Override
-//	public boolean isValid() {
-//		boolean is = (dataMap.containsKey(ENVIRONMENT) && !((String)dataMap.get(ENVIRONMENT)).isEmpty());
-//		if (btnOk != null) {
-//			btnOk.setEnabled(is);
-//		}
-//		return is;
-//	}
-//
-//	@Override
-//	protected boolean hasUseSecureStorageButton() {
-//		return false;
-//	}
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.ui.server.tools.ILoginDialog#isValid()
+	 */
+	@Override
+	public boolean isValid() {
+		boolean result = getErrorMessage() == null;
+		Map<String, Object> inputData = getDataMap();
+
+		if (result) {
+			result = (inputData.containsKey(ENVIRONMENT) && !((String) inputData.get(ENVIRONMENT)).isEmpty());
+		}
+
+		return result;
+	}
+
+	/**
+	 * Carrega os dados nos campos.
+	 */
+	@Override
+	protected void loadData() {
+		String[] environments = (String[]) getDataMap().getOrDefault(LAST_ENVIRONMENTS, new String[0]);
+		try {
+			this.cmbEnvironment.setItems(environments);
+		} catch (Exception e) {
+			this.cmbEnvironment.setItems(new String[0]);
+		}
+		this.cmbEnvironment.setText((String) getDataMap().getOrDefault(ENVIRONMENT, Messages.EMPTY_STRING));
+
+		setSaveSecure(false);
+	}
 
 }

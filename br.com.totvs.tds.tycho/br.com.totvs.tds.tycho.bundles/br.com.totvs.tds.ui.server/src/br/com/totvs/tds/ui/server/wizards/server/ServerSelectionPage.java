@@ -1,5 +1,8 @@
 package br.com.totvs.tds.ui.server.wizards.server;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -17,6 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
 
@@ -116,11 +120,11 @@ public class ServerSelectionPage extends WizardSelectionPage {
 	}
 
 	protected void fillServerList() {
-		ServerWizardNode[] wizardNodes = new ServerWizardNode[3];
+		List<ServerWizardNode> wizardNodes = new ArrayList<ServerWizardNode>();
 
-		wizardNodes[0] = new ServerWizardNode("Protheus", "protheus", this); //$NON-NLS-1$ //$NON-NLS-2$
-		wizardNodes[1] = new ServerWizardNode("Logix", "logix", this); //$NON-NLS-1$ //$NON-NLS-2$
-		wizardNodes[2] = new ServerWizardNode("DBAccess", "dbaccess", this); //$NON-NLS-1$ //$NON-NLS-2$
+		for (ServerType serverType : ServerType.values()) {
+			wizardNodes.add(new ServerWizardNode(serverType, this));
+		}
 
 		projectType.setInput(wizardNodes);
 	}

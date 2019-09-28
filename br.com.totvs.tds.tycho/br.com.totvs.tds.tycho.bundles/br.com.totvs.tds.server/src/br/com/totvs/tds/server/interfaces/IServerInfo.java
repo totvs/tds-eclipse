@@ -15,6 +15,57 @@ import br.com.totvs.tds.server.ServerOsType;
  */
 public interface IServerInfo extends IItemInfo {
 
+	public enum ServerType {
+		PROTHEUS(1, "Protheus"), LOGIX(2, "Logix"), TOTVSTEC(3, "TOTVS Tec"), DBACCESS(100, "DBAcess");
+
+		private int code;
+		private String title;
+
+		ServerType(final int code, final String title) {
+			this.code = code;
+			this.setTitle(title);
+
+		}
+
+		/**
+		 * @return the code
+		 */
+		public int getCode() {
+			return code;
+		}
+
+		/**
+		 * @return the title
+		 */
+		public String getTitle() {
+			return title;
+		}
+
+		/**
+		 * @param title the title to set
+		 */
+		public void setTitle(final String title) {
+			this.title = title;
+		}
+
+		public String getLoginDialog() {
+			switch (this) {
+			case PROTHEUS:
+				return "br.com.totvs.tds.ui.server.tools.ProtheusLoginDialog"; // $NON-NLS-N$
+			case LOGIX:
+				return "br.com.totvs.tds.ui.server.tools.LogixLoginDialog"; // $NON-NLS-N$
+			case TOTVSTEC:
+				return "br.com.totvs.tds.ui.server.tools.ProtheusLoginDialog"; // $NON-NLS-N$
+			case DBACCESS:
+				return "br.com.totvs.tds.ui.server.tools.DbAccessLoginDialog"; // $NON-NLS-N$
+			default:
+				break;
+			}
+
+			return null;
+		}
+	}
+
 	/**
 	 * Recupera o endereço.
 	 *
@@ -43,7 +94,12 @@ public interface IServerInfo extends IItemInfo {
 	 */
 	ServerOsType getServerOsType();
 
-	String getServerType();
+	/**
+	 * Tipo de servidor
+	 *
+	 * @return then server type
+	 */
+	ServerType getServerType();
 
 	/**
 	 * s�oeturn Versão do servidor.
@@ -141,7 +197,7 @@ public interface IServerInfo extends IItemInfo {
 	 *
 	 * @param serverType type of element.
 	 */
-	void setServerType(String serverType);
+	void setServerType(ServerType serverType);
 
 	/**
 	 * Estado de apresentação do console do servidor.

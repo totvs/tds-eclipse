@@ -44,6 +44,13 @@
             id="br.com.totvs.tds.ui.debug.sourcePathComputer">
       </sourcePathComputer>
    </extension>
+   <extension
+         point="org.eclipse.debug.core.watchExpressionDelegates">
+      <watchExpressionDelegate
+            debugModel="org.eclipse.lsp4e.debug.model"
+            delegateClass="br.com.totvs.tds.ui.debug.model.DAPWatchExpressionDelegate">
+      </watchExpressionDelegate>
+   </extension>
 <!--
    <extension
          point="org.eclipse.debug.core.sourceLocators">

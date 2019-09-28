@@ -20,7 +20,7 @@ public interface IGroupInfo extends IItemInfo {
 	void addChild(IItemInfo child) throws RuntimeException;
 
 	/**
-	 * Verifica a exist�ncia do elemento, baseado no nome.
+	 * Verifica a existência do elemento, baseado no nome.
 	 *
 	 * @param name nome do elemento-alvo.
 	 * @return boolean

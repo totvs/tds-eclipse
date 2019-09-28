@@ -21,13 +21,11 @@ import br.com.totvs.tds.server.interfaces.IServerInfo;
 public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private static final long SERIAL_VERSION_1 = 1L;
-	private static final long SERIAL_VERSION_2 = 2L;
-	private static final long CURRENT_SERIAL_VERSION = 3L;
 
 	/**
 	 * Valida se o endereço ou caminho do execut�vel � valido.<br>
@@ -39,7 +37,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 	public static void isValidAddress(final URI address, final boolean local) throws RuntimeException {
 		// null URI cannot be a valid address
 		if (local) {
-			File file = new File(address.getPath());
+			final File file = new File(address.getPath());
 
 			if (!((file.exists() && file.canExecute()))) {
 				throw new RuntimeException("Messages.BaseServerInfo_6");
@@ -66,7 +64,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	private boolean connected;
 
-	private String serverType;
+	private ServerType serverType;
 
 	/**
 	 * Construtor.
@@ -84,7 +82,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.internal.ItemInfo#doCustomValid()
 	 */
 	@Override
@@ -96,7 +94,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.internal.IServerInfo#getAddress()
 	 */
 	@Override
@@ -106,7 +104,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#getAppServerPort()
 	 */
 	@Override
@@ -127,7 +125,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#getServerOsType()
 	 */
 	@Override
@@ -136,14 +134,14 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 	}
 
 	@Override
-	public String getServerType() {
+	public ServerType getServerType() {
 
 		return this.serverType;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#isBlockedToConnection()
 	 */
 	@Override
@@ -154,7 +152,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#isConnected()
 	 */
 	@Override
@@ -164,7 +162,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#getConsoleLog()
 	 */
 	@Override
@@ -174,7 +172,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.internal.IServerInfo#setAddress(java.net.URI)
 	 */
 	@Override
@@ -186,31 +184,31 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#setAppServerPort(int)
 	 */
 	@Override
 	public void setAppServerPort(final int port) {
 		String host = "//localhost:";
-		
+
 		if (this.address != null) {
-			String path = address.getPath();
-			if (path != null && !path.isEmpty()) {
+			final String path = address.getPath();
+			if ((path != null) && !path.isEmpty()) {
 				host = "//" + address.getPath().split(":")[0] + ":";
 			}
 		}
-		
+
 		setAddress(URI.create(host + String.valueOf(port))); // $NON-NLS-1$
 	}
 
 	@Override
-	public void setComputerName(String computerName) {
+	public void setComputerName(final String computerName) {
 		this.computerName = computerName;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#setConnected(boolean)
 	 */
 	@Override
@@ -220,7 +218,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#setConsoleLog(boolean)
 	 */
 	@Override
@@ -230,7 +228,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IServerInfo#setServerOsType(br.com.totvs.tds.
 	 * server.ServerOsType)
 	 */
@@ -240,34 +238,32 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 	}
 
 	@Override
-	public void setServerType(String serverType) {
+	public void setServerType(final ServerType serverType) {
 		this.serverType = serverType;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IItemInfo#doReadExternal(ObjectInput)
 	 */
 	@Override
 	public void doReadExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
-		long serialVerion = in.readLong();
+		final long serialVerion = in.readLong();
 
-		if ((serialVerion > SERIAL_VERSION_1)) {
-			address = (URI) in.readObject();
-			serverType = (String) in.readObject();
-		}
+		address = (URI) in.readObject();
+		serverType = (ServerType) in.readObject();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IItemInfo#doWriteExternal(ObjectInput)
-	 * 
+	 *
 	 */
 	@Override
 	public void doWriteExternal(final ObjectOutput out) throws IOException {
-		out.writeLong(CURRENT_SERIAL_VERSION);
+		out.writeLong(SERIAL_VERSION_1);
 
 		out.writeObject(address);
 		out.writeObject(serverType);

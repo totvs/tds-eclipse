@@ -292,8 +292,6 @@ public class Messages extends NLS {
 
 	public static String NewServerWizardPage_name;
 
-	public static String NewServerWizardPage_new_server;
-
 	public static String NewServerWizardPage_new_server_title_page;
 
 	public static String NewServerWizardPage_port;

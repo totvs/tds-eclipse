@@ -31,7 +31,7 @@ import br.com.totvs.tds.server.interfaces.IServerConstants;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.debug.DebugUIActivator;
 import br.com.totvs.tds.ui.debug.helper.LaunchParameters;
-import br.com.totvs.tds.ui.debug.model.TDSDebugTarget;
+import br.com.totvs.tds.ui.debug.model.DAPDebugTarget;
 
 /**
  * The Class that defines the launcher.
@@ -100,13 +100,14 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 
 		final List<String> daargs = ActivatorServer.getInstance().getDAArgs();
 		// ao iniciar, aguarda 30 segudos para que possa fazer um "attach"
-		// daargs.add("--wait-for-attach");
-		// daargs.add("30000"); //milisegundos
+		//daargs.add("--wait-for-attach");
+		//daargs.add("30000"); // milisegundos
 		//////////////////////////////////////////////
 
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MODE, DSPPlugin.DSP_MODE_LAUNCH);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_ARGS, daargs);
+		wk.setAttribute(DSPPlugin.ATTR_DSP_PARAM, getDspParam(mode, lp));
 		wk.setAttribute(DSPPlugin.ATTR_DSP_PARAM, getDspParam(mode, lp));
 
 		try {
@@ -155,11 +156,11 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 	 * of {@link DSPDebugTarget}, but does not have to be. The arguments to this
 	 * method are normally just passed to {@link DSPDebugTarget} constructor.
 	 */
-	// @Override
+	@Override
 	protected IDebugTarget createDebugTarget(final SubMonitor subMonitor, final Runnable cleanup,
 			final InputStream inputStream, final OutputStream outputStream, final ILaunch launch,
 			final Map<String, Object> dspParameters) throws CoreException {
-		final TDSDebugTarget target = new TDSDebugTarget(launch, cleanup, inputStream, outputStream, dspParameters);
+		final DAPDebugTarget target = new DAPDebugTarget(launch, cleanup, inputStream, outputStream, dspParameters);
 		target.initialize(subMonitor.split(80));
 		return target;
 	}
@@ -244,4 +245,5 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 
 		return commandLine;
 	}
+
 }

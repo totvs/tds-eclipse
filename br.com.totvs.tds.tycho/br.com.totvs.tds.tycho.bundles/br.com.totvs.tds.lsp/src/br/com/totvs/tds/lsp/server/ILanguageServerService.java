@@ -8,48 +8,52 @@ import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 
 /**
  * Interface com o serviço de ls.
- * 
+ *
  * @author acandido
- * 
+ *
  */
 public interface ILanguageServerService {
 	/**
 	 * Efetua a conexão e a autenticação do usuário/desenvolvedor.
+	 *
 	 * @return token de segurança da conexão.
-	 * 
+	 *
 	 */
-	String authentication(String id, URI address, String buildVersion, String environment, String user, String password);
+	String authentication(String id, URI address, String buildVersion, String environment, String user, String password,
+			int serverType);
 
 	/**
 	 * Efetua a desconexão com servidor Protheus.
+	 *
 	 * @param token de segurança obtido no último login
-	 * @param name nome do servidor
+	 * @param name  nome do servidor
 	 * @return status da desconexão
-	 * 
+	 *
 	 */
 	boolean disconnect(String name, String token);
 
 	/**
 	 * Efetua a validação da conexão, retornando a versão do servidor.
-	 * 
+	 *
 	 */
 	String validation(URI address);
 
 	/**
 	 * Compila a lista de arquivos, conforme configurações informadas.
-	 * 
+	 *
 	 */
-	void buidlFile(String token, String permimissionToken, String environment, List<String> files, CompileOptions compileOptions, List<String> includePaths);
+	void buidlFile(String token, String permimissionToken, String environment, List<String> files,
+			CompileOptions compileOptions, List<String> includePaths);
 
 	/**
 	 * Lista de servidores 'slave'.
-	 * 
+	 *
 	 */
 	SlaveDataNode[] getSlaveList(String token);
 
 	/**
 	 * Lista de permissões.
-	 * 
+	 *
 	 * @param token
 	 * @return
 	 */
@@ -61,7 +65,7 @@ public interface ILanguageServerService {
 	boolean isReady();
 
 	/**
-	 * 
+	 *
 	 * @param token
 	 * @param environment
 	 * @param includeTres
@@ -70,7 +74,7 @@ public interface ILanguageServerService {
 	List<String> getProgramMap(String token, String environment, boolean includeTres);
 
 	/**
-	 * 
+	 *
 	 * @param token
 	 * @param authorizationToken
 	 * @param environment
@@ -86,11 +90,12 @@ public interface ILanguageServerService {
 			String patchDest, String[] patchFiles, String patchMaster, int patchType);
 
 	/**
-	 * 
+	 *
 	 * @param token
 	 * @param environment
 	 * @param string
 	 * @param b
 	 */
 	void getPathDirList(String token, String environment, String folder, boolean includeDir);
+
 }

@@ -2,13 +2,15 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>br.com.totvs.tds.tycho.updbin</artifactId>
+	<packaging>pom</packaging>
+
 	<parent>
 		<groupId>br.com.totvs.tds.tycho</groupId>
 		<artifactId>br.com.totvs.tds.tycho.root</artifactId>
 		<version>11.4.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>br.com.totvs.tds.tycho.updbin</artifactId>
-	<packaging>pom</packaging>
 
 	<properties>
 		<bundles.folder>${project.build.directory}/../../br.com.totvs.tds.tycho.bundles</bundles.folder>
@@ -165,66 +167,8 @@
 						</configuration>
 					</execution>
 				</executions>
-
 			</plugin>
-
 		</plugins>
 	</build>
-
-	<profiles>
-		<!-- This profile is used to upload the repo -->
-		<profile>
-			<id>uploadRepo</id>
-			<properties>
-				<!-- Properties relative to the distant host where to upload the repo -->
-				<ftp.url>ftps://ds.tovs.com</ftp.url>
-				<ftp.toDir>/data/UPDATESITETECNOLOGIA/index/updates/tds114nb</ftp.toDir>
-				<!-- Relative path to the repo being uploaded -->
-				<repo.path>${project.build.directory}/repository/</repo.path>
-			</properties>
-
-			<distributionManagement>
-				<site>
-					<id>p2Repo</id>
-					<url>${ftp.url}</url>
-				</site>
-			</distributionManagement>
-
-			<build>
-				<plugins>
-					<!-- Upload the repo to the server -->
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
-						<version>1.0-beta-4</version>
-						<executions>
-							<execution>
-								<id>upload-repo</id>
-								<phase>install</phase>
-								<goals>
-									<goal>upload</goal>
-								</goals>
-								<configuration>
-									<fromDir>${repo.path}</fromDir>
-									<includes>**</includes>
-									<toDir>${ftp.toDir}</toDir>
-									<url>${ftp.url}</url>
-									<serverId>p2Repo</serverId>
-
-									<!-- Points to your settings.xml where the connection settings are 
-										stored as shown below -->
-									<!-- <server> -->
-									<!-- <id>p2Repo</id> -->
-									<!-- <username>username</username> -->
-									<!-- <password>password</password> -->
-									<!-- </server> -->
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 
 </project>

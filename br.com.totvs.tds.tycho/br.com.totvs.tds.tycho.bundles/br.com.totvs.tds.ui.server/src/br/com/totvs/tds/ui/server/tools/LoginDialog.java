@@ -189,6 +189,15 @@ public abstract class LoginDialog extends TitleAreaDialog implements ILoginDialo
 	abstract protected boolean hasUseSecureStorageButton();
 
 	@Override
+	public void initialize(final String title, final Map<String, Object> inputData) {
+		this.title = title;
+
+		this.getDataMap().clear();
+		this.getDataMap().putAll(inputData);
+
+	}
+
+	@Override
 	public boolean isSafeSave() {
 		return saveSecure;
 	}

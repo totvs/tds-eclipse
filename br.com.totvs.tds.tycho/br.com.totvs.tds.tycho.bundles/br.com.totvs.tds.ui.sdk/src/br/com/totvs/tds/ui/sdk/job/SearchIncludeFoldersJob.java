@@ -65,7 +65,7 @@ public class SearchIncludeFoldersJob extends Job {
 
 		if (monitor.isCanceled() && !folders.isEmpty()) {
 			return SdkUIActivator.showStatus(IStatus.CANCEL, String.format("Busca parcial|%s", "dialog:result_search"),
-					"Foram localizadas [%d] pastas em [%d] visitadas.\n\tConfirme-as acionando o t�tulo.",
+					"Foram localizadas [%d] pastas em [%d] visitadas.\n\tConfirme-as acionando o título.",
 					URI.create("dialog:result_search"), folders.size(), countVisitedFolders,
 					ISDKPreferenceKeys.RESULT_SEARCH);
 		}
@@ -98,7 +98,7 @@ public class SearchIncludeFoldersJob extends Job {
 		}
 
 		return SdkUIActivator.showStatus(IStatus.OK, String.format("Busca finalizada|%s", "dialog:result_search"),
-				"Foram localizadas [%d] pastas em [%d] visitadas.\n\tConfirme-as acionando o t�tulo.",
+				"Foram localizadas [%d] pastas em [%d] visitadas.\n\tConfirme-as acionando o título.",
 				URI.create("dialog:result_search"), folders.size(), countVisitedFolders,
 				ISDKPreferenceKeys.RESULT_SEARCH);
 	}

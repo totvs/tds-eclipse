@@ -17,6 +17,7 @@ import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 /**
@@ -62,11 +63,12 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 	private void decorate(final IAppServerSlaveInfo element, final IDecoration decoration) {
 		decoration.addOverlay(ServerUIIcons.getSlave(), IDecoration.BOTTOM_RIGHT);
 
-		if (element.getServerType().equals("Protheus")) { //$NON-NLS-1$
+		if (ServerType.PROTHEUS.equals(element.getServerType())) {
 			decoration.addOverlay(ServerUIIcons.getProtheus(), IDecoration.TOP_LEFT);
-		} else if (element.getServerType().equals("Logix")) { //$NON-NLS-1$
+		} else if (ServerType.LOGIX.equals(element.getServerType())) {
 			decoration.addOverlay(ServerUIIcons.getLogix(), IDecoration.TOP_LEFT);
 		}
+
 	}
 
 	private void decorate(final IEnvironmentInfo element, final IDecoration decoration) {
@@ -103,9 +105,9 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 		if (element instanceof IAppServerInfo) {
 			IAppServerInfo appServerInfo = (IAppServerInfo) element;
 
-			if (appServerInfo.getServerType().equals("Protheus")) { //$NON-NLS-1$
+			if (ServerType.PROTHEUS.equals(element.getServerType())) {
 				decoration.addOverlay(ServerUIIcons.getProtheus(), IDecoration.TOP_LEFT);
-			} else if (appServerInfo.getServerType().equals("Logix")) { //$NON-NLS-1$
+			} else if (ServerType.LOGIX.equals(element.getServerType())) {
 				decoration.addOverlay(ServerUIIcons.getLogix(), IDecoration.TOP_LEFT);
 			}
 

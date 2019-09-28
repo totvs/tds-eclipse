@@ -34,6 +34,7 @@ import br.com.totvs.tds.server.interfaces.IOrganization;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.ISubsidiary;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -276,8 +277,9 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 	protected void openSelectOrganization() {
 		final IAppServerInfo server = serverManager.getCurrentServer();
 		if (server != null) {
-			final String serverType = server.getServerType();
-			if (serverType.equalsIgnoreCase(Messages.StatusLineControl_Protheus)) { // $NON-NLS-1$
+			final ServerType serverType = server.getServerType();
+
+			if (ServerType.PROTHEUS.equals(serverType)) { // $NON-NLS-1$
 				IAppServerInfo currentServer = serverManager.getCurrentServer();
 				List<IOrganization> organizations = currentServer.getOrganizations();
 
@@ -368,8 +370,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 
 		if (server == null || environment == null) {
 		} else {
-			String serverType = server.getServerType();
-			enabled = serverType.equalsIgnoreCase("Protheus"); //$NON-NLS-1$
+			enabled = ServerType.PROTHEUS.equals(server.getServerType());
 			serverName = server.getName().toLowerCase();
 			serverNameToolTip = serverName.toUpperCase();
 			environment = environment.toLowerCase();

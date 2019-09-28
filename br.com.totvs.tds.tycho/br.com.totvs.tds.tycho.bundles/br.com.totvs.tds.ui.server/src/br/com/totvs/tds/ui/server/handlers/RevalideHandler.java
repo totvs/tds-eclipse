@@ -27,6 +27,7 @@ import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -131,16 +132,16 @@ public class RevalideHandler extends ServerHandler {
 		@Override
 		public void run() {
 			try {
-				String serverType = server.getServerType();
+				ServerType serverType = server.getServerType();
 				boolean ok = false;
 
-				if (serverType.equals("Protheus")) { //$NON-NLS-1$
+				if (ServerType.PROTHEUS.equals(serverType)) { // $NON-NLS-1$
 					if (revalidate) {
 						ok = loginProtheus(server, false);
 					} else {
 						ok = loginProtheus(server, forceUser);
 					}
-				} else if (serverType.equals("Logix")) { //$NON-NLS-1$
+				} else if (ServerType.LOGIX.equals(serverType)) { // $NON-NLS-1$
 					ok = false; // loginLogix(environmentsAllowed, server, allEnvironments);
 				} else {
 					ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_identification,

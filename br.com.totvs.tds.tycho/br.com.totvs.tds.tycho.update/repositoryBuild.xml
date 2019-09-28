@@ -1,0 +1,63 @@
+<project name="FTP Updatesite 11.4" basedir="." default="main">
+
+	<property name="updatesite.prefix" value="11.4" />
+	<property name="updateversion" value="${updatesite.prefix}.0" />
+
+	<property name="ftp.remotebasedir" value="tds114" />
+
+	<property name="repository.dir" value="target/repository" />
+
+	<property name="repository.zip.dir" value="target" />
+	<property name="repository.zip.file" value="br.com.totvs.tds.repository-${updateversion}-SNAPSHOT.zip" />
+
+	<property name="upload.zip.temp" value="${basedir}/temp" />
+	<property name="repository.qualifier.id" value="br.com.totvs.tds.repository-${updateversion}-${buildQualifier}" />
+	<property name="repository.qualifier.zip.file" value="${repository.qualifier.id}.zip" />
+	<property name="last.dat" value="last.dat" />
+
+	<property name="ftp.server" value="10.171.71.117" />
+	<property name="ftp.port" value="81" />
+
+	<property name="ftp.userid" value="updates" />
+	<property name="ftp.password" value="updates" />
+
+	<property name="ftp.remotebasedir.type" value="${ftp.remotebasedir}${build.type}" />
+	<property name="ftp.remotedir" value="${ftp.remotebasedir.type}/${updatesite.prefix}_${buildQualifier}" />
+
+	<taskdef name="ftp" classname="org.apache.tools.ant.taskdefs.optional.net.FTP" />
+
+	<echo>
+		**************************************************************************
+		TOTVS Developer Studio (c) TOTVS S.A. Todos os direitos reservados
+		--------------------------------------------------------------------------
+		Publicação do sítio de atualização em VM de transição
+		Repositório: ${repository.qualifier.id}
+		--------------------------------------------------------------------------
+	</echo>
+
+	<target name="main" depends="mkdir, upload, upload_zip" />
+
+	<target name="mkdir">
+		<echo>Mkdir...</echo>
+		<ftp action="mkdir" verbose="yes" server="${ftp.server}" userid="${ftp.userid}" password="${ftp.password}" passive="yes" remotedir="${ftp.remotedir}">
+		</ftp>
+	</target>
+
+	<target name="upload">
+		<echo>Uploading...</echo>
+		<ftp action="put" verbose="yes" server="${ftp.server}" remotedir="${ftp.remotedir}" userid="${ftp.userid}" password="${ftp.password}" passive="yes" depends="yes">
+			<fileset dir="${repository.dir}" />
+		</ftp>
+	</target>
+
+	<target name="upload_zip">
+		<echo>Uploading ZIP...</echo>
+		<mkdir dir="${upload.zip.temp}" />
+		<copy file="${basedir}/${repository.zip.dir}/${repository.zip.file}" tofile="${upload.zip.temp}/${repository.qualifier.zip.file}" />
+		<echo file="${upload.zip.temp}/${last.dat}" append="false">${repository.qualifier.zip.file}</echo>
+		<ftp action="put" verbose="yes" server="${ftp.server}" remotedir="${ftp.remotebasedir.type}" userid="${ftp.userid}" password="${ftp.password}" passive="yes" depends="yes">
+			<fileset dir="${upload.zip.temp}" />
+		</ftp>
+		<delete dir="${basedir}/temp" />
+	</target>
+</project>

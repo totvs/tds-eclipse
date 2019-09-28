@@ -9,6 +9,7 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.vo.NewServerVO;
@@ -20,11 +21,6 @@ import br.com.totvs.tds.ui.server.wizards.INewItemWizard;
  * @author acandido
  */
 public class ServerWizardNode implements IWizardNode {
-
-	/**
-	 * Just a name so we can display these IWizardNodes with a descriptive label.
-	 */
-	private final String name;
 
 	/**
 	 * VO para uso do assistente.
@@ -45,14 +41,10 @@ public class ServerWizardNode implements IWizardNode {
 	 * @param type                , tipo de servidor.
 	 * @param serverSelectionPage ,elemento pai
 	 */
-	public ServerWizardNode(final String name, final String serverId, final ServerSelectionPage serverSelectionPage) {
-		Assert.isNotNull(name, Messages.ServerWizardNode_required_argument);
-		Assert.isNotNull(serverId, Messages.ServerWizardNode_required_argument_1);
-		Assert.isNotNull(serverSelectionPage, Messages.ServerWizardNode_required_argument_2);
-
-		this.name = name;
+	public ServerWizardNode(final ServerType serverType, final ServerSelectionPage serverSelectionPage) {
 		this.newServer = new NewServerVO();
 		this.newServer.setParent(serverSelectionPage.getParentElement());
+		this.newServer.setServerType(serverType);
 	}
 
 	/**
@@ -81,7 +73,7 @@ public class ServerWizardNode implements IWizardNode {
 	 * @return nome a ser apresentado
 	 */
 	public String getName() {
-		return name;
+		return this.newServer.getServerType().getTitle();
 	}
 
 	public IItemInfo getNewItem() {
@@ -94,7 +86,7 @@ public class ServerWizardNode implements IWizardNode {
 	 * caches it so that the identical wizard object is returned on subsequent
 	 * calls.
 	 *
-	 * @return assistente espec�fico conforme seleção efetuada.s
+	 * @return assistente conforme seleção efetuada.
 	 */
 	@Override
 	public IWizard getWizard() {
@@ -102,9 +94,9 @@ public class ServerWizardNode implements IWizardNode {
 			try {
 				IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 				IServerInfo server = serverManager.newAppServer("Novo"); //$NON-NLS-1$
-				server.setServerType(this.getName());
 				newServer.setServer((IAppServerInfo) server);
-				wizard = new NewServerWizard(name, newServer);
+				server.setServerType(newServer.getServerType());
+				wizard = new NewServerWizard(newServer);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -26,7 +26,7 @@ public interface IAppServerInfo extends IServerInfo {
 	void addEnvironment(IEnvironmentInfo environment) throws RuntimeException;
 
 	/**
-	 * Verifica a exist�ncia do elemento, baseado no nome.
+	 * Verifica a existência do elemento, baseado no nome.
 	 *
 	 * @param environment nome do elemento-alvo.
 	 * @return boolean
@@ -58,7 +58,7 @@ public interface IAppServerInfo extends IServerInfo {
 	List<IEnvironmentInfo> getEnvironments();
 
 	/**
-	 * Retorna a seleção de m�ltiplos Ambientes.
+	 * Retorna a seleção de múltiplos Ambientes.
 	 *
 	 * @return
 	 */

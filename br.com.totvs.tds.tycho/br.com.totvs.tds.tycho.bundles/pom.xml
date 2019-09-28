@@ -2,24 +2,26 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>br.com.totvs.tds.tycho.bundles</groupId>
+	<artifactId>br.com.totvs.tds.tycho.bundles</artifactId>
+	<packaging>pom</packaging>
+
 	<parent>
 		<groupId>br.com.totvs.tds.tycho</groupId>
 		<artifactId>br.com.totvs.tds.tycho.root</artifactId>
 		<version>11.4.0-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<groupId>br.com.totvs.tds.tycho.bundles</groupId>
-	<artifactId>br.com.totvs.tds.tycho.bundles</artifactId>
-	<packaging>pom</packaging>
 
 	<modules>
 		<module>br.com.totvs.tds.lsp</module>
-		<module>br.com.totvs.tds.lsp.linux.</module>
+		<module>br.com.totvs.tds.lsp.linux</module>
 		<module>br.com.totvs.tds.lsp.macosx</module>
  		<module>br.com.totvs.tds.lsp.win32</module>
 		<module>br.com.totvs.tds.server</module>
-		<module>br.com.totvs.tds.ui.server</module>
 		<module>br.com.totvs.tds.ui</module>
+		<module>br.com.totvs.tds.ui.server</module>
 		<module>br.com.totvs.tds.ui.debug</module>
 		<module>br.com.totvs.tds.ui.editor</module>
 		<module>br.com.totvs.tds.ui.editor.advpl</module>

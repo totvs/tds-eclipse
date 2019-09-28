@@ -2,6 +2,7 @@ package br.com.totvs.tds.ui.server.vo;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 
 /**
  * informações utilizadas pelos assistentes.
@@ -14,6 +15,7 @@ public class NewServerVO {
 	private IGroupInfo parent;
 	private IAppServerInfo server;
 	private boolean immediateConnection = true;
+	private ServerType serverType;
 
 	public IGroupInfo getParent() {
 		return parent;
@@ -21,6 +23,13 @@ public class NewServerVO {
 
 	public IAppServerInfo getServer() {
 		return server;
+	}
+
+	/**
+	 * @return the serverType
+	 */
+	public ServerType getServerType() {
+		return serverType;
 	}
 
 	public boolean isImmediateConnection() {
@@ -38,6 +47,13 @@ public class NewServerVO {
 
 	public void setServer(IAppServerInfo server) {
 		this.server = server;
+	}
+
+	/**
+	 * @param serverType the serverType to set
+	 */
+	public void setServerType(ServerType serverType) {
+		this.serverType = serverType;
 	}
 
 }

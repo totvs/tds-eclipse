@@ -52,7 +52,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 	@Override
 	public String authentication(final String id, final URI address, final String buildVersion,
-			final String environment, final String user, final String password) {
+			final String environment, final String user, final String password, final int serverType) {
 		final AuthenticationInfo authenticationInfo = new AuthenticationInfo();
 
 		authenticationInfo.setConnType(1);
@@ -64,6 +64,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 		authenticationInfo.setUser(user);
 		authenticationInfo.setPassword(password);
 		authenticationInfo.setAutoReconnect(true);
+		authenticationInfo.setServerType(serverType);
 
 		AuthenticationNode result = null;
 		try {

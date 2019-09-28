@@ -517,7 +517,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		final String user = (String) connectionMap.get(IServerConstants.USERNAME);
 		final String password = (String) connectionMap.get(IServerConstants.PASSWORD);
 		final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(), environment, user,
-				password);
+				password, getServerType().getCode());
 		final boolean isLogged = token != null;
 
 		if (isLogged) {

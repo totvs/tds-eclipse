@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package br.com.totvs.tds.server.model;
 
@@ -9,17 +9,18 @@ import java.net.URI;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
 
 /**
  * Base de servidores Protheus.
- * 
+ *
  * @author acandido
  */
 public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -28,10 +29,10 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 
 	/**
 	 * Construtor.
-	 * 
+	 *
 	 * @param name
 	 */
-	public AppServerSlaveInfo(IServerSlaveHubInfo hub, final String name) {
+	public AppServerSlaveInfo(final IServerSlaveHubInfo hub, final String name) {
 		super(name);
 
 		this.hub = hub;
@@ -41,7 +42,7 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.internal.IServerInfo#containsNode(java.lang.
 	 * String )
 	 */
@@ -73,7 +74,7 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 	}
 
 	@Override
-	public void setAddress(URI addres) {
+	public void setAddress(final URI addres) {
 		this.addres = addres;
 	}
 
@@ -83,18 +84,18 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 	}
 
 	@Override
-	public String getServerType() {
+	public ServerType getServerType() {
 		return getMaster().getServerType();
 	}
 
 	@Override
-	public void doReadExternal(ObjectInput in) {
+	public void doReadExternal(final ObjectInput in) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void doWriteExternal(ObjectOutput out) {
+	public void doWriteExternal(final ObjectOutput out) {
 		// TODO Auto-generated method stub
 
 	}

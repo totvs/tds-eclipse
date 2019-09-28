@@ -146,8 +146,8 @@ public class LoginHandler extends ServerHandler {
 	private ILoginDialog getLoginDialog(final String dialogParameter, final IAppServerInfo server,
 			final Map<String, Object> inputMap) throws ClassNotFoundException, NoSuchMethodException,
 			InstantiationException, IllegalAccessException, InvocationTargetException {
-		String dialogTitle = String.format(Messages.LoginHandler_connection_server_identify, server.getName(),
-				server.getServerType());
+		String dialogTitle = String.format(Messages.LoginHandler_connection_server_identify,
+				server.getServerType().getTitle(), server.getName());
 
 		Class<?> clazz = Class.forName(dialogParameter);
 		Constructor<?> constructor = clazz.getConstructor(new Class[] { Shell.class });

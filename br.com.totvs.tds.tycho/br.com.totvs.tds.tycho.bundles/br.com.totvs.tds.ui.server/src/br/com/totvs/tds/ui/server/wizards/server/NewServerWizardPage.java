@@ -67,18 +67,11 @@ public class NewServerWizardPage extends WizardPage {
 	 * @wbp.eval.method.parameter subTitle "NewServer"
 	 *
 	 */
-	public NewServerWizardPage(final String subTitle) {
-		super("newServerWizardPage", //$NON-NLS-1$
-				String.format(Messages.NewServerWizardPage_new_server_title_page, Messages.EMPTY_STRING, subTitle),
-				null);
-	}
-
-	public NewServerWizardPage(final String subTitle, final NewServerVO newServer) {
+	public NewServerWizardPage(final NewServerVO newServer) {
 		super("newServerWizardPage", //$NON-NLS-1$
 				String.format(Messages.NewServerWizardPage_new_server_title_page,
-						newServer.getServer().getServerType().toUpperCase(), subTitle),
+						newServer.getServer().getServerType().getTitle().toUpperCase()),
 				ServerUIIcons.getWizardServer());
-		setTitle(String.format(Messages.NewServerWizardPage_new_server, subTitle));
 		setDescription(Messages.NewServerWizardPage_wizard_descrption);
 		this.newServer = newServer;
 	}
