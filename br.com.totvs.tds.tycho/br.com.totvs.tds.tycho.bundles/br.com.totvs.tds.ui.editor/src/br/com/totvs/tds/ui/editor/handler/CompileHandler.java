@@ -53,7 +53,7 @@ public class CompileHandler extends EditorHandler {
 		private CompileOptions compileOptions;
 
 		public CompileJob(final CompileOptions compileOptions, final Map<String, CompileMapData> compileMap) {
-			super("TDS: Compilação");
+			super("TDS: CompilaÃ§Ã£o");
 
 			this.compileOptions = compileOptions;
 			this.compileMap = compileMap;
@@ -62,7 +62,7 @@ public class CompileHandler extends EditorHandler {
 
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
-			monitor.beginTask("Compilação", compileMap.size() + 1);
+			monitor.beginTask("CompilaÃ§Ã£o", compileMap.size() + 1);
 
 			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
@@ -113,14 +113,14 @@ public class CompileHandler extends EditorHandler {
 				final IStatusLineManager statusLineManager = bars.getStatusLineManager();
 				final IProgressMonitor monitor = statusLineManager.getProgressMonitor();
 				editor.doSave(monitor);
-				EditorActivator.logStatus(IStatus.INFO, "Compilação",
-						"Alterações salvas automaticamente.\n\tArquivo: %s", editor.getTitleToolTip());
+				EditorActivator.logStatus(IStatus.INFO, "CompilaÃ§Ã£o",
+						"Alteraï¿½ï¿½es salvas automaticamente.\n\tArquivo: %s", editor.getTitleToolTip());
 			}
 
 			try {
 				prepareToCompile(file, compileMap);
 			} catch (final CoreException e) {
-				EditorActivator.logStatus(IStatus.ERROR, "Compilação", e.getMessage(), e);
+				EditorActivator.logStatus(IStatus.ERROR, "CompilaÃ§Ã£o", e.getMessage(), e);
 			}
 		} else if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
@@ -131,7 +131,7 @@ public class CompileHandler extends EditorHandler {
 					try {
 						prepareToCompile((IResource) element, compileMap);
 					} catch (final CoreException e) {
-						EditorActivator.logStatus(IStatus.ERROR, "Compilação", e.getMessage(), e);
+						EditorActivator.logStatus(IStatus.ERROR, "CompilaÃ§Ã£o", e.getMessage(), e);
 					}
 				}
 			}
@@ -176,8 +176,8 @@ public class CompileHandler extends EditorHandler {
 				final URI location = file.getLocationURI();
 				compileMapData.files.add(String.format("file://%s", location.getSchemeSpecificPart()));
 			} else {
-				EditorActivator.logStatus(IStatus.INFO, "Compilação",
-						"Recurso [%s] configurado para ser ignorado na Compilação.", file.getName());
+				EditorActivator.logStatus(IStatus.INFO, "CompilaÃ§Ã£o",
+						"Recurso [%s] configurado para ser ignorado na CompilaÃ§Ã£o.", file.getName());
 			}
 		}
 	}
@@ -189,7 +189,7 @@ public class CompileHandler extends EditorHandler {
 			final IProjectWrapper wp = wm.getWrapper(project);
 			return Arrays.asList(wp.getIncludeSearchList(true));
 		} catch (final CoreException e) {
-			EditorActivator.logStatus(IStatus.ERROR, "Compilação", e.getMessage(), e);
+			EditorActivator.logStatus(IStatus.ERROR, "CompilaÃ§Ã£o", e.getMessage(), e);
 		}
 
 		return EMPTY_STRING_LIST;

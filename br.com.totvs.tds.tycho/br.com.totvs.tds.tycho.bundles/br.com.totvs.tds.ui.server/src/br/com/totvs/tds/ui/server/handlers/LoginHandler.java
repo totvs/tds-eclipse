@@ -115,6 +115,7 @@ public class LoginHandler extends ServerHandler {
 				}
 			}
 		});
+		event.getCommand().setEnabled(null);
 
 		return false;
 	}

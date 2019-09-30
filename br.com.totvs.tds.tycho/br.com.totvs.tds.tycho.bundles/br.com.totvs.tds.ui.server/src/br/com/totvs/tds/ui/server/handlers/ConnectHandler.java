@@ -53,6 +53,8 @@ public class ConnectHandler extends ServerHandler {
 				IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
 				handlerService.executeCommand(pc, null);
 			}
+
+			event.getCommand().setEnabled(null);
 		} catch (Exception e) {
 			ServerActivator.logStatus(IStatus.ERROR, Messages.ConnectHandler_connect, e.getMessage(), e);
 		}

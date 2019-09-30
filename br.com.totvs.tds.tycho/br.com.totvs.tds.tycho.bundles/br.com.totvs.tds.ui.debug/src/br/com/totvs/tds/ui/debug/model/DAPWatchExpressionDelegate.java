@@ -15,7 +15,6 @@ import org.eclipse.debug.core.model.IWatchExpressionListener;
 import org.eclipse.debug.core.model.IWatchExpressionResult;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.lsp4e.debug.DSPPlugin;
-import org.eclipse.lsp4e.debug.debugmodel.DSPDebugElement;
 import org.eclipse.lsp4e.debug.debugmodel.DSPStackFrame;
 import org.eclipse.lsp4e.debug.debugmodel.DSPValue;
 import org.eclipse.lsp4j.debug.EvaluateArguments;
@@ -26,6 +25,7 @@ import org.eclipse.lsp4j.debug.EvaluateResponse;
  * @author acandido
  *
  */
+@SuppressWarnings("restriction")
 public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 
 	@SuppressWarnings("restriction")
@@ -44,9 +44,7 @@ public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 		args.setExpression(expression);
 		try {
 			final EvaluateResponse res = frame.getDebugProtocolServer().evaluate(args).get();
-			final DSPDebugElement parent = null;
-
-			final DSPValue value = new DSPValue(getFrame(), res.getVariablesReference(), expression, res.getResult());
+			final DSPValue value = new DSPValue(frame, res.getVariablesReference(), expression, res.getResult());
 
 			listener.watchEvaluationFinished(new IWatchExpressionResult() {
 				@Override

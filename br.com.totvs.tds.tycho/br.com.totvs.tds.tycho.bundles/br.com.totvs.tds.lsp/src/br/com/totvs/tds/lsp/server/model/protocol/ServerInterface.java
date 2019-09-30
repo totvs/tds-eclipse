@@ -20,7 +20,7 @@ public interface ServerInterface extends LanguageServer {
 	public CompletableFuture<AuthenticationNode> authentication(AuthenticationData authenticationData);
 
 	@JsonRequest("$totvsserver/compilation")
-	public CompletableFuture<Void> compile(CompilationData compile);
+	public CompletableFuture<Void> compilation(CompilationData compile);
 
 	@JsonRequest("$totvsserver/disconnect")
 	public CompletableFuture<DisconnectReturnInfo> disconnect(DisconnectData disconnectData);

@@ -100,8 +100,8 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 
 		final List<String> daargs = ActivatorServer.getInstance().getDAArgs();
 		// ao iniciar, aguarda 30 segudos para que possa fazer um "attach"
-		//daargs.add("--wait-for-attach");
-		//daargs.add("30000"); // milisegundos
+		// daargs.add("--wait-for-attach");
+		// daargs.add("30000"); // milisegundos
 		//////////////////////////////////////////////
 
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MODE, DSPPlugin.DSP_MODE_LAUNCH);
@@ -156,7 +156,6 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 	 * of {@link DSPDebugTarget}, but does not have to be. The arguments to this
 	 * method are normally just passed to {@link DSPDebugTarget} constructor.
 	 */
-	@Override
 	protected IDebugTarget createDebugTarget(final SubMonitor subMonitor, final Runnable cleanup,
 			final InputStream inputStream, final OutputStream outputStream, final ILaunch launch,
 			final Map<String, Object> dspParameters) throws CoreException {

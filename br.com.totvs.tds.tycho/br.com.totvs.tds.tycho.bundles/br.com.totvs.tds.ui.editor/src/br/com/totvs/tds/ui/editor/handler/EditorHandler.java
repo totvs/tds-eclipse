@@ -69,8 +69,8 @@ public abstract class EditorHandler extends AbstractHandler {
 		final String username = server.getUsername();
 
 		if (!server.canPermission("COMPILE")) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Permissão",
-					"Usuário [%s] sem permissão para compilar em [%s/%s].", username, server.getName(), environment);
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Permissï¿½o",
+					"Usuï¿½rio [%s] sem permissï¿½o para compilar em [%s/%s].", username, server.getName(), environment);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}
@@ -80,19 +80,19 @@ public abstract class EditorHandler extends AbstractHandler {
 		final IAppServerInfo server = serverManager.getCurrentServer();
 
 		if (server == null) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "CompilaÃ§Ã£o",
 					"NÃ£o foi selecionado nenhum servidor Protheus.");
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 
 		if (server.getCurrentEnvironment() == null) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "CompilaÃ§Ã£o",
 					"NÃ£o foi selecionado nenhum ambiente para o servidor [%s]", server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 		if (!server.isConnected()) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
-					"Servidor [%s] não conectado.", server.getName());
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "CompilaÃ§Ã£o",
+					"Servidor [%s] nï¿½o conectado.", server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}

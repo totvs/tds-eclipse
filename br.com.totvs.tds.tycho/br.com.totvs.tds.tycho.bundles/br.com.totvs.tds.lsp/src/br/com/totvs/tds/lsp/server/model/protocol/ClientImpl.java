@@ -63,7 +63,7 @@ public class ClientImpl extends LanguageClientImpl {
 		final ServerInterface server = (ServerInterface) getLanguageServer();
 
 		return CompletableFuture.runAsync(() -> {
-			server.compile(compile);
+			server.compilation(compile);
 		});
 
 	}

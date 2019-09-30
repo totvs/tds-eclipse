@@ -110,12 +110,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				command = commandService.getCommand("br.com.totvs.tds.ui.server.commands.connectCommand"); //$NON-NLS-1$
 			}
 
-			// FIX: ativar o comando
-			// command.setEnabled(server); << não resolveu a indisponibilidade
-			// acho que será necessário "mandar" para SelecionService
-			// ou via handler forçando a habilitação ou
-			// separar o handler do processamento.
-
+			command.setEnabled(server);
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("server", server.getName()); //$NON-NLS-1$
 
