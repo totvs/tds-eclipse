@@ -321,49 +321,56 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 				@Override
 				protected IStatus run(final IProgressMonitor monitor) {
-					monitor.subTask("Iniciando servidores locais");
 
-					for (final String name : serversRunning) {
-						final IServerInfo server = getServer(name);
-						if (server instanceof IAppServerInfo) {
-							final IAppServerInfo appServer = (IAppServerInfo) server;
-							final LocalAppServerLauncher launcher = new LocalAppServerLauncher(appServer.getName(),
-									appServer.getAppServerPath());
-							launcher.start();
-							appServer.setLauncher(launcher);
-						}
-					}
+					if (!serversRunning.isEmpty()) {
+						monitor.subTask("Iniciando servidores locais");
 
-					try {
-						monitor.subTask("Conexão a servidores");
-						final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-						final ICommandService commandService = serviceLocator.getService(ICommandService.class);
-						final IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
-						final Command command = commandService
-								.getCommand("br.com.totvs.tds.ui.server.commands.revalidateCommand"); //$NON-NLS-1$
-
-						for (final IServerInfo serverInfo : activeServers) {
-							if (serverInfo instanceof IAppServerInfo) {
-								final Map<String, Object> parameters = new HashMap<String, Object>();
-								parameters.put("server", serverInfo.getName()); //$NON-NLS-1$
-								parameters.put("environment", ((IAppServerInfo) serverInfo).getCurrentEnvironment()); //$NON-NLS-1$
-
-								final ParameterizedCommand pc = ParameterizedCommand.generateCommand(command,
-										parameters);
-//								handlerService.executeCommand(pc, null);
+						for (final String name : serversRunning) {
+							final IServerInfo server = getServer(name);
+							if (server instanceof IAppServerInfo) {
+								final IAppServerInfo appServer = (IAppServerInfo) server;
+								final LocalAppServerLauncher launcher = new LocalAppServerLauncher(appServer.getName(),
+										appServer.getAppServerPath());
+								launcher.start();
+								appServer.setLauncher(launcher);
 							}
 						}
-					} catch (final IllegalArgumentException e) {
-						ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
-					} catch (final Exception e) {
-						ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
 					}
 
-					if (auxCurrentServer.isConnected()) {
+					if (!activeServers.isEmpty()) {
+						try {
+							monitor.subTask("Conexão a servidores");
+							final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+							final ICommandService commandService = serviceLocator.getService(ICommandService.class);
+							final IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
+							final Command command = commandService
+									.getCommand("br.com.totvs.tds.ui.server.commands.revalidateCommand"); //$NON-NLS-1$
+
+							for (final IServerInfo serverInfo : activeServers) {
+								if (serverInfo instanceof IAppServerInfo) {
+									final Map<String, Object> parameters = new HashMap<String, Object>();
+									parameters.put("server", serverInfo.getName()); //$NON-NLS-1$
+									parameters.put("environment", //$NON-NLS-1$
+											((IAppServerInfo) serverInfo).getCurrentEnvironment());
+
+									final ParameterizedCommand pc = ParameterizedCommand.generateCommand(command,
+											parameters);
+									handlerService.executeCommand(pc, null);
+								}
+							}
+						} catch (final IllegalArgumentException e) {
+							ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
+						} catch (final Exception e) {
+							ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
+						}
+					}
+
+					if ((auxCurrentServer != null) && (auxCurrentServer.isConnected())) {
 						ServerManagerImpl.this.setCurrentServer(auxCurrentServer);
 					} else {
 						ServerManagerImpl.this.setCurrentServer(null);
 					}
+
 					monitor.done();
 
 					return Status.OK_STATUS;

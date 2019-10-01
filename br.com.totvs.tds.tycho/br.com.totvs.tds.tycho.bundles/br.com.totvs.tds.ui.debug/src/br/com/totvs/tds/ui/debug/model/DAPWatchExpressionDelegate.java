@@ -28,7 +28,6 @@ import org.eclipse.lsp4j.debug.EvaluateResponse;
 @SuppressWarnings("restriction")
 public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 
-	@SuppressWarnings("restriction")
 	@Override
 	public void evaluateExpression(final String expression, final IDebugElement context,
 			final IWatchExpressionListener listener) {
