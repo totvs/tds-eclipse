@@ -26,7 +26,8 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
 
    <includes
          id="br.com.totvs.tds.feature.tds"
-         version="0.0.0"/>
+         version="0.0.0"
+         search-location="both"/>
 
    <requires>
       <import plugin="org.eclipse.ui"/>
@@ -39,19 +40,58 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="br.com.totvs.tds.ui.server"/>
       <import plugin="br.com.totvs.tds.server"/>
-      <import plugin="br.com.totvs.tds.lsp"/>
       <import plugin="br.com.totvs.tds.ui"/>
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.debug.ui" version="3.14.100" match="greaterOrEqual"/>
+      <import plugin="br.com.totvs.tds.lsp"/>
       <import plugin="org.eclipse.ui.genericeditor" version="1.1.400" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.editors" version="3.11.500" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="br.com.totvs.tds.ui.editor" version="11.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="br.com.totvs.tds.ui.sdk" version="11.4.0" match="greaterOrEqual"/>
-      <import feature="br.com.totvs.tds.feature.server" version="11.4.0.qualifier"/>
+      <import feature="tm-feature" version="0.3.4.201908081702"/>
+      <import plugin="org.eclipse.tm4e.core"/>
+      <import plugin="org.eclipse.tm4e.languageconfiguration"/>
+      <import plugin="org.eclipse.tm4e.markdown"/>
+      <import plugin="org.eclipse.tm4e.registry"/>
+      <import plugin="org.eclipse.tm4e.ui"/>
    </requires>
+
+<plugin
+      id="br.com.totvs.tds.lsp"
+      download-size="0"
+      install-size="0"
+      version="0.0.0"
+      unpack="false"/>
+<plugin
+      id="br.com.totvs.tds.lsp.linux"
+      os="linux"
+      ws="gtk"
+      arch="x86_64"
+      download-size="0"
+      install-size="0"
+      version="0.0.0"
+      fragment="true"/>
+<plugin
+      id="br.com.totvs.tds.lsp.macosx"
+      os="macosx"
+      ws="cocoa"
+      arch="x86_64"
+      download-size="0"
+      install-size="0"
+      version="0.0.0"
+      fragment="true"/>
+<plugin
+      id="br.com.totvs.tds.lsp.win32"
+      os="win32"
+      ws="win32"
+      arch="x86_64"
+      download-size="0"
+      install-size="0"
+      version="0.0.0"
+      fragment="true"/>
 
    <plugin
          id="br.com.totvs.tds.ui.debug"
@@ -88,41 +128,6 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
          install-size="0"
          version="0.0.0"
          fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.tm4e.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.tm4e.languageconfiguration"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.tm4e.markdown"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.tm4e.registry"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.tm4e.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
          unpack="false"/>
 
 </feature>

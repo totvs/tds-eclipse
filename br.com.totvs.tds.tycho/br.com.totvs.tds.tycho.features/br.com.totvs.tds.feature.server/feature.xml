@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="br.com.totvs.tds.feature.server"
-      label="TDS Servidores (para administradores)"
+      label="TDS Administração de Servidores (para administradores)"
       version="11.4.0.qualifier"
       provider-name="TOTVS S.A."
       plugin="br.com.totvs.tds.ui.server"
@@ -26,24 +26,22 @@ Ideal para quem administrada servidores na plataforma TOTVS.
 
    <includes
          id="br.com.totvs.tds.feature.tds"
-         version="0.0.0"/>
+         version="0.0.0"
+         search-location="both"/>
 
    <requires>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.lsp4e"/>
-      <import plugin="org.eclipse.lsp4j"/>
-      <import plugin="org.eclipse.lsp4j.jsonrpc"/>
-      <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime" version="3.12.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.11.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.commands" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="org.eclipse.debug.core"/>
-      <import plugin="br.com.totvs.tds.ui"/>
+      <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.equinox.security" version="1.2.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.106.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms" version="3.6.100" match="greaterOrEqual"/>
       <import plugin="br.com.totvs.tds.server" version="11.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.lsp4e"/>
+      <import plugin="org.eclipse.lsp4j"/>
       <import plugin="org.eclipse.lsp4j.debug"/>
       <import plugin="org.eclipse.core.filebuffers"/>
       <import plugin="org.eclipse.core.databinding"/>
@@ -56,6 +54,12 @@ Ideal para quem administrada servidores na plataforma TOTVS.
       <import plugin="org.eclipse.ui.console"/>
       <import plugin="org.eclipse.ui.editors" version="3.11.500" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.lsp4j.jsonrpc"/>
+      <import plugin="br.com.totvs.tds.lsp" version="11.4.0" match="greaterOrEqual"/>
+      <import plugin="br.com.totvs.tds.ui" version="11.4.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="com.google.gson"/>
+      <import plugin="org.eclipse.mylyn.commons.notifications.core"/>
    </requires>
 
    <plugin
@@ -67,37 +71,6 @@ Ideal para quem administrada servidores na plataforma TOTVS.
 
    <plugin
          id="br.com.totvs.tds.ui.server"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="br.com.totvs.tds.lsp.linux"
-         os="linux"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
-         id="br.com.totvs.tds.lsp.macosx"
-         os="macosx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
-         id="br.com.totvs.tds.lsp.win32"
-         os="win32"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"/>
-
-   <plugin
-         id="br.com.totvs.tds.lsp"
          download-size="0"
          install-size="0"
          version="0.0.0"
