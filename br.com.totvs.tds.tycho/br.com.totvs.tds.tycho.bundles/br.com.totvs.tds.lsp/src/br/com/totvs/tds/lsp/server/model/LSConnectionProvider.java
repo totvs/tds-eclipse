@@ -10,6 +10,8 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 
+import br.com.totvs.tds.lsp.server.ActivatorServer;
+
 public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 
 	public LSConnectionProvider() {
@@ -33,7 +35,14 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 				serverPathUrl = getClass().getResource("/resources/tds-ls/advpls");
 			}
 			final File serverPath = new File(FileLocator.toFileURL(serverPathUrl).getPath());
-
+			
+			if (!serverPath.canExecute()) {
+				System.err.println(String.format("LS com insuficiência de privilégios.\nO TDS tentará ajudar os privilégios.\n\tArquivo: %s", serverPath.getAbsolutePath()));
+				serverPath.setExecutable(true);
+				if (!serverPath.canExecute()) {
+					System.err.println("Não foi possível ajustar os privilégios.\nFavor corrigir manualmente e reiniciar a aplicação.");
+				}
+			}
 			return serverPath.getAbsolutePath();
 		} catch (final Exception e) {
 			e.printStackTrace();

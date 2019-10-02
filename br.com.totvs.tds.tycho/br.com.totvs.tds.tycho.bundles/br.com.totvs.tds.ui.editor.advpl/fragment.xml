@@ -6,22 +6,22 @@
          point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
       <languageConfiguration
             contentTypeId="br.com.totvs.tds.lsp.advplSource"
-            path="tmlanguage/advpl/language-configuration.json">
+            path="./tmlanguage/advpl/advpl-configuration.json">
       </languageConfiguration>
       <languageConfiguration
             contentTypeId="br.com.totvs.tds.lsp.advplAspSource"
-            path="tmlanguage/advpl/language-configuration.json">
+            path="./tmlanguage/advpl/asp-configuration.json">
       </languageConfiguration>
    </extension>
 
    <extension
          point="org.eclipse.tm4e.registry.grammars">
       <grammar
-            path="tmlanguage/advpl/grammar_advpl.json"
+            path="./tmlanguage/advpl/grammar_advpl.json"
             scopeName="source.advpl">
       </grammar>
       <grammar
-            path="tmlanguage/advpl/grammar_advpl_asp.json"
+            path="./tmlanguage/advpl/grammar_advpl_asp.json"
             scopeName="source.advpl.asp">
       </grammar>
       <scopeNameContentTypeBinding
@@ -65,12 +65,12 @@
 	  </editor>
 	  
 	</extension>
- <extension
+
+	<extension
        point="org.eclipse.ui.menus">
     <menuContribution
           allPopups="false"
           locationURI="popup:br.com.totvs.tds.sdk.ui.editor.advpl.sourceEditor.EditorContext?after=additions">
-          >
 <!--          locationURI="popup:#TextEditorContext?after=additions">-->
        <separator
              name="br.com.totvs.tds.ui.editor.advpl.separator1" visible="true">
@@ -104,5 +104,13 @@
                id="br.com.totvs.tds.sdk.ui.editor.advpl.doubleClickBreakpointAction"/>
       </editorContribution>
    </extension>
-    
+ 
+ 	<extension
+         point="org.eclipse.ui.genericeditor.presentationReconcilers">
+      <presentationReconciler
+            class="org.eclipse.tm4e.ui.text.TMPresentationReconciler"
+            contentType="br.com.totvs.tds.lsp.advplSource">
+      </presentationReconciler>
+   </extension>
+      
 </fragment>

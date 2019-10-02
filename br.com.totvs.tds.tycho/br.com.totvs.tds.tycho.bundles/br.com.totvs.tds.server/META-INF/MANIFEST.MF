@@ -24,10 +24,4 @@ Export-Package: br.com.totvs.tds.server;uses:="org.osgi.framework,org.eclipse.co
  br.com.totvs.tds.server.launcher,
  br.com.totvs.tds.server.manager,
  br.com.totvs.tds.server.model;uses:="br.com.totvs.tds.server.interfaces,br.com.totvs.tds.server",
- br.com.totvs.tds.server.persistence,
- br.com.totvs.tds.server.tools;
-  uses:="org.eclipse.osgi.service.datalocation,
-   org.eclipse.core.runtime,
-   br.com.totvs.tds.server.xml,
-   br.com.totvs.tds.server.interfaces",
- br.com.totvs.tds.server.xml
+ br.com.totvs.tds.server.persistence

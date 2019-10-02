@@ -3,7 +3,6 @@ package br.com.totvs.tds.ui.server;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -11,9 +10,6 @@ import org.eclipse.swt.widgets.Shell;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
-import br.com.totvs.tds.server.tools.ExportTool;
-import br.com.totvs.tds.server.xml.Group;
-import br.com.totvs.tds.server.xml.ObjectFactory;
 import br.com.totvs.tds.ui.TDSUtil;
 
 /**
@@ -36,93 +32,6 @@ public final class ServerUIUtil {
 			}
 		}
 	};
-
-	/**
-	 * Check all children from the selected node in the checkboxTreeViewer.
-	 *
-	 * @param nodeElement
-	 * @param factory
-	 * @param serverTreeRoot
-	 * @param parentGroup
-	 * @param checkboxTreeViewer
-	 */
-	private static void checkChildren(final IItemInfo nodeElement, final ObjectFactory factory,
-			final Group serverTreeRoot, final CheckboxTreeViewer checkboxTreeViewer) {
-		if (nodeElement instanceof IGroupInfo) {
-			IGroupInfo groupInfo = (IGroupInfo) nodeElement;
-			Group parentGroup = ExportTool.findGroupByName(serverTreeRoot.getGroupList(), groupInfo.getName());
-			// if(parentGroup == null) {
-			// parentGroup = ExportTool.toGroup(factory, groupInfo);
-			// }
-			List<IItemInfo> children = groupInfo.getChildren();
-			for (IItemInfo child : children) {
-				if (checkboxTreeViewer != null) {
-					checkboxTreeViewer.setChecked(child, true);
-				}
-				ExportTool.addElementToStructure(factory, serverTreeRoot, parentGroup, child);
-				if (child instanceof IGroupInfo) {
-					checkChildren(child, factory, serverTreeRoot, checkboxTreeViewer);
-				}
-			}
-		}
-	}
-
-	/**
-	 * Check all parents from the selected node in the checkboxTreeViewer.
-	 *
-	 * @param nodeElement
-	 * @param factory
-	 * @param serverTreeRoot
-	 * @param checkboxTreeViewer
-	 * @return
-	 */
-	public static Group checkParents(final IItemInfo nodeElement, final ObjectFactory factory,
-			final Group serverTreeRoot, final CheckboxTreeViewer checkboxTreeViewer) {
-		IItemInfo parentInfo = nodeElement.getParent();
-		Group group = null;
-		if (parentInfo != null) {
-			Group parentGroup = checkParents(parentInfo, factory, serverTreeRoot, checkboxTreeViewer);
-			group = ExportTool.addElementToStructure(factory, serverTreeRoot, parentGroup, nodeElement);
-			if (checkboxTreeViewer != null) {
-				checkboxTreeViewer.setChecked(parentInfo, true);
-			}
-		} else {
-			// group = ExportTool.findGroupById(serverTreeRoot.getGroupList(),
-			// nodeElement.getId().toString());
-			// if(serverTreeRoot.getId() == null) {
-			// serverTreeRoot.setId(nodeElement.getId().toString());
-			// }
-			group = serverTreeRoot;
-		}
-		return group;
-	}
-
-	/**
-	 * Any place that uses a SmartClient combo can call this method.<br>
-	 * This automatically checks for the registered SmartClients to fill the
-	 * Combo.<br>
-	 * Note that this method must be called from the UI Thread
-	 *
-	 * @param combo
-	 */
-	private static void fillComboSmartClient(final Combo combo) {
-		System.out.println("ServerUIUtil.fillComboSmartClient()"); //$NON-NLS-1$
-//		List<SmartClientConfig> allSmartClients = SmartClientUtil.getAllSmartClientsRegistered();
-//		List<String> items = Arrays.asList(combo.getItems());
-//		for (SmartClientConfig smartClientConfig : allSmartClients) {
-//			String smartClientToAdd = smartClientConfig.getName();
-//			boolean itemFound = false;
-//			for (String existentItem : items) {
-//				if (existentItem.equals(smartClientToAdd)) {
-//					itemFound = true;
-//					break;
-//				}
-//			}
-//			if (!itemFound) {
-//				combo.add(smartClientToAdd);
-//			}
-//		}
-	}
 
 	private static boolean hasChildrenChecked(final IItemInfo parentInfo, final CheckboxTreeViewer checkboxTreeViewer) {
 		boolean hasChildrenChecked = false;
@@ -171,26 +80,6 @@ public final class ServerUIUtil {
 	 */
 	public static String openFolderDialog(final Shell shell, final String title, final String filterPath) {
 		return TDSUtil.directoryDialog(shell, title, null, filterPath);
-	}
-
-	/**
-	 * Uncheck all parents from the selected node in the informed checkbosTree
-	 * Viewer.
-	 *
-	 * @param nodeElement
-	 * @param serverTreeRoot
-	 * @param checkboxTreeViewer
-	 */
-	private static void unCheckParents(final IItemInfo nodeElement, final Group serverTreeRoot,
-			final CheckboxTreeViewer checkboxTreeViewer) {
-		IItemInfo parentInfo = nodeElement.getParent();
-		ExportTool.removeElementFromStructure(serverTreeRoot, nodeElement);
-		if (parentInfo != null && !hasChildrenChecked(parentInfo, checkboxTreeViewer)) {
-			if (checkboxTreeViewer != null) {
-				checkboxTreeViewer.setChecked(parentInfo, false);
-			}
-			unCheckParents(parentInfo, serverTreeRoot, checkboxTreeViewer);
-		}
 	}
 
 	/**
