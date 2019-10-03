@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+
+<extension
+         point="org.eclipse.tm4e.languageconfiguration.languageConfigurations">
+      <languageConfiguration
+            contentTypeId="br.com.totvs.tds.lsp.advplAspSource"
+            path="tmlanguage/asp-configuration.json">
+      </languageConfiguration>
+   </extension>
+
+   <extension
+         point="org.eclipse.tm4e.registry.grammars">
+      <grammar
+            path="tmlanguage/asp-grammar.json"
+            scopeName="source.advpl-asp">
+      </grammar>
+      <scopeNameContentTypeBinding
+            contentTypeId="br.com.totvs.tds.lsp.advplAspSource"
+            scopeName="source.advpl-asp">
+      </scopeNameContentTypeBinding>
+   </extension>
+
+	<extension
+	     point="org.eclipse.ui.editors">
+	  <editor
+	        name="Editor AdvPL/Asp"
+	        icon="icons/source_asp.png"
+	        class="br.com.totvs.tds.ui.editor.asp.SourceEditor"
+	        id="br.com.totvs.tds.sdk.ui.editor.asp.sourceEditor">
+	        <contentTypeBinding
+	              contentTypeId="br.com.totvs.tds.lsp.advplAspSource">
+	        </contentTypeBinding>
+	  </editor>
+	  
+	  
+	</extension>
+
+	<extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="popup:br.com.totvs.tds.sdk.ui.editor.asp.sourceEditor.EditorContext?after=additions">
+<!--          locationURI="popup:#TextEditorContext?after=additions">-->
+       <separator
+             name="br.com.totvs.tds.ui.editor.asp.separator1" visible="true">
+       </separator>
+       <command
+             commandId="br.com.totvs.tds.ui.editor.command.compile"
+             label="%command.label"
+             style="push">
+          <parameter
+                name="recompile"
+                value="true">
+          </parameter>
+       </command>
+       <separator
+             name="br.com.totvs.tds.ui.editor.asp.separator4"
+             visible="true">
+       </separator>
+    </menuContribution>
+   </extension>
+      
+</fragment>

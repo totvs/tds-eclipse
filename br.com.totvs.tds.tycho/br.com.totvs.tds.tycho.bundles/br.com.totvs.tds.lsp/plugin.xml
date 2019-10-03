@@ -40,7 +40,7 @@
             priority="normal">
       </content-type>
       <content-type
-            base-type="br.com.totvs.tds.ls.protheus"
+            base-type="br.com.totvs.tds.lsp.advplSource"
             default-charset="cp1252"
             file-extensions="APH, AHU, APL, APW"
             id="br.com.totvs.tds.lsp.advplAspSource"

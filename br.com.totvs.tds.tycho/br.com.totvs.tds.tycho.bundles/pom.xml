@@ -25,6 +25,7 @@
 		<module>br.com.totvs.tds.ui.debug</module>
 		<module>br.com.totvs.tds.ui.editor</module>
 		<module>br.com.totvs.tds.ui.editor.advpl</module>
+		<module>br.com.totvs.tds.ui.editor.asp</module>
 		<module>br.com.totvs.tds.ui.sdk</module>
 		<module>br.com.totvs.tds.ui.sdk.advpl</module>
 	</modules>
