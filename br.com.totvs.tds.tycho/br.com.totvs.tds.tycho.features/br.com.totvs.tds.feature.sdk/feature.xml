@@ -59,39 +59,42 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
       <import plugin="org.eclipse.tm4e.ui"/>
    </requires>
 
-<plugin
-      id="br.com.totvs.tds.lsp"
-      download-size="0"
-      install-size="0"
-      version="0.0.0"
-      unpack="false"/>
-<plugin
-      id="br.com.totvs.tds.lsp.linux"
-      os="linux"
-      ws="gtk"
-      arch="x86_64"
-      download-size="0"
-      install-size="0"
-      version="0.0.0"
-      fragment="true"/>
-<plugin
-      id="br.com.totvs.tds.lsp.macosx"
-      os="macosx"
-      ws="cocoa"
-      arch="x86_64"
-      download-size="0"
-      install-size="0"
-      version="0.0.0"
-      fragment="true"/>
-<plugin
-      id="br.com.totvs.tds.lsp.win32"
-      os="win32"
-      ws="win32"
-      arch="x86_64"
-      download-size="0"
-      install-size="0"
-      version="0.0.0"
-      fragment="true"/>
+   <plugin
+         id="br.com.totvs.tds.lsp"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="br.com.totvs.tds.lsp.linux"
+         os="linux"
+         ws="gtk"
+         arch="x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
+   <plugin
+         id="br.com.totvs.tds.lsp.macosx"
+         os="macosx"
+         ws="cocoa"
+         arch="x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
+
+   <plugin
+         id="br.com.totvs.tds.lsp.win32"
+         os="win32"
+         ws="win32"
+         arch="x86_64"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"/>
 
    <plugin
          id="br.com.totvs.tds.ui.debug"
@@ -124,6 +127,14 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
 
    <plugin
          id="br.com.totvs.tds.ui.sdk.advpl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="br.com.totvs.tds.ui.editor.asp"
          download-size="0"
          install-size="0"
          version="0.0.0"
