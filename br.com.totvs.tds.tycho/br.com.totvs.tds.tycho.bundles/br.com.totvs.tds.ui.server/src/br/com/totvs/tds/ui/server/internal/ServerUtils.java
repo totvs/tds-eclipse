@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
+import br.com.totvs.tds.ui.TDSUtil;
 import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.wizards.server.INIFile;
 import br.com.totvs.tds.ui.server.wizards.server.INIFile.INIProperty;
@@ -53,8 +54,6 @@ public class ServerUtils {
 	}
 
 	public static String doSelectAppServer(Shell shell) {
-		FileDialog dialog = new FileDialog(shell);
-
 //		if (TDSUtil.isLinux()) {
 //			dialog.setFilterExtensions(buildVariants(IServerConstants.APP_SERVER_EXECUTABLES_LINUX));
 //		} else if (TDSUtil.isWindows()) {
@@ -63,9 +62,7 @@ public class ServerUtils {
 //			dialog.setFilterExtensions(buildVariants(IServerConstants.APP_SERVER_EXECUTABLES_MAC));
 //		}
 
-		String result = dialog.open();
-
-		return result == null ? Messages.EMPTY_STRING : result;
+		return TDSUtil.fileDialog(shell);
 	}
 
 	public static String doSelectSmartClient(Shell shell) {

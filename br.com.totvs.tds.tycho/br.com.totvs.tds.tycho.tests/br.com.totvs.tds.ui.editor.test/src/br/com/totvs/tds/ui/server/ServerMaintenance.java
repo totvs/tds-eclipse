@@ -14,35 +14,27 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import br.com.totvs.tds.ui.AbstractTest;
 import br.com.totvs.tds.ui.ITestProperties;
-import br.com.totvs.tds.ui.TdsBot;
-import br.com.totvs.tds.ui.scenario.PlatformScenario;
-import br.com.totvs.tds.ui.scenario.ServerScenario;
+import br.com.totvs.tds.ui.bot.PerspectiveBot;
+import br.com.totvs.tds.ui.bot.ServerBot;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class ServerMaintenance {
-
-	private static TdsBot bot;
+public class ServerMaintenance extends AbstractTest {
 
 	@AfterClass
 	public static void afterClass() {
-		bot.endTest();
-
-		ServerScenario.stopLocalServer();
+		ServerBot.stopLocalAppServer();
 	}
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		ServerScenario.startLocalServer();
-
-		bot = new TdsBot();
-		bot.beginTest();
+		ServerBot.startLocalAppServer();
+		PerspectiveBot.openTotvsPlatform();
 	}
 
 	@Test
 	public void canAddServer() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
-
 		bot.viewByTitle("Servidores").show();
 		bot.viewByTitle("Servidores").setFocus();
 		bot.tree().getTreeItem("Servidores").select().contextMenu("Novo Servidor").click();
@@ -60,7 +52,7 @@ public class ServerMaintenance {
 		assertEquals(ITestProperties.APP_SERVER_ADDRESS, shell.bot().textWithLabel("Endereço").getText());
 		assertEquals(ITestProperties.APP_SERVER_PORT, shell.bot().textWithLabel("Porta").getText());
 
-		bot.waitFinish().click();
+		waitFinish().click();
 
 		bot.viewByTitle("Servidores").setFocus();
 		final List<String> nodes = bot.tree().getTreeItem("Servidores").getNodes();
@@ -69,8 +61,7 @@ public class ServerMaintenance {
 
 	@Test
 	public void canEditServer() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
-		final SWTBotTreeItem node = ServerScenario.addServer(bot, "editServer", ITestProperties.SMART_CLIENT_EXE);
+		final SWTBotTreeItem node = ServerBot.addServer("editServer", ITestProperties.SMART_CLIENT_EXE);
 
 		node.click();
 		node.contextMenu("Editar").click();
@@ -81,7 +72,7 @@ public class ServerMaintenance {
 		shell.bot().button("OK").click();
 
 		bot.viewByTitle("Servidores").setFocus();
-		bot.pause();
+		pause();
 
 		final List<String> nodes = bot.tree().getTreeItem("Servidores").getNodes();
 
@@ -90,8 +81,7 @@ public class ServerMaintenance {
 
 	@Test
 	public void canRemoveServer() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
-		final SWTBotTreeItem node = ServerScenario.addServer(bot, "removeServer", ITestProperties.SMART_CLIENT_EXE);
+		final SWTBotTreeItem node = ServerBot.addServer("removeServer", ITestProperties.SMART_CLIENT_EXE);
 
 		node.click();
 		node.contextMenu("Remover").click();

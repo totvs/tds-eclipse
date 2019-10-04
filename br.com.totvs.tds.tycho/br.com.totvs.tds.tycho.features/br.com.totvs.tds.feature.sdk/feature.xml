@@ -29,6 +29,10 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
          version="0.0.0"
          search-location="both"/>
 
+   <includes
+         id="tm-feature"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>

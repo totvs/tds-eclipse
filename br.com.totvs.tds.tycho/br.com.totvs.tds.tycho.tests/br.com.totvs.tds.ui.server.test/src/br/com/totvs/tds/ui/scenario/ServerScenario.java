@@ -15,26 +15,6 @@ public class ServerScenario {
 
 	private static Process appServer;
 
-	public static SWTBotTreeItem addGroup(final TdsBot bot, final String name) {
-		bot.viewByTitle("Servidores").setFocus();
-		final SWTBotTreeItem parent = bot.tree().getTreeItem("Servidores");
-
-		return addGroup(bot, parent, name);
-	}
-
-	public static SWTBotTreeItem addGroup(final TdsBot bot, final SWTBotTreeItem parent, final String name) {
-		parent.select();
-		parent.contextMenu("Novo Grupo").click();
-
-		// assistente 'Novo Grupo'
-		final SWTBotShell shell = bot.shell("Novo Grupo");
-		shell.bot().textWithLabel("Nome").setText(name);
-
-		bot.waitFinish().click();
-
-		return parent.getNode(name);
-	}
-
 	public static SWTBotTreeItem addServer(final TdsBot bot, final String name, final String smartClientExe) {
 		bot.viewByTitle("Servidores").setFocus();
 		final SWTBotTreeItem parent = bot.tree().getTreeItem("Servidores");

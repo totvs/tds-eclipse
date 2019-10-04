@@ -12,14 +12,16 @@ public class SDKPreferenceInitializer extends AbstractPreferenceInitializer impl
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
+	 *
+	 * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#
+	 * initializeDefaultPreferences()
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore ps = SdkUIActivator.getDefault().getPreferenceStore();
+		final IPreferenceStore ps = SdkUIActivator.getDefault().getPreferenceStore();
 
 		ps.setDefault(GLOBAL_INCLUDE, ""); //$NON-NLS-1$
-		
+
 		ps.setDefault(DESIRE_NO_COMPILE_IMAGE, true);
 		ps.setDefault(DESIRE_NO_COMPILE_TAG, false);
 		ps.setDefault(NO_COMPILE_TAG, "[NC]"); //$NON-NLS-1$
@@ -29,8 +31,7 @@ public class SDKPreferenceInitializer extends AbstractPreferenceInitializer impl
 		ps.setDefault(MULT_PROCESS, "1"); //$NON-NLS-1$
 		ps.setDefault(CLEAR_CONSOLE_LOG, false);
 
-		ps.setDefault(EXCLUSION_PATTERNS,
-				"(\\.\\w*)$,(#.*#)$,(%.*%)$,(CVS)$,(SCCS)$,(.*\\.PDB)$"); //$NON-NLS-1$
+		ps.setDefault(EXCLUSION_PATTERNS, "(\\.\\w*)$,(#.*#)$,(%.*%)$,(CVS)$,(SCCS)$,(.*\\.PDB)$"); //$NON-NLS-1$
 
 		ps.setDefault(NAME_DELRESOURCE_OPER_DEL, true);
 		ps.setDefault(NAME_DELFROMRPO_OPER_DEL, false);
@@ -49,7 +50,6 @@ public class SDKPreferenceInitializer extends AbstractPreferenceInitializer impl
 		ps.setDefault(NAME_COMPILERESOURCEWITHNEWNAME, false);
 		ps.setDefault(NAME_SELECTEDONLY_OPER_COMPILE, true);
 		ps.setDefault(NAME_ALLENVS_OPER_COMPILE, false);
-
 	}
 
 }

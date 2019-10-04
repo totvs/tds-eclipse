@@ -33,5 +33,4 @@ Import-Package: br.com.totvs.tds.server,
 Export-Package: br.com.totvs.tds.ui,
  br.com.totvs.tds.ui.scenario,
  br.com.totvs.tds.ui.sdk,
- br.com.totvs.tds.ui.server,
  br.com.totvs.tds.ui.server.wizards.path

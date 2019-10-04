@@ -19,5 +19,7 @@ public interface ITestProperties {
 	static String ENVIRONMENT = "p12";
 	static String USERNAME = "admin";
 	static String PASSWORD = "";
+	static String AUT_FILE = "M:/Ap5Check/alan.AUT";
+	static String INVALID_AUT_FILE = "M:/Ap5Check/leo.AUT";
 
 }

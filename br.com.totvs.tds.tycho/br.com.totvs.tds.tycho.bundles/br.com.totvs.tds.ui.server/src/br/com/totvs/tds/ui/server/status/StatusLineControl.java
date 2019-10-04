@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
 import org.eclipse.ui.services.IServiceLocator;
@@ -235,17 +236,17 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		this.tbUserItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/user.png"));
 
 		this.tbCompileKeyItem = new ToolItem(this.toolBar, SWT.NONE);
-		tbCompileKeyItem.setDisabledImage(
-				ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/compile_key_lock.png"));
 		this.tbCompileKeyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				System.out.println("StatusLineControl.fill(...).new SelectionAdapter() {...}.widgetSelected()"); //$NON-NLS-1$
+				PreferencesUtil.createPreferenceDialogOn(Display.getCurrent().getActiveShell(),
+						"br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage",
+						new String[] { "br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage" },
+						null).open();
 			}
 		});
-		this.tbCompileKeyItem
-				.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/compile_key_unlock.png"));
-		// this.tbCompileKeyItem.setDisabledImage(ServerUIIcons.getCompileKeyLock().createImage());
+		this.tbCompileKeyItem.setImage(ServerUIIcons.getCompileKeyUnlock().createImage());
+		this.tbCompileKeyItem.setDisabledImage(ServerUIIcons.getCompileKeyLock().createImage());
 
 		this.tbOrganizationItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbOrganizationItem.addSelectionListener(new SelectionAdapter() {
@@ -257,7 +258,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		this.tbOrganizationItem
 				.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/organizations.png"));
 
-		refreshButton();
+		updateStatusPanel();
 
 		composite.pack(true);
 
@@ -370,8 +371,6 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 					final IOrganization companySelected = dialog.getSelection();
 					server.setCurrentCompany(companySelected);
 				}
-
-				refreshButton();
 			} else {
 				ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_status,
 						Messages.StatusLineControl_invalid_operation);
@@ -385,39 +384,38 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getPropertyName().equals("currentServer")) { //$NON-NLS-1$
-			refreshButton();
-		}
-	}
-
-	public void refreshButton() {
-
-		final IAppServerInfo server = serverManager.getCurrentServer();
-		final String environment = (server == null) ? "" : server.getCurrentEnvironment(); //$NON-NLS-1$
-
-//		tbServerItem.setToolTipText(Messages.StatusLineControl_select_server_and_environment_active);
-		tbServerItem.setText(Messages.StatusLineControl_no_selected);
-
-//		tbOrganizationItem.setToolTipText(Messages.StatusLineControl_select_organization);
-		tbOrganizationItem.setText(Messages.StatusLineControl_organization);
-
-//		tbUserItem.setToolTipText(Messages.StatusLineControl_user_identification);
-		tbUserItem.setText(Messages.StatusLineControl_unknow);
-
-//		tbCompileKeyItem.setToolTipText(Messages.StatusLineControl_compile_key);
-		tbCompileKeyItem.setText(Messages.EMPTY_STRING);
-
-		updateTextServer(server, environment);
-
-		if (server != null) {
-			updateTextOrganization(server, environment);
-			updateTextUser(server, environment);
+			updateStatusPanel();
+		} else if (evt.getPropertyName().equals("currentCompany")) { //$NON-NLS-1$
+			updateStatusPanel();
+		} else if (evt.getPropertyName().equals("connected")) { //$NON-NLS-1$
+			updateStatusPanel();
+		} else if (evt.getPropertyName().equals("environments")) { //$NON-NLS-1$
+			updateStatusPanel();
+		} else if (evt.getPropertyName().equals("currentOrganization")) { //$NON-NLS-1$
+			updateStatusPanel();
 		}
 
-		composite.pack(true);
 	}
 
 	private void unhookNotifications() {
 		serverManager.removePropertyChangeListener(this);
+	}
+
+	private void updateStatusPanel() {
+		final IAppServerInfo server = serverManager.getCurrentServer();
+		final String environment = (server == null) ? "" : server.getCurrentEnvironment(); //$NON-NLS-1$
+
+		tbServerItem.setText(Messages.StatusLineControl_no_selected);
+
+		tbOrganizationItem.setText(Messages.StatusLineControl_organization);
+		tbUserItem.setText(Messages.StatusLineControl_unknow);
+		tbCompileKeyItem.setText(Messages.EMPTY_STRING);
+
+		updateTextServer(server, environment);
+		updateTextUser(server, environment);
+		updateTextOrganization(server, environment);
+
+		composite.pack(true);
 	}
 
 	/*
@@ -448,8 +446,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		String environmentToolTip = Messages.EMPTY_STRING;
 		boolean enabled = false;
 
-		if (server == null || environment == null) {
-		} else {
+		if ((server != null) && (environment != null)) {
 			enabled = ServerType.PROTHEUS.equals(server.getServerType());
 			serverName = server.getName().toLowerCase();
 			serverNameToolTip = serverName.toUpperCase();
@@ -468,32 +465,44 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 
 			tbServerItem.setText(String.format("%s [%s]", serverName, environment)); //$NON-NLS-1$
 			tbServerItem.setToolTipText(String.format("%s [%s]", serverNameToolTip, environmentToolTip)); // $NON-NLS-1$
+		} else {
+			tbServerItem.setToolTipText(""); // $NON-NLS-1$
 		}
 
 		tbOrganizationItem.setEnabled(enabled);
-		tbUserItem.setEnabled(enabled);
-		tbCompileKeyItem.setEnabled(enabled);
-
 	}
 
 	/*
 	 * Atualiza informações sobre usuário.
 	 */
 	private void updateTextUser(final IAppServerInfo server, final String environment) {
+		boolean enabledKey = false;
+		boolean enabled = false;
+
 		if (server != null && server.isConnected()) {
-			final String compileKey = server.getPermimissionToken();
+			enabled = ServerType.PROTHEUS.equals(server.getServerType());
+			enabledKey = enabled && server.isConnected();
+
+			// String compileKey = server.getPermimissionToken();
 			final List<String> permissions = server.getPermissions();
 			final String user = server.getUsername();
 
-			StringJoiner sb = new StringJoiner("\n");
+			StringJoiner sb = new StringJoiner("|", "[", "]");
 			for (String permission : permissions) {
 				sb.add(permission);
+
+				enabledKey |= permission.equals("COMPILE");
 			}
 
 			tbUserItem.setText(user);
 			tbUserItem.setToolTipText(String.format(Messages.StatusLineControl_permissions, sb.toString()));
-			tbCompileKeyItem.setEnabled(!compileKey.isEmpty());
+		} else {
+			tbUserItem.setToolTipText("");
 		}
+
+		tbUserItem.setEnabled(enabled);
+		tbCompileKeyItem.setEnabled(enabledKey);
+		tbCompileKeyItem.setToolTipText(tbUserItem.getToolTipText());
 	}
 
 //

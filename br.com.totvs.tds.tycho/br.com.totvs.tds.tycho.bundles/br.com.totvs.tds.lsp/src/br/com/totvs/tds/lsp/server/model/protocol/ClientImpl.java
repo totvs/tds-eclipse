@@ -10,12 +10,14 @@ import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
+import br.com.totvs.tds.lsp.server.model.node.IdNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 
 @SuppressWarnings("restriction")
 public class ClientImpl extends LanguageClientImpl {
@@ -186,6 +188,42 @@ public class ClientImpl extends LanguageClientImpl {
 		PatchDirListNode result = null;
 
 		final CompletableFuture<PatchDirListNode> future = server.getPathDirList(patchDirListInfo);
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public ValidKeyNode validKey(final ValidKeyData validKey) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+
+		final CompletableFuture<ValidKeyNode> future = server.getValidKey(validKey);
+		ValidKeyNode result = null;
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public IdNode getId() {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+
+		final CompletableFuture<IdNode> future = server.getId();
+		IdNode result = null;
 		try {
 			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
 		} catch (final InterruptedException e) {

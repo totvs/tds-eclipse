@@ -39,7 +39,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 	private static final long CURRENT_SERIAL_VERSION = 3L;
 
-	private IOrganization activeCompany;
+	private IOrganization currentOrganization;
 
 	private Map<String, Object> connectionMap = new HashMap<String, Object>();
 
@@ -132,7 +132,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 */
 	@Override
 	public IOrganization getCurrentOrganization() {
-		return activeCompany;
+		return currentOrganization;
 	}
 
 	/*
@@ -270,7 +270,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 */
 	@Override
 	public void setCurrentCompany(final IOrganization companySelected) {
-		firePropertyChange("activeCompany", this.activeCompany, this.activeCompany = companySelected); //$NON-NLS-1$
+		firePropertyChange("currentOrganization", this.currentOrganization, this.currentOrganization = companySelected); //$NON-NLS-1$
 	}
 
 	/*
@@ -393,7 +393,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 				multiEnvironmentSelection = (List<String>) in.readObject();
 			}
 			if (version >= 2L) {
-				activeCompany = (IOrganization) in.readObject();
+				currentOrganization = (IOrganization) in.readObject();
 			}
 			if (version >= 3L) {
 				setConnected(in.readBoolean());
@@ -422,7 +422,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		out.writeObject(currentEnvironment);
 		out.writeObject(multiEnvironmentSelection);
 		// 2L
-		out.writeObject(activeCompany);
+		out.writeObject(currentOrganization);
 		// 3L
 		final boolean isSecureStorage = getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
 				.equals(true);

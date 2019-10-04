@@ -1,20 +1,22 @@
 package br.com.totvs.tds.ui;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * Classe utilitária geral do startup.
+ * Classe utilitï¿½ria geral do startup.
  */
 public final class TDSUtil {
+
+	private static final String[] EMPTY_ARRAY = new String[0];
 
 	private TDSUtil() {
 	}
 
 	/**
-	 * Verifica se a plataforma é Windows.
+	 * Verifica se a plataforma ï¿½ Windows.
 	 *
 	 * @return true caso seja Windows
 	 */
@@ -23,7 +25,7 @@ public final class TDSUtil {
 	}
 
 	/**
-	 * Verifica se a plataforma é Linux.
+	 * Verifica se a plataforma ï¿½ Linux.
 	 *
 	 * @return true caso seja Linux
 	 */
@@ -31,16 +33,17 @@ public final class TDSUtil {
 		return Platform.getOS().equals(Platform.OS_LINUX);
 	}
 
-	public static String directoryDialog(Shell shell, String message) {
+	public static String directoryDialog(final Shell shell, final String message) {
 		return directoryDialog(shell, null, message, null);
 	}
 
-	public static String directoryDialog(Shell shell, String title, String message, String filterPath) {
+	public static String directoryDialog(final Shell shell, final String title, final String message,
+			final String filterPath) {
 		if (isRunningInTestMode()) {
 			return System.getProperty("return");
 		}
 
-		DirectoryDialog dialog = new DirectoryDialog(shell, SWT.NONE);
+		final DirectoryDialog dialog = new DirectoryDialog(shell);
 
 		if ((message != null) && !message.isEmpty()) {
 			dialog.setMessage(message);
@@ -58,6 +61,23 @@ public final class TDSUtil {
 	public static boolean isRunningInTestMode() {
 
 		return (Boolean.TRUE.toString().equals(System.getProperty("isTest", Boolean.FALSE.toString())));
+	}
+
+	public static String fileDialog(final Shell shell, final String[] filter, final String[] filterNames) {
+		if (isRunningInTestMode()) {
+			return System.getProperty("return");
+		}
+
+		final FileDialog dialog = new FileDialog(shell);
+		dialog.setFilterExtensions(filter);
+		dialog.setFilterNames(filterNames);
+
+		return dialog.open();
+	}
+
+	public static String fileDialog(final Shell shell) {
+
+		return fileDialog(shell, EMPTY_ARRAY, EMPTY_ARRAY);
 	}
 
 }

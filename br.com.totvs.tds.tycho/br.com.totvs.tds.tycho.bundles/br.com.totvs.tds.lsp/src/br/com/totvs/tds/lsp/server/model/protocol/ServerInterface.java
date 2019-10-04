@@ -7,12 +7,14 @@ import org.eclipse.lsp4j.services.LanguageServer;
 
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
+import br.com.totvs.tds.lsp.server.model.node.IdNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 
 public interface ServerInterface extends LanguageServer {
 
@@ -24,7 +26,7 @@ public interface ServerInterface extends LanguageServer {
 
 	@JsonRequest("$totvsserver/disconnect")
 	public CompletableFuture<DisconnectReturnInfo> disconnect(DisconnectData disconnectData);
-	
+
 	@JsonRequest("$totvsserver/validation")
 	public CompletableFuture<NodeInfo> validation(ValidationData validationData);
 
@@ -42,5 +44,11 @@ public interface ServerInterface extends LanguageServer {
 
 	@JsonRequest("$totvsserver/getPathDirList")
 	public CompletableFuture<PatchDirListNode> getPathDirList(PatchDirListData patchDirListInfo);
+
+	@JsonRequest("$totvsserver/validKey")
+	public CompletableFuture<ValidKeyNode> getValidKey(ValidKeyData validKey);
+
+	@JsonRequest("$totvsserver/getId")
+	public CompletableFuture<IdNode> getId();
 
 }

@@ -8,37 +8,37 @@ import java.util.List;
 import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import br.com.totvs.tds.ui.AbstractTest;
 import br.com.totvs.tds.ui.ITestProperties;
-import br.com.totvs.tds.ui.TdsBot;
-import br.com.totvs.tds.ui.scenario.PlatformScenario;
-import br.com.totvs.tds.ui.scenario.ServerScenario;
+import br.com.totvs.tds.ui.bot.PerspectiveBot;
+import br.com.totvs.tds.ui.bot.ServerBot;
 
 @RunWith(SWTBotJunit4ClassRunner.class)
-public class GroupMaintenance {
-
-	private static TdsBot bot;
+public class GroupMaintenance extends AbstractTest {
 
 	@AfterClass
 	public static void afterClass() {
-		bot.endTest();
+		ServerBot.stopLocalAppServer();
 	}
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		bot = new TdsBot();
-		bot.beginTest();
+		ServerBot.startLocalAppServer();
+	}
+
+	@Before
+	public void before() throws Exception {
+		PerspectiveBot.openTotvsPlatform();
 	}
 
 	@Test
 	public void canAddGroup() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
 
 		bot.viewByTitle("Servidores").show();
 		bot.viewByTitle("Servidores").setFocus();
@@ -49,7 +49,7 @@ public class GroupMaintenance {
 		final SWTBotShell shell = bot.shell("Novo Grupo");
 		shell.bot().textWithLabel("Nome").setText("Novo_Grupo");
 
-		bot.waitFinish().click();
+		waitFinish().click();
 
 		bot.viewByTitle("Servidores").setFocus();
 		final List<String> nodes = bot.tree().getTreeItem("Servidores").getNodes();
@@ -58,15 +58,14 @@ public class GroupMaintenance {
 
 	@Test
 	public void canAddSubGroups() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
-
-		final SWTBotTreeItem node_g1 = ServerScenario.addGroup(bot, "G1");
+		final SWTBotTreeItem node_g1 = ServerBot.addGroup("G1");
 		node_g1.click();
 
-		final SWTBotTreeItem node_g1_1 = ServerScenario.addGroup(bot, node_g1, "G1.1");
+		final SWTBotTreeItem node_g1_1 = ServerBot.addGroup(new String[] { "Servidores", "G1" }, "G1.1");
 		node_g1_1.click();
 
-		ServerScenario.addServer(bot, node_g1_1, "server_g1_1", ITestProperties.APP_SERVER_EXE);
+		ServerBot.addServer(new String[] { "Servidores", "G1", "G1.1" }, "server_g1_1",
+				ITestProperties.SMART_CLIENT_EXE);
 
 		bot.viewByTitle("Servidores").setFocus();
 		final SWTBotTreeItem[] items = bot.tree().getAllItems();
@@ -75,8 +74,7 @@ public class GroupMaintenance {
 
 	@Test
 	public void canEditGroup() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
-		final SWTBotTreeItem node = ServerScenario.addGroup(bot, "editGroup");
+		final SWTBotTreeItem node = ServerBot.addGroup("editGroup");
 
 		bot.viewByTitle("Servidores").show();
 		bot.viewByTitle("Servidores").setFocus();
@@ -96,11 +94,10 @@ public class GroupMaintenance {
 
 	@Test
 	public void canRemoveGroup() throws Exception {
-		PlatformScenario.select(bot, "Plataforma (TOTVS)");
 		bot.viewByTitle("Servidores").show();
 		bot.viewByTitle("Servidores").setFocus();
 
-		final SWTBotTreeItem node = ServerScenario.addGroup(bot, "removeGroup");
+		final SWTBotTreeItem node = ServerBot.addGroup("removeGroup");
 		node.click();
 
 		node.contextMenu("Remover").click();
@@ -111,16 +108,6 @@ public class GroupMaintenance {
 
 		final List<String> nodes = bot.tree().getTreeItem("Servidores").getNodes();
 		assertFalse(nodes.contains("removeGroup"));
-	}
-
-	@Before
-	public void initBot() throws Exception {
-
-	}
-
-	@After
-	public void resetBot() throws Exception {
-		// bot.resetWorkbench();
 	}
 
 }

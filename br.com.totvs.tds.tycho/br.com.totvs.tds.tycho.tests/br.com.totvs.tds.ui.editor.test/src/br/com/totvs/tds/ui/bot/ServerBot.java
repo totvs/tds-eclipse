@@ -11,6 +11,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 
 import br.com.totvs.tds.ui.AbstractTest;
 import br.com.totvs.tds.ui.ITestProperties;
+import br.com.totvs.tds.ui.screen.CompileKeyScreen;
 import br.com.totvs.tds.ui.screen.LoginScreen;
 import br.com.totvs.tds.ui.screen.NewGroupScreen;
 import br.com.totvs.tds.ui.screen.NewServerScreen;
@@ -129,6 +130,24 @@ public class ServerBot extends AbstractTest {
 	public static void removeLocalServer() {
 
 		removeServer(ITestProperties.LOCAL_SERVER);
+	}
+
+	public static void applyComileKey() {
+		applyComileKey(ITestProperties.AUT_FILE);
+	}
+
+	public static void applyComileKey(final String autFile) {
+		bot.menu("Window").menu("Preferences").click();
+		final SWTBotShell prefsShell = waitShell("Preferences");
+
+		bot.tree().getTreeItem("TOTVS Developer Studio").click().expand().getNode("Compilação").click().expand()
+				.getNode("Chave de Compilação").select();
+
+		final CompileKeyScreen compileKeyScreen = new CompileKeyScreen();
+		compileKeyScreen.setAutFile(autFile).finish(prefsShell.bot());
+
+		prefsShell.activate();
+		bot.waitUntil(Conditions.shellCloses(prefsShell));
 	}
 
 }

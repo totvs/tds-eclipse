@@ -414,39 +414,6 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	public void propertyChange(final PropertyChangeEvent evt) {
 		if (!isLoading()) {
 			firePropertyChange(evt);
-
-			if (evt.getSource() instanceof IItemInfo) {
-
-				if ((evt.getOldValue() == null) || (evt.getNewValue() == null)
-						|| !evt.getOldValue().equals(evt.getNewValue())) {
-
-//					INotification notification = null;
-//					if (evt.getPropertyName().equals("parent")) { //$NON-NLS-1$
-//						notification = notificationService.createNotification(
-//								INotification.EventType.SERVER_TREE_CHANGE, ((IItemInfo) evt.getSource()).getParent());
-//					} else if (evt.getPropertyName().equals("children") //$NON-NLS-1$ //$NON-NLS-2$
-//							|| evt.getPropertyName().equals("name")) { //$NON-NLS-1$
-//						notification = notificationService
-//								.createNotification(INotification.EventType.SERVER_TREE_CHANGE, evt.getSource());
-//					} else if (evt.getPropertyName().equals("connected")) { //$NON-NLS-1$
-//						notification = notificationService
-//								.createNotification(INotification.EventType.CHANGE_SERVER_STATE, evt.getSource());
-//					} else if (evt.getPropertyName().equals("currentEnvironment")) { //$NON-NLS-1$
-//						notification = notificationService
-//								.createNotification(INotification.EventType.CHANGE_SERVER_ENVIRONMENT, evt.getSource());
-//					} else if (evt.getPropertyName().equals("multiEnvironment")) { //$NON-NLS-1$
-//						notification = notificationService.createNotification(
-//								INotification.EventType.CHANGE_SERVER_MULTI_ENVIRONMENT, evt.getSource());
-//					} else if (evt.getPropertyName().equals("activeCompany")) { //$NON-NLS-1$
-//						notification = notificationService
-//								.createNotification(INotification.EventType.CHANGE_COMPANY_CURRENT, evt.getSource());
-//					} else {
-//						notification = notificationService
-//								.createNotification(INotification.EventType.SERVER_TREE_UPDATE, evt.getSource());
-//					}
-//					notificationService.sendAsync(notification);
-				}
-			}
 		}
 	}
 
@@ -525,10 +492,9 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		} else if ((currentServer != null) && !currentServer.equals(newServer)) {
 			change = true;
 		}
-		// efetua a troca, se necessário
+		// notifica e efetua a troca, se necessário
 		if (change) {
-			Display.getDefault().syncExec(() -> firePropertyChange("currentServer",
-					ServerManagerImpl.this.currentServer, ServerManagerImpl.this.currentServer = newServer));
+			firePropertyChange("currentServer", this.currentServer, this.currentServer = newServer);
 		}
 	}
 
@@ -580,13 +546,13 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	@Override
 	protected void firePropertyChange(final String propertyName, final Object oldValue, final Object newValue) {
 		if (!loading || (propertyName.equals("loading"))) {
-			super.firePropertyChange(propertyName, oldValue, newValue);
+			Display.getDefault().syncExec(() -> super.firePropertyChange(propertyName, oldValue, newValue));
 		}
 	}
 
 	@Override
 	protected void firePropertyChange(final PropertyChangeEvent event) {
-		super.firePropertyChange(event);
+		Display.getDefault().syncExec(() -> super.firePropertyChange(event));
 
 		if (event.getPropertyName().equals("connected")) {
 			final IAppServerInfo server = (IAppServerInfo) event.getSource();

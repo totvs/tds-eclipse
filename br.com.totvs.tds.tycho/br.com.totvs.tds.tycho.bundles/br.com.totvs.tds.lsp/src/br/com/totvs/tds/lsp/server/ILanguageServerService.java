@@ -1,7 +1,10 @@
 package br.com.totvs.tds.lsp.server;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.Properties;
 
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
@@ -97,5 +100,19 @@ public interface ILanguageServerService {
 	 * @param b
 	 */
 	void getPathDirList(String token, String environment, String folder, boolean includeDir);
+
+	/**
+	 * @param inputStream
+	 * @return
+	 * @throws IOException
+	 *
+	 */
+	Properties validKey(InputStream inputStream) throws IOException;
+
+	/**
+	 *
+	 * @return
+	 */
+	String getMachineId();
 
 }

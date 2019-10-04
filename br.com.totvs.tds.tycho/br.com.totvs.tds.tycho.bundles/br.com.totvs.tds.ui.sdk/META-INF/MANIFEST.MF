@@ -8,7 +8,8 @@ Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,
- br.com.totvs.tds.ui
+ br.com.totvs.tds.ui,
+ org.eclipse.equinox.security
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: br.com.totvs.tds.ui.sdk
 Bundle-ActivationPolicy: lazy
@@ -67,6 +68,7 @@ Export-Package: br.com.totvs.tds.ui.sdk;
    org.eclipse.jface.resource,
    org.eclipse.jface.preference,
    org.eclipse.swt.widgets"
-Import-Package: org.eclipse.core.resources,
+Import-Package: br.com.totvs.tds.lsp.server,
+ org.eclipse.core.resources,
  org.eclipse.ui.forms.widgets
 Eclipse-RegisterBuddy: org.eclipse.swtbot.swt.finder

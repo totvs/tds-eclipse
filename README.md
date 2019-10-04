@@ -30,7 +30,7 @@ O **TDS** pode ser utilizado nos sistemas operacionais:
 * Linux
 * MAC/OS 
 
-> Recomenda-se o uso de arquitetura 64.
+> Recomenda-se o uso de arquitetura 64 bits.
 
 ### Plataforma Protheus
 
@@ -92,27 +92,21 @@ Processo de compatibilização planejado (chamados [#11](https://github.com/totv
 > - Conhecimentos no uso das ferramentas de teste JUnit e SWTBot
 
 1. Obtenha e instale a plataforma [Eclipse IDE for RCP and RAP Developers](https://www.eclipse.org/downloads/packages/release/2019-09/r/eclipse-ide-rcp-and-rap-developers-includes-incubating-components).
-2. Inicie o Eclipse e instale os adicionais:
-  - ???????????????????????
-3. Efetue um _fork_ do [TDS-Eclipse](https://github.com/totvs/tds-eclipse)
-   **ATENÇÃO:** Faça o _fork_ a partir do ramo no qual vai efetuar a correção ou do ramo `desenv`, se for uma nova funcionalidade.
-   Fazendo assim, você agiliza o processo de revisão e incorporação.
-4. Inicie (ou abra) uma área de trabalho.
-5. Baixe o projeto a partir do endereço do seu _fork_.
-6. Selecione o projeto `br.com.totvs.tds.tycho`.
-7. Acione o menu de contexto do projeto, item de menu `Configure | Configure and Detect Nested Project...`.
-8. No diálogo apresentado, selecione todos os projetos e confirme.
-9. Após o passo anterior, pode fechar os projetos:
-  - br.com.totvs.tds.tycho
-  - br.com.totvs.tds.tycho.configurations
-  - bundles
-  - features
-  - tests
-10. Acesse [Abertura e acompanhamento de chamados](https://github.com/totvs/tds-eclipse/issues), localize (ou crie) um e...
-11. DIVIRTA-SE programando :D
-12. Ao terminar a sua colaboração, solicite a incorporação.
+2. Inicie uma área de trabalho nova.
+3. Inicie o Eclipse e instale os adicionais necessários transferindo para sua estação e importando o arquivo [colaboratorSettings.p2f](colaboratorSettings.p2f)
+4. Instale a aplicação [Apache Maven Project](http://maven.apache.org/download.cgi), versão 3.6.2 (mínima) conforme o seu sistema operacional.
+5. Retorne ao Eclipse, acesse menu `Windows | Preferences` e na árvore de navegação, localize `Maven + Instalations...` e registre o Apache Maven Projeto instalado no passo anterior.
+6. Efetue um _fork_ do projeto [TDS-Eclipse](https://github.com/totvs/tds-eclipse). Faça o _fork_ a partir do ramo no qual vai efetuar a correção ou do ramo `desenv`, se for uma nova funcionalidade. Assim, você agiliza o processo de reincorporação.
+7. Importe o projeto a partir do endereço do seu _fork_.
+9. Execute o lançador `br.com.totvs.tds.build`.
+10. Após a execução dos _scripts_ Maven, reconstrua todo os projetos acionando o menu `Project | Clean...`.
+11. Pronto para começar a colaborar.
+12. Acesse [Abertura e acompanhamento de chamados](https://github.com/totvs/tds-eclipse/issues), localize (ou crie) um e...
+13. DIVIRTA-SE programando :D
+14. Ao terminar a sua colaboração, solicite a incorporação.
 
 > Veja outras formas de colaborar no tópico _Colaboração_ abaixo.
+> Leitura complementar: [[Fazendo fork]], [[Estrutura do TDS-Eclipse]], [[Diretrizes de Desenvolvimento]]
 
 ## Conceitos
 
@@ -148,7 +142,7 @@ Leitura complementar: [[Ajude-nos a ajudá-lo]]
 3. Requisite a incorporação de suas edições
 
 > Recomenda-se que a edição seja efetuada localmente. 
-> Leitura complementar: [[Fazendo fork]], [[Edição local da documentação]], [[Diretrizes de Documentação]]
+> Leitura complementar: [[Fazendo fork]], [[Edição Local da Documentação]], [[Diretrizes de Documentação]]
 
 ### Tradução (nova ou revisão)
 
@@ -157,7 +151,7 @@ Leitura complementar: [[Ajude-nos a ajudá-lo]]
 3. Requisite a incorporação de suas edições
 
 > Recomenda-se que a edição seja efetuada localmente. 
-> Leitura complementar: [[Fazendo fork]], [[Edição local da documentação]], [[Diretrizes de Documentação]]
+> Leitura complementar: [[Fazendo fork]], [[Edição Local da Traduções/Revisão]], [[Diretrizes de Traduções/Revisão]]
 
 ### Desenvolvimento
 
@@ -176,3 +170,5 @@ Leitura complementar: [[Fazendo fork]], [[Estrutura do TDS-Eclipse]], [[Diretriz
 
 1. Incompatibilidade da lista de servidores registrados no [TDS-VSCode](https://github.com/totvs/tds-vscode) ou em **TDS** anteriores a versão 11.4. Assim como, a lista de servidores do **TDS 11.4** também não é compatível com essas aplicações.
 Chamados #11 e #12.
+
+2. Testes automatizados devem ser executados um a um.

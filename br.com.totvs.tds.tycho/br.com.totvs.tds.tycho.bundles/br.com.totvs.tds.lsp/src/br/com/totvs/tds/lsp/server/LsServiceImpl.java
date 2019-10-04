@@ -1,12 +1,16 @@
 package br.com.totvs.tds.lsp.server;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
+import br.com.totvs.tds.lsp.server.model.node.IdNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
@@ -14,6 +18,7 @@ import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationData;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.ClientImpl;
@@ -24,6 +29,7 @@ import br.com.totvs.tds.lsp.server.model.protocol.DisconnectData;
 import br.com.totvs.tds.lsp.server.model.protocol.DisconnectInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsData;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.KeyInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchDirListData;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateData;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateInfo;
@@ -31,6 +37,7 @@ import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsData;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.SlaveData;
 import br.com.totvs.tds.lsp.server.model.protocol.SlaveInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.ValidKeyData;
 import br.com.totvs.tds.lsp.server.model.protocol.ValidationData;
 import br.com.totvs.tds.lsp.server.model.protocol.ValidationInfo;
 
@@ -224,4 +231,50 @@ public final class LsServiceImpl implements ILanguageServerService {
 		return instance;
 	}
 
+	@Override
+	public Properties validKey(final InputStream inputStream) throws IOException {
+		final Properties props = new Properties();
+		props.load(inputStream);
+		inputStream.close();
+
+		final KeyInfo keyInfo = new KeyInfo();
+		keyInfo.setId(props.getOrDefault("ID", "").toString());
+		keyInfo.setIssued(props.getOrDefault("GENERATION", "").toString());
+		keyInfo.setExpiry(props.getOrDefault("VALIDATION", "").toString());
+		keyInfo.setToken(props.getOrDefault("KEY", "").toString());
+		keyInfo.setCanOverride(props.getOrDefault("PERMISSION", "0").toString());
+
+		final ValidKeyData validKey = new ValidKeyData(keyInfo);
+		final ValidKeyNode validKeyNode = ClientImpl.getInstance().validKey(validKey);
+		final int buildType = validKeyNode.getBuildType();
+
+		props.clear();
+		if ((buildType == 0) || (buildType == 1) || (buildType == 2)) {
+			props.put("ID", validKeyNode.getMachineId());
+			props.put("GENERATION", validKeyNode.getIssued());
+			props.put("VALIDATION", validKeyNode.getExpiry());
+			props.put("KEY", validKeyNode.getAuthorizationToken());
+			props.put("PERMISSION", keyInfo.getCanOverride());
+			props.put("USER_ID", validKeyNode.getUserId());
+		}
+
+		return props;
+	}
+
+	@Override
+	public String getMachineId() {
+		final IdNode idNode = ClientImpl.getInstance().getId();
+
+		if (idNode != null) {
+			return idNode.getId();
+		}
+
+		return null;
+	}
+	/*
+	 * languageClient.sendRequest('$totvsserver/getId') .then((response: any) => {
+	 * if (response.id) { currentPanel.webview.postMessage({ command: "setID", 'id':
+	 * response.id }); } }, (err) => { vscode.window.showErrorMessage(err); });
+	 *
+	 */
 }
