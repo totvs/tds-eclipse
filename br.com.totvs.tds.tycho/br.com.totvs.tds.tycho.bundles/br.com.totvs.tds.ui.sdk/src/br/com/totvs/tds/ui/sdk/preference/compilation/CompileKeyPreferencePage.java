@@ -1,16 +1,7 @@
 package br.com.totvs.tds.ui.sdk.preference.compilation;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.util.Properties;
 import java.util.StringJoiner;
 
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -29,10 +20,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
+import org.eclipse.wb.swt.SWTResourceManager;
 
-import br.com.totvs.tds.lsp.server.ILanguageServerService;
+import br.com.totvs.tds.server.interfaces.IAuthorizationKey;
+import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.TDSUtil;
-import br.com.totvs.tds.ui.sdk.SdkUIActivator;
 
 /**
  * Classe CompileKeyPreferencePage.
@@ -53,7 +45,8 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 	private Text txtAuthorizationCode;
 	private Text txtAuthorizationFile;
 	private Button btnSelectFile;
-	private String machineId;
+
+	private IAuthorizationKey authorizationKey;
 
 	/**
 	 * Create the preference page.
@@ -68,9 +61,9 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 	@Override
 	public void init(final IWorkbench workbench) {
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+		final IServerManager serverManager = serviceLocator.getService(IServerManager.class);
 
-		machineId = lsService.getMachineId();
+		authorizationKey = serverManager.getAuthorizationKey();
 	}
 
 	/**
@@ -89,7 +82,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		txtIdLocal = new Text(container, SWT.BORDER);
 		txtIdLocal.setEnabled(false);
 		txtIdLocal.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtIdLocal.setText(machineId);
+		txtIdLocal.setText(authorizationKey.getMachineId());
 		new Label(container, SWT.NONE);
 
 		final Label lblArquivoDeAutorizao = new Label(container, SWT.NONE);
@@ -112,42 +105,21 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 				final String autfile = TDSUtil.fileDialog(new Shell(), filter, filterNames);
 				if (autfile != null) {
 					BusyIndicator.showWhile(Display.getCurrent(), () -> {
-						final File file = new File(autfile);
-						if (!file.exists()) {
-							setErrorMessage("Arquivo informado não localizado ou inválido.");
+						authorizationKey.setAuthorizationFile(autfile);
+
+						if (authorizationKey.isValid()) {
+							txtAuthorizationFile.setText(autfile);
+							txtIdFile.setText(authorizationKey.getIdFile());
+							txtGeneratedAt.setText(authorizationKey.getGeneratedAt());
+							txtValidUntil.setText(authorizationKey.getValidUntil());
+							txtAuthorizationCode.setText(addBreakLine(authorizationKey.getAuthorizationCode()));
+							cbOverridePermission.setSelection(authorizationKey.isOverridePermission());
 						} else {
-							try {
-								final InputStream inStream = Files.newInputStream(file.toPath(),
-										StandardOpenOption.READ);
-
-								final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-								final ILanguageServerService lsService = serviceLocator
-										.getService(ILanguageServerService.class);
-								final Properties props = lsService.validKey(inStream);
-
-								if (props.isEmpty()) {
-									setErrorMessage("Arquivo de autenticação inválido.");
-								} else {
-									txtAuthorizationFile.setText(autfile);
-									txtIdFile.setText(props.getOrDefault("ID", "").toString());
-									txtGeneratedAt.setText(props.getOrDefault("GENERATION", "").toString());
-									txtValidUntil.setText(props.getOrDefault("VALIDATION", "").toString());
-									txtAuthorizationCode
-											.setText(addBreakLine(props.getOrDefault("KEY", "").toString()));
-									cbOverridePermission
-											.setSelection(props.getOrDefault("PERMISSION", "0").toString().equals("1"));
-								}
-								if (txtAuthorizationCode.getText().isEmpty()) {
-									setErrorMessage("Autorização inválida.");
-								}
-							} catch (final IOException e1) {
-								SdkUIActivator.logStatus(ERROR, "Chave de Compilação", e1.getMessage(), e);
-								setErrorMessage(e1.getMessage());
-							}
-
+							setErrorMessage(authorizationKey.getErrorMessage());
 						}
 					});
 				}
+
 			}
 
 			@Override
@@ -188,52 +160,31 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		txtAuthorizationCode = new Text(container, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+		txtAuthorizationCode.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL));
 		txtAuthorizationCode.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		txtAuthorizationCode.setEditable(false);
 
 		loadData();
 
 		return container;
+
 	}
 
 	private void loadData() {
-		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
-		if (securePreference.nodeExists(ICompileKeyConstants.SECURE_NODE)) {
-			final ISecurePreferences secureNode = securePreference.node(ICompileKeyConstants.SECURE_NODE);
+		txtAuthorizationFile.setText(authorizationKey.getAuthorizationFile());
+		txtIdFile.setText(authorizationKey.getIdFile());
+		txtGeneratedAt.setText(authorizationKey.getGeneratedAt());
+		txtValidUntil.setText(authorizationKey.getValidUntil());
+		cbOverridePermission.setSelection(authorizationKey.isOverridePermission());
+		txtAuthorizationCode.setText(addBreakLine(authorizationKey.getAuthorizationCode()));
 
-			try {
-				txtAuthorizationFile.setText(secureNode.get(ICompileKeyConstants.AUTHORIZATION_FILE, ""));
-				txtIdFile.setText(secureNode.get(ICompileKeyConstants.ID_FILE, ""));
-				txtGeneratedAt.setText(secureNode.get(ICompileKeyConstants.GENERATED_AT, ""));
-				txtValidUntil.setText(secureNode.get(ICompileKeyConstants.VALID_UNTIL, ""));
-				cbOverridePermission
-						.setSelection(secureNode.getBoolean(ICompileKeyConstants.OVERRIDE_PERMISSION, false));
-				txtAuthorizationCode.setText(addBreakLine(secureNode.get(ICompileKeyConstants.AUTHORIZATION_CODE, "")));
-			} catch (final StorageException e) {
-				SdkUIActivator.logStatus(ERROR, "Chave de Compilação", e.getMessage(), e);
-				setErrorMessage("Não foi possível recuperar dados. Vela log para detalhes.");
-			}
-		} else {
-			txtAuthorizationFile.setText("");
-			txtIdFile.setText("");
-			txtGeneratedAt.setText("");
-			txtValidUntil.setText("");
-			cbOverridePermission.setSelection(false);
-			txtAuthorizationCode.setText("");
-		}
+		setErrorMessage(authorizationKey.getErrorMessage());
 	}
 
 	@Override
 	protected void performDefaults() {
-		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
-		final ISecurePreferences secureNode = securePreference.node(ICompileKeyConstants.SECURE_NODE);
 
-		secureNode.removeNode();
-		try {
-			securePreference.flush();
-		} catch (final IOException e) {
-			SdkUIActivator.logStatus(ERROR, "Chave de Compilação", e.getMessage(), e);
-		}
+		authorizationKey.reset();
 
 		loadData();
 		super.performDefaults();
@@ -242,27 +193,11 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 
 	@Override
 	public boolean performOk() {
-		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
-		final ISecurePreferences secureNode = securePreference.node(ICompileKeyConstants.SECURE_NODE);
-		setErrorMessage(null);
 
-		try {
-			secureNode.put(ICompileKeyConstants.AUTHORIZATION_FILE, txtAuthorizationFile.getText(), false);
-			secureNode.put(ICompileKeyConstants.ID_FILE, txtIdFile.getText(), false);
-			secureNode.put(ICompileKeyConstants.GENERATED_AT, txtGeneratedAt.getText(), false);
-			secureNode.put(ICompileKeyConstants.VALID_UNTIL, txtValidUntil.getText(), false);
-			secureNode.put(ICompileKeyConstants.AUTHORIZATION_CODE, txtAuthorizationCode.getText().replace("\n", ""),
-					false);
-			secureNode.put(ICompileKeyConstants.OVERRIDE_PERMISSION,
-					String.valueOf(cbOverridePermission.getSelection()), false);
-
-			secureNode.flush();
-		} catch (final StorageException e) {
-			SdkUIActivator.logStatus(ERROR, "Chave de Compilação", e.getMessage(), e);
-			setErrorMessage("Chave não aplicada. Veja log para detalhes.");
-		} catch (final IOException e) {
-			SdkUIActivator.logStatus(ERROR, "Chave de Compilação", e.getMessage(), e);
-			setErrorMessage("Chave não aplicada. Veja log para detalhes.");
+		if (authorizationKey.apply()) {
+			setMessage("Chave de Compilação aplicada com sucesso.", INFORMATION);
+		} else {
+			setErrorMessage(authorizationKey.getErrorMessage());
 		}
 
 		return getErrorMessage() == null;
@@ -270,10 +205,16 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 
 	private String addBreakLine(final String text) {
 		final StringJoiner sb = new StringJoiner("\n");
-		final int len = 40;
+		int i = 0;
 
-		for (int i = 0; i < text.length(); i += len) {
-			sb.add(text.substring(i, i + len));
+		while (i < text.length()) {
+			if ((i + 40) > text.length()) {
+				sb.add(text.substring(i, text.length()));
+			} else {
+				sb.add(text.substring(i, i + 40));
+			}
+
+			i += 40;
 		}
 
 		return sb.toString();

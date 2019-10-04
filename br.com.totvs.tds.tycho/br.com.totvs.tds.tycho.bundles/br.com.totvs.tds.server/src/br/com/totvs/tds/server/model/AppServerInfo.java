@@ -166,12 +166,6 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public String getPermimissionToken() {
-
-		return (String) getConnectionMap().getOrDefault("compile.key", "");
-	}
-
-	@Override
 	public String getToken() {
 		return (String) getConnectionMap().getOrDefault("token", "");
 	}
@@ -530,6 +524,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		}
 
 		this.connectionMap.putAll(connectionMap);
+
 		setConnected(isLogged);
 		setCurrentEnvironment(environment);
 
@@ -537,6 +532,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		if (searchNode instanceof IEnvironmentInfo) {
 			((IEnvironmentInfo) searchNode).setCredentialValidated(isLogged);
 		}
+
 		return isLogged;
 	}
 

@@ -68,13 +68,13 @@ public class CompileHandler extends EditorHandler {
 			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 			final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 			final IAppServerInfo currentServer = serverManager.getCurrentServer();
+			final String authorizationCode = serverManager.getAuthorizationKey().getAuthorizationCode();
 
 			for (final Entry<String, CompileMapData> compileData : compileMap.entrySet()) {
 				monitor.subTask(String.format("Projeto %s", compileData.getKey()));
 
-				lsService.buidlFile(currentServer.getToken(), currentServer.getPermimissionToken(),
-						currentServer.getCurrentEnvironment(), compileData.getValue().files, compileOptions,
-						compileData.getValue().includePaths);
+				lsService.buidlFile(currentServer.getToken(), authorizationCode, currentServer.getCurrentEnvironment(),
+						compileData.getValue().files, compileOptions, compileData.getValue().includePaths);
 
 				monitor.worked(1);
 			}

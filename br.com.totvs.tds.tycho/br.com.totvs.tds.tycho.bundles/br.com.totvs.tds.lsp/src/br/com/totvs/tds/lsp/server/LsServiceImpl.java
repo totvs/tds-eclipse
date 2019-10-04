@@ -263,14 +263,19 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 	@Override
 	public String getMachineId() {
-		final IdNode idNode = ClientImpl.getInstance().getId();
+		String machineId = null;
 
-		if (idNode != null) {
-			return idNode.getId();
+		if (ClientImpl.getInstance() != null) {
+			final IdNode idNode = ClientImpl.getInstance().getId();
+
+			if (idNode != null) {
+				machineId = idNode.getId();
+			}
 		}
 
-		return null;
+		return machineId;
 	}
+
 	/*
 	 * languageClient.sendRequest('$totvsserver/getId') .then((response: any) => {
 	 * if (response.id) { currentPanel.webview.postMessage({ command: "setID", 'id':

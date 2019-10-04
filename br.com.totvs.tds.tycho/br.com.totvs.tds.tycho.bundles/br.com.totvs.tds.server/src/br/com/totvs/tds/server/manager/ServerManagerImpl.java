@@ -32,6 +32,7 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.interfaces.IAuthorizationKey;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IRootInfo;
@@ -41,6 +42,7 @@ import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
 import br.com.totvs.tds.server.model.AbstractBean;
 import br.com.totvs.tds.server.model.AppServerInfo;
+import br.com.totvs.tds.server.model.AuthorizationKey;
 import br.com.totvs.tds.server.model.GroupInfo;
 import br.com.totvs.tds.server.model.ItemInfo;
 import br.com.totvs.tds.server.model.RootInfo;
@@ -59,17 +61,16 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 	private boolean loading;
 
-	/** Lista de servidores registrados. */
 	private IGroupInfo rootGroupInfo;
-
 	private ByteArrayOutputStream tempSave;
-
 	protected IAppServerInfo auxCurrentServer;
+	private IAuthorizationKey authorizationKey;
 
 	/**
 	 * Construtor.
 	 */
 	public ServerManagerImpl() {
+		authorizationKey = new AuthorizationKey();
 		rootGroupInfo = new RootInfo();
 		hookChangeListener(rootGroupInfo);
 	}
@@ -638,6 +639,12 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		} else {
 			deleteSecureStorageServerNode(serverInfo);
 		}
+	}
+
+	@Override
+	public IAuthorizationKey getAuthorizationKey() {
+
+		return authorizationKey;
 	}
 
 }

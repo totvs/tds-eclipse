@@ -69,6 +69,7 @@ Export-Package: br.com.totvs.tds.ui.sdk;
    org.eclipse.jface.preference,
    org.eclipse.swt.widgets"
 Import-Package: br.com.totvs.tds.lsp.server,
+ br.com.totvs.tds.server.interfaces,
  org.eclipse.core.resources,
  org.eclipse.ui.forms.widgets
 Eclipse-RegisterBuddy: org.eclipse.swtbot.swt.finder

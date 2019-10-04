@@ -130,11 +130,6 @@ public interface IAppServerInfo extends IServerInfo {
 	void unloadEnvironments();
 
 	/**
-	 * Chave de compilação.
-	 */
-	String getPermimissionToken();
-
-	/**
 	 * Efetua a carga de informações de configuração de slave
 	 *
 	 * @param lsService

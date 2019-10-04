@@ -184,4 +184,6 @@ public interface IServerManager {
 
 	void restore();
 
+	IAuthorizationKey getAuthorizationKey();
+
 }

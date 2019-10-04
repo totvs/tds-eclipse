@@ -1,7 +1,5 @@
 package br.com.totvs.tds.ui.screen;
 
-import static org.junit.Assert.assertFalse;
-
 import org.eclipse.swtbot.swt.finder.SWTBot;
 
 import br.com.totvs.tds.ui.AbstractTest;
@@ -20,10 +18,8 @@ public class CompileKeyScreen extends AbstractTest {
 	public void finish(final SWTBot bot) {
 		pause();
 		pause();
-		final String idLocal = bot.textWithLabel("ID Local").getText();
 
-		assertFalse("Não foi possivel obter ID Local", idLocal.isEmpty());
-
+		idLocal = bot.textWithLabel("ID Local").getText();
 		setReturnDialog(getAutFile());
 		bot.button("...").click();
 
@@ -35,7 +31,7 @@ public class CompileKeyScreen extends AbstractTest {
 		token = bot.textWithLabel("Autorização").getText().replace("\n", "");
 		overwriteMicrosiga = bot.checkBox().isChecked();
 
-		bot.button("Apply and Close").click();
+		bot.button("Apply").click();
 	}
 
 	/**

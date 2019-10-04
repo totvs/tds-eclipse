@@ -21,7 +21,7 @@ import br.com.totvs.tds.ui.screen.CompileKeyScreen;
 public class CompileKeyTest extends AbstractTest {
 
 	@Before
-	public static void before() throws Exception {
+	public void before() throws Exception {
 		PerspectiveBot.openTotvsPlatform();
 		ConsoleBot.clear();
 	}
@@ -38,14 +38,16 @@ public class CompileKeyTest extends AbstractTest {
 		final CompileKeyScreen compileKeyScreen = new CompileKeyScreen();
 		compileKeyScreen.setAutFile(ITestProperties.AUT_FILE).finish(prefsShell.bot());
 
+		prefsShell.activate();
+		prefsShell.bot().text("Chave de Compilação aplicada com sucesso.");
+		prefsShell.bot().button("Apply and Close").click();
+
+		bot.waitUntil(Conditions.shellCloses(prefsShell));
+
 		final boolean resultLog = ConsoleBot.test("User successfully authorized.");
 		assertEquals("ID´s local/autorização não conferem.", compileKeyScreen.getIdLocal(),
 				compileKeyScreen.getIdAuthotization());
-		assertTrue("Chave de compilação aplicada não foi aceita.", resultLog);
-
-		prefsShell.activate();
-
-		bot.waitUntil(Conditions.shellCloses(prefsShell));
+		assertTrue("Chave de compilação não foi aceita na aplicação.", resultLog);
 
 	}
 

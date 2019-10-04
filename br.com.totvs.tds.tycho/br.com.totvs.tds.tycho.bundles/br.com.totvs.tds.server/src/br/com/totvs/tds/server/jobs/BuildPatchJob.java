@@ -21,6 +21,7 @@ import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IRpoElement;
+import br.com.totvs.tds.server.interfaces.IServerManager;
 
 /**
  * Job para construção de pacotes de atualização.
@@ -113,10 +114,11 @@ public class BuildPatchJob extends Job {
 		} else {
 			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-
+			final IServerManager serverManager = serviceLocator.getService(IServerManager.class);
+			final String authorizationCode = serverManager.getAuthorizationKey().getAuthorizationCode();
 			final java.nio.file.Path tempFolder = Files.createTempDirectory("tds");
 
-			final int resultPatchGenerate = lsService.patchGenerate(server.getToken(), server.getPermimissionToken(),
+			final int resultPatchGenerate = lsService.patchGenerate(server.getToken(), authorizationCode,
 					attributes.getEnvironment(), attributes.isLocal(), attributes.getFilename(), tempFolder.toString(),
 					attributes.getResources().toArray(new String[attributes.getResources().size()]),
 					attributes.getMasterPatch(), attributes.getPatchType().getPatchType());
