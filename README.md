@@ -59,7 +59,7 @@ O **TDS** pode ser utilizado nas plataformas **Protheus** com suporte a:
 * Monitoramento de servidores
 * Assistentes para geração de códigos
 * Integração com o dicionário de dados
-* E mais aquilo que você invertar e compartlhar com a comunidade
+* E mais aquilo que você inventar e compartlhar com a comunidade
 
 ## Guia Ultra Rápido e Simplificado 
 
