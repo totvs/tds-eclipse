@@ -11,7 +11,7 @@ public class TotvsNature implements IProjectNature {
 	/**
 	 * ID of this project nature
 	 */
-	public static final String NATURE_ID = "br.com.totvs.tds.ui.sdk.protheusNature";
+	public static final String NATURE_ID = "br.com.totvs.tds.ui.sdk.protheusNature"; //$NON-NLS-1$
 
 	private IProject project;
 

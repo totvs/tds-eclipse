@@ -74,9 +74,9 @@ public class TotvsBuilder extends IncrementalProjectBuilder {
 		}
 	}
 
-	public static final String BUILDER_ID = "br.com.totvs.tds.ui.sdk.protheusBuilder";
+	public static final String BUILDER_ID = "br.com.totvs.tds.ui.sdk.protheusBuilder"; //$NON-NLS-1$
 
-	private static final String MARKER_TYPE = "br.com.totvs.tds.ui.sdk.protheusProblem";
+	private static final String MARKER_TYPE = "br.com.totvs.tds.ui.sdk.protheusProblem"; //$NON-NLS-1$
 
 	private void addMarker(IFile file, String message, int lineNumber, int severity) {
 		try {
@@ -111,7 +111,7 @@ public class TotvsBuilder extends IncrementalProjectBuilder {
 	}
 
 	void checkResource(IResource resource) {
-		if (resource instanceof IFile && resource.getName().endsWith(".xml")) {
+		if (resource instanceof IFile && resource.getName().endsWith(".xml")) { //$NON-NLS-1$
 			IFile file = (IFile) resource;
 			deleteMarkers(file);
 			XMLErrorHandler reporter = new XMLErrorHandler(file);

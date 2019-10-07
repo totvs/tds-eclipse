@@ -20,7 +20,7 @@ import br.com.totvs.tds.ui.sdk.builder.TotvsNature;
  */
 public class SourcePathComputerDelegate implements ISourcePathComputerDelegate {
 
-	public static final String ID = "br.com.totvs.tds.ui.debug.sourcePathComputer";
+	public static final String ID = "br.com.totvs.tds.ui.debug.sourcePathComputer"; //$NON-NLS-1$
 
 	private static final ISourceContainer[] EMPTY_ARRAY = new ISourceContainer[0];;
 

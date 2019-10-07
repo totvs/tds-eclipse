@@ -214,14 +214,14 @@ public class TDSMessageHandler {
 				}
 
 				if (message == null) {
-					message = "";
+					message = Messages.TDSMessageHandler_EMPTY_STRING;
 					exception.printStackTrace();
 				}
 			}
 
 			message = String.format(message, args);
 		}
-		message = String.format("%s: %s", title, message);
+		message = String.format("%s: %s", title, message); //$NON-NLS-1$
 
 		return new Status(level, pluginId, 0, message, exception);
 	}

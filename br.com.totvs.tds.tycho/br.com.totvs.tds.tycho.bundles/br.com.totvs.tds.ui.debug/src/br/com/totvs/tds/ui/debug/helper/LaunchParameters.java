@@ -108,10 +108,10 @@ public class LaunchParameters {
 		this.bIgnoreFilesNotInWS = false;
 		this.trace = false;
 		this.enableTableSync = false;
-		this.program = "";
-		this.cwb = "";
-		this.language = "";
-		this.logFile = "";
+		this.program = ""; //$NON-NLS-1$
+		this.cwb = ""; //$NON-NLS-1$
+		this.language = ""; //$NON-NLS-1$
+		this.logFile = ""; //$NON-NLS-1$
 		this.programArguments = new ArrayList<String>();
 		this.workspaceFolders = new ArrayList<String>();
 	}
@@ -312,10 +312,10 @@ public class LaunchParameters {
 			if (value != null) {
 				Class<?> type = field.getType();
 
-				if (type.getSimpleName().equals("List")) {
+				if (type.getSimpleName().equals("List")) { //$NON-NLS-1$
 					List<?> list = (List<?>) value;
 
-					String listStr = list.stream().map(n -> String.valueOf(n)).collect(Collectors.joining("\t"));
+					String listStr = list.stream().map(n -> String.valueOf(n)).collect(Collectors.joining("\t")); //$NON-NLS-1$
 
 					map.put(field.getName(), listStr);
 				} else {
@@ -344,16 +344,16 @@ public class LaunchParameters {
 
 					Class<?> type = field.getType();
 					if (type.isPrimitive()) {
-						if (field.getType().getName().equals("boolean")) {
+						if (field.getType().getName().equals("boolean")) { //$NON-NLS-1$
 							field.setBoolean(this, Boolean.valueOf(value.toString()));
 						} else {
 							field.setInt(this, Integer.valueOf(value.toString()));
 						}
-					} else if (type.getSimpleName().equals("List")) {
+					} else if (type.getSimpleName().equals("List")) { //$NON-NLS-1$
 						String listStr = (String) value;
 
 						if (!listStr.isEmpty()) {
-							List<?> listAux = Arrays.asList(listStr.split("\t"));
+							List<?> listAux = Arrays.asList(listStr.split("\t")); //$NON-NLS-1$
 							@SuppressWarnings("unchecked")
 							List<Object> listObj = (List<Object>) field.get(this);
 							listObj.clear();
@@ -447,23 +447,23 @@ public class LaunchParameters {
 		List<String> result = new ArrayList<String>();
 
 		if (this.isMultiSession) {
-			result.add("-M");
+			result.add("-M"); //$NON-NLS-1$
 		}
 		if (this.isAccessibilityMode) {
-			result.add("-AC");
+			result.add("-AC"); //$NON-NLS-1$
 		}
 		if (this.doNotShowSplash) {
-			result.add("-Q");
+			result.add("-Q"); //$NON-NLS-1$
 		}
 
 		if (!this.language.isEmpty()) {
 			SCLanguages language = IDebugLauncherAttributes.SCLanguages.getEnum(this.language);
-			result.add(String.format("-L=%d", language.getCode()));
+			result.add(String.format("-L=%d", language.getCode())); //$NON-NLS-1$
 		}
 
-		result.add(String.format("-P=%s", this.program));
+		result.add(String.format("-P=%s", this.program)); //$NON-NLS-1$
 		for (String value : this.programArguments) {
-			result.add(String.format("-A %s", value));
+			result.add(String.format("-A %s", value)); //$NON-NLS-1$
 		}
 
 		return result;

@@ -38,7 +38,7 @@ public class HttpLink implements IHyperlink {
 			IWebBrowser browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser(url.toString());
 			browser.openURL(url);
 		} catch (PartInitException e) {
-			TDSUIActivator.logStatus(IStatus.ERROR, "Navegador", e.getMessage(), e);
+			TDSUIActivator.logStatus(IStatus.ERROR, Messages.HttpLink_Navigator, e.getMessage(), e);
 		}
 	}
 }

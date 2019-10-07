@@ -35,7 +35,7 @@ import br.com.totvs.tds.ui.TDSUtil;
  */
 public class CompileKeyPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 
-	public final static String PAGE_ID = "br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage";
+	public final static String PAGE_ID = "br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage"; //$NON-NLS-1$
 
 	private Text txtIdLocal;
 	private Text txtIdFile;
@@ -52,7 +52,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 	 * Create the preference page.
 	 */
 	public CompileKeyPreferencePage() {
-		setTitle("Chave de Compila\u00E7\u00E3o");
+		setTitle(Messages.CompileKeyPreferencePage_Compile_key);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		container.setLayout(new GridLayout(3, false));
 
 		final Label lblIdlocal = new Label(container, SWT.NONE);
-		lblIdlocal.setText("ID Local");
+		lblIdlocal.setText(Messages.CompileKeyPreferencePage_Local_id);
 		txtIdLocal = new Text(container, SWT.BORDER);
 		txtIdLocal.setEnabled(false);
 		txtIdLocal.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -86,21 +86,21 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		new Label(container, SWT.NONE);
 
 		final Label lblArquivoDeAutorizao = new Label(container, SWT.NONE);
-		lblArquivoDeAutorizao.setText("Arquivo de Autoriza\u00E7\u00E3o");
+		lblArquivoDeAutorizao.setText(Messages.CompileKeyPreferencePage_Authorization_File);
 
 		txtAuthorizationFile = new Text(container, SWT.BORDER);
 		txtAuthorizationFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtAuthorizationFile.setEditable(false);
 		btnSelectFile = new Button(container, SWT.NONE);
 		btnSelectFile.setEnabled(true);
-		btnSelectFile.setText("...");
+		btnSelectFile.setText("..."); //$NON-NLS-1$
 		btnSelectFile.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				setMessage(null);
 				final String[] filter = { "*.AUT" }; //$NON-NLS-1$ //$NON-NLS-2$
-				final String[] filterNames = { "Chave de Compilação (*.aut)" };
+				final String[] filterNames = { Messages.CompileKeyPreferencePage_Compilation_key_file };
 
 				final String autfile = TDSUtil.fileDialog(new Shell(), filter, filterNames);
 				if (autfile != null) {
@@ -129,7 +129,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		});
 
 		final Label lblIdFile = new Label(container, SWT.NONE);
-		lblIdFile.setText("ID Autoriza\u00E7\u00E3o");
+		lblIdFile.setText(Messages.CompileKeyPreferencePage_Authorization_ID);
 		txtIdFile = new Text(container, SWT.BORDER);
 		txtIdFile.setEnabled(false);
 		txtIdFile.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -137,14 +137,14 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		new Label(container, SWT.NONE);
 
 		final Label lblDate = new Label(container, SWT.NONE);
-		lblDate.setText("Gerado em");
+		lblDate.setText(Messages.CompileKeyPreferencePage_Generated_in);
 		txtGeneratedAt = new Text(container, SWT.BORDER);
 		txtGeneratedAt.setEnabled(false);
 		txtGeneratedAt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		new Label(container, SWT.NONE);
 
 		final Label lblValidade = new Label(container, SWT.NONE);
-		lblValidade.setText("Válido at\u00E9");
+		lblValidade.setText(Messages.CompileKeyPreferencePage_Valid_until);
 		txtValidUntil = new Text(container, SWT.BORDER);
 		txtValidUntil.setEnabled(false);
 		txtValidUntil.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -152,15 +152,15 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 
 		cbOverridePermission = new Button(container, SWT.CHECK);
 		cbOverridePermission.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 3, 1));
-		cbOverridePermission.setText("Pode substituir fontes originais Microsiga");
+		cbOverridePermission.setText(Messages.CompileKeyPreferencePage_Can_replace_Microsiga_fonts);
 		cbOverridePermission.setEnabled(false);
 
 		final Label lblCodeAuth = new Label(container, SWT.NONE);
-		lblCodeAuth.setText("Autoriza\u00E7\u00E3o");
+		lblCodeAuth.setText(Messages.CompileKeyPreferencePage_Authorization);
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		txtAuthorizationCode = new Text(container, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-		txtAuthorizationCode.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL));
+		txtAuthorizationCode.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL)); //$NON-NLS-1$
 		txtAuthorizationCode.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		txtAuthorizationCode.setEditable(false);
 
@@ -195,7 +195,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 	public boolean performOk() {
 
 		if (authorizationKey.apply()) {
-			setMessage("Chave de Compilação aplicada com sucesso.", INFORMATION);
+			setMessage(Messages.CompileKeyPreferencePage_Compilation_key_successfully_applied, INFORMATION);
 		} else {
 			setErrorMessage(authorizationKey.getErrorMessage());
 		}
@@ -204,7 +204,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 	}
 
 	private String addBreakLine(final String text) {
-		final StringJoiner sb = new StringJoiner("\n");
+		final StringJoiner sb = new StringJoiner("\n"); //$NON-NLS-1$
 		int i = 0;
 
 		while (i < text.length()) {

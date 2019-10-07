@@ -31,9 +31,9 @@ public class ActivatorServer implements BundleActivator {
 	 * @throws IOException
 	 */
 	public String getDACommand() throws IOException {
-		URL daPathUrl = getClass().getResource("/resources/tds-da/debugAdapter.exe");
+		URL daPathUrl = getClass().getResource("/resources/tds-da/debugAdapter.exe"); //$NON-NLS-1$
 		if (daPathUrl == null) {
-			daPathUrl = getClass().getResource("/resources/tds-da/debugAdapter");
+			daPathUrl = getClass().getResource("/resources/tds-da/debugAdapter"); //$NON-NLS-1$
 		}
 		File daPath = new File(FileLocator.toFileURL(daPathUrl).getPath());
 

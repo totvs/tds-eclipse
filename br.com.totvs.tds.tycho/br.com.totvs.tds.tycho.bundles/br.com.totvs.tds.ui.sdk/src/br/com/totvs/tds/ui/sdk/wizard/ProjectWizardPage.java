@@ -34,14 +34,14 @@ public class ProjectWizardPage extends WizardPage {
 	private IncludeConfigurationComposite containerIncludePath;
 
 	/**
-	 * Página principal do Wizard para criar um projeto.
+	 * Pï¿½gina principal do Wizard para criar um projeto.
 	 * 
 	 * @param pageName
 	 */
 	public ProjectWizardPage(final ISelection selection, final ProjectVO voProject) {
 		super("wizardPage"); //$NON-NLS-1$
-		setTitle("Assistente de Projeto TOTVS");
-		setDescription("Esse assistente cria um projeto TOTVS.");
+		setTitle(Messages.ProjectWizardPage_Totvs_project_wizard);
+		setDescription(Messages.ProjectWizardPage_Wizard_creates_TOTVS_project);
 		this.voProject = voProject;
 	}
 
@@ -58,7 +58,7 @@ public class ProjectWizardPage extends WizardPage {
 		layout.verticalSpacing = VERTICAL_SPACING;
 
 		Label labelProject = new Label(container, SWT.NULL);
-		labelProject.setText("Nome");
+		labelProject.setText(Messages.ProjectWizardPage_Name);
 		txtNameProject = new Text(container, SWT.BORDER | SWT.SINGLE);
 		txtNameProject.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -97,17 +97,17 @@ public class ProjectWizardPage extends WizardPage {
 	 * Tests if the current workbench selection is a suitable container to use.
 	 */
 	private void initialize() {
-		txtNameProject.setText("Novo_Projeto");
+		txtNameProject.setText(Messages.ProjectWizardPage_New_Project);
 	}
 
 	private void dialogChanged() {
 		voProject.projectName = txtNameProject.getText();
 		if (voProject.projectName.length() == 0) {
-			updateStatus("O nome do projeto precisa ser informado.");
+			updateStatus(Messages.ProjectWizardPage_Project_name_required);
 			return;
 		}
 		if (voProject.projectName.replace('\\', '/').indexOf('/', 1) > 0) {
-			updateStatus("O nome do projeto possui caracteres invalidos.");
+			updateStatus(Messages.ProjectWizardPage_Project_name_invalid);
 			return;
 		}
 		updateStatus(null);

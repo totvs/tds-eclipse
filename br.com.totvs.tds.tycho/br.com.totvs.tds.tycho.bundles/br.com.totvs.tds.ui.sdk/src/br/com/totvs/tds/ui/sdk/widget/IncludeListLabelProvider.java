@@ -29,7 +29,7 @@ class IncludeListLabelProvider extends StyledCellLabelProvider { // implements I
 
 		if (element.getFolder().equals(IncludeDataModel.GLOBAL)) {
 			image = GLOBAL;
-			text = "Global";
+			text = Messages.IncludeListLabelProvider_Global;
 		} else if (element.getFolder().startsWith(IncludeDataModel.WORKSPACE)) {
 			image = WORKSPACE;
 		} else {

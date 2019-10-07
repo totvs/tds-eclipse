@@ -49,7 +49,7 @@ public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 			final Long parentVariablesReference = res.getVariablesReference();
 			final Long childrenVariablesReference = 0L;
 			final String name = args.getExpression();
-			final DSPVariable variable = new DSPVariable(debugTarget, parentVariablesReference, name, "**",
+			final DSPVariable variable = new DSPVariable(debugTarget, parentVariablesReference, name, "**", //$NON-NLS-1$
 					childrenVariablesReference);
 			final DSPValue value = new DSPValue(variable, res.getVariablesReference(), res.getResult());
 

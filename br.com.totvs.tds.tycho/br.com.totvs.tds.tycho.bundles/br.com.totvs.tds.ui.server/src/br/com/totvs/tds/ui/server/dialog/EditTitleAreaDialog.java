@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
 import br.com.totvs.tds.server.interfaces.IItemInfo;
+import br.com.totvs.tds.ui.server.nl.Messages;
 
 public abstract class EditTitleAreaDialog extends TitleAreaDialog {
 
@@ -26,7 +27,7 @@ public abstract class EditTitleAreaDialog extends TitleAreaDialog {
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 
-		newShell.setText("Edição");
+		newShell.setText(Messages.EditTitleAreaDialog_Edit);
 	}
 
 	@Override

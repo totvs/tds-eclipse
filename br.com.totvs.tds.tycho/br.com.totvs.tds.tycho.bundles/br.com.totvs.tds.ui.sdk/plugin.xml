@@ -178,7 +178,7 @@
             category="br.com.totvs.tds.ui.sdk.preference.compilation.CompilePreferencePage"
             class="br.com.totvs.tds.ui.sdk.preference.compilation.CompileKeyPreferencePage"
             id="br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage"
-            name="Chave de Compilação">
+            name="%page.name.6">
       </page>
    </extension>
    <extension

@@ -121,7 +121,7 @@ public class DualSelector extends Composite {
 				doReorder(ss, true);
 			}
 		});
-		btnUp.setImage(ResourceManager.getPluginImage(Messages.DualSelector_4, "icons/up.gif")); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$
+		btnUp.setImage(ResourceManager.getPluginImage(Messages.DualSelector_4, "icons/up.gif")); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$
 		toolkit.adapt(btnUp, true, true);
 
 		Button btnSelecionarTudo = new Button(this, SWT.NONE);

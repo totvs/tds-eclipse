@@ -104,26 +104,26 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		group.setText("SmartClient"); //$NON-NLS-1$
 
 		final Label lblDirRemote = new Label(group, SWT.NONE);
-		lblDirRemote.setText("Execut\u00E1vel");
+		lblDirRemote.setText(Messages.SmartClientLaunchTab_Executable);
 
 		this.lblNewLabel_1 = new Label(group, SWT.WRAP);
 		// lblNewLabel_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_INFO_BACKGROUND));
 		lblNewLabel_1.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		// this.lblNewLabel_1.setFont(SWTResourceManager.getFont("Segoe UI", 8,
 		// SWT.ITALIC));
-		this.lblNewLabel_1.setText("*Ser\u00E1 utilizado o SmartClient associado ao servidor.");
+		this.lblNewLabel_1.setText(Messages.SmartClientLaunchTab_Server_associated_SmartClient);
 		new Label(group, SWT.NONE);
 		new Label(group, SWT.NONE);
 
 		final Label lblNewLabel = new Label(group, SWT.NONE);
-		lblNewLabel.setText("(-P) Função principal");
+		lblNewLabel.setText(Messages.SmartClientLaunchTab_Main_Function);
 		txtMainFunction = new Text(group, SWT.SINGLE | SWT.BORDER);
-		txtMainFunction.setToolTipText("Função que será utilizada para iniciar o processo.");
+		txtMainFunction.setToolTipText(Messages.SmartClientLaunchTab_Function_start_process);
 		txtMainFunction.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		final Label lblParametros = new Label(group, SWT.NONE);
-		lblParametros.setToolTipText("Informe os parâmetros para a função principal.");
-		lblParametros.setText("(-A) Parâmetros");
+		lblParametros.setToolTipText(Messages.SmartClientLaunchTab_Parameters_for_main_function);
+		lblParametros.setText(Messages.SmartClientLaunchTab_Parameters);
 		txtParameters = new Text(group, SWT.SINGLE | SWT.BORDER);
 		txtParameters.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
@@ -131,31 +131,31 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		grpArgumentos.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		final GridLayout glGrpArgumentos = new GridLayout(2, false);
 		grpArgumentos.setLayout(glGrpArgumentos);
-		grpArgumentos.setText("Argumentos");
+		grpArgumentos.setText(Messages.SmartClientLaunchTab_Arguments);
 
 		chkMultiSelection = new Button(grpArgumentos, SWT.CHECK);
-		chkMultiSelection.setToolTipText("Permite a execução de uma ou mais instâncias do TOTVS SmartClient.");
+		chkMultiSelection.setToolTipText(Messages.SmartClientLaunchTab_Allows_running_more_instances_SmartClient);
 		chkMultiSelection.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		chkMultiSelection.setText("(-M) múltiplas sessões");
+		chkMultiSelection.setText(Messages.SmartClientLaunchTab_Multiple_sessions);
 		chkMultiSelection.addSelectionListener(defaultSelectionListener);
 
 		chkAccess = new Button(grpArgumentos, SWT.CHECK);
-		chkAccess.setToolTipText("Ativa o módulo de acessibilidade.");
+		chkAccess.setToolTipText(Messages.SmartClientLaunchTab_Activates_accessibility_module);
 		chkAccess.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		chkAccess.setText("(-AC) Módulo de acessibilidade");
+		chkAccess.setText(Messages.SmartClientLaunchTab_Accessibility_module);
 		chkAccess.addSelectionListener(defaultSelectionListener);
 
 		chkSplash = new Button(grpArgumentos, SWT.CHECK);
-		chkSplash.setToolTipText("Não apresenta a imagem de abertura.");
+		chkSplash.setToolTipText(Messages.SmartClientLaunchTab_Not_display_splash);
 		chkSplash.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		chkSplash.setText("(-Q) não apresentar 'splash'");
+		chkSplash.setText(Messages.SmartClientLaunchTab_Does_not_display_splash);
 		chkSplash.addSelectionListener(defaultSelectionListener);
 		new Label(grpArgumentos, SWT.NONE);
 
 		chkLanguage = new Button(grpArgumentos, SWT.CHECK);
-		chkLanguage.setToolTipText("Idioma a ser utilizado durante a execução.");
+		chkLanguage.setToolTipText(Messages.SmartClientLaunchTab_Language_use_during_execution);
 		chkLanguage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		chkLanguage.setText("(-L) Idioma");
+		chkLanguage.setText(Messages.SmartClientLaunchTab_Language);
 
 		cmbLanguage = new Combo(grpArgumentos, SWT.NONE);
 		cmbLanguage.setItems(scLanguages);
@@ -168,23 +168,23 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		grpOptions.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		final GridLayout glGrpOpes = new GridLayout(3, false);
 		grpOptions.setLayout(glGrpOpes);
-		grpOptions.setText("Opções");
+		grpOptions.setText(Messages.SmartClientLaunchTab_Options);
 		chkEnableProfile = new Button(grpOptions, SWT.CHECK);
-		chkEnableProfile.setText("Perfil de execução");
+		chkEnableProfile.setText(Messages.SmartClientLaunchTab_Execution_Profile);
 
 		chkMultiThread = new Button(grpOptions, SWT.CHECK);
-		chkMultiThread.setText("Multi-thread");
+		chkMultiThread.setText(Messages.SmartClientLaunchTab_Multi_thread);
 
 		chkStopAtFirstKnowSource = new Button(grpOptions, SWT.CHECK);
-		chkStopAtFirstKnowSource.setText("*Parar no primeiro fonte conhecido");
+		chkStopAtFirstKnowSource.setText(Messages.SmartClientLaunchTab_Stop_first_known_source);
 
 		chkShowCommandLine = new Button(grpOptions, SWT.CHECK);
 		chkShowCommandLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		chkShowCommandLine.setSelection(true);
-		chkShowCommandLine.setText("Apresentar linha de comando");
+		chkShowCommandLine.setText(Messages.SmartClientLaunchTab_Display_command_line);
 
 		lblpOuSuperior = new Label(grpOptions, SWT.WRAP);
-		lblpOuSuperior.setText("*P17 ou superior");
+		lblpOuSuperior.setText(Messages.SmartClientLaunchTab_P17_or_higher);
 		// lblpOuSuperior.setFont(SWTResourceManager.getFont("Segoe UI", 8,
 		// SWT.ITALIC));
 		chkMultiThread.addSelectionListener(defaultSelectionListener);
@@ -249,11 +249,11 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 			lp.fromMap((Map<String, Object>) attributes.getOrDefault(IServerConstants.LAUNCH_PARAMETERS, null));
 			setWidgtesValue(lp);
 		} catch (final IllegalArgumentException e) {
-			DebugUIActivator.showStatus(IStatus.ERROR, "Executor", e.getMessage());
+			DebugUIActivator.showStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
 		} catch (final IllegalAccessException e) {
-			DebugUIActivator.showStatus(IStatus.ERROR, "Executor", e.getMessage());
+			DebugUIActivator.showStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
 		} catch (final CoreException e) {
-			DebugUIActivator.showStatus(IStatus.ERROR, "Executor", e.getMessage());
+			DebugUIActivator.showStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
 		}
 	}
 
@@ -264,7 +264,7 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		try {
 			configuration.getAttributes().put(IServerConstants.LAUNCH_PARAMETERS, lp);
 		} catch (final CoreException e) {
-			DebugUIActivator.logStatus(IStatus.ERROR, "Executor", e.getMessage());
+			DebugUIActivator.logStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
 		}
 
 		// setWidgtesValue(lp);
@@ -281,8 +281,8 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		chkSplash.setSelection(launchParameters.isNotShowSplash());
 		cmbLanguage.setText(launchParameters.getLanguage());
 
-		final String mode = "";
-		if (mode == "run") {
+		final String mode = ""; //$NON-NLS-1$
+		if (mode == "run") { //$NON-NLS-1$
 			// chkStopAtFirstKnowSource.setSelection(launchParameters.isStopAtFirtLine());
 //			chkTableSync.setSelection(launchParameters.isEnableTableSync());
 //			chkTrace.setSelection(launchParameters.isTrace());
@@ -304,7 +304,7 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		lp.setDoNotShowSplash(chkSplash.getSelection());
 		lp.setLanguage(cmbLanguage.getText().trim());
 		lp.setTrace(false);
-		lp.setLogFile("");
+		lp.setLogFile(""); //$NON-NLS-1$
 		lp.setIgnoreFilesNotInWS(false);
 		lp.setEnableTableSync(false);
 
@@ -315,9 +315,9 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		try {
 			configuration.setAttribute(IServerConstants.LAUNCH_PARAMETERS, lp.toMap());
 		} catch (final IllegalArgumentException e) {
-			DebugUIActivator.showStatus(IStatus.WARNING, "Executor", e.getMessage(), e);
+			DebugUIActivator.showStatus(IStatus.WARNING, Messages.SmartClientLaunchTab_Performer, e.getMessage(), e);
 		} catch (final IllegalAccessException e) {
-			DebugUIActivator.showStatus(IStatus.WARNING, "Executor", e.getMessage(), e);
+			DebugUIActivator.showStatus(IStatus.WARNING, Messages.SmartClientLaunchTab_Performer, e.getMessage(), e);
 		}
 	}
 

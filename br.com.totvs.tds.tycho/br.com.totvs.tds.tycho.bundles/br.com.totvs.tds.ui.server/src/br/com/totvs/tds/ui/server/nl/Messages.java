@@ -213,6 +213,8 @@ public class Messages extends NLS {
 
 	public static String ServerWizardNode_required_argument_2;
 
+	public static String Startup_Initialize;
+
 	public static String StatusLineControl_active;
 
 	public static String StatusLineControl_compile_key;
@@ -248,6 +250,8 @@ public class Messages extends NLS {
 	public static String DisconnectHandler_discconect;
 	public static String DisconnectHandler_disconect_ok;
 	public static String DisconnectHandler_disconnect_forced;
+	public static String EditTitleAreaDialog_Edit;
+
 	public static String ExportServersWizard_exporing_server;
 
 	public static String ExportServersWizard_export_server_wizard_title;

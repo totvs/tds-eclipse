@@ -53,7 +53,7 @@ public class CompileHandler extends EditorHandler {
 		private CompileOptions compileOptions;
 
 		public CompileJob(final CompileOptions compileOptions, final Map<String, CompileMapData> compileMap) {
-			super("TDS: Compilação");
+			super(Messages.CompileHandler_TDS_Compilation);
 
 			this.compileOptions = compileOptions;
 			this.compileMap = compileMap;
@@ -62,7 +62,7 @@ public class CompileHandler extends EditorHandler {
 
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
-			monitor.beginTask("Compilação", compileMap.size() + 1);
+			monitor.beginTask(Messages.CompileHandler_Compilation, compileMap.size() + 1);
 
 			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
@@ -71,7 +71,7 @@ public class CompileHandler extends EditorHandler {
 			final String authorizationCode = serverManager.getAuthorizationKey().getAuthorizationCode();
 
 			for (final Entry<String, CompileMapData> compileData : compileMap.entrySet()) {
-				monitor.subTask(String.format("Projeto %s", compileData.getKey()));
+				monitor.subTask(String.format(Messages.CompileHandler_Project, compileData.getKey()));
 
 				lsService.buidlFile(currentServer.getToken(), authorizationCode, currentServer.getCurrentEnvironment(),
 						compileData.getValue().files, compileOptions, compileData.getValue().includePaths);
@@ -98,7 +98,7 @@ public class CompileHandler extends EditorHandler {
 		checkPermission();
 
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		final boolean recompile = Boolean.valueOf(event.getParameter("recompile"));
+		final boolean recompile = Boolean.valueOf(event.getParameter("recompile")); //$NON-NLS-1$
 		//
 		if (selection instanceof ITextSelection) {
 			final IWorkbench wb = PlatformUI.getWorkbench();
@@ -113,14 +113,14 @@ public class CompileHandler extends EditorHandler {
 				final IStatusLineManager statusLineManager = bars.getStatusLineManager();
 				final IProgressMonitor monitor = statusLineManager.getProgressMonitor();
 				editor.doSave(monitor);
-				EditorActivator.logStatus(IStatus.INFO, "Compilação",
-						"Altera��es salvas automaticamente.\n\tArquivo: %s", editor.getTitleToolTip());
+				EditorActivator.logStatus(IStatus.INFO, Messages.CompileHandler_Compilation,
+						Messages.CompileHandler_Autosave_warning, editor.getTitleToolTip());
 			}
 
 			try {
 				prepareToCompile(file, compileMap);
 			} catch (final CoreException e) {
-				EditorActivator.logStatus(IStatus.ERROR, "Compilação", e.getMessage(), e);
+				EditorActivator.logStatus(IStatus.ERROR, Messages.CompileHandler_Compilation, e.getMessage(), e);
 			}
 		} else if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection ss = (IStructuredSelection) selection;
@@ -131,7 +131,7 @@ public class CompileHandler extends EditorHandler {
 					try {
 						prepareToCompile((IResource) element, compileMap);
 					} catch (final CoreException e) {
-						EditorActivator.logStatus(IStatus.ERROR, "Compilação", e.getMessage(), e);
+						EditorActivator.logStatus(IStatus.ERROR, Messages.CompileHandler_Compilation, e.getMessage(), e);
 					}
 				}
 			}
@@ -174,10 +174,10 @@ public class CompileHandler extends EditorHandler {
 				}
 
 				final URI location = file.getLocationURI();
-				compileMapData.files.add(String.format("file://%s", location.getSchemeSpecificPart()));
+				compileMapData.files.add(String.format(Messages.CompileHandler_File, location.getSchemeSpecificPart()));
 			} else {
-				EditorActivator.logStatus(IStatus.INFO, "Compilação",
-						"Recurso [%s] configurado para ser ignorado na Compilação.", file.getName());
+				EditorActivator.logStatus(IStatus.INFO, Messages.CompileHandler_Compilation,
+						Messages.CompileHandler_Ignore_resource, file.getName());
 			}
 		}
 	}
@@ -189,7 +189,7 @@ public class CompileHandler extends EditorHandler {
 			final IProjectWrapper wp = wm.getWrapper(project);
 			return Arrays.asList(wp.getIncludeSearchList(true));
 		} catch (final CoreException e) {
-			EditorActivator.logStatus(IStatus.ERROR, "Compilação", e.getMessage(), e);
+			EditorActivator.logStatus(IStatus.ERROR, Messages.CompileHandler_Compilation, e.getMessage(), e);
 		}
 
 		return EMPTY_STRING_LIST;

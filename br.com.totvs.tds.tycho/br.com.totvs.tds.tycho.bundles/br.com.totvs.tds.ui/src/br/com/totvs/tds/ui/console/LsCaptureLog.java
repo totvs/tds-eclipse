@@ -30,7 +30,7 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 	@Override
 	public void consolesAdded(final IConsole[] consoles) {
 		for (final IConsole console : consoles) {
-			if ((console instanceof MessageConsole) && (console.getName().startsWith("TOTVS Servidor de Linguagem"))) {
+			if ((console instanceof MessageConsole) && (console.getName().startsWith(Messages.LsCaptureLog_TLS))) {
 				final MessageConsole lsConsole = (MessageConsole) console;
 				lsConsole.getDocument().addDocumentListener(this);
 			}
@@ -40,7 +40,7 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 	@Override
 	public void consolesRemoved(final IConsole[] consoles) {
 		for (final IConsole console : consoles) {
-			if ((console instanceof MessageConsole) && (console.getName().startsWith("TOTVS Servidor de Linguagem"))) {
+			if ((console instanceof MessageConsole) && (console.getName().startsWith(Messages.LsCaptureLog_TLS))) {
 				final MessageConsole lsConsole = (MessageConsole) console;
 				lsConsole.getDocument().removeDocumentListener(this);
 			}
@@ -60,48 +60,48 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 	public void logging(final String _message) {
 		String message;
 
-		final int nPos = _message.indexOf("\n");
+		final int nPos = _message.indexOf("\n"); //$NON-NLS-1$
 		if (nPos > -1) {
 			message = new String(_message);
-			String method = "";
+			String method = Messages.LsCaptureLog_EMPTY_STRING;
 
-			if (message.startsWith("{")) {
+			if (message.startsWith("{")) { //$NON-NLS-1$
 				final JSONObject json = new JSONObject(message.substring(nPos + 1));
-				if (json.opt("result") != null) { // ignorar mensages do tipo
+				if (json.opt("result") != null) { // ignorar mensages do tipo //$NON-NLS-1$
 					return;
 				}
 				try {
-					method = (String) json.get("method");
+					method = (String) json.get("method"); //$NON-NLS-1$
 				} catch (final Exception e) {
-					System.out.println("ServerUIActivator.logging()");
+					System.out.println("ServerUIActivator.logging()"); //$NON-NLS-1$
 					System.out.println(method);
 				}
 
 				if (method.isEmpty()) {
 					try {
-						final JSONObject error = (JSONObject) json.get("error");
-						final int code = error.getInt("code");
-						final String msg = error.getString("message");
-						TDSUIActivator.logStatus(IStatus.ERROR, "LS", "[%d] %s", code, msg.replace("\n", "\n\t"));
+						final JSONObject error = (JSONObject) json.get("error"); //$NON-NLS-1$
+						final int code = error.getInt("code"); //$NON-NLS-1$
+						final String msg = error.getString("message"); //$NON-NLS-1$
+						TDSUIActivator.logStatus(IStatus.ERROR, Messages.LsCaptureLog_LS_PREFIX, Messages.LsCaptureLog_12, code, msg.replace("\n", "\n\t")); //$NON-NLS-3$ //$NON-NLS-4$
 					} catch (final Exception e) {
-						System.out.println("ServerUIActivator.logging()");
+						System.out.println("ServerUIActivator.logging()"); //$NON-NLS-1$
 						System.out.println(method);
 					}
-				} else if (method.equals("window/logMessage")) {
-					final JSONObject params = (JSONObject) json.get("params");
-					final String msg = params.getString("message");
+				} else if (method.equals("window/logMessage")) { //$NON-NLS-1$
+					final JSONObject params = (JSONObject) json.get("params"); //$NON-NLS-1$
+					final String msg = params.getString("message"); //$NON-NLS-1$
 
-					final String regex = "\\[(.*)\\](.*)";
+					final String regex = "\\[(.*)\\](.*)"; //$NON-NLS-1$
 					final Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 					final Matcher matcher = pattern.matcher(msg);
 					int type = IStatus.INFO;
 					int i = 1;
-					String finalMsg = "";
+					String finalMsg = Messages.LsCaptureLog_EMPTY_STRING;
 
 					while (matcher.find()) {
 						final String group = matcher.group(i);
 						if (i == 1) {
-							if (group.startsWith("Log")) {
+							if (group.startsWith("Log")) { //$NON-NLS-1$
 								type = IStatus.INFO;
 							}
 						} else {
@@ -110,15 +110,15 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 						i++;
 					}
 
-					TDSUIActivator.logStatus(type, "LS", finalMsg.isEmpty() ? msg : finalMsg);
+					TDSUIActivator.logStatus(type, Messages.LsCaptureLog_LS_PREFIX, finalMsg.isEmpty() ? msg : finalMsg);
 				}
 			} else {
-				final String[] lines = message.split("\n");
-				String level = "";
-				StringJoiner text = new StringJoiner("\n\t");
+				final String[] lines = message.split("\n"); //$NON-NLS-1$
+				String level = Messages.LsCaptureLog_EMPTY_STRING;
+				StringJoiner text = new StringJoiner("\n\t"); //$NON-NLS-1$
 
 				for (final String line : lines) {
-					final String[] parts = line.split("\t");
+					final String[] parts = line.split("\t"); //$NON-NLS-1$
 
 					if ((parts.length > 1) && !parts[1].isEmpty()) {
 						text.add(extractText(parts[1]));
@@ -129,7 +129,7 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 							level = parts[0];
 						} else if (text.length() > 0) {
 							printText(level, text);
-							text = new StringJoiner("\n\t");
+							text = new StringJoiner("\n\t"); //$NON-NLS-1$
 						}
 
 						level = parts[0];
@@ -153,14 +153,14 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 	}
 
 	private void printText(final String level, final StringJoiner text) {
-		if (level.startsWith("[E")) {
-			TDSUIActivator.logStatus(IStatus.ERROR, "LS", text.toString());
-		} else if (level.startsWith("[I")) {
-			TDSUIActivator.logStatus(IStatus.INFO, "LS", text.toString());
-		} else if (level.startsWith("[W")) {
-			TDSUIActivator.logStatus(IStatus.WARNING, "LS", text.toString());
+		if (level.startsWith("[E")) { //$NON-NLS-1$
+			TDSUIActivator.logStatus(IStatus.ERROR, Messages.LsCaptureLog_LS_PREFIX, text.toString());
+		} else if (level.startsWith("[I")) { //$NON-NLS-1$
+			TDSUIActivator.logStatus(IStatus.INFO, Messages.LsCaptureLog_LS_PREFIX, text.toString());
+		} else if (level.startsWith("[W")) { //$NON-NLS-1$
+			TDSUIActivator.logStatus(IStatus.WARNING, Messages.LsCaptureLog_LS_PREFIX, text.toString());
 		} else {
-			TDSUIActivator.logStatus(IStatus.OK, "LS", text.toString());
+			TDSUIActivator.logStatus(IStatus.OK, Messages.LsCaptureLog_LS_PREFIX, text.toString());
 		}
 	}
 

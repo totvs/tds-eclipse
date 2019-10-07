@@ -75,7 +75,7 @@ public final class ProjectWrapper extends ContainerWrapper implements IProjectWr
 		try {
 			getResource().setPersistentProperty(QN_PROJECT_INCLUDE, sb.toString());
 		} catch (CoreException e) {
-			SdkUIActivator.logStatus(IStatus.ERROR, "Interno", e.getMessage(), e);
+			SdkUIActivator.logStatus(IStatus.ERROR, Messages.ProjectWrapper_Internal, e.getMessage(), e);
 		}
 
 	}
@@ -194,7 +194,7 @@ public final class ProjectWrapper extends ContainerWrapper implements IProjectWr
 				folders = includes.split(IWrapperManager.INCLUDES_SEPARATOR);
 			}
 		} catch (CoreException e) {
-			SdkUIActivator.logStatus(IStatus.ERROR, "Interno", e.getMessage(), e);
+			SdkUIActivator.logStatus(IStatus.ERROR, Messages.ProjectWrapper_Internal, e.getMessage(), e);
 		}
 
 		return folders;

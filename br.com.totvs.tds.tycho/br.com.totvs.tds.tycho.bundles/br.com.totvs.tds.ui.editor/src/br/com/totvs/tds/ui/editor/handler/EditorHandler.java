@@ -68,9 +68,9 @@ public abstract class EditorHandler extends AbstractHandler {
 		final String environment = server.getCurrentEnvironment();
 		final String username = server.getUsername();
 
-		if (!server.canPermission("COMPILE")) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "permissão",
-					"usuário [%s] sem permissão para compilar em [%s/%s].", username, server.getName(), environment);
+		if (!server.canPermission("COMPILE")) { //$NON-NLS-1$
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Permission,
+					Messages.EditorHandler_User_not_allowed_compile, username, server.getName(), environment);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}
@@ -80,19 +80,19 @@ public abstract class EditorHandler extends AbstractHandler {
 		final IAppServerInfo server = serverManager.getCurrentServer();
 
 		if (server == null) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
-					"Não foi selecionado nenhum servidor Protheus.");
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Compilation,
+					Messages.EditorHandler_Server_not_selected);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 
 		if (server.getCurrentEnvironment() == null) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
-					"Não foi selecionado nenhum ambiente para o servidor [%s]", server.getName());
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Compilation,
+					Messages.EditorHandler_No_environment_selected, server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 		if (!server.isConnected()) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Compilação",
-					"Servidor [%s] n�o conectado.", server.getName());
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Compilation,
+					Messages.EditorHandler_Server_not_connected, server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}

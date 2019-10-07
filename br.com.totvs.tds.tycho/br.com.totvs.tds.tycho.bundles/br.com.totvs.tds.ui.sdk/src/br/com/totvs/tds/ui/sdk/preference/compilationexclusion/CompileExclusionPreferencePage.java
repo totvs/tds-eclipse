@@ -41,7 +41,7 @@ public class CompileExclusionPreferencePage extends PreferencePage implements IW
 	private String exclusionPatternSelected;
 
 	public CompileExclusionPreferencePage() {
-		super("Exclusão padrão");
+		super(Messages.CompileExclusionPreferencePage_Patter_exclusion);
 		setPreferenceStore(SdkUIActivator.getDefault().getPreferenceStore());
 		exclusionPatternList = new ArrayList<>();
 	}
@@ -56,7 +56,7 @@ public class CompileExclusionPreferencePage extends PreferencePage implements IW
 		composite.setLayout(new GridLayout(2, false));
 		//
 		Label descricao = new Label(composite, SWT.NONE);
-		descricao.setText("Adicione os padrões de exclusão de arquivos.");
+		descricao.setText(Messages.CompileExclusionPreferencePage_Add_file_exclusion_patterns);
 		descricao.setLayoutData(new GridData(SWT.TOP, SWT.LEFT, true, false, 2, 1));
 		// Add TableViewer
 		addTableViewer(composite);
@@ -99,7 +99,7 @@ public class CompileExclusionPreferencePage extends PreferencePage implements IW
 		//
 		TableViewerColumn tvcName = new TableViewerColumn(tv, SWT.NONE);
 		tvcName.getColumn().setWidth(250);
-		tvcName.getColumn().setText("Padrão de exclusão");
+		tvcName.getColumn().setText(Messages.CompileExclusionPreferencePage_Exclusion_pattern);
 		tvcName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -159,12 +159,12 @@ public class CompileExclusionPreferencePage extends PreferencePage implements IW
 		};
 		//
 		addAction = new Button(composite, SWT.NONE);
-		addAction.setText("Adicionar");
+		addAction.setText(Messages.CompileExclusionPreferencePage_Add);
 		addAction.setLayoutData(gdBtn);
 		addAction.addSelectionListener(actionListener);
 		//
 		removeAction = new Button(composite, SWT.NONE);
-		removeAction.setText("Remover");
+		removeAction.setText(Messages.CompileExclusionPreferencePage_Remove);
 		removeAction.setLayoutData(gdBtn);
 		removeAction.addSelectionListener(actionListener);
 		removeAction.setEnabled(false);

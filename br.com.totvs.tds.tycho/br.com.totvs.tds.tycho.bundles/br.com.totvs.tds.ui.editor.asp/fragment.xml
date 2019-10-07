@@ -25,7 +25,7 @@
 	<extension
 	     point="org.eclipse.ui.editors">
 	  <editor
-	        name="Editor AdvPL/Asp"
+	        name="%editor.name.f1"
 	        icon="icons/source_asp.png"
 	        class="br.com.totvs.tds.ui.editor.asp.SourceEditor"
 	        id="br.com.totvs.tds.sdk.ui.editor.asp.sourceEditor">

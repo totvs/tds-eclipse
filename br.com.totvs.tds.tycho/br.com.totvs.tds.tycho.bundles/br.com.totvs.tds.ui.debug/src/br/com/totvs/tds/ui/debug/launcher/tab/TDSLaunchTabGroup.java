@@ -23,7 +23,7 @@ public class TDSLaunchTabGroup extends AbstractLaunchConfigurationTabGroup {
 		final List<ILaunchConfigurationTab> tabList = new ArrayList<ILaunchConfigurationTab>();
 
 		tabList.add(new SmartClientLaunchTab(mode));
-		if (mode == "debug") {
+		if (mode == "debug") { //$NON-NLS-1$
 			tabList.add(new SourceLookupTab());
 		}
 		tabList.add(new CommonTab());

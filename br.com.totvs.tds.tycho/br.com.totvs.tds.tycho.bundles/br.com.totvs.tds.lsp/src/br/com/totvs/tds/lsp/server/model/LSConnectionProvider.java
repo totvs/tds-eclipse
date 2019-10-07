@@ -28,20 +28,20 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 	 */
 	private String getServer() {
 		try {
-			URL serverPathUrl = getClass().getResource("/resources/tds-ls/advpls.exe");
+			URL serverPathUrl = getClass().getResource("/resources/tds-ls/advpls.exe"); //$NON-NLS-1$
 			if (serverPathUrl == null) {
-				serverPathUrl = getClass().getResource("/resources/tds-ls/advpls");
+				serverPathUrl = getClass().getResource("/resources/tds-ls/advpls"); //$NON-NLS-1$
 			}
 			final File serverPath = new File(FileLocator.toFileURL(serverPathUrl).getPath());
 
 			if (!serverPath.canExecute()) {
 				System.err.println(String.format(
-						"LS com insuficiência de privilégios.\nO TDS tentará ajustar os privilégios.\n\tArquivo: %s",
+						Messages.LSConnectionProvider_LS_insufficient_privileges,
 						serverPath.getAbsolutePath()));
 				serverPath.setExecutable(true);
 				if (!serverPath.canExecute()) {
 					System.err.println(
-							"Não foi possível ajustar os privilégios.\nFavor corrigir manualmente e reiniciar a aplicação.");
+							Messages.LSConnectionProvider_Could_not_adjust_privileges);
 				}
 			}
 			return serverPath.getAbsolutePath();

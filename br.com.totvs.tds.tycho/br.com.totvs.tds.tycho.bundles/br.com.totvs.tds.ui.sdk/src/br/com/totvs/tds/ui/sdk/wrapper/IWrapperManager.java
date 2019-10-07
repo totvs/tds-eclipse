@@ -13,7 +13,7 @@ import org.eclipse.core.runtime.CoreException;
  */
 public interface IWrapperManager {
 
-	String INCLUDES_SEPARATOR = ";";
+	String INCLUDES_SEPARATOR = ";"; //$NON-NLS-1$
 
 	/**
 	 * Recupera o inv�lucro conforme o tipo de recurso (IResource ou IModelElement).

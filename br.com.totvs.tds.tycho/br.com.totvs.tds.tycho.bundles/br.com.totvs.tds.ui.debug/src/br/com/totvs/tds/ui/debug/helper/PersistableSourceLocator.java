@@ -24,7 +24,7 @@ import br.com.totvs.tds.ui.debug.DebugUIActivator;
 @SuppressWarnings("restriction")
 public class PersistableSourceLocator extends AbstractSourceLookupDirector {
 
-	public static final String ID = "br.com.totvs.tds.ui.debug.sourceLocator";
+	public static final String ID = "br.com.totvs.tds.ui.debug.sourceLocator"; //$NON-NLS-1$
 	private static final IProgressMonitor NULL_MONITOR = new NullProgressMonitor();;
 
 	@Override
@@ -46,7 +46,7 @@ public class PersistableSourceLocator extends AbstractSourceLookupDirector {
 				}
 			}
 		} catch (CoreException e) {
-			DebugUIActivator.logStatus(IStatus.ERROR, "Deburador", e.getMessage(), e);
+			DebugUIActivator.logStatus(IStatus.ERROR, Messages.PersistableSourceLocator_Debugger, e.getMessage(), e);
 		}
 
 		if (ret == null) {

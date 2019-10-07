@@ -7,7 +7,7 @@ public interface ISDKPreferenceKeys {
 
 	String ID_INCLUDE_PAGE = "br.com.totvs.tds.ui.sdk.preference.include.IncludePreferencePage"; //$NON-NLS-1$
 	String GLOBAL_INCLUDE = "global.includes"; //$NON-NLS-1$
-	String RESULT_SEARCH = "result.search";
+	String RESULT_SEARCH = "result.search"; //$NON-NLS-1$
 
 	String ID_COMPILE_PAGE = "br.com.totvs.tds.ui.sdk.preference.workarea.compile"; //$NON-NLS-1$
 

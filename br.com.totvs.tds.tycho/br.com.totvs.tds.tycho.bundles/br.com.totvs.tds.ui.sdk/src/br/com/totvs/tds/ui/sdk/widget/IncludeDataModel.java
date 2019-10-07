@@ -64,7 +64,7 @@ public class IncludeDataModel implements IIncludeDataModel {
 				IWorkspaceRoot root = workspace.getRoot();
 				IResource resource = root.findMember(folder.substring(WORKSPACE.length()));
 				if (resource == null) {
-					message = "Não localizado.";
+					message = Messages.IncludeDataModel_Not_found;
 				}
 				path = resource.getLocation();
 			} else {
@@ -73,9 +73,9 @@ public class IncludeDataModel implements IIncludeDataModel {
 			
 			File file = path.toFile();
 			if (!file.exists()) {
-				message = "Não localizado.";
+				message = Messages.IncludeDataModel_Not_found;
 			} else if (!file.isDirectory()) {
-				message = "Não é uma pasta.";
+				message = Messages.IncludeDataModel_No_folder;
 			} else {
 				FilenameFilter filter = new FilenameFilter() {
 
@@ -86,7 +86,7 @@ public class IncludeDataModel implements IIncludeDataModel {
 				};
 				
 				if (file.list(filter).length == 0) {
-					message = "Não há arquivos de definição nesta pasta.";
+					message = Messages.IncludeDataModel_No_definition_files;
 					warning = true;
 				}
 			}

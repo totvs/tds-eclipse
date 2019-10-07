@@ -35,7 +35,7 @@ public class ExclusionPatternDialog extends TitleAreaDialog {
 	@Override
 	public void create() {
 		super.create();
-		setTitle("Adicionar padr�o de exclusão");
+		setTitle(Messages.ExclusionPatternDialog_Add_exclusion_pattern);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ExclusionPatternDialog extends TitleAreaDialog {
 			}
 		};
 		Label lbtFirstName = new Label(container, SWT.NONE);
-		lbtFirstName.setText("Padr�o de exclusão");
+		lbtFirstName.setText(Messages.ExclusionPatternDialog_Exclusion_Pattern);
 		GridData dataFirstName = new GridData();
 		dataFirstName.grabExcessHorizontalSpace = true;
 		dataFirstName.horizontalAlignment = GridData.FILL;
@@ -78,14 +78,14 @@ public class ExclusionPatternDialog extends TitleAreaDialog {
 		String errorMessage = null;
 		exclusionPattern = txtExclusionPattern.getText();
 		if (exclusionPattern.isEmpty()) {
-			errorMessage = "Digite um padr�o de exclusão v�lido.";
+			errorMessage = Messages.ExclusionPatternDialog_Please_enter_valid_exclusion_pattern;
 		} else if (exclusionPatternList.contains(exclusionPattern)) {
-			errorMessage = "Padr�o de exclusão existente.";
+			errorMessage = Messages.ExclusionPatternDialog_Existing_exclusion_pattern;
 		} else {
 			try {
 				Pattern.compile(exclusionPattern);
 			} catch (PatternSyntaxException pse) {
-				errorMessage = "IncludeListLabelDecorator expressão regular digitada não � v�lida.";
+				errorMessage = Messages.ExclusionPatternDialog_Invalid_regular_expression;
 			}
 		}
 		setErrorMessage(errorMessage);

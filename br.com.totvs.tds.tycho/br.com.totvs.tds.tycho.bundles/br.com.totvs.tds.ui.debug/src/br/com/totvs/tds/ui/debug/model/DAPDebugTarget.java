@@ -30,16 +30,16 @@ public class DAPDebugTarget extends DSPDebugTarget {
 	public final void log(final LogData log) {
 
 		if (log.isNotify()) {
-			if (log.getLevel().equals("INFO")) {
-				DebugUIActivator.showStatus(IStatus.INFO, "Depuração", "[%s] %s", log.getTime(), log.getMessage());
+			if (log.getLevel().equals("INFO")) { //$NON-NLS-1$
+				DebugUIActivator.showStatus(IStatus.INFO, Messages.DAPDebugTarget_Debugger, "[%s] %s", log.getTime(), log.getMessage()); //$NON-NLS-2$
 			} else {
-				DebugUIActivator.showStatus(IStatus.OK, "*****", "[%s] %s", log.getTime(), log.getMessage());
+				DebugUIActivator.showStatus(IStatus.OK, "*****", "[%s] %s", log.getTime(), log.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} else {
-			if (log.getLevel().equals("INFO")) {
-				DebugUIActivator.logStatus(IStatus.INFO, "Depuração", "[%s] %s", log.getTime(), log.getMessage());
+			if (log.getLevel().equals("INFO")) { //$NON-NLS-1$
+				DebugUIActivator.logStatus(IStatus.INFO, Messages.DAPDebugTarget_Debugger, "[%s] %s", log.getTime(), log.getMessage()); //$NON-NLS-2$
 			} else {
-				DebugUIActivator.logStatus(IStatus.OK, "*****", "[%s] %s", log.getTime(), log.getMessage());
+				DebugUIActivator.logStatus(IStatus.OK, "*****", "[%s] %s", log.getTime(), log.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}

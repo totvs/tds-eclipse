@@ -75,7 +75,7 @@ public final class FileWrapper implements IResourceWrapper {
 					ignoreCompile = wpProject.isIgnoreCompile();
 				}
 			} catch (CoreException e) {
-				SdkUIActivator.logStatus(IStatus.ERROR, "Interno", e.getMessage(), e);
+				SdkUIActivator.logStatus(IStatus.ERROR, Messages.FileWrapper_Internal, e.getMessage(), e);
 			}
 		}
 

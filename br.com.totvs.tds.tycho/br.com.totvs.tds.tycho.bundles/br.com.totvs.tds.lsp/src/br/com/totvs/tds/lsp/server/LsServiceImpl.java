@@ -173,7 +173,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 		final InspectorObjectsData inspectorObjectsData = new InspectorObjectsData(inspectorObjectsInfo);
 		final InspectorObjectNode inspectorObjectNode = ClientImpl.getInstance().inspectorObjects(inspectorObjectsData);
 
-		if (inspectorObjectNode.getMessage().equals("Success")) {
+		if (inspectorObjectNode.getMessage().equals("Success")) { //$NON-NLS-1$
 			result = inspectorObjectNode.getObjects();
 		}
 
@@ -238,11 +238,11 @@ public final class LsServiceImpl implements ILanguageServerService {
 		inputStream.close();
 
 		final KeyInfo keyInfo = new KeyInfo();
-		keyInfo.setId(props.getOrDefault("ID", "").toString());
-		keyInfo.setIssued(props.getOrDefault("GENERATION", "").toString());
-		keyInfo.setExpiry(props.getOrDefault("VALIDATION", "").toString());
-		keyInfo.setToken(props.getOrDefault("KEY", "").toString());
-		keyInfo.setCanOverride(props.getOrDefault("PERMISSION", "0").toString());
+		keyInfo.setId(props.getOrDefault("ID", Messages.LsServiceImpl_EMPTY_STRING).toString()); //$NON-NLS-1$
+		keyInfo.setIssued(props.getOrDefault("GENERATION", Messages.LsServiceImpl_EMPTY_STRING).toString()); //$NON-NLS-1$
+		keyInfo.setExpiry(props.getOrDefault("VALIDATION", Messages.LsServiceImpl_EMPTY_STRING).toString()); //$NON-NLS-1$
+		keyInfo.setToken(props.getOrDefault("KEY", Messages.LsServiceImpl_EMPTY_STRING).toString()); //$NON-NLS-1$
+		keyInfo.setCanOverride(props.getOrDefault("PERMISSION", "0").toString()); //$NON-NLS-1$ //$NON-NLS-2$
 
 		final ValidKeyData validKey = new ValidKeyData(keyInfo);
 		final ValidKeyNode validKeyNode = ClientImpl.getInstance().validKey(validKey);
@@ -250,12 +250,12 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		props.clear();
 		if ((buildType == 0) || (buildType == 1) || (buildType == 2)) {
-			props.put("ID", validKeyNode.getMachineId());
-			props.put("GENERATION", validKeyNode.getIssued());
-			props.put("VALIDATION", validKeyNode.getExpiry());
-			props.put("KEY", validKeyNode.getAuthorizationToken());
-			props.put("PERMISSION", keyInfo.getCanOverride());
-			props.put("USER_ID", validKeyNode.getUserId());
+			props.put("ID", validKeyNode.getMachineId()); //$NON-NLS-1$
+			props.put("GENERATION", validKeyNode.getIssued()); //$NON-NLS-1$
+			props.put("VALIDATION", validKeyNode.getExpiry()); //$NON-NLS-1$
+			props.put("KEY", validKeyNode.getAuthorizationToken()); //$NON-NLS-1$
+			props.put("PERMISSION", keyInfo.getCanOverride()); //$NON-NLS-1$
+			props.put("USER_ID", validKeyNode.getUserId()); //$NON-NLS-1$
 		}
 
 		return props;

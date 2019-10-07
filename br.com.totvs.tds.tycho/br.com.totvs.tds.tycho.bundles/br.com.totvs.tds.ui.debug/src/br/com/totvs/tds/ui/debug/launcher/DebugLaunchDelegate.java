@@ -52,37 +52,37 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 			final IProgressMonitor monitor) throws CoreException {
 		final ILaunchConfigurationWorkingCopy wk = configuration.getWorkingCopy();
 
-		if (mode.equals("run")) {
-			modeTitle = "Execução";
-		} else if (mode.equals("debug")) {
-			modeTitle = "Depuração";
+		if (mode.equals("run")) { //$NON-NLS-1$
+			modeTitle = Messages.DebugLaunchDelegate_Run;
+		} else if (mode.equals("debug")) { //$NON-NLS-1$
+			modeTitle = Messages.DebugLaunchDelegate_Debug;
 		} else {
-			modeTitle = "Cobertura";
+			modeTitle = Messages.DebugLaunchDelegate_Coverage;
 		}
-		monitor.setTaskName(String.format("%s TOTVS SmartClient", modeTitle));
+		monitor.setTaskName(String.format("%s TOTVS SmartClient", modeTitle)); //$NON-NLS-1$
 
-		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, "Validando configuração.");
+		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, Messages.DebugLaunchDelegate_Validating_configuration);
 		final boolean ok = verifyLaunchConditions(wk);
 		if (!ok) {
 			return;
 		}
 
-		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, "Iniciando TOTVS SmartClient.");
+		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, Messages.DebugLaunchDelegate_Starting_SmartClient);
 
 		if (monitor.isCanceled()) {
-			DebugUIActivator.logStatus(IStatus.CANCEL, modeTitle, "Execução TOTVS SmartClient cancelado.");
+			DebugUIActivator.logStatus(IStatus.CANCEL, modeTitle, Messages.DebugLaunchDelegate_SmartClient_execution_canceled);
 			return;
 		}
 
 		final List<String> commandList = new ArrayList<String>();
 		final String[] commandLine = createSmartClientCommandLine(server, commandList);
 
-		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, "Iniciando processo externo.");
+		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, Messages.DebugLaunchDelegate_Starting_external_process);
 
 		if (lp.isShowCommandLine()) {
-			final StringJoiner sj = new StringJoiner("]\n\t[", "[", "]");
+			final StringJoiner sj = new StringJoiner("]\n\t[", "[", "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-			sj.add("----- LINHA DE COMANDO (execução) ------");
+			sj.add(Messages.DebugLaunchDelegate_COMMAND_LINE_execution);
 			for (final String value : commandLine) {
 				sj.add(value);
 			}
@@ -126,16 +126,16 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 			throw new CoreException(DebugUIActivator.logStatus(IStatus.ERROR, modeTitle, e.getMessage(), e));
 		}
 
-		params.put("type", "totvs_language_debug");
-		params.put("serverAddress", server.getAddress().getHost());
-		params.put("serverPort", server.getAddress().getPort());
-		params.put("buildVersion", server.getVersion());
-		params.put("environment", environment);
-		params.put("serverName", server.getName());
-		params.put("authToken", server.getToken());
+		params.put("type", "totvs_language_debug"); //$NON-NLS-1$ //$NON-NLS-2$
+		params.put("serverAddress", server.getAddress().getHost()); //$NON-NLS-1$
+		params.put("serverPort", server.getAddress().getPort()); //$NON-NLS-1$
+		params.put("buildVersion", server.getVersion()); //$NON-NLS-1$
+		params.put("environment", environment); //$NON-NLS-1$
+		params.put("serverName", server.getName()); //$NON-NLS-1$
+		params.put("authToken", server.getToken()); //$NON-NLS-1$
 		// params.put("publicKey", server.getToken());
-		params.put("noDebug", !mode.equals(ILaunchManager.DEBUG_MODE));
-		params.put("smartclientBin", server.getSmartClientPath());
+		params.put("noDebug", !mode.equals(ILaunchManager.DEBUG_MODE)); //$NON-NLS-1$
+		params.put("smartclientBin", server.getSmartClientPath()); //$NON-NLS-1$
 
 		final Gson gson = new Gson();
 		return gson.toJson(params);
@@ -173,40 +173,40 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 
 		if (lp == null) {
 			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					"Parâmetros do executor inválido ou não informado."));
+					Messages.DebugLaunchDelegate_Executor_parameters_invalid));
 		}
 
 		final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 		server = serverManager.getCurrentServer();
 		if (server == null) {
 			throw new CoreException(
-					DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, "Não há servidor selecionado."));
+					DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, Messages.DebugLaunchDelegate_No_server_selected));
 		}
 
 		if (!server.isConnected()) {
 			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					"Servidor [%s] não conectado.", server.getName()));
+					Messages.DebugLaunchDelegate_Server_not_connected, server.getName()));
 		}
 
 		environment = server.getCurrentEnvironment();
 		if ((environment == null) || (environment.isEmpty())) {
 			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					"Não há ambiente selecionado para o servidor corrente."));
+					Messages.DebugLaunchDelegate_No_environment_selected));
 		}
 
 		final File smartClientFile = new File(server.getSmartClientPath());
 		if (!(smartClientFile.exists() && smartClientFile.canExecute())) {
 			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					"TOTVS SmartClient inacessável ou inexistente.\n\t:Arquivo: %s", smartClientFile.getPath()));
+					Messages.DebugLaunchDelegate_SmartClient_inaccessible_nonexistent, smartClientFile.getPath()));
 		}
 
 		if (lp.getMainProgram().isEmpty()) {
 			throw new CoreException(
-					DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, "Função principal requerida."));
+					DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, Messages.DebugLaunchDelegate_Main_function_required));
 		}
 
 		if (lp.getMainProgram().equalsIgnoreCase(IServerConstants.CANCELED)) {
-			DebugUIActivator.logStatus(IStatus.CANCEL, modeTitle, "Processo cancelado por solicitação do usuário.");
+			DebugUIActivator.logStatus(IStatus.CANCEL, modeTitle, Messages.DebugLaunchDelegate_Process_canceled);
 			return false;
 		}
 

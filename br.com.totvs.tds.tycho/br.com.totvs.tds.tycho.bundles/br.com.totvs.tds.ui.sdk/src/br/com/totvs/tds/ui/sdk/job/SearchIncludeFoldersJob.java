@@ -26,7 +26,7 @@ public class SearchIncludeFoldersJob extends Job {
 	private FilenameFilter filterHeaderFile;
 
 	public SearchIncludeFoldersJob(String targetFolder) {
-		super(String.format("Busca de pastas com arquivos de definições em [%s].", targetFolder));
+		super(String.format(Messages.SearchIncludeFoldersJob_Search_folders_definition_files, targetFolder));
 
 		this.targetFolder = targetFolder;
 	}
@@ -34,7 +34,7 @@ public class SearchIncludeFoldersJob extends Job {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
-		monitor.beginTask("An�lise", IProgressMonitor.UNKNOWN);
+		monitor.beginTask(Messages.SearchIncludeFoldersJob_Searching, IProgressMonitor.UNKNOWN);
 
 		filterFolders = new FileFilter() {
 
@@ -50,29 +50,29 @@ public class SearchIncludeFoldersJob extends Job {
 			@Override
 			public boolean accept(File dir, String name) {
 
-				return name.toLowerCase().endsWith(".ch") || name.toLowerCase().endsWith(".LOGIX"); // #FIX: header
+				return name.toLowerCase().endsWith(".ch") || name.toLowerCase().endsWith(".LOGIX"); // #FIX: header //$NON-NLS-1$ //$NON-NLS-2$
 																									// logix
 			}
 		};
 
 		File dir = new File(targetFolder);
 		if (!dir.isDirectory()) {
-			return SdkUIActivator.showStatus(IStatus.ERROR, "Busca finalizada", "O recurso alvo [%s] não � uma pasta.",
+			return SdkUIActivator.showStatus(IStatus.ERROR, Messages.SearchIncludeFoldersJob_Search_completed, Messages.SearchIncludeFoldersJob_Target_resource_not_folder,
 					targetFolder);
 		}
 
 		searchFolders(dir, monitor);
 
 		if (monitor.isCanceled() && !folders.isEmpty()) {
-			return SdkUIActivator.showStatus(IStatus.CANCEL, String.format("Busca parcial|%s", "dialog:result_search"),
-					"Foram localizadas [%d] pastas em [%d] visitadas.\n\tConfirme-as acionando o título.",
-					URI.create("dialog:result_search"), folders.size(), countVisitedFolders,
+			return SdkUIActivator.showStatus(IStatus.CANCEL, String.format(Messages.SearchIncludeFoldersJob_Partial_search, "dialog:result_search"), //$NON-NLS-2$
+					Messages.SearchIncludeFoldersJob_Folders_were_found,
+					URI.create("dialog:result_search"), folders.size(), countVisitedFolders, //$NON-NLS-1$
 					ISDKPreferenceKeys.RESULT_SEARCH);
 		}
 
 		if (folders.isEmpty()) {
-			return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK, "Busca finalizada",
-					"não foram localizados arquivos de definições em [%s], incluindo sub-pastas.", targetFolder);
+			return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK, Messages.SearchIncludeFoldersJob_Search_completed,
+					Messages.SearchIncludeFoldersJob_No_definition_files_found, targetFolder);
 		}
 
 		synchronized (SdkUIActivator.getDefault().getPreferenceStore()) {
@@ -97,9 +97,9 @@ public class SearchIncludeFoldersJob extends Job {
 			ps.setValue(ISDKPreferenceKeys.RESULT_SEARCH, result.toString());
 		}
 
-		return SdkUIActivator.showStatus(IStatus.OK, String.format("Busca finalizada|%s", "dialog:result_search"),
-				"Foram localizadas [%d] pastas em [%d] visitadas.\n\tConfirme-as acionando o título.",
-				URI.create("dialog:result_search"), folders.size(), countVisitedFolders,
+		return SdkUIActivator.showStatus(IStatus.OK, String.format(Messages.SearchIncludeFoldersJob_Search_completed, "dialog:result_search"), //$NON-NLS-2$
+				Messages.SearchIncludeFoldersJob_Folders_were_found,
+				URI.create(Messages.SearchIncludeFoldersJob_15), folders.size(), countVisitedFolders,
 				ISDKPreferenceKeys.RESULT_SEARCH);
 	}
 
@@ -110,8 +110,8 @@ public class SearchIncludeFoldersJob extends Job {
 
 		countVisitedFolders++;
 		String parcialPath = folder.getAbsolutePath();
-		parcialPath = "..." + parcialPath.substring(targetFolder.length() - 1);
-		monitor.subTask(String.format(" #%d [%s]", countVisitedFolders, parcialPath));
+		parcialPath = "..." + parcialPath.substring(targetFolder.length() - 1); //$NON-NLS-1$
+		monitor.subTask(String.format(" #%d [%s]", countVisitedFolders, parcialPath)); //$NON-NLS-1$
 
 		String[] fileList = folder.list(filterHeaderFile);
 

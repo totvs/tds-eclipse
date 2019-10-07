@@ -31,7 +31,7 @@ public class IncludePreferencePage extends PreferencePage implements IWorkbenchP
 		super();
 
 		setPreferenceStore(SdkUIActivator.getDefault().getPreferenceStore());
-		setDescription("Pastas de busca de arquivos de definição");
+		setDescription(Messages.IncludePreferencePage_Definition_file_search_folders);
 	}
 
 	/*

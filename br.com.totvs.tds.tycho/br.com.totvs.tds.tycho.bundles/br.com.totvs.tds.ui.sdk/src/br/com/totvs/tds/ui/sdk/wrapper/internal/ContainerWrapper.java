@@ -24,9 +24,9 @@ public class ContainerWrapper {
 	}
 
 	/**
-	 * Obtém membros de um folder.
+	 * Obtï¿½m membros de um folder.
 	 * 
-	 * @return IResource[], conteúdo do folder.
+	 * @return IResource[], conteï¿½do do folder.
 	 * @throws CoreException
 	 */
 	public IResource[] getMembers() throws CoreException {
@@ -59,7 +59,7 @@ public class ContainerWrapper {
 		try {
 			return getChildFiles(this.resource, allLevels);
 		} catch (CoreException e) {
-			SdkUIActivator.logStatus(IStatus.ERROR, "Interno", e.getMessage(), e);
+			SdkUIActivator.logStatus(IStatus.ERROR, Messages.ContainerWrapper_Internal, e.getMessage(), e);
 		}
 
 		return EMPTY_FILE_LIST;

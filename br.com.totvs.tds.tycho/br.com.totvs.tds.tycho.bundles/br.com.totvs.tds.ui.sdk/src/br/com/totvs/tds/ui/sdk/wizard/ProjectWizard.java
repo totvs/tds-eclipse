@@ -39,7 +39,7 @@ public class ProjectWizard extends Wizard implements INewWizard {
 		
 		projectVO = new ProjectVO();
 		setNeedsProgressMonitor(true);
-		setWindowTitle("Assistentes de Projeto Protheus");
+		setWindowTitle(Messages.ProjectWizard_Protheus_project_wizard);
 		setHelpAvailable(false);
 	}
 
@@ -75,7 +75,7 @@ public class ProjectWizard extends Wizard implements INewWizard {
 		} catch (InterruptedException e) {
 			return false;
 		} catch (InvocationTargetException e) {
-			SdkUIActivator.logStatus(IStatus.ERROR, "Projeto", e.getMessage(), e);
+			SdkUIActivator.logStatus(IStatus.ERROR, Messages.ProjectWizard_Project, e.getMessage(), e);
 			page.setErrorMessage(e.getMessage());
 			return false;
 		}
@@ -89,11 +89,11 @@ public class ProjectWizard extends Wizard implements INewWizard {
 	 */
 
 	private void doFinish(final IProgressMonitor monitor) throws CoreException {
-		monitor.beginTask("Criando projeto", 1);
+		monitor.beginTask(Messages.ProjectWizard_Creating_project, 1);
 		IWorkspaceWrapper workWrapper = WrapperUtil.getWorkspaceWrapper(ResourcesPlugin.getWorkspace());
 		workWrapper.createProject(projectVO, monitor);
 		monitor.worked(1);
-		monitor.setTaskName("TOTVS");
+		monitor.setTaskName("TOTVS"); //$NON-NLS-1$
 		monitor.worked(1);
 	}
 

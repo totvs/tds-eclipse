@@ -37,7 +37,7 @@ public class ToggleTotvsNatureHandler extends AbstractHandler {
 						IProjectWrapper wrapper = WrapperManager.getInstance().getWrapper(project);
 						wrapper.toggleNature(TotvsNature.NATURE_ID);
 					} catch (CoreException e) {
-						SdkUIActivator.logStatus(IStatus.ERROR, "Interno", e.getMessage(), e);
+						SdkUIActivator.logStatus(IStatus.ERROR, Messages.ToggleTotvsNatureHandler_Internal, e.getMessage(), e);
 						throw new ExecutionException(e.getMessage(),e);
 					}
 				}

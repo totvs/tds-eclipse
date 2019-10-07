@@ -54,11 +54,11 @@ public class UrlMatchListener implements IPatternMatchListener {
 				
 				console.addHyperlink(link, offset, lenght);
 			} catch (BadLocationException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, "Ligação", e.getMessage(), e);
+				TDSUIActivator.logStatus(IStatus.ERROR, Messages.UrlMatchListener_Link, e.getMessage(), e);
 			} catch (NumberFormatException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, "Ligação", e.getMessage(), e);
+				TDSUIActivator.logStatus(IStatus.ERROR, Messages.UrlMatchListener_Link, e.getMessage(), e);
 			} catch (MalformedURLException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, "Ligação", e.getMessage(), e);
+				TDSUIActivator.logStatus(IStatus.ERROR, Messages.UrlMatchListener_Link, e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}

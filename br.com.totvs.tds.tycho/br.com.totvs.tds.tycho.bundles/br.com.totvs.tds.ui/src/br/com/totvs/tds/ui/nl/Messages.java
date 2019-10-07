@@ -22,6 +22,8 @@ public class Messages extends NLS {
 	public static String ShowStandardErrAction_show_console_when_changed;
 	public static String ShowStandardOutAction_show_console_when_changed;
 	public static String TDSMessageHandler_cancel;
+
+	public static String TDSMessageHandler_EMPTY_STRING;
 	public static String TDSMessageHandler_error;
 	public static String TDSMessageHandler_info;
 	public static String TDSMessageHandler_ok;

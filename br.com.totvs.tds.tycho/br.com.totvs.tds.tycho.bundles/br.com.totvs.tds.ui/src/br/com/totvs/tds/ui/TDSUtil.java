@@ -40,7 +40,7 @@ public final class TDSUtil {
 	public static String directoryDialog(final Shell shell, final String title, final String message,
 			final String filterPath) {
 		if (isRunningInTestMode()) {
-			return System.getProperty("return");
+			return System.getProperty("return"); //$NON-NLS-1$
 		}
 
 		final DirectoryDialog dialog = new DirectoryDialog(shell);
@@ -60,12 +60,12 @@ public final class TDSUtil {
 
 	public static boolean isRunningInTestMode() {
 
-		return (Boolean.TRUE.toString().equals(System.getProperty("isTest", Boolean.FALSE.toString())));
+		return (Boolean.TRUE.toString().equals(System.getProperty("isTest", Boolean.FALSE.toString()))); //$NON-NLS-1$
 	}
 
 	public static String fileDialog(final Shell shell, final String[] filter, final String[] filterNames) {
 		if (isRunningInTestMode()) {
-			return System.getProperty("return");
+			return System.getProperty("return"); //$NON-NLS-1$
 		}
 
 		final FileDialog dialog = new FileDialog(shell);

@@ -91,8 +91,8 @@ public class SdkUIActivator extends AbstractUIPlugin implements IPropertyChangeL
 	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		if (event.getProperty().equals(ISDKPreferenceKeys.RESULT_SEARCH)) {
-			System.out.println("SdkUIActivator.propertyChange()");
-			System.out.println("RESULT_SEARCH");
+			System.out.println("SdkUIActivator.propertyChange()"); //$NON-NLS-1$
+			System.out.println("RESULT_SEARCH"); //$NON-NLS-1$
 		}
 		
 	}

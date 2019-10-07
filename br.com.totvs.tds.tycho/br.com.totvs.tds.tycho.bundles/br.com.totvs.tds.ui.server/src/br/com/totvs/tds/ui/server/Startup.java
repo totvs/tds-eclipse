@@ -23,6 +23,8 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IStartup;
 
+import br.com.totvs.tds.ui.server.nl.Messages;
+
 @SuppressWarnings("restriction")
 public class Startup implements IStartup {
 
@@ -41,7 +43,7 @@ public class Startup implements IStartup {
 		IFile file = null;
 
 		try {
-			Pattern source = Pattern.compile("prw|prg|prx", Pattern.CASE_INSENSITIVE);
+			Pattern source = Pattern.compile("prw|prg|prx", Pattern.CASE_INSENSITIVE); //$NON-NLS-1$
 
 			for (IResource element : container.members()) {
 				if (element instanceof IFile) {
@@ -60,7 +62,7 @@ public class Startup implements IStartup {
 				}
 			}
 		} catch (CoreException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, "Inicialização", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, Messages.Startup_Initialize, e.getMessage(), e);
 		}
 
 		return file;
@@ -75,7 +77,7 @@ public class Startup implements IStartup {
 
 			for (IProject project : projects) {
 				if (project.isOpen()) {
-					if (project.isNatureEnabled("br.com.totvs.tds.ui.sdk.protheusNature")) {
+					if (project.isNatureEnabled("br.com.totvs.tds.ui.sdk.protheusNature")) { //$NON-NLS-1$
 						IContainer container = project;
 						file = findFile(container);
 						if (file != null) {
@@ -90,17 +92,17 @@ public class Startup implements IStartup {
 
 			if (file == null) {
 				removeProject = true;
-				project = ResourcesPlugin.getWorkspace().getRoot().getProject("_for_aux_can_remove_");
+				project = ResourcesPlugin.getWorkspace().getRoot().getProject("_for_aux_can_remove_"); //$NON-NLS-1$
 				if (!project.exists()) {
 					project.create(null);
 				}
 				project.open(null);
 				project.setHidden(true);
-				IFolder folder = project.getFolder("folder");
+				IFolder folder = project.getFolder("folder"); //$NON-NLS-1$
 				if (!folder.exists()) {
 					folder.create(true, true, null);
 				}
-				file = folder.getFile("p1.prw");
+				file = folder.getFile("p1.prw"); //$NON-NLS-1$
 				if (!file.exists()) {
 					InputStream source = new ByteArrayInputStream(new byte[0]);
 					file.create(source, true, null);
@@ -126,7 +128,7 @@ public class Startup implements IStartup {
 			}
 
 		} catch (CoreException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, "Inicialização", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, Messages.Startup_Initialize, e.getMessage(), e);
 		}
 	}
 }

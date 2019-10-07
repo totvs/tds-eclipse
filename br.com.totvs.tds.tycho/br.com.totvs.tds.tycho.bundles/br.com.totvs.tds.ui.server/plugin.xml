@@ -46,7 +46,7 @@
        <command
              commandId="br.com.totvs.tds.ui.server.commands.editItemCommand"
              icon="icons/editGroup.png"
-             label="Editar">
+             label="%command.label.3">
           <parameter
                 name="dialog"
                 value="br.com.totvs.tds.ui.server.dialog.GroupEditDialog">
@@ -64,7 +64,7 @@
        <command
              commandId="br.com.totvs.tds.ui.server.commands.editItemCommand"
              icon="icons/editServer.png"
-             label="Editar">
+             label="%command.label.4">
           <parameter
                 name="dialog"
                 value="br.com.totvs.tds.ui.server.dialog.ServerEditDialog">
@@ -115,12 +115,12 @@
 			</visibleWhen>
        </command>
        <menu
-             label="Pacote de Atualização">
+             label="%menu.label.0">
           <command
                 commandId="br.com.totvs.tds.ui.server.commands.buildPatchCommand"
                 icon="icons/patch_build.png"
-                label="Gerar"
-                tooltip="Gera pacotes de atualização">
+                label="%command.label.5"
+                tooltip="%command.tooltip.4">
           </command>
 			<visibleWhen checkEnabled="false">
 				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
@@ -190,7 +190,7 @@
 		
 		<toolbar
                    id="br.com.totvs.tds.server.ui.toolbar.status"
-                   label="TDS">
+                   label="%toolbar.label">
                    <!-- contorno devido a um bug no eclipse, que corta a contribuição-->
         	<command
                       commandId="dummy"
@@ -243,7 +243,7 @@
           name="%command.name.editItem">
        <commandParameter
              id="dialog"
-             name="Diálogo"
+             name="%commandParameter.name.8"
              optional="false">
        </commandParameter>
     </command>
@@ -310,29 +310,29 @@
     <command
     	defaultHandler="br.com.totvs.tds.ui.server.handlers.BuildPatchHandler"
         id="br.com.totvs.tds.ui.server.commands.buildPatchCommand"
-        name="Gerar Pacote de Atualização">
+        name="%command.name.0">
      </command>
     <command
           categoryId="br.com.totvs.tds.ui.server.commands.category"
           defaultHandler="br.com.totvs.tds.ui.server.handlers.StartServerHandler"
-          description="Inicia execução de AppServer local"
+          description="%command.description.0"
           id="br.com.totvs.tds.ui.server.commands.startServerCommand"
-          name="Iniciar">
+          name="%command.name.4">
        <commandParameter
              id="dialog"
-             name="Diálogo"
+             name="%commandParameter.name.9"
              optional="false">
        </commandParameter>
     </command>
     <command
           categoryId="br.com.totvs.tds.ui.server.commands.category"
           defaultHandler="br.com.totvs.tds.ui.server.handlers.StopServerHandler"
-          description="Para a execução de AppServer local"
+          description="%command.description.1"
           id="br.com.totvs.tds.ui.server.commands.stopServerCommand"
-          name="Parar">
+          name="%command.name.5">
        <commandParameter
              id="dialog"
-             name="Diálogo"
+             name="%commandParameter.name.10"
              optional="false">
        </commandParameter>
     </command>
