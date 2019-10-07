@@ -15,8 +15,10 @@ import org.eclipse.debug.core.model.IWatchExpressionListener;
 import org.eclipse.debug.core.model.IWatchExpressionResult;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.lsp4e.debug.DSPPlugin;
+import org.eclipse.lsp4e.debug.debugmodel.DSPDebugTarget;
 import org.eclipse.lsp4e.debug.debugmodel.DSPStackFrame;
 import org.eclipse.lsp4e.debug.debugmodel.DSPValue;
+import org.eclipse.lsp4e.debug.debugmodel.DSPVariable;
 import org.eclipse.lsp4j.debug.EvaluateArguments;
 import org.eclipse.lsp4j.debug.EvaluateArgumentsContext;
 import org.eclipse.lsp4j.debug.EvaluateResponse;
@@ -43,7 +45,13 @@ public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 		args.setExpression(expression);
 		try {
 			final EvaluateResponse res = frame.getDebugProtocolServer().evaluate(args).get();
-			final DSPValue value = new DSPValue(frame, res.getVariablesReference(), expression, res.getResult());
+			final DSPDebugTarget debugTarget = frame.getDebugTarget();
+			final Long parentVariablesReference = res.getVariablesReference();
+			final Long childrenVariablesReference = 0L;
+			final String name = args.getExpression();
+			final DSPVariable variable = new DSPVariable(debugTarget, parentVariablesReference, name, "**",
+					childrenVariablesReference);
+			final DSPValue value = new DSPValue(variable, res.getVariablesReference(), res.getResult());
 
 			listener.watchEvaluationFinished(new IWatchExpressionResult() {
 				@Override
@@ -72,33 +80,13 @@ public class DAPWatchExpressionDelegate implements IWatchExpressionDelegate {
 					return null;
 				}
 			});
-		} catch (final ExecutionException e) {
-			DSPPlugin.logError(e);
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
-			DSPPlugin.logError(e);
-			// will fail back by looking by looking up in current frame
-		}
 
-//			try {
-//				for (final IVariable scopeVariable : frame.getVariables()) {
-//					final IValue scope = scopeVariable.getValue();
-//					if (scope != null) {
-//						final IVariable[] vars = scope.getVariables();
-//						for (final IVariable var : vars) {
-//							if (var.getName().equals(variableName)) {
-//								return var;
-//							}
-//						}
-//					}
-//				}
-//			} catch (final DebugException de) {
-//				DSPPlugin.logError(de);
-//			}
+		} catch (InterruptedException | ExecutionException e) {
+			DSPPlugin.logError(e);
+		}
 
 	}
 
-	@SuppressWarnings("restriction")
 	private DSPStackFrame getFrame() {
 		final IAdaptable adaptable = DebugUITools.getDebugContext();
 		if (adaptable != null) {

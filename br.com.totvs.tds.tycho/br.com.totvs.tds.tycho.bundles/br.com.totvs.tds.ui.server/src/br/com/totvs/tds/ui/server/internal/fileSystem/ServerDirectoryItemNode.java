@@ -97,15 +97,15 @@ public class ServerDirectoryItemNode implements IServerDirectoryItemNode {
 		}
 	}
 
-	// Carrega os diretorios do n� corrente
+	// Carrega os diretorios do nó corrente
 	private boolean loadDirs(final IAppServerInfo server, final String environment) {
 		boolean loadDirs = true;
 		//
 		try {
 			List<String> dirs = null; // server.getDirectory(environment, absolutPath, true);
 			for (String dir : dirs) {
-				addItemNode(
-						ServerFileSystemFactory.getInstance().createDirNode(dir, absolutPath + dir + File.separatorChar, getFiles));
+				addItemNode(ServerFileSystemFactory.getInstance().createDirNode(dir,
+						absolutPath + dir + File.separatorChar, getFiles));
 			}
 		} catch (Exception e) {
 			loadDirs = false;
@@ -122,7 +122,8 @@ public class ServerDirectoryItemNode implements IServerDirectoryItemNode {
 			try {
 				List<String> files = null; // server.getDirectory(environment, absolutPath, false);
 				for (String file : files) {
-					addItemNode(ServerFileSystemFactory.getInstance().createFileNode(file, absolutPath + file, getFiles));
+					addItemNode(
+							ServerFileSystemFactory.getInstance().createFileNode(file, absolutPath + file, getFiles));
 				}
 			} catch (Exception e) {
 				loadFiles = false;

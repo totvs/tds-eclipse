@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  br.com.totvs.tds.ui.sdk,
  br.com.totvs.tds.ui.server,
  br.com.totvs.tds.server,
- br.com.totvs.tds.ui
+ br.com.totvs.tds.ui,
+ org.eclipse.debug.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: br.com.totvs.tds.ui.debug
 Bundle-ActivationPolicy: lazy

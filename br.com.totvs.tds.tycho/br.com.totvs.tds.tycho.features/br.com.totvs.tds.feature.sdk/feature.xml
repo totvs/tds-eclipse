@@ -29,10 +29,6 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
          version="0.0.0"
          search-location="both"/>
 
-   <includes
-         id="tm-feature"
-         version="0.0.0"/>
-
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
@@ -55,7 +51,6 @@ Ideal para quem desenvolve e administrada na plataforma TOTVS.
       <import plugin="br.com.totvs.tds.ui.editor" version="11.4.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="br.com.totvs.tds.ui.sdk" version="11.4.0" match="greaterOrEqual"/>
-      <import feature="tm-feature" version="0.3.4.201908081702"/>
       <import plugin="org.eclipse.tm4e.core"/>
       <import plugin="org.eclipse.tm4e.languageconfiguration"/>
       <import plugin="org.eclipse.tm4e.markdown"/>

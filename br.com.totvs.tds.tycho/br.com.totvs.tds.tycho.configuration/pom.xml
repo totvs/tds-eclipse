@@ -14,7 +14,7 @@
 		<swt.version>4.6.1</swt.version>
 
 		<eclipse-repo.url>http://download.eclipse.org/releases/2019-06</eclipse-repo.url>
-		<lsp4-repo.url>https://download.eclipse.org/lsp4j/updates/milestones/</lsp4-repo.url>
+		<lsp4-repo.url>http://download.eclipse.org/releases/latest/</lsp4-repo.url>
 		<swt-repo.url>http://maven-eclipse.github.io/maven/</swt-repo.url>
 	</properties>
 
