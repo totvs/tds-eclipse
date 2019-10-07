@@ -50,14 +50,6 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
 			final IProgressMonitor monitor) throws CoreException {
-//		for (IMarker marker : container.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
-//		if (marker.getAttribute(IMarker.SEVERITY, -1) == IMarker.SEVERITY_ERROR) {
-//			Display.getDefault().asyncExec(() -> {
-//				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DotnetDebugLaunchDelegate_errorsOnProject_title, Messages.DotnetDebugLaunchDelegate_errorsOnProject_message);
-//			});
-//			return;
-//		}
-//	}
 		final ILaunchConfigurationWorkingCopy wk = configuration.getWorkingCopy();
 
 		if (mode.equals("run")) {
@@ -156,6 +148,7 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 	 * of {@link DSPDebugTarget}, but does not have to be. The arguments to this
 	 * method are normally just passed to {@link DSPDebugTarget} constructor.
 	 */
+	@Override
 	protected IDebugTarget createDebugTarget(final SubMonitor subMonitor, final Runnable cleanup,
 			final InputStream inputStream, final OutputStream outputStream, final ILaunch launch,
 			final Map<String, Object> dspParameters) throws CoreException {

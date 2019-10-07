@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?p2f version='1.0.0'?>
+<p2f version='1.0.0'>
+  <ius size='4'>
+    <iu id='org.eclipse.lsp4e.debug' name='Debug Adapter client for Eclipse IDE (Incubation)' version='0.10.0.201909031808'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/2019-09'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.lsp4e' name='Language Server Protocol client for Eclipse IDE (Incubation)' version='0.11.0.201909090701'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/2019-09'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.tm4e.feature.feature.group' name='TextMate Core' version='0.3.4.201909051118'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/2019-09'/>
+      </repositories>
+    </iu>
+    <iu id='org.sonatype.tycho.m2e.feature.feature.group' name='Tycho Project Configurators' version='0.8.1.201704211436'>
+      <repositories size='1'>
+        <repository location='http://repo1.maven.org/maven2/.m2e/connectors/m2eclipse-tycho/0.8.1/N/0.8.1.201704211436/'/>
+      </repositories>
+    </iu>
+  </ius>
+</p2f>
