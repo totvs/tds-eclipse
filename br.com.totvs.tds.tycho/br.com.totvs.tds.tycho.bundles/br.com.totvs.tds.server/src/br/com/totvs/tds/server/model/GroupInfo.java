@@ -192,7 +192,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	 */
 	@Override
 	public void doReadExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
-		// Obt�m os filhos
+		// Obtem os filhos
 		IItemInfo child = null;
 		final int size = in.readInt();
 		for (int i = 0; i < size; i++) {

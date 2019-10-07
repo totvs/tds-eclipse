@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.debug.core.ILaunchesListener;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
@@ -51,15 +54,13 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 	private volatile boolean monitoring;
 
-	private List<String> multiEnvironmentSelection;
+	private List<String> multiEnvironmentSelection = new ArrayList<String>();
 
 	private boolean settingBlock;
 
 	private boolean showConsole;
 
 	private ILaunchesListener launcher;
-
-	private Map<String, Object> unmodifiableconnectionMap;
 
 	/**
 	 * Construtor.
@@ -117,12 +118,11 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	@Override
 	public Map<String, Object> getConnectionMap() {
 
-		return this.unmodifiableconnectionMap;
+		return this.connectionMap;
 	}
 
 	private void setConnectionMap(final Map<String, Object> map) {
 		this.connectionMap = map;
-		unmodifiableconnectionMap = Collections.unmodifiableMap(this.connectionMap);
 	}
 
 	/*
@@ -157,7 +157,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 */
 	@Override
 	public List<String> getMultiEnvironmentSelection() {
-		return (multiEnvironmentSelection != null) ? multiEnvironmentSelection : (new ArrayList<String>());
+		return multiEnvironmentSelection;
 	}
 
 	@Override
@@ -390,16 +390,12 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 				currentOrganization = (IOrganization) in.readObject();
 			}
 			if (version >= 3L) {
-				setConnected(in.readBoolean());
+				final boolean connected = in.readBoolean();
 				setUseSecureStorage(in.readBoolean());
+				setConnected(connected && loadLoginInfo());
 			}
-
 		} catch (final Exception e) {
 			e.printStackTrace();
-//			TdsLogging.getDefault().log(MessageKind.MSG_INFORMATION, ServerActivator.PLUGIN_ID,
-//					Messages.AppServerInfo_6);
-//			PushbackInputStream pushbackInputStream = new PushbackInputStream((ObjectInputStream) in);
-//			pushbackInputStream.unread(Long.SIZE);
 		}
 	}
 
@@ -420,8 +416,18 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		// 3L
 		final boolean isSecureStorage = getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
 				.equals(true);
-		out.writeBoolean(isSecureStorage && isConnected());
+		out.writeBoolean(isConnected());
 		out.writeBoolean(isSecureStorage);
+
+		try {
+			if (isSecureStorage) {
+				saveLoginInfo();
+			} else {
+				deleteLoginInfo();
+			}
+		} catch (final StorageException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -534,6 +540,55 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		}
 
 		return isLogged;
+	}
+
+	private String getNodeServerKey(final String environment) {
+		return String.format("developerStudio/%s/%s", getId(), environment.toUpperCase()); //$NON-NLS-1$
+	}
+
+	private void deleteLoginInfo() throws StorageException, IOException {
+		final String node = getNodeServerKey(currentEnvironment);
+		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
+
+		if (securePreference.nodeExists(node)) {
+			final ISecurePreferences credencial = securePreference.node(node);
+			credencial.removeNode();
+			credencial.flush();
+		}
+	}
+
+	private void saveLoginInfo() throws StorageException, IOException {
+		final String node = getNodeServerKey(currentEnvironment);
+		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
+		final ISecurePreferences credencial = securePreference.node(node);
+
+		credencial.put(IServerConstants.USERNAME, (String) connectionMap.get(IServerConstants.USERNAME), true);
+		credencial.put(IServerConstants.PASSWORD, (String) connectionMap.get(IServerConstants.PASSWORD), true);
+
+		credencial.flush();
+	}
+
+	private boolean loadLoginInfo() throws StorageException, IOException {
+		final String node = getNodeServerKey(currentEnvironment);
+		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
+
+		if (securePreference.nodeExists(node)) {
+			final ISecurePreferences credencial = securePreference.node(node);
+
+			connectionMap.put(IServerConstants.ENVIRONMENT, currentEnvironment);
+			connectionMap.put(IServerConstants.USERNAME, credencial.get(IServerConstants.USERNAME, ""));
+			connectionMap.put(IServerConstants.PASSWORD, credencial.get(IServerConstants.PASSWORD, ""));
+
+			return true;
+		}
+
+		connectionMap.remove(IServerConstants.ENVIRONMENT);
+		connectionMap.remove(IServerConstants.USERNAME);
+		connectionMap.remove(IServerConstants.PASSWORD);
+
+		deleteLoginInfo();
+
+		return false;
 	}
 
 }

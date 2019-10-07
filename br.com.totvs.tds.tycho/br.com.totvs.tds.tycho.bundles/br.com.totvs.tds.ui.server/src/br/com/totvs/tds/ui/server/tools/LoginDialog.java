@@ -151,7 +151,7 @@ public abstract class LoginDialog extends TitleAreaDialog implements ILoginDialo
 
 	/**
 	 * <p>
-	 * Utilize este m�todo para validar e salvar os dados customizados, conforme
+	 * Utilize este método para validar e salvar os dados customizados, conforme
 	 * exemplo.
 	 * </p>
 	 *

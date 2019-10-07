@@ -18,7 +18,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
 Bundle-Vendor: %Bundle-Vendor
 Automatic-Module-Name: br.com.totvs.tds.server
 Export-Package: br.com.totvs.tds.server;uses:="org.osgi.framework,org.eclipse.core.runtime,br.com.totvs.tds.server.interfaces",
- br.com.totvs.tds.server.handler;uses:="br.com.totvs.tds.server.interfaces,org.eclipse.core.commands",
  br.com.totvs.tds.server.interfaces;uses:="br.com.totvs.tds.server",
  br.com.totvs.tds.server.jobs;uses:="org.eclipse.core.runtime",
  br.com.totvs.tds.server.launcher,

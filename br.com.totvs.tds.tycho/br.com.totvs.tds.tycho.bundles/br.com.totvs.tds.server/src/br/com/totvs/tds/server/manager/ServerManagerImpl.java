@@ -11,32 +11,24 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.equinox.security.storage.ISecurePreferences;
-import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
-import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.commands.ICommandService;
-import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
+import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAuthorizationKey;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IRootInfo;
-import br.com.totvs.tds.server.interfaces.IServerConstants;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
@@ -339,30 +331,18 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 					}
 
 					if (!activeServers.isEmpty()) {
-						try {
-							monitor.subTask("Conexão a servidores");
-							final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-							final ICommandService commandService = serviceLocator.getService(ICommandService.class);
-							final IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
-							final Command command = commandService
-									.getCommand("br.com.totvs.tds.ui.server.commands.revalidateCommand"); //$NON-NLS-1$
+						monitor.subTask("Conexão a servidores");
+						ServerActivator.logStatus(IStatus.INFO, "Conexão",
+								"Efetuando conex\u00E3o ao servidor utilizando credenciais salvas em local seguro.");
 
-							for (final IServerInfo serverInfo : activeServers) {
-								if (serverInfo instanceof IAppServerInfo) {
-									final Map<String, Object> parameters = new HashMap<String, Object>();
-									parameters.put("server", serverInfo.getName()); //$NON-NLS-1$
-									parameters.put("environment", //$NON-NLS-1$
-											((IAppServerInfo) serverInfo).getCurrentEnvironment());
+						final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+						final ILanguageServerService lsService = serviceLocator
+								.getService(ILanguageServerService.class);
 
-									final ParameterizedCommand pc = ParameterizedCommand.generateCommand(command,
-											parameters);
-									handlerService.executeCommand(pc, null);
-								}
+						for (final IServerInfo serverInfo : activeServers) {
+							if (serverInfo instanceof IAppServerInfo) {
+								doReconnect((IAppServerInfo) serverInfo, lsService);
 							}
-						} catch (final IllegalArgumentException e) {
-							ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
-						} catch (final Exception e) {
-							ServerActivator.logStatus(IStatus.ERROR, "Reconexão", e.getMessage(), e);
 						}
 					}
 
@@ -383,6 +363,25 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 			hookChangeListener(rootGroupInfo);
 			setLoading(false);
 			refresh();
+		}
+	}
+
+	protected void doReconnect(final IAppServerInfo serverInfo, final ILanguageServerService lsService) {
+		boolean isLogged = false;
+
+		final String connectMessage = "A conex\u00E3o foi recusada pelo servidor.\n\tAmbiente ou credenciais inv\u00E1lidas\n\tServidor/Ambiente: %s/%s";
+		try {
+			final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
+			isLogged = serverInfo.authentication(lsService, connectionMap);
+
+			if (!isLogged) {
+				ServerActivator.logStatus(IStatus.ERROR, "Conexão", connectMessage, serverInfo.getName(),
+						serverInfo.getCurrentEnvironment());
+			}
+		} catch (final Exception e) {
+			ServerActivator.logStatus(IStatus.ERROR, "Conexão", connectMessage, serverInfo.getName(),
+					serverInfo.getCurrentEnvironment());
+			ServerActivator.logStatus(IStatus.ERROR, "Causa", e.getMessage());
 		}
 	}
 
@@ -585,59 +584,6 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 			}
 		} catch (final IOException e) {
 			e.printStackTrace();
-		}
-	}
-
-	private void deleteSecureStorageServerNode(final IAppServerInfo serverInfo) {
-		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
-		final String node = String.format("developerStudio/%s", serverInfo.getId()); //$NON-NLS-1$
-
-		if (securePreference.nodeExists(node)) {
-			securePreference.node(node).removeNode();
-			try {
-				securePreference.flush();
-			} catch (final IOException e) {
-				ServerActivator.logStatus(IStatus.ERROR, "Armazenamento Seguro", e.getMessage(), e);
-			}
-		}
-	}
-
-	/**
-	 * Returns the key used to store the server information in the SecureStorage
-	 * area.<br>
-	 * This method sets the environment name to upperCase.
-	 *
-	 * @param serverInfo  - The server info
-	 * @param environment - The environment name. (Which will be set to upper case)
-	 * @return
-	 */
-	public String getNodeServerKey(final IAppServerInfo serverInfo, final String environment) {
-		return String.format("developerStudio/%s/%s", serverInfo.getId(), environment.toUpperCase()); //$NON-NLS-1$
-	}
-
-	private void saveLoginInfo(final IAppServerInfo serverInfo, final String environment)
-			throws StorageException, IOException {
-		final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
-		final String node = getNodeServerKey(serverInfo, environment);
-		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
-		final ISecurePreferences credencial = securePreference.node(node);
-
-		credencial.put(IServerConstants.USERNAME, (String) connectionMap.get(IServerConstants.USERNAME), true);
-		credencial.put(IServerConstants.PASSWORD, (String) connectionMap.get(IServerConstants.PASSWORD), true);
-
-		credencial.flush();
-	}
-
-	private void updateSecureStorage(final IAppServerInfo serverInfo) throws StorageException, IOException {
-		final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
-		final String environment = (String) connectionMap.getOrDefault(IServerConstants.ENVIRONMENT, "");
-		final boolean useSecureStorage = connectionMap.getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
-				.equals(true);
-
-		if (useSecureStorage) {
-			saveLoginInfo(serverInfo, environment);
-		} else {
-			deleteSecureStorageServerNode(serverInfo);
 		}
 	}
 

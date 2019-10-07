@@ -94,7 +94,7 @@ public interface IAppServerInfo extends IServerInfo {
 	/**
 	 * Ajusta a empresa corrente. <br>
 	 * Nota: Devido a ocorr�ncia de referencia serviçor do servi�o de dicion�rio ao
-	 * utilizar IOrganization, este m�todo recebe-o como um Object.
+	 * utilizar IOrganization, este método recebe-o como um Object.
 	 *
 	 * @param companySelected
 	 */
@@ -149,14 +149,14 @@ public interface IAppServerInfo extends IServerInfo {
 
 	/**
 	 *
-	 * @return nome do usu�rio usado no login
+	 * @return nome do usuário usado no login
 	 */
 	String getUsername();
 
 	/**
 	 *
-	 * @param string permiss�o a ser verificada
-	 * @return se tem ou permiss�o
+	 * @param string permissão a ser verificada
+	 * @return se tem ou permissão
 	 */
 	boolean canPermission(String string);
 
@@ -179,5 +179,4 @@ public interface IAppServerInfo extends IServerInfo {
 	boolean isLocalServer();
 
 	boolean authentication(ILanguageServerService lsService, Map<String, Object> connectionMap);
-
 }

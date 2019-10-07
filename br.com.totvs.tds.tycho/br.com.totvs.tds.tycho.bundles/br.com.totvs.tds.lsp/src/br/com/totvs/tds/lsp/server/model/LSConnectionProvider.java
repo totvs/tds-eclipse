@@ -10,8 +10,6 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
 
-import br.com.totvs.tds.lsp.server.ActivatorServer;
-
 public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 
 	public LSConnectionProvider() {
@@ -35,12 +33,15 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 				serverPathUrl = getClass().getResource("/resources/tds-ls/advpls");
 			}
 			final File serverPath = new File(FileLocator.toFileURL(serverPathUrl).getPath());
-			
+
 			if (!serverPath.canExecute()) {
-				System.err.println(String.format("LS com insuficiência de privilégios.\nO TDS tentará ajudar os privilégios.\n\tArquivo: %s", serverPath.getAbsolutePath()));
+				System.err.println(String.format(
+						"LS com insuficiência de privilégios.\nO TDS tentará ajustar os privilégios.\n\tArquivo: %s",
+						serverPath.getAbsolutePath()));
 				serverPath.setExecutable(true);
 				if (!serverPath.canExecute()) {
-					System.err.println("Não foi possível ajustar os privilégios.\nFavor corrigir manualmente e reiniciar a aplicação.");
+					System.err.println(
+							"Não foi possível ajustar os privilégios.\nFavor corrigir manualmente e reiniciar a aplicação.");
 				}
 			}
 			return serverPath.getAbsolutePath();
@@ -59,21 +60,7 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 	 * @throws IOException
 	 */
 	private List<String> getArguments() {
-//		File serverFileUrl = null;
-//		if (Platform.OS_WIN32.equals(Platform.getOS())) {
-//			serverFileUrl = new File(serverPath, "server/Omnisharp.exe"); //$NON-NLS-1$
-//		} else {
-//			serverFileUrl = new File(serverPath, "run"); //$NON-NLS-1$
-//		}
-//
-//		if (serverFileUrl == null || !serverFileUrl.exists()) {
-//			AcutePlugin.logError(NLS.bind(Messages.omnisharpStreamConnection_serverNotFoundError,serverPath));
-//			return null;
-//		} else if (!serverFileUrl.canExecute()) {
-//			AcutePlugin.logError(NLS.bind(Messages.omnisharpStreamConnection_serverNotExecutableError, serverFileUrl));
-//			// return value anyway
-//		}
-//		return serverFileUrl.getAbsolutePath() + " -lsp"; //$NON-NLS-1$
+
 		return Collections.emptyList();
 	}
 

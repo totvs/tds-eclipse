@@ -48,13 +48,8 @@ public class LoginHandler extends ServerHandler {
 	 * @param connector     - Conector do servidor
 	 */
 	private boolean doLogin(final IAppServerInfo connector, Map<String, Object> connectionMap) {
-		if (isUseSecureStorage(connectionMap)) {
-			ServerUIActivator.logStatus(IStatus.INFO, Messages.LoginHandler_identification,
-					Messages.LoginHandler_connection_use_credentials_secure_local);
-		} else {
-			ServerUIActivator.logStatus(IStatus.INFO, Messages.LoginHandler_identification,
-					Messages.LoginHandler_connection_in_processs);
-		}
+		ServerUIActivator.logStatus(IStatus.INFO, Messages.LoginHandler_identification,
+				Messages.LoginHandler_connection_in_processs);
 
 		boolean isLogged = false;
 
@@ -158,10 +153,6 @@ public class LoginHandler extends ServerHandler {
 		dialogLogin.initialize(dialogTitle, inputMap);
 
 		return dialogLogin;
-	}
-
-	private boolean isUseSecureStorage(final Map<String, Object> connectionMap) {
-		return connectionMap.getOrDefault(ILoginDialog.USE_SECURE_STORAGE, false).equals(true); // $NON-NLS-1$
 	}
 
 	/**

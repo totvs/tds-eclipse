@@ -13,7 +13,7 @@ import br.com.totvs.tds.ui.debug.launcher.IDebugLauncherAttributes.SCLanguages;
 
 public class LaunchParameters {
 	// usar somente private String, boolean ou List destes tipos
-	// na necessidade de outros tipos, rever métodos
+	// na necessidade de outros tipos, rever mÃ©todos
 	// toMap e fromMap. acandido
 
 	/**

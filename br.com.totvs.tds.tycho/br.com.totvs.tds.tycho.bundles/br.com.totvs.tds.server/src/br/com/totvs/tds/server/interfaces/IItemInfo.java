@@ -142,7 +142,7 @@ public interface IItemInfo extends Externalizable {
 
 	/**
 	 * Ajusta o elemento pai.<br>
-	 * não chame este m�todo diretamente. Utilize IParentInfo.addChild();
+	 * não chame este método diretamente. Utilize IParentInfo.addChild();
 	 * 
 	 * @param parent
 	 *            elemento pai.

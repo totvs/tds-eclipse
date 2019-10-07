@@ -69,8 +69,8 @@ public abstract class EditorHandler extends AbstractHandler {
 		final String username = server.getUsername();
 
 		if (!server.canPermission("COMPILE")) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "Permiss�o",
-					"Usu�rio [%s] sem permiss�o para compilar em [%s/%s].", username, server.getName(), environment);
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, "permissão",
+					"usuário [%s] sem permissão para compilar em [%s/%s].", username, server.getName(), environment);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}
