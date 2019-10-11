@@ -46,7 +46,7 @@ public class PersistableSourceLocator extends AbstractSourceLookupDirector {
 				}
 			}
 		} catch (CoreException e) {
-			DebugUIActivator.logStatus(IStatus.ERROR, Messages.PersistableSourceLocator_Debugger, e.getMessage(), e);
+			DebugUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
 		if (ret == null) {

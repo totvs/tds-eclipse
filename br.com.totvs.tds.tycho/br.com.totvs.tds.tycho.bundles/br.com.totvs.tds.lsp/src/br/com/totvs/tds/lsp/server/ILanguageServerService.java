@@ -98,8 +98,9 @@ public interface ILanguageServerService {
 	 * @param environment
 	 * @param string
 	 * @param b
+	 * @return
 	 */
-	void getPathDirList(String token, String environment, String folder, boolean includeDir);
+	String[] getPathDirList(String token, String environment, String folder, boolean includeDir);
 
 	/**
 	 * @param inputStream

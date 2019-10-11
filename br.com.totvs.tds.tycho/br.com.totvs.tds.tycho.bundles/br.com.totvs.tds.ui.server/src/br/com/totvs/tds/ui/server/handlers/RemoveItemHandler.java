@@ -22,6 +22,7 @@ import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
 
 /**
@@ -46,7 +47,7 @@ public final class RemoveItemHandler extends ServerHandler {
 		try {
 			handlerService.executeCommand(pc, null);
 		} catch (Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, Messages.RemoveItemHandler_server_view, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 	}
 
@@ -84,8 +85,8 @@ public final class RemoveItemHandler extends ServerHandler {
 						IAppServerInfo server = (IAppServerInfo) itemInfo.getParent();
 						server.removeEnvironment((IEnvironmentInfo) itemInfo);
 						serverManager.refresh(server);
-						ServerActivator.logStatus(IStatus.ERROR, Messages.RemoveItemHandler_server_view,
-								Messages.RemoveItemHandler_environment_removed, itemInfo.getName(), server.getName());
+						ServerUIActivator.logStatus(IStatus.ERROR, Messages.RemoveItemHandler_environment_removed, itemInfo.getName(),
+								server.getName());
 						continue;
 					}
 
@@ -108,15 +109,14 @@ public final class RemoveItemHandler extends ServerHandler {
 					} else if (itemInfo instanceof IServerInfo) {
 						IServerInfo server = (IServerInfo) itemInfo;
 						if (server.isConnected()) {
-							ServerActivator.logStatus(IStatus.WARNING, Messages.RemoveItemHandler_server_view,
-									Messages.RemoveItemHandler_desconnect_process, server.getName());
+							ServerUIActivator.logStatus(IStatus.WARNING, Messages.RemoveItemHandler_desconnect_process,
+									server.getName());
 							disconectServer(server);
 						}
 					}
 
 					serverManager.remove(itemInfo);
-					ServerActivator.logStatus(IStatus.WARNING, Messages.RemoveItemHandler_server_view,
-							Messages.RemoveItemHandler_item_removed, itemInfo.getName());
+					ServerUIActivator.logStatus(IStatus.WARNING, Messages.RemoveItemHandler_item_removed, itemInfo.getName());
 				}
 			}
 		}

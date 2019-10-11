@@ -2,26 +2,31 @@ package br.com.totvs.tds.ui.server.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
+import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.jobs.BuildPatchAttributes;
 import br.com.totvs.tds.server.jobs.BuildPatchJob;
 import br.com.totvs.tds.server.jobs.BuildPatchProcessType;
+import br.com.totvs.tds.server.jobs.CompileJob;
+import br.com.totvs.tds.server.jobs.CompileMapData;
+import br.com.totvs.tds.ui.sdk.SdkUIUtils;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.wizards.patch.PatchComparisonPage;
 import br.com.totvs.tds.ui.server.wizards.patch.PatchRPOPage;
@@ -50,7 +55,7 @@ public class BuildPatchWizard extends Wizard implements IWorkbenchWizard {
 		super();
 
 		setNeedsProgressMonitor(true);
-		setWindowTitle("Pacote de Atualização");
+		setWindowTitle(Messages.BuildPatchWizard_Patch);
 
 		this.attributes = attributes;
 
@@ -63,9 +68,9 @@ public class BuildPatchWizard extends Wizard implements IWorkbenchWizard {
 	@Override
 	public void addPages() {
 		addPage(selectServerPage);
-		addPage(getComparasionPage());
-		addPage(getWorkareaPage());
-		addPage(getRpoPage());
+		addPage(comparasionPage);
+		addPage(workareaPage);
+		addPage(rpoPage);
 	}
 
 	@Override
@@ -102,66 +107,13 @@ public class BuildPatchWizard extends Wizard implements IWorkbenchWizard {
 							}
 						}
 					} catch (CoreException e) {
-						ServerActivator.showStatus(IStatus.ERROR, "Pacote de Atualização", e.getMessage(), e);
+						ServerActivator.showStatus(IStatus.ERROR, e.getMessage(), e);
 					}
 				}
 			}
 		}
 
 		return false;
-	}
-
-	protected void doFinish(final IProgressMonitor monitor) throws Exception {
-		try {
-			monitor.beginTask("Criando pacote de Atualização.", 10);
-			ServerActivator.showStatus(IStatus.INFO, "Pacote de Atualização", "Criando pacote de Atualização.");
-			BuildPatchProcessType process = attributes.getProcesso();
-
-			if (attributes.isCompile() && (process.equals(BuildPatchProcessType.BY_WORKAREA))) {
-				// TODO: Melhorar colocando "family" e "rules". eliminado join
-				ServerActivator.showStatus(IStatus.INFO, "Pacote de Atualização",
-						"Compilando fontes na geração do pacote. Ambiente: %s", attributes.getEnvironment());
-
-//					@SuppressWarnings("unchecked")
-//					Object[] objectsList = ((List<Object>) attributes.getAdapter(ISelectedList.class)).toArray();
-				//
-//					procResourceList(fileList, objectsList);
-				//
-//					IAppServerConnector connector = attributes.getServer();
-				//
-//					ConfigResourceJob configJob = new ConfigResourceJob(connector.getCredencial());
-//					configJob.setServer((IAppServerInfo) attributes.getServer().getServerInfo());
-//					configJob.setEnvironments(attributes.getEnvironmentsList());
-//					configJob.setResourceList(fileList);
-//					configJob.setCheckSum(true);
-//					configJob.setOutputLevel(outputLevel);
-//					configJob.setOutputFile(outputFile);
-//					configJob.setPriorVelocity(isPriorVelocity);
-//					// XXX SOURCESTAMP: Projeto do Source Stamp interrompido por tempo indeterminado
-//					// configJob.setFiredBySourceStamp(attributes.isFiredBySourceStamp());
-				//
-//					CompileResourcesJob job = new CompileResourcesJob(configJob);
-//					job.schedule();
-//					job.join();
-			}
-
-			if (checkForCompilationErrors()) {
-				ServerActivator.showStatus(IStatus.ERROR, "Pacote de Atualização",
-						"Geração do pacote de Atualização cancelado devido a erros de compilação. Verifique a Visão [Problemas].");
-				return;
-			}
-
-			List<String> environments = attributes.getEnvironmentsList();
-			attributes.setPrefix(environments.size() > 1);
-
-			for (String environment : environments) {
-				attributes.setEnvironment(environment);
-				BuildPatchJob patchBuilderJob = new BuildPatchJob(this.attributes);
-				patchBuilderJob.schedule();
-			}
-		} catch (Exception e) {
-			ServerActivator.showStatus(IStatus.ERROR, "Pacote de Atualização", e.getLocalizedMessage(), e);
-		}
 	}
 
 	public PatchComparisonPage getComparasionPage() {
@@ -178,54 +130,89 @@ public class BuildPatchWizard extends Wizard implements IWorkbenchWizard {
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
+		attributes.setSelection(selection);
 	}
 
 	@Override
 	public boolean performFinish() {
-		IRunnableWithProgress op = new IRunnableWithProgress() {
-			@Override
-			public void run(final IProgressMonitor monitor) throws InvocationTargetException {
-				try {
-					doFinish(monitor);
-				} catch (Exception e) {
-					throw new InvocationTargetException(e);
-				} finally {
-					monitor.done();
-				}
-			}
-		};
-
 		try {
-			getContainer().run(true, false, op);
+			getContainer().run(true, true, new IRunnableWithProgress() {
+				@Override
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(Messages.BuildPatchWizard_Creating_patch, 10);
+					ServerActivator.showStatus(IStatus.INFO, Messages.BuildPatchWizard_Creating_patch);
+					BuildPatchProcessType process = attributes.getProcesso();
+
+					if (attributes.isCompile() && (process.equals(BuildPatchProcessType.BY_WORKAREA))) {
+						ServerActivator.showStatus(IStatus.INFO,
+								Messages.BuildPatchWizard_Compiling_sources_patch_generation,
+								attributes.getEnvironment());
+						Map<String, CompileMapData> compileMap = new HashMap<String, CompileMapData>();
+
+						attributes.getResourceFiles().stream().forEach(resource -> {
+							try {
+								SdkUIUtils.prepareToCompile(resource, compileMap);
+							} catch (CoreException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						});
+
+						final CompileOptions compileOptions = new CompileOptions();
+						compileOptions.setRecompile(true);
+
+						final Job job = new CompileJob(compileOptions, compileMap);
+						job.schedule();
+						job.join(); // TODO: Melhorar processo de forma a eliminar o "join".
+
+						if (checkForCompilationErrors()) {
+							ServerActivator.showStatus(IStatus.ERROR,
+									Messages.BuildPatchWizard_Patch_generation_canceled_compilation_errors);
+							return;
+						}
+					}
+					List<String> environments = attributes.getEnvironmentsList();
+					attributes.setPrefix(environments.size() > 1);
+
+					ArrayList<BuildPatchJob> jobs = new ArrayList<BuildPatchJob>();
+					for (String environment : environments) {
+						attributes.setEnvironment(environment);
+						// TODO: Criar dependencia de CompileJob
+						BuildPatchJob patchBuilderJob = new BuildPatchJob(attributes);
+						jobs.add(patchBuilderJob);
+						patchBuilderJob.schedule();
+					}
+
+					// TODO: Melhorar processo de forma a eliminar o "join".
+					boolean running = true;
+					while (running) {
+						running = false;
+						for (BuildPatchJob buildPatchJob : jobs) {
+							if (buildPatchJob.getState() == Job.RUNNING) {
+								running = true;
+								buildPatchJob.join(2000, monitor);
+								break;
+							}
+						}
+
+						if (running) {
+							monitor.worked(1);
+						}
+					}
+				}
+			});
+		} catch (OperationCanceledException e) {
+			ServerUIActivator.logStatus(IStatus.CANCEL, Messages.BuildPatchWizard_Interrupt_process);
+			return false;
 		} catch (InterruptedException e) {
-			ServerUIActivator.logStatus(IStatus.CANCEL, "Pacote de Atualização", "Processo interronpido.");
+			ServerUIActivator.logStatus(IStatus.CANCEL, Messages.BuildPatchWizard_Interrupt_process);
 			return false;
 		} catch (InvocationTargetException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, "Pacote de Atualização", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			return false;
 		}
 
 		return true;
 	}
 
-	/*
-	 * Filtra os arquivos para gerar o patch
-	 */
-	private void procResourceList(final List<IResource> fileList, final Object[] objects) {
-		try {
-			for (Object resource : objects) {
-				if (resource instanceof IProject) {
-					procResourceList(fileList, ((IProject) resource).members());
-				} else if (resource instanceof IFolder) {
-					procResourceList(fileList, ((IFolder) resource).members());
-				} else if (resource instanceof IFile
-						&& !"PDB".equalsIgnoreCase(((IFile) resource).getFileExtension())) { //$NON-NLS-1$
-					fileList.add((IFile) resource);
-				}
-			}
-		} catch (CoreException e) {
-			ServerActivator.showStatus(IStatus.ERROR, "Pacote de Atualização",
-					"Erro durante processamento de recursos.", e);
-		}
-	}
 }

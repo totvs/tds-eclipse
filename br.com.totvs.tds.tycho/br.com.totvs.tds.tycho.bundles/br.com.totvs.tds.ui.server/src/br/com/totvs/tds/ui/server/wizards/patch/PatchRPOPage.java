@@ -48,12 +48,12 @@ import org.eclipse.swt.widgets.ToolItem;
 
 import com.ibm.icu.text.NumberFormat;
 
-import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IRpoElement;
 import br.com.totvs.tds.server.jobs.BuildPatchAttributes;
 import br.com.totvs.tds.server.jobs.LoadRpoMapJob;
 import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 /**
@@ -146,8 +146,9 @@ public class PatchRPOPage extends WizardPage {
 		super("patchRPOPage"); //$NON-NLS-1$
 
 		setTitle("Geração a partir do RPO");
-		setDescription("Este assistente o auxiliar� na geração do pacote de Atualização a partir do RPO.");
+		setDescription("Este assistente o auxiliará na geração do pacote de Atualização a partir do RPO.");
 		setImageDescriptor(ServerUIIcons.getBuildPatch());
+
 		this.attributes = attributes;
 	}
 
@@ -607,9 +608,9 @@ public class PatchRPOPage extends WizardPage {
 				}
 			});
 		} catch (InvocationTargetException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Geração de Pacote", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		} catch (InterruptedException e) {
-			ServerActivator.logStatus(IStatus.CANCEL, "Geração de Pacote", e.getMessage());
+			ServerUIActivator.logStatus(IStatus.CANCEL, e.getMessage());
 		}
 
 		NumberFormat nf = NumberFormat.getIntegerInstance();

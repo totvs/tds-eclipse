@@ -32,10 +32,6 @@ public class TDSMessageHandler {
 
 	}
 
-	// TODO: TDSUIIcons.getCancel() pode retornar null
-	public static final Image imgCancel = null; // TDSUIIcons.getCancel().createImage();
-	public static final Image imgOk = null; // TDSUIIcons.getOk().createImage();
-
 	private static final DateFormat SDF = new SimpleDateFormat("HH:mm:ss"); //$NON-NLS-1$
 	public static final Object[] _EMPTY_ARGS = new Object[0];
 
@@ -99,9 +95,13 @@ public class TDSMessageHandler {
 			case IStatus.INFO:
 				return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
 			case IStatus.CANCEL:
-				return imgCancel;
+				// return
+				// PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
+				return null;
 			default:
-				return imgOk;
+				// return
+				// PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK);
+				return null;
 			}
 		}
 
@@ -167,15 +167,15 @@ public class TDSMessageHandler {
 		}
 	}
 
-	public static void showMessage(final String title, final IStatus status) {
-		final AbstractNotification notification = new TDSNotification(String.format("TDS: %s", title), //$NON-NLS-1$
+	public static void showMessage(final IStatus status) {
+		final AbstractNotification notification = new TDSNotification("TDS", //$NON-NLS-1$
 				status);
 		NotificationsUi.getService().notify(Collections.singletonList(notification));
 		logMessage(notification);
 	}
 
-	public static void logMessage(final String title, final IStatus status) {
-		final AbstractNotification notification = new TDSNotification(String.format("TDS: %s", title), //$NON-NLS-1$
+	public static void logMessage(final IStatus status) {
+		final AbstractNotification notification = new TDSNotification("TDS", //$NON-NLS-1$
 				status);
 		logMessage(notification);
 	}
@@ -198,8 +198,7 @@ public class TDSMessageHandler {
 		return arrOut;
 	}
 
-	public static IStatus createStatus(final int level, final String pluginId, final String title, String message,
-			Object... args) {
+	public static IStatus createStatus(final int level, final String pluginId, String message, Object... args) {
 		Throwable exception = null;
 
 		if (args != null) {
@@ -215,13 +214,13 @@ public class TDSMessageHandler {
 
 				if (message == null) {
 					message = Messages.TDSMessageHandler_EMPTY_STRING;
-					exception.printStackTrace();
 				}
+
+				exception.printStackTrace();
 			}
 
 			message = String.format(message, args);
 		}
-		message = String.format("%s: %s", title, message); //$NON-NLS-1$
 
 		return new Status(level, pluginId, 0, message, exception);
 	}

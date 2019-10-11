@@ -2,7 +2,7 @@ package br.com.totvs.tds.lsp.server.model.node;
 
 public class PatchDirListNode {
 	private Object id;
-	private int returnCode = -1;
+	private String[] directory;
 
 	/**
 	 * @return the id
@@ -10,23 +10,20 @@ public class PatchDirListNode {
 	public Object getId() {
 		return id;
 	}
+
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(Object id) {
+	public void setId(final Object id) {
 		this.id = id;
 	}
-	/**
-	 * @return the returnCode
-	 */
-	public int getReturnCode() {
-		return returnCode;
+
+	public String[] getDirectory() {
+		return directory;
 	}
-	/**
-	 * @param returnCode the returnCode to set
-	 */
-	public void setReturnCode(int returnCode) {
-		this.returnCode = returnCode;
+
+	public void setDirectory(final String[] directory) {
+		this.directory = directory;
 	}
 
 }

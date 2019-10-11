@@ -14,10 +14,10 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
+import br.com.totvs.tds.sdk.wrapper.IWorkspaceWrapper;
+import br.com.totvs.tds.sdk.wrapper.ProjectVO;
+import br.com.totvs.tds.sdk.wrapper.WrapperUtil;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
-import br.com.totvs.tds.ui.sdk.wrapper.IWorkspaceWrapper;
-import br.com.totvs.tds.ui.sdk.wrapper.ProjectVO;
-import br.com.totvs.tds.ui.sdk.wrapper.WrapperUtil;
 
 /**
  * Classe ProjectWizard.
@@ -75,7 +75,7 @@ public class ProjectWizard extends Wizard implements INewWizard {
 		} catch (InterruptedException e) {
 			return false;
 		} catch (InvocationTargetException e) {
-			SdkUIActivator.logStatus(IStatus.ERROR, Messages.ProjectWizard_Project, e.getMessage(), e);
+			SdkUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			page.setErrorMessage(e.getMessage());
 			return false;
 		}

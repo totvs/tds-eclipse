@@ -16,7 +16,7 @@ import br.com.totvs.tds.server.ServerOsType;
 public interface IServerInfo extends IItemInfo {
 
 	public enum ServerType {
-		PROTHEUS(1, "Protheus"), LOGIX(2, "Logix"), DBACCESS(100, "DBAccess");
+		PROTHEUS(1, "Protheus"), LOGIX(2, "Logix"), DBACCESS(100, "DBAccess"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		private int code;
 		private String title;
@@ -51,11 +51,11 @@ public interface IServerInfo extends IItemInfo {
 		public String getLoginDialog() {
 			switch (this) {
 			case PROTHEUS:
-				return "br.com.totvs.tds.ui.server.tools.ProtheusLoginDialog"; // $NON-NLS-N$
+				return "br.com.totvs.tds.ui.server.tools.ProtheusLoginDialog"; // $NON-NLS-N$ //$NON-NLS-1$
 			case LOGIX:
-				return "br.com.totvs.tds.ui.server.tools.LogixLoginDialog"; // $NON-NLS-N$
+				return "br.com.totvs.tds.ui.server.tools.LogixLoginDialog"; // $NON-NLS-N$ //$NON-NLS-1$
 			case DBACCESS:
-				return "br.com.totvs.tds.ui.server.tools.DbAccessLoginDialog"; // $NON-NLS-N$
+				return "br.com.totvs.tds.ui.server.tools.DbAccessLoginDialog"; // $NON-NLS-N$ //$NON-NLS-1$
 			default:
 				break;
 			}

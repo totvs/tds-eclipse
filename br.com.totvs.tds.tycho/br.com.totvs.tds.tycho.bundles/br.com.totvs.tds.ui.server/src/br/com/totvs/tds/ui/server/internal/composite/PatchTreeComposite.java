@@ -30,7 +30,6 @@ import br.com.totvs.tds.server.interfaces.IPatchRpoInfo;
 import br.com.totvs.tds.server.interfaces.IRpoInfo;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
-import br.com.totvs.tds.ui.server.nl.Messages;
 
 public class PatchTreeComposite extends Composite {
 
@@ -65,8 +64,7 @@ public class PatchTreeComposite extends Composite {
 						try {
 							date = dateFormatter.parse(rpoPatch.getDateFileApplication());
 						} catch (ParseException e) {
-							ServerUIActivator.logStatus(IStatus.ERROR, Messages.PatchTreeComposite_internal,
-									e.getMessage(), e);
+							ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 						}
 						Locale localeBR = new Locale("pt", "BR"); //$NON-NLS-1$ //$NON-NLS-2$
 						DateFormat formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy", localeBR); //$NON-NLS-1$

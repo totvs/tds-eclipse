@@ -1,9 +1,9 @@
 package br.com.totvs.tds.ui.server.wizards.server;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.swt.graphics.Point;
+
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
@@ -11,7 +11,6 @@ import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.vo.NewServerVO;
 import br.com.totvs.tds.ui.server.wizards.INewItemWizard;
 

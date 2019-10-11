@@ -102,10 +102,10 @@ public class ServerDirectoryItemNode implements IServerDirectoryItemNode {
 		boolean loadDirs = true;
 		//
 		try {
-			List<String> dirs = null; // server.getDirectory(environment, absolutPath, true);
+			String[] dirs = server.getDirectory(environment, absolutPath, true);
 			for (String dir : dirs) {
-				addItemNode(ServerFileSystemFactory.getInstance().createDirNode(dir,
-						absolutPath + dir + File.separatorChar, getFiles));
+				addItemNode(
+						ServerFileSystemFactory.createDirNode(dir, absolutPath + dir + File.separatorChar, getFiles));
 			}
 		} catch (Exception e) {
 			loadDirs = false;
@@ -114,16 +114,15 @@ public class ServerDirectoryItemNode implements IServerDirectoryItemNode {
 		return loadDirs;
 	}
 
-	// Carrega os arquivos, se a flag getFiles estiver ativa, do n� corrente
+	// Carrega os arquivos, se a flag getFiles estiver ativa, do nó corrente
 	private boolean loadFiles(final IAppServerInfo server, final String environment) {
 		boolean loadFiles = true;
 		//
 		if (getFiles) {
 			try {
-				List<String> files = null; // server.getDirectory(environment, absolutPath, false);
+				String[] files = server.getDirectory(environment, absolutPath, false);
 				for (String file : files) {
-					addItemNode(
-							ServerFileSystemFactory.getInstance().createFileNode(file, absolutPath + file, getFiles));
+					addItemNode(ServerFileSystemFactory.createFileNode(file, absolutPath + file, getFiles));
 				}
 			} catch (Exception e) {
 				loadFiles = false;

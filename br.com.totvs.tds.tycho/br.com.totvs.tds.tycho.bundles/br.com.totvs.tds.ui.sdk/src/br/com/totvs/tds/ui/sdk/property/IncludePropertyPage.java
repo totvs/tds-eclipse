@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.dialogs.PropertyPage;
 
+import br.com.totvs.tds.sdk.wrapper.IProjectWrapper;
+import br.com.totvs.tds.sdk.wrapper.WrapperManager;
 import br.com.totvs.tds.ui.sdk.widget.IncludeConfigurationComposite;
-import br.com.totvs.tds.ui.sdk.wrapper.IProjectWrapper;
-import br.com.totvs.tds.ui.sdk.wrapper.WrapperManager;
 
 /**
  * Propriedade do Projeto - definição da lista de busca de includes.

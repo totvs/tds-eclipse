@@ -48,8 +48,7 @@ public class LoginHandler extends ServerHandler {
 	 * @param connector     - Conector do servidor
 	 */
 	private boolean doLogin(final IAppServerInfo connector, Map<String, Object> connectionMap) {
-		ServerUIActivator.logStatus(IStatus.INFO, Messages.LoginHandler_identification,
-				Messages.LoginHandler_connection_in_processs);
+		ServerUIActivator.logStatus(IStatus.INFO, Messages.LoginHandler_connection_in_processs);
 
 		boolean isLogged = false;
 
@@ -60,16 +59,15 @@ public class LoginHandler extends ServerHandler {
 			isLogged = connector.authentication(lsService, connectionMap);
 			if (!isLogged) {
 				connectMessage = Messages.LoginHandler_connection_error_1;
-				ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_identification, connectMessage);
+				ServerUIActivator.logStatus(IStatus.ERROR, connectMessage);
 			}
 		} catch (IllegalArgumentException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_identification, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		} catch (Exception e) {
 			connectMessage = Messages.LoginHandler_connection_error_1;
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_identification, connectMessage);
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_identification, e.getMessage());
-			ServerUIActivator.logStatus(IStatus.WARNING, Messages.LoginHandler_identification,
-					Messages.LoginHandler_connection_error_3);
+			ServerUIActivator.logStatus(IStatus.ERROR, connectMessage);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage());
+			ServerUIActivator.logStatus(IStatus.WARNING, Messages.LoginHandler_connection_error_3);
 		}
 
 		return isLogged;
@@ -97,16 +95,14 @@ public class LoginHandler extends ServerHandler {
 					IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 					if (ok) {
 						serverManager.setCurrentServer(server);
-						ServerUIActivator.logStatus(IStatus.OK, Messages.LoginHandler_identification,
-								Messages.LoginHandler_connection_ok, server.getName(), server.getCurrentEnvironment(),
-								server.getConnectionMap().get(ILoginDialog.USERNAME));
+						ServerUIActivator.logStatus(IStatus.OK, Messages.LoginHandler_connection_ok, server.getName(),
+								server.getCurrentEnvironment(), server.getConnectionMap().get(ILoginDialog.USERNAME));
 					} else {
 						serverManager.setCurrentServer(null);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_identification,
-							Messages.LoginHandler_connection_error);
+					ServerUIActivator.logStatus(IStatus.ERROR, Messages.LoginHandler_connection_error);
 				}
 			}
 		});

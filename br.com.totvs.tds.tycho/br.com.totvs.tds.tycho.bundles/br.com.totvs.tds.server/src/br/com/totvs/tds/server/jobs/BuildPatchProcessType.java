@@ -5,10 +5,10 @@ package br.com.totvs.tds.server.jobs;
  */
 public enum BuildPatchProcessType {
 
-	UNDEFINED(-1, "(não definido)"), //
-	BY_COMPARISON(0, "por comparação (RPO)"),  //
-	BY_RPO(1, "a partir do RPO"), //
-	BY_WORKAREA(2, "a partir da �rea de trabalho");
+	UNDEFINED(-1, Messages.BuildPatchProcessType_Undefined), //
+	BY_COMPARISON(0, Messages.BuildPatchProcessType_By_comparasion),  //
+	BY_RPO(1, Messages.BuildPatchProcessType_FromRpo), //
+	BY_WORKAREA(2, Messages.BuildPatchProcessType_From_workarea);
 
 	/**
 	 * C�digo do processo.

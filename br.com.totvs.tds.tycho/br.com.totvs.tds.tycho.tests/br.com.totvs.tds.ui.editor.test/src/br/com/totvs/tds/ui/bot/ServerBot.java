@@ -84,16 +84,14 @@ public class ServerBot extends AbstractTest {
 	}
 
 	public static SWTBotTreeItem disconnectServer(final String serverName) {
-		bot.viewByTitle("Servidores").show();
-		final SWTBotTreeItem node = bot.tree().getTreeItem("Servidores").getNode(serverName).select();
+		final SWTBotTreeItem node = selectServerNode(serverName);
 		node.contextMenu("Desconectar").click();
 
 		return node;
 	}
 
 	public static void removeServer(final String serverName) {
-		bot.viewByTitle("Servidores").show();
-		final SWTBotTreeItem node = bot.tree().getTreeItem("Servidores").getNode(serverName).select();
+		final SWTBotTreeItem node = selectServerNode(serverName);
 		node.contextMenu("Remover").click();
 
 		final SWTBotShell shell = bot.shell("Remoção");
@@ -148,6 +146,18 @@ public class ServerBot extends AbstractTest {
 
 		prefsShell.activate();
 		bot.waitUntil(Conditions.shellCloses(prefsShell));
+	}
+
+	public static SWTBotTreeItem selectLocalServerNode() {
+
+		return selectServerNode(ITestProperties.LOCAL_SERVER);
+	}
+
+	public static SWTBotTreeItem selectServerNode(final String serverName) {
+		bot.viewByTitle("Servidores").show();
+		final SWTBotTreeItem node = bot.tree().getTreeItem("Servidores").getNode(serverName).click().select();
+
+		return node;
 	}
 
 }

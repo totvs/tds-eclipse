@@ -23,3 +23,4 @@ Require-Bundle: org.eclipse.swtbot.go,
 Automatic-Module-Name: br.com.totvs.tds.server.ui.test
 Export-Package: br.com.totvs.tds.ui.editor 
 Bundle-Activator: br.com.totvs.tds.ui.TestActivator
+Import-Package: br.com.totvs.tds.server.jobs

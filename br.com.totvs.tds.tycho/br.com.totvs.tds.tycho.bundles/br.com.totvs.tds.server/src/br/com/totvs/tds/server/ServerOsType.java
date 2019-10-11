@@ -37,7 +37,7 @@ public enum ServerOsType {
 	OS_WINSRV2012R2(25, "Windows Server 2012 R2"), //$NON-NLS-1$
 	OS_WINSRV2016(28, "Windows Server 2016"), //$NON-NLS-1$
 	OS_WINVISTA(18, "Windows Vista"), //$NON-NLS-1$
-	OS_WINXP(16, "Windows XP");
+	OS_WINXP(16, "Windows XP"); //$NON-NLS-1$
 
 	public static ServerOsType valueOf(final int osTypeCode) {
 		ServerOsType result = OS_INVALID;

@@ -139,7 +139,7 @@ public class ImportTools {
 					verifyNameChanged(serverInfo);
 				}
 			} catch (RuntimeException e1) {
-				ServerActivator.logStatus(IStatus.ERROR, "Visão Servidor", e1.getMessage(), e1);
+				ServerActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 				if (serverInfo != null ) { //&& e1.getErrorCode() == RuntimeException.SERVER_DUPLICATEDNAME) {
 					serverInfo.setParent(parentGroupInfo);
 					parentGroupInfo.getChildren().add(serverInfo);
@@ -151,7 +151,7 @@ public class ImportTools {
 	}
 
 	private static String getVersion(Server server) {
-		System.out.println("ImportTools.getVersion()");
+		System.out.println("ImportTools.getVersion()"); //$NON-NLS-1$
 //		String buildName = server.getBuild();
 //		ServerVersion[] versions = AppServerConnector.getAvailableServerVersion(server.getServerType());
 //
@@ -166,7 +166,7 @@ public class ImportTools {
 
 	//TODO: tratamento de rename na importação
 	private static void verifyNameChanged(final IServerInfo serverInfo) {
-		System.out.println("ImportTools.verifyNameChanged()");
+		System.out.println("ImportTools.verifyNameChanged()"); //$NON-NLS-1$
 //		boolean nameChanged = (boolean) serverInfo.getProperty(IServerConstants.PROPERTY_NAME_CHANGED);
 //		if (nameChanged) {
 //			String newName = (String) serverInfo.getProperty(IServerConstants.PROPERTY_NEW_NAME);

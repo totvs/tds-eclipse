@@ -3,6 +3,7 @@ package br.com.totvs.tds.ui;
 import org.eclipse.swtbot.eclipse.finder.SWTWorkbenchBot;
 import org.eclipse.swtbot.eclipse.finder.waits.Conditions;
 import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
+import org.eclipse.swtbot.swt.finder.SWTBot;
 import org.eclipse.swtbot.swt.finder.waits.DefaultCondition;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
@@ -11,6 +12,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public class AbstractTest {
+
+	private static final long JOB_WAIT = 60000;
+	private static final long JOB_INTERVAL = 2000;
 
 	public static SWTWorkbenchBot bot = new SWTWorkbenchBot();
 
@@ -63,7 +67,7 @@ public class AbstractTest {
 		return btnFinish;
 	}
 
-	protected SWTBotTable waitTableEnable(final String label) {
+	protected SWTBotTable waitTableEnable(final SWTBot bot, final String label) {
 		final SWTBotTable table = bot.tableWithLabel(label);
 
 		bot.waitUntil(new DefaultCondition() {
@@ -80,6 +84,17 @@ public class AbstractTest {
 		});
 
 		return table;
+	}
+
+	protected SWTBotTable waitTableEnable(final String label) {
+
+		return waitTableEnable(bot, label);
+	}
+
+	protected void waitJob(final String jobID) {
+		pause();
+
+		bot.waitUntil(Conditions.waitForJobs(jobID, jobID), JOB_WAIT, JOB_INTERVAL);
 	}
 
 	/**

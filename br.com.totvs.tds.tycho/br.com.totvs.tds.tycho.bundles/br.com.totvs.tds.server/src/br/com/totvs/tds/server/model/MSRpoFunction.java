@@ -4,7 +4,7 @@ public final class MSRpoFunction {
 
 	private int lineNumber = 0;
 
-	private String name = "";
+	private String name = ""; //$NON-NLS-1$
 
 	private MSRpoObject program = new MSRpoObject();
 
@@ -77,8 +77,8 @@ public final class MSRpoFunction {
 	 */
 	@Override
 	public String toString() {
-		return "MSRpoFunction [name=" + name + ", lineNumber=" + lineNumber + ", program=" + program + ", visible="
-				+ visible + "]";
+		return "MSRpoFunction [name=" + name + ", lineNumber=" + lineNumber + ", program=" + program + ", visible=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ visible + "]"; //$NON-NLS-1$
 	}
 
 }

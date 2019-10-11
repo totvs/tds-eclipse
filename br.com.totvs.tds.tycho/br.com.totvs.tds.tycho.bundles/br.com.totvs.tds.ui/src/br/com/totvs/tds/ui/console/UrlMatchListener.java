@@ -17,18 +17,25 @@ import br.com.totvs.tds.ui.TDSUIActivator;
 
 public class UrlMatchListener implements IPatternMatchListener {
 
-	private static final Pattern PATTERN = Pattern.compile("https?://(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?(\\S+)*"); //$NON-NLS-1$
+	private static final Pattern PATTERN = Pattern
+			.compile("https?://(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?(\\S+)*"); //$NON-NLS-1$
 	private static final String LINE_QUALIFIER = null;
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.console.IPatternMatchListenerDelegate#connect(org.eclipse.ui.console.TextConsole)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.console.IPatternMatchListenerDelegate#connect(org.eclipse.ui.
+	 * console.TextConsole)
 	 */
 	@Override
 	public void connect(final TextConsole console) {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.console.IPatternMatchListenerDelegate#disconnect()
 	 */
 	@Override
@@ -36,29 +43,33 @@ public class UrlMatchListener implements IPatternMatchListener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.console.IPatternMatchListenerDelegate#matchFound(org.eclipse.ui.console.PatternMatchEvent)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.console.IPatternMatchListenerDelegate#matchFound(org.eclipse.
+	 * ui.console.PatternMatchEvent)
 	 */
 	@Override
 	public final void matchFound(final PatternMatchEvent event) {
 		if (event.getSource() instanceof MessageConsole) {
-			MessageConsole console = (MessageConsole) event.getSource();
+			final MessageConsole console = (MessageConsole) event.getSource();
 			final IDocument doc = console.getDocument();
 			final int offset = event.getOffset();
 			final int lenght = event.getLength();
 
 			try {
-				String str = doc.get(offset, lenght-1);
-				URL url = new URL(str); 
-				IHyperlink link = new HttpLink(url);
-				
+				final String str = doc.get(offset, lenght - 1);
+				final URL url = new URL(str);
+				final IHyperlink link = new HttpLink(url);
+
 				console.addHyperlink(link, offset, lenght);
-			} catch (BadLocationException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, Messages.UrlMatchListener_Link, e.getMessage(), e);
-			} catch (NumberFormatException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, Messages.UrlMatchListener_Link, e.getMessage(), e);
-			} catch (MalformedURLException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, Messages.UrlMatchListener_Link, e.getMessage(), e);
+			} catch (final BadLocationException e) {
+				TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
+			} catch (final NumberFormatException e) {
+				TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
+			} catch (final MalformedURLException e) {
+				TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}
@@ -76,7 +87,7 @@ public class UrlMatchListener implements IPatternMatchListener {
 
 	@Override
 	public final String getLineQualifier() {
-		return LINE_QUALIFIER; 
+		return LINE_QUALIFIER;
 	}
 
 }

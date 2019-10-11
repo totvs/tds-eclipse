@@ -35,15 +35,14 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 			final File serverPath = new File(FileLocator.toFileURL(serverPathUrl).getPath());
 
 			if (!serverPath.canExecute()) {
-				System.err.println(String.format(
-						Messages.LSConnectionProvider_LS_insufficient_privileges,
+				System.err.println(String.format(Messages.LSConnectionProvider_LS_insufficient_privileges,
 						serverPath.getAbsolutePath()));
 				serverPath.setExecutable(true);
 				if (!serverPath.canExecute()) {
-					System.err.println(
-							Messages.LSConnectionProvider_Could_not_adjust_privileges);
+					System.err.println(Messages.LSConnectionProvider_Could_not_adjust_privileges);
 				}
 			}
+
 			return serverPath.getAbsolutePath();
 		} catch (final Exception e) {
 			e.printStackTrace();

@@ -13,9 +13,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import br.com.totvs.tds.sdk.wrapper.IProjectWrapper;
+import br.com.totvs.tds.sdk.wrapper.WrapperManager;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
-import br.com.totvs.tds.ui.sdk.wrapper.IProjectWrapper;
-import br.com.totvs.tds.ui.sdk.wrapper.WrapperManager;
 
 public class ToggleTotvsNatureHandler extends AbstractHandler {
 
@@ -37,7 +37,7 @@ public class ToggleTotvsNatureHandler extends AbstractHandler {
 						IProjectWrapper wrapper = WrapperManager.getInstance().getWrapper(project);
 						wrapper.toggleNature(TotvsNature.NATURE_ID);
 					} catch (CoreException e) {
-						SdkUIActivator.logStatus(IStatus.ERROR, Messages.ToggleTotvsNatureHandler_Internal, e.getMessage(), e);
+						SdkUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 						throw new ExecutionException(e.getMessage(),e);
 					}
 				}

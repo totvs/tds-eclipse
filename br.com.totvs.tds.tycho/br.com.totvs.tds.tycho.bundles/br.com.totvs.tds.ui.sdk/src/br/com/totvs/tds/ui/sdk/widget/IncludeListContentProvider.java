@@ -6,9 +6,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import br.com.totvs.tds.sdk.wrapper.IWrapperManager;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
 import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
-import br.com.totvs.tds.ui.sdk.wrapper.IWrapperManager;
 
 /**
  * Provimento de conte�do para a lista de definições.

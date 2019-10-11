@@ -147,20 +147,20 @@ public interface IServerConstants {
 
 	public static final String VERIFY_RPO = "server.verify.RPO"; //$NON-NLS-1$
 
-	public static final String _IS_ROOT = "group.is.root";
+	public static final String _IS_ROOT = "group.is.root"; //$NON-NLS-1$
 
-	public static final String BUILD_VERSION = "build.version";
+	public static final String BUILD_VERSION = "build.version"; //$NON-NLS-1$
 
-	public static final String SMARTCLIENT_PATH = "smartclient.path";
+	public static final String SMARTCLIENT_PATH = Messages.IServerConstants_2;
 
-	public static final String IMMEDIATE_CONNECTION = "immediate.connection";
+	public static final String IMMEDIATE_CONNECTION = Messages.IServerConstants_3;
 
-	public static final String LAUNCH_PARAMETERS = "launch.parameters";
+	public static final String LAUNCH_PARAMETERS = "launch.parameters"; //$NON-NLS-1$
 
-	public static final String CANCELED = "*** CANCELED ***";
+	public static final String CANCELED = "*** CANCELED ***"; //$NON-NLS-1$
 
-	public static final String APP_SERVER_PATH = "app.server.path";
+	public static final String APP_SERVER_PATH = "app.server.path"; //$NON-NLS-1$
 
-	public static final String LOCAL_SERVER = "local.server";
+	public static final String LOCAL_SERVER = "local.server"; //$NON-NLS-1$
 
 }

@@ -286,17 +286,17 @@ public class NewServerWizardPage extends WizardPage {
 		if (localServer) {
 			String appServerPath = txtAppServerPath.getText().trim();
 			if (Messages.EMPTY_STRING.equals(appServerPath)) { // $NON-NLS-1$
-				updateStatus("Caminho do execut�vel do servidor local � requirido.");
+				updateStatus(Messages.NewServerWizardPage_Local_server_executable_required);
 				return;
 			}
 
 			File file = new File(appServerPath);
 			if (!file.exists()) {
-				updateStatus("Execut�vel AppServer não localizado.");
+				updateStatus(Messages.NewServerWizardPage_Local_server_executable_not_found);
 				return;
 			}
 			if (!file.canExecute()) {
-				updateStatus("Arquivo para AppServer selecionado não pode ser executado.");
+				updateStatus(Messages.NewServerWizardPage_File_selected_cannot_executed);
 				return;
 			}
 			newServer.getServer().setAppServerPath(appServerPath);
@@ -394,7 +394,7 @@ public class NewServerWizardPage extends WizardPage {
 				if (version == null) {
 					String msg = String.format(Messages.NewServerWizardPage_connection_error,
 							newServer.getServer().getAddress());
-					ServerUIActivator.logStatus(IStatus.ERROR, "Novo Servidor", msg);
+					ServerUIActivator.logStatus(IStatus.ERROR, msg);
 					updateStatus(msg);
 				} else {
 					newServer.getServer().setVersion(version);

@@ -34,7 +34,7 @@ public class EnvironmentInfo extends ItemInfo implements IEnvironmentInfo {
 	@Override
 	public String getIconName() {
 
-		return "environment";
+		return "environment"; //$NON-NLS-1$
 	}
 
 	/**

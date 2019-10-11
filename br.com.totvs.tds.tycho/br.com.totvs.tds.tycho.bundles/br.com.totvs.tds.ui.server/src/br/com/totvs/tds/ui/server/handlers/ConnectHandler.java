@@ -16,7 +16,7 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.ui.server.nl.Messages;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 
 /**
  * Conecta ao servidor selecionado.
@@ -56,7 +56,7 @@ public class ConnectHandler extends ServerHandler {
 
 			event.getCommand().setEnabled(null);
 		} catch (Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, Messages.ConnectHandler_connect, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 		//
 		return null;

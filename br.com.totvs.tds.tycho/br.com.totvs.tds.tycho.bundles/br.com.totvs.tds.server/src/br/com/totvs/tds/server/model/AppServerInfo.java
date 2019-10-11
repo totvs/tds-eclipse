@@ -17,6 +17,8 @@ import org.eclipse.debug.core.ILaunchesListener;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
@@ -66,7 +68,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 * Construtor.
 	 */
 	public AppServerInfo() {
-		this("");
+		this(""); //$NON-NLS-1$
 	}
 
 	/**
@@ -80,8 +82,8 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		this.hub = new ServerSlaveHubInfo(this);
 		setConnectionMap(new HashMap<String, Object>());
 
-		setSmartClientPath("");
-		setAppServerPath("");
+		setSmartClientPath(""); //$NON-NLS-1$
+		setAppServerPath(""); //$NON-NLS-1$
 	}
 
 	@Override
@@ -94,7 +96,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 		if (containsEnvironment(child.getName())) {
 			throw new RuntimeException(
-					"RuntimeException.ITEM_DUPLICATED, Messages.AppServerInfo_2 %s, child.getName()");
+					"RuntimeException.ITEM_DUPLICATED, Messages.AppServerInfo_2 %s, child.getName()"); //$NON-NLS-1$
 		}
 		environments.add(child);
 		child.setParent(this);
@@ -167,18 +169,18 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 	@Override
 	public String getToken() {
-		return (String) getConnectionMap().getOrDefault("token", "");
+		return (String) getConnectionMap().getOrDefault("token", ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<String> getPermissions() {
-		return (List<String>) getConnectionMap().getOrDefault("permissions", Collections.emptyList());
+		return (List<String>) getConnectionMap().getOrDefault("permissions", Collections.emptyList()); //$NON-NLS-1$
 	}
 
 	@Override
 	public String getUsername() {
-		return (String) getConnectionMap().getOrDefault(IServerConstants.USERNAME, "");
+		return (String) getConnectionMap().getOrDefault(IServerConstants.USERNAME, ""); //$NON-NLS-1$
 	}
 
 	/*
@@ -250,7 +252,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		if (!connected) {
 			setMonitoring(false);
 			unloadSlavesLoadBalance();
-			connectionMap.remove("token");
+			connectionMap.remove("token"); //$NON-NLS-1$
 		}
 
 		super.setConnected(connected);
@@ -309,7 +311,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 */
 	@Override
 	public void setMonitoring(final boolean monitoring) {
-		setProperty("users", null);
+		setProperty("users", null); //$NON-NLS-1$
 		firePropertyChange("monitoring", this.monitoring, this.monitoring = monitoring); //$NON-NLS-1$
 	}
 
@@ -371,7 +373,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 		for (final SlaveDataNode slaveNode : slaveList) {
 			final IAppServerSlaveInfo slave = new AppServerSlaveInfo(this.hub, slaveNode.getSectionName());
-			slave.setAddress(URI.create("//" + slaveNode.getServer() + ":" + slaveNode.getPort()));
+			slave.setAddress(URI.create("//" + slaveNode.getServer() + ":" + slaveNode.getPort())); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
@@ -471,7 +473,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		super.doCustomValid();
 
 		if (getSmartClientPath().isEmpty()) {
-			throw new RuntimeException("Caminho e arquivo do execut�vel SmartClient requerido.");
+			throw new RuntimeException(Messages.AppServerInfo_File_required_SmartClient);
 		}
 
 	}
@@ -525,8 +527,8 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 			connectionMap.put(IServerConstants.TOKEN, token);
 			connectionMap.put(IServerConstants.PERMISSIONS, permissions);
 		} else {
-			connectionMap.put(IServerConstants.TOKEN, "");
-			connectionMap.put(IServerConstants.PERMISSIONS, "");
+			connectionMap.put(IServerConstants.TOKEN, ""); //$NON-NLS-1$
+			connectionMap.put(IServerConstants.PERMISSIONS, ""); //$NON-NLS-1$
 		}
 
 		this.connectionMap.putAll(connectionMap);
@@ -576,8 +578,8 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 			final ISecurePreferences credencial = securePreference.node(node);
 
 			connectionMap.put(IServerConstants.ENVIRONMENT, currentEnvironment);
-			connectionMap.put(IServerConstants.USERNAME, credencial.get(IServerConstants.USERNAME, ""));
-			connectionMap.put(IServerConstants.PASSWORD, credencial.get(IServerConstants.PASSWORD, ""));
+			connectionMap.put(IServerConstants.USERNAME, credencial.get(IServerConstants.USERNAME, "")); //$NON-NLS-1$
+			connectionMap.put(IServerConstants.PASSWORD, credencial.get(IServerConstants.PASSWORD, "")); //$NON-NLS-1$
 
 			return true;
 		}
@@ -589,6 +591,14 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		deleteLoginInfo();
 
 		return false;
+	}
+
+	@Override
+	public String[] getDirectory(final String environment, final String absolutPath, final boolean b) {
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+
+		return lsService.getPathDirList(getToken(), environment, absolutPath, b); // $NON-NLS-1$
 	}
 
 }

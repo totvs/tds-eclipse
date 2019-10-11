@@ -10,11 +10,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import br.com.totvs.tds.ui.sdk.wrapper.IIncludeDataModel;
-
 /**
  * Modelo de dados para definição da pasta para busca.
- * 
+ *
  * @author acandido
  */
 public class IncludeDataModel implements IIncludeDataModel {
@@ -51,18 +49,18 @@ public class IncludeDataModel implements IIncludeDataModel {
 	 * Valida a pasta.
 	 */
 	private void validade() {
-		String folder = getFolder();
+		final String folder = getFolder();
 
 		message = null;
 		warning = false;
 
 		if (!folder.startsWith(GLOBAL)) {
 			IPath path = null;
-			
+
 			if (folder.startsWith(WORKSPACE)) {
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				IWorkspaceRoot root = workspace.getRoot();
-				IResource resource = root.findMember(folder.substring(WORKSPACE.length()));
+				final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+				final IWorkspaceRoot root = workspace.getRoot();
+				final IResource resource = root.findMember(folder.substring(WORKSPACE.length()));
 				if (resource == null) {
 					message = Messages.IncludeDataModel_Not_found;
 				}
@@ -70,21 +68,15 @@ public class IncludeDataModel implements IIncludeDataModel {
 			} else {
 				path = new Path(getFolder());
 			}
-			
-			File file = path.toFile();
+
+			final File file = path.toFile();
 			if (!file.exists()) {
 				message = Messages.IncludeDataModel_Not_found;
 			} else if (!file.isDirectory()) {
 				message = Messages.IncludeDataModel_No_folder;
 			} else {
-				FilenameFilter filter = new FilenameFilter() {
+				final FilenameFilter filter = (dir, name) -> (name.endsWith(".ch") || name.endsWith(".per"));
 
-					@Override
-					public boolean accept(final File dir, final String name) {
-						return (name.endsWith(".ch") || name.endsWith(".per")); //$NON-NLS-1$ //$NON-NLS-2$
-					}
-				};
-				
 				if (file.list(filter).length == 0) {
 					message = Messages.IncludeDataModel_No_definition_files;
 					warning = true;

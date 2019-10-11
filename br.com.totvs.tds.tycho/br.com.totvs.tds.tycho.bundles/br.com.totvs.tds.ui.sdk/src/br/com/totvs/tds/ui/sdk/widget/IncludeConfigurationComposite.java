@@ -7,8 +7,6 @@ import java.util.StringJoiner;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -16,7 +14,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -24,25 +21,22 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
+import br.com.totvs.tds.sdk.wrapper.IWrapperManager;
 import br.com.totvs.tds.ui.TDSUtil;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
 import br.com.totvs.tds.ui.sdk.SdkUIIcons;
 import br.com.totvs.tds.ui.sdk.job.SearchIncludeFoldersJob;
 import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
-import br.com.totvs.tds.ui.sdk.wrapper.IIncludeDataModel;
-import br.com.totvs.tds.ui.sdk.wrapper.IWrapperManager;
 
 /**
  * Composite para includes de projeto.
- * 
+ *
  * @author acandido
  */
 public final class IncludeConfigurationComposite extends Composite {
@@ -72,14 +66,14 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent , composite
 	 * @param style  , estilo
 	 */
 	public IncludeConfigurationComposite(final Composite parent, final int style) {
 		super(parent, style);
 
-		Composite container = this;
+		final Composite container = this;
 		container.setLayout(new GridLayout(2, false));
 
 		createTree(container);
@@ -97,11 +91,11 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/**
 	 * Cria a botoneira.
-	 * 
+	 *
 	 * @param container
 	 */
 	private void createButtons(final Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
+		final Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, true, 1, 1));
 
@@ -150,7 +144,7 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/**
 	 * Cria a �rvore para as definições.
-	 * 
+	 *
 	 * @param container
 	 */
 	private void createTree(final Composite container) {
@@ -166,12 +160,7 @@ public final class IncludeConfigurationComposite extends Composite {
 		treeIncludes.setContentProvider(new IncludeListContentProvider());
 		treeIncludes.setLabelProvider(new IncludeListLabelProvider());
 		treeIncludes.setInput(includeList);
-		treeIncludes.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				enabledButtons();
-			}
-		});
+		treeIncludes.addSelectionChangedListener(event -> enabledButtons());
 	}
 
 	/**
@@ -195,7 +184,7 @@ public final class IncludeConfigurationComposite extends Composite {
 		btnInc.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				String result = selectDirectory("Selecione uma pasta para busca de arquivos de definição.");
+				final String result = selectDirectory("Selecione uma pasta para busca de arquivos de definição.");
 
 				if (!result.isEmpty()) {
 					IncludeConfigurationComposite.this.addSelection(result);
@@ -232,24 +221,16 @@ public final class IncludeConfigurationComposite extends Composite {
 			}
 		});
 
-		lnkGlobal.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(final Event event) {
-				final PreferenceDialog pref = PreferencesUtil.createPreferenceDialogOn(getShell(),
-						ISDKPreferenceKeys.ID_INCLUDE_PAGE, new String[0], null);
-				if (pref != null) {
-					pref.open();
-					treeIncludes.refresh();
-				}
+		lnkGlobal.addListener(SWT.Selection, event -> {
+			final PreferenceDialog pref = PreferencesUtil.createPreferenceDialogOn(getShell(),
+					ISDKPreferenceKeys.ID_INCLUDE_PAGE, new String[0], null);
+			if (pref != null) {
+				pref.open();
+				treeIncludes.refresh();
 			}
 		});
 
-		addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(final DisposeEvent e) {
-				IncludeConfigurationComposite.this.widgetDispose(e);
-			}
-		});
+		addDisposeListener(e -> IncludeConfigurationComposite.this.widgetDispose(e));
 
 		addControlListener(new ControlAdapter() {
 			@Override
@@ -261,7 +242,7 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/**
 	 * Movimenta o item selecionado para cima ou para baixo.
-	 * 
+	 *
 	 * @param direction Direção da movimentação (negativo para cima, positivo para
 	 *                  baixo).
 	 */
@@ -286,8 +267,8 @@ public final class IncludeConfigurationComposite extends Composite {
 	/**
 	 * Sseleção de diret�rios local.
 	 */
-	private String selectDirectory(String message) {
-		String result = TDSUtil.directoryDialog(getParent().getShell(), message);
+	private String selectDirectory(final String message) {
+		final String result = TDSUtil.directoryDialog(getParent().getShell(), message);
 
 		return (result == null) ? "" : result.trim();
 	}
@@ -365,7 +346,7 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/**
 	 * Libera o componente.
-	 * 
+	 *
 	 * @param e
 	 */
 	protected void widgetDispose(final DisposeEvent e) {
@@ -380,7 +361,7 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.swt.widgets.Composite#checkSubclass()
 	 */
 	@Override
@@ -448,7 +429,7 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	/**
 	 * Controla a visibilidade de uso de configuração global.
-	 * 
+	 *
 	 * @param visible Visibilidade
 	 */
 	public void setGlobalVisible(final boolean visible) {
@@ -457,7 +438,7 @@ public final class IncludeConfigurationComposite extends Composite {
 	}
 
 	public String getIncludeSelectionAsString() {
-		StringJoiner result = new StringJoiner(IWrapperManager.INCLUDES_SEPARATOR);
+		final StringJoiner result = new StringJoiner(IWrapperManager.INCLUDES_SEPARATOR);
 
 		for (final IncludeDataModel element : includeList) {
 			result.add(element.getFolder());
@@ -477,12 +458,12 @@ public final class IncludeConfigurationComposite extends Composite {
 	}
 
 	private void search() {
-		String result = selectDirectory("Selecione a pasta inicial para a busca.");
+		final String result = selectDirectory("Selecione a pasta inicial para a busca.");
 
 		if (!result.isEmpty()) {
 			SdkUIActivator.logStatus(IStatus.WARNING, "Procura",
 					"Iniciando processo de busca de arquivos de definição. Ao final, voc� ser� notificado.\n\tSe desejar pode iniciar nova busca em paralelo.");
-			SearchIncludeFoldersJob job = new SearchIncludeFoldersJob(result);
+			final SearchIncludeFoldersJob job = new SearchIncludeFoldersJob(result);
 			job.schedule();
 		}
 	}

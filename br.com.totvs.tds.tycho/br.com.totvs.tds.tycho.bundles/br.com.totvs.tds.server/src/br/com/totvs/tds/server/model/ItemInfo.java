@@ -136,7 +136,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 		if (ret) {
 			doCustomValid();
 		} else if (isNameDuplicated(getName())) {
-			throw new RuntimeException(String.format("Já existe um item com esse nome. Nome: %s", getName()));
+			throw new RuntimeException(String.format(Messages.ItemInfo_Name_already_exists, getName()));
 		}
 
 		return ret;

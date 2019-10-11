@@ -13,9 +13,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 
+import br.com.totvs.tds.sdk.wrapper.IWrapperManager;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
 import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
-import br.com.totvs.tds.ui.sdk.wrapper.IWrapperManager;
 
 public class SearchIncludeFoldersJob extends Job {
 
@@ -57,8 +57,7 @@ public class SearchIncludeFoldersJob extends Job {
 
 		File dir = new File(targetFolder);
 		if (!dir.isDirectory()) {
-			return SdkUIActivator.showStatus(IStatus.ERROR, Messages.SearchIncludeFoldersJob_Search_completed, Messages.SearchIncludeFoldersJob_Target_resource_not_folder,
-					targetFolder);
+			return SdkUIActivator.showStatus(IStatus.ERROR, Messages.SearchIncludeFoldersJob_Target_resource_not_folder, targetFolder);
 		}
 
 		searchFolders(dir, monitor);
@@ -71,8 +70,8 @@ public class SearchIncludeFoldersJob extends Job {
 		}
 
 		if (folders.isEmpty()) {
-			return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK, Messages.SearchIncludeFoldersJob_Search_completed,
-					Messages.SearchIncludeFoldersJob_No_definition_files_found, targetFolder);
+			return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK, Messages.SearchIncludeFoldersJob_No_definition_files_found,
+					targetFolder);
 		}
 
 		synchronized (SdkUIActivator.getDefault().getPreferenceStore()) {

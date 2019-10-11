@@ -12,7 +12,7 @@ public class RootInfo extends GroupInfo implements IRootInfo {
 	 * Construtor.
 	 */
 	public RootInfo() {
-		super("Servidores");
+		super(Messages.RootInfo_Servers);
 	}
 
 	/*
@@ -25,7 +25,7 @@ public class RootInfo extends GroupInfo implements IRootInfo {
 	@Override
 	public String getIconName() {
 
-		return "root";
+		return "root"; //$NON-NLS-1$
 	}
 
 }

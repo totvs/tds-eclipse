@@ -8,11 +8,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
+import br.com.totvs.tds.sdk.wrapper.IWrapperManager;
+import br.com.totvs.tds.sdk.wrapper.WrapperManager;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
 import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
 import br.com.totvs.tds.ui.sdk.widget.IncludeConfigurationComposite;
-import br.com.totvs.tds.ui.sdk.wrapper.IWrapperManager;
-import br.com.totvs.tds.ui.sdk.wrapper.WrapperManager;
 
 /**
  * Define a PreferencePage de Includes de projetos.

@@ -40,8 +40,8 @@ public class GroupEditDialog extends EditTitleAreaDialog {
 	public void create() {
 		super.create();
 
-		setTitle(String.format("Grupo %s", groupInfo.getName()));
-		setMessage("Edição de atributos do item.", IMessageProvider.INFORMATION);
+		setTitle(String.format(Messages.GroupEditDialog_Group_identifier, groupInfo.getName()));
+		setMessage(Messages.GroupEditDialog_Attributes_editr, IMessageProvider.INFORMATION);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class GroupEditDialog extends EditTitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitleImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/group_dialog.png"));
+		setTitleImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/group_dialog.png")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
@@ -67,11 +67,11 @@ public class GroupEditDialog extends EditTitleAreaDialog {
 		txtParent.setEditable(false);
 
 		Label l1 = new Label(container, SWT.NULL);
-		l1.setText("Nome");
+		l1.setText(Messages.GroupEditDialog_Name);
 
 		txtGroupName = new Text(container, SWT.NULL);
 		txtGroupName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		txtGroupName.setText("");
+		txtGroupName.setText(Messages.GroupEditDialog_EMPTY_STRING);
 
 		txtGroupName.addModifyListener(new ModifyListener() {
 
@@ -89,14 +89,14 @@ public class GroupEditDialog extends EditTitleAreaDialog {
 		//
 		String name = txtGroupName.getText();
 		if (name.isEmpty()) {
-			setErrorMessage("Informe o nome do grupo");
+			setErrorMessage(Messages.GroupEditDialog_Required_attribute);
 			return;
 		}
 
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 		IGroupInfo group = serverManager.getGroup(name);
 		if ((group != null) && (!group.equals(groupInfo))) {
-			setErrorMessage("O nome de grupo informado Já existe");
+			setErrorMessage(Messages.GroupEditDialog_Group_already_exist);
 			return;
 		}
 	}

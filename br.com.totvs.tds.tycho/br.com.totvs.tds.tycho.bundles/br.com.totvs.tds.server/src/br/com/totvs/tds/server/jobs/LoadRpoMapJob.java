@@ -48,7 +48,7 @@ public class LoadRpoMapJob extends Job {
 	@Override
 	protected IStatus run(final IProgressMonitor monitor) {
 		IStatus ret = Status.CANCEL_STATUS;
-		monitor.beginTask("Carga de RPO", 2);
+		monitor.beginTask(Messages.LoadRpoMapJob_Load_rpo, 2);
 		monitor.worked(1);
 
 		rpoObjectList = new ArrayList<IRpoElement>();
@@ -59,7 +59,7 @@ public class LoadRpoMapJob extends Job {
 
 			List<String> rpoMap = lsService.getProgramMap(server.getToken(), environment, includeTres);
 			for (String object : rpoMap) {
-				int pos = object.indexOf("(");
+				int pos = object.indexOf("("); //$NON-NLS-1$
 
 				IRpoElement rpoObject = new RpoObject();
 				try {
@@ -78,7 +78,7 @@ public class LoadRpoMapJob extends Job {
 			monitor.worked(2);
 		} catch (Exception e) {
 			e.printStackTrace();
-			ServerActivator.logStatus(IStatus.ERROR, "Mapa RPO", e.getMessage(), e);
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		} finally {
 			monitor.done();
 		}

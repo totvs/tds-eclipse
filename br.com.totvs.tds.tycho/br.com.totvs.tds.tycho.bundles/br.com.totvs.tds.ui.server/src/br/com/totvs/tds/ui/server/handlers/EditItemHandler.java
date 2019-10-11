@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.dialog.EditTitleAreaDialog;
 
 /**
@@ -44,7 +45,7 @@ public class EditItemHandler extends ServerHandler {
 			Constructor<?> constructor = t.getDeclaredConstructor(Shell.class);
 			dialog = (Dialog) constructor.newInstance(Display.getCurrent().getActiveShell());
 		} catch (Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Servidor", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			return null;
 		}
 

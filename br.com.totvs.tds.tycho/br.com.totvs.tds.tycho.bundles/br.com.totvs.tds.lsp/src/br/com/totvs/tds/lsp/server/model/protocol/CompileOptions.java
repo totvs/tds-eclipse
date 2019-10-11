@@ -1,5 +1,8 @@
 package br.com.totvs.tds.lsp.server.model.protocol;
 
+import java.util.Collections;
+import java.util.List;
+
 public class CompileOptions {
 
 	private boolean recompile;
@@ -8,6 +11,7 @@ public class CompileOptions {
 	private boolean generatePpoFile;
 	private boolean showPreCompiler;
 	private boolean priorVelocity;
+	private List<String> resources;
 
 	/**
 	 * @param recompile
@@ -22,14 +26,15 @@ public class CompileOptions {
 		this(false, true, false, false, false, true);
 	}
 
-	public CompileOptions(boolean recompile, boolean debugAphInfo, boolean gradualSending, boolean generatePpoFile,
-			boolean showPreCompiler, boolean priorVelocity) {
+	public CompileOptions(final boolean recompile, final boolean debugAphInfo, final boolean gradualSending,
+			final boolean generatePpoFile, final boolean showPreCompiler, final boolean priorVelocity) {
 		this.recompile = recompile;
 		this.debugAphInfo = debugAphInfo;
 		this.gradualSending = gradualSending;
 		this.generatePpoFile = generatePpoFile;
 		this.showPreCompiler = showPreCompiler;
 		this.priorVelocity = priorVelocity;
+		this.resources = Collections.emptyList();
 	}
 
 	/**
@@ -42,7 +47,7 @@ public class CompileOptions {
 	/**
 	 * @param recompile the recompile to set
 	 */
-	public void setRecompile(boolean recompile) {
+	public void setRecompile(final boolean recompile) {
 		this.recompile = recompile;
 	}
 
@@ -56,7 +61,7 @@ public class CompileOptions {
 	/**
 	 * @param debugAphInfo the debugAphInfo to set
 	 */
-	public void setDebugAphInfo(boolean debugAphInfo) {
+	public void setDebugAphInfo(final boolean debugAphInfo) {
 		this.debugAphInfo = debugAphInfo;
 	}
 
@@ -70,7 +75,7 @@ public class CompileOptions {
 	/**
 	 * @param gradualSending the gradualSending to set
 	 */
-	public void setGradualSending(boolean gradualSending) {
+	public void setGradualSending(final boolean gradualSending) {
 		this.gradualSending = gradualSending;
 	}
 
@@ -84,7 +89,7 @@ public class CompileOptions {
 	/**
 	 * @param generatePpoFile the generatePpoFile to set
 	 */
-	public void setGeneratePpoFile(boolean generatePpoFile) {
+	public void setGeneratePpoFile(final boolean generatePpoFile) {
 		this.generatePpoFile = generatePpoFile;
 	}
 
@@ -98,7 +103,7 @@ public class CompileOptions {
 	/**
 	 * @param showPreCompiler the showPreCompiler to set
 	 */
-	public void setShowPreCompiler(boolean showPreCompiler) {
+	public void setShowPreCompiler(final boolean showPreCompiler) {
 		this.showPreCompiler = showPreCompiler;
 	}
 
@@ -112,8 +117,16 @@ public class CompileOptions {
 	/**
 	 * @param priorVelocity the priorVelocity to set
 	 */
-	public void setPriorVelocity(boolean priorVelocity) {
+	public void setPriorVelocity(final boolean priorVelocity) {
 		this.priorVelocity = priorVelocity;
+	}
+
+	public List<String> getResources() {
+		return resources;
+	}
+
+	public void setResources(final List<String> resources) {
+		this.resources = resources;
 	}
 
 }

@@ -45,9 +45,9 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IOrganization;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.ISubsidiary;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -121,13 +121,13 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			try {
 				handlerService.executeCommand(pc, null);
 			} catch (ExecutionException e1) {
-				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+				ServerUIActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 			} catch (NotDefinedException e1) {
-				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+				ServerUIActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 			} catch (NotEnabledException e1) {
-				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+				ServerUIActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 			} catch (NotHandledException e1) {
-				ServerActivator.logStatus(IStatus.ERROR, "Seleção", e1.getMessage(), e1);
+				ServerUIActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 			}
 
 		}
@@ -179,7 +179,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				final Menu menuEnvironment = new Menu(menuItem);
 				final List<String> listEnvironments = getEnvironmentsNameList(server.getEnvironments());
 				final MenuItem disconnectMenuItem = new MenuItem(menuEnvironment, SWT.PUSH);
-				disconnectMenuItem.setText("Desconectar");
+				disconnectMenuItem.setText(Messages.StatusLineControl_Disconect);
 				disconnectMenuItem.setMenu(menuEnvironment);
 				disconnectMenuItem.addSelectionListener(serverMenuItemAction);
 
@@ -199,7 +199,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				menuItem.addSelectionListener(serverMenuItemAction);
 			}
 		} catch (final Exception e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_status, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 	}
 
@@ -224,7 +224,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				popupMenu.setVisible(true);
 			}
 		});
-		this.tbServerItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/server.png"));
+		this.tbServerItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/server.png")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		this.tbUserItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbUserItem.addSelectionListener(new SelectionAdapter() {
@@ -233,15 +233,15 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				System.out.println("StatusLineControl.fill(...).new SelectionAdapter() {...}.widgetSelected()"); //$NON-NLS-1$
 			}
 		});
-		this.tbUserItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/user.png"));
+		this.tbUserItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/user.png")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		this.tbCompileKeyItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbCompileKeyItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				PreferencesUtil.createPreferenceDialogOn(Display.getCurrent().getActiveShell(),
-						"br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage",
-						new String[] { "br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage" },
+						"br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage", //$NON-NLS-1$
+						new String[] { "br.com.totvs.tds.ui.sdk.preference.compilation.compileKeyPreferencePage" }, //$NON-NLS-1$
 						null).open();
 			}
 		});
@@ -256,7 +256,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			}
 		});
 		this.tbOrganizationItem
-				.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/organizations.png"));
+				.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/organizations.png")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		updateStatusPanel();
 
@@ -372,12 +372,10 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 					server.setCurrentCompany(companySelected);
 				}
 			} else {
-				ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_status,
-						Messages.StatusLineControl_invalid_operation);
+				ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_invalid_operation);
 			}
 		} else {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_status,
-					Messages.StatusLineControl_select_server_and_environment);
+			ServerUIActivator.logStatus(IStatus.ERROR, Messages.StatusLineControl_select_server_and_environment);
 		}
 	}
 
@@ -464,9 +462,9 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			}
 
 			tbServerItem.setText(String.format("%s [%s]", serverName, environment)); //$NON-NLS-1$
-			tbServerItem.setToolTipText(String.format("%s [%s]", serverNameToolTip, environmentToolTip)); // $NON-NLS-1$
+			tbServerItem.setToolTipText(String.format("%s [%s]", serverNameToolTip, environmentToolTip)); // $NON-NLS-1$ //$NON-NLS-1$
 		} else {
-			tbServerItem.setToolTipText(""); // $NON-NLS-1$
+			tbServerItem.setToolTipText(Messages.StatusLineControl_EMPTY_STRING); // $NON-NLS-1$
 		}
 
 		tbOrganizationItem.setEnabled(enabled);
@@ -487,17 +485,17 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			final List<String> permissions = server.getPermissions();
 			final String user = server.getUsername();
 
-			StringJoiner sb = new StringJoiner("|", "[", "]");
+			StringJoiner sb = new StringJoiner("|", "[", "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			for (String permission : permissions) {
 				sb.add(permission);
 
-				enabledKey |= permission.equals("COMPILE");
+				enabledKey |= permission.equals("COMPILE"); //$NON-NLS-1$
 			}
 
 			tbUserItem.setText(user);
 			tbUserItem.setToolTipText(String.format(Messages.StatusLineControl_permissions, sb.toString()));
 		} else {
-			tbUserItem.setToolTipText("");
+			tbUserItem.setToolTipText(Messages.StatusLineControl_EMPTY_STRING);
 		}
 
 		tbUserItem.setEnabled(enabled);

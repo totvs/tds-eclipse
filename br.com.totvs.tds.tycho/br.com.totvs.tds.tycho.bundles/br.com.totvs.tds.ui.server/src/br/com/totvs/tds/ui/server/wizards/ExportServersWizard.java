@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
-import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.tools.ExportTool;
 import br.com.totvs.tds.server.xml.XMLServerRoot;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
@@ -60,8 +59,7 @@ public class ExportServersWizard extends Wizard {
 		monitor.worked(1);
 
 		monitor.done();
-		ServerActivator.logStatus(IStatus.WARNING, Messages.ExportServersWizard_server_view, Messages.ExportServersWizard_server_exported_file_warning,
-				file.getAbsoluteFile());
+		ServerUIActivator.logStatus(IStatus.WARNING, Messages.ExportServersWizard_server_exported_file_warning, file.getAbsoluteFile());
 	}
 
 	// @Override
@@ -73,7 +71,7 @@ public class ExportServersWizard extends Wizard {
 				try {
 					doFinish(monitor);
 				} catch (Throwable e) {
-					ServerUIActivator.logStatus(IStatus.ERROR, Messages.ExportServersWizard_server_view, e.getMessage(), e);
+					ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 				} finally {
 					monitor.done();
 				}
@@ -82,10 +80,10 @@ public class ExportServersWizard extends Wizard {
 		try {
 			getContainer().run(true, false, op);
 		} catch (InterruptedException e) {
-			ServerUIActivator.logStatus(IStatus.CANCEL, Messages.ExportServersWizard_server_view, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.CANCEL, e.getMessage(), e);
 			return false;
 		} catch (InvocationTargetException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.ExportServersWizard_server_view, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			return false;
 		}
 

@@ -20,6 +20,7 @@
 		<module>br.com.totvs.tds.lsp.macosx</module>
  		<module>br.com.totvs.tds.lsp.win32</module>
 		<module>br.com.totvs.tds.server</module>
+		<module>br.com.totvs.tds.sdk</module>
 		<module>br.com.totvs.tds.ui</module>
 		<module>br.com.totvs.tds.ui.server</module>
 		<module>br.com.totvs.tds.ui.debug</module>

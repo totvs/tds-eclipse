@@ -87,7 +87,7 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 				sj.add(value);
 			}
 
-			DebugUIActivator.showStatus(IStatus.INFO, modeTitle, sj.toString());
+			DebugUIActivator.showStatus(IStatus.INFO, sj.toString());
 		}
 
 		final List<String> daargs = ActivatorServer.getInstance().getDAArgs();
@@ -105,7 +105,7 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		try {
 			wk.setAttribute(DSPPlugin.ATTR_DSP_CMD, ActivatorServer.getInstance().getDACommand());
 		} catch (final IOException e) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, e.getMessage(), e));
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, e.getMessage(), e));
 		}
 
 		super.launch(wk, mode, launch, monitor);
@@ -121,9 +121,9 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		try {
 			params = lp.toMap();
 		} catch (final IllegalArgumentException e) {
-			throw new CoreException(DebugUIActivator.logStatus(IStatus.ERROR, modeTitle, e.getMessage(), e));
+			throw new CoreException(DebugUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e));
 		} catch (final IllegalAccessException e) {
-			throw new CoreException(DebugUIActivator.logStatus(IStatus.ERROR, modeTitle, e.getMessage(), e));
+			throw new CoreException(DebugUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e));
 		}
 
 		params.put("type", "totvs_language_debug"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -172,37 +172,33 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		this.lp = new LaunchParameters(params);
 
 		if (lp == null) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					Messages.DebugLaunchDelegate_Executor_parameters_invalid));
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_Executor_parameters_invalid));
 		}
 
 		final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 		server = serverManager.getCurrentServer();
 		if (server == null) {
 			throw new CoreException(
-					DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, Messages.DebugLaunchDelegate_No_server_selected));
+					DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_No_server_selected));
 		}
 
 		if (!server.isConnected()) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					Messages.DebugLaunchDelegate_Server_not_connected, server.getName()));
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, server.getName()));
 		}
 
 		environment = server.getCurrentEnvironment();
 		if ((environment == null) || (environment.isEmpty())) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					Messages.DebugLaunchDelegate_No_environment_selected));
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_No_environment_selected));
 		}
 
 		final File smartClientFile = new File(server.getSmartClientPath());
 		if (!(smartClientFile.exists() && smartClientFile.canExecute())) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, modeTitle,
-					Messages.DebugLaunchDelegate_SmartClient_inaccessible_nonexistent, smartClientFile.getPath()));
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, smartClientFile.getPath()));
 		}
 
 		if (lp.getMainProgram().isEmpty()) {
 			throw new CoreException(
-					DebugUIActivator.showStatus(IStatus.ERROR, modeTitle, Messages.DebugLaunchDelegate_Main_function_required));
+					DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_Main_function_required));
 		}
 
 		if (lp.getMainProgram().equalsIgnoreCase(IServerConstants.CANCELED)) {

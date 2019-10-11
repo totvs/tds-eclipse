@@ -69,8 +69,8 @@ public abstract class EditorHandler extends AbstractHandler {
 		final String username = server.getUsername();
 
 		if (!server.canPermission("COMPILE")) { //$NON-NLS-1$
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Permission,
-					Messages.EditorHandler_User_not_allowed_compile, username, server.getName(), environment);
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_User_not_allowed_compile,
+					username, server.getName(), environment);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}
@@ -80,19 +80,16 @@ public abstract class EditorHandler extends AbstractHandler {
 		final IAppServerInfo server = serverManager.getCurrentServer();
 
 		if (server == null) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Compilation,
-					Messages.EditorHandler_Server_not_selected);
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Server_not_selected);
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 
 		if (server.getCurrentEnvironment() == null) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Compilation,
-					Messages.EditorHandler_No_environment_selected, server.getName());
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 		if (!server.isConnected()) {
-			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_Compilation,
-					Messages.EditorHandler_Server_not_connected, server.getName());
+			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, server.getName());
 			throw new ExecutionException(status.getMessage(), status.getException());
 		}
 	}

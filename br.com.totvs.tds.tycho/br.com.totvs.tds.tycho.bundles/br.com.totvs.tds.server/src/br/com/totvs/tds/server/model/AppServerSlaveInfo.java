@@ -55,7 +55,7 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 
 	@Override
 	public String getIconName() {
-		return "server";
+		return "server"; //$NON-NLS-1$
 	}
 
 	/**

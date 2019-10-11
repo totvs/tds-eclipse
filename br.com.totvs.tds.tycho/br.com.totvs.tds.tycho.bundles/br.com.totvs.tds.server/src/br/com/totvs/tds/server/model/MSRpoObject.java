@@ -13,7 +13,7 @@ public final class MSRpoObject {
 	// XXX necessario???
 	private List<MSRpoFunction> functionList = new ArrayList<MSRpoFunction>();
 
-	private final SimpleDateFormat myDF = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+	private final SimpleDateFormat myDF = new SimpleDateFormat("dd/MM/yy HH:mm:ss"); //$NON-NLS-1$
 
 	private String name = ""; //$NON-NLS-1$
 
@@ -144,8 +144,8 @@ public final class MSRpoObject {
 	 */
 	@Override
 	public String toString() {
-		return "MSRpoObject [name=" + name + ", type=" + type + ", date=" + getDateAsString() + ", visible=" + visible
-				+ "]";
+		return "MSRpoObject [name=" + name + ", type=" + type + ", date=" + getDateAsString() + ", visible=" + visible //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ "]"; //$NON-NLS-1$
 	}
 
 }

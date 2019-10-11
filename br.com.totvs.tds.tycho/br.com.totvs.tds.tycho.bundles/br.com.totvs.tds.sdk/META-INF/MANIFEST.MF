@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: TDS Kit de desenvolvimento (base)
+Bundle-SymbolicName: br.com.totvs.tds.sdk;singleton:=true
+Bundle-Version: 11.4.0.qualifier
+Bundle-Vendor: TOTVS S.A.
+Automatic-Module-Name: br.com.totvs.tds.sdk
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.16.0",
+ org.eclipse.core.resources
+Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.ui.plugin
+Export-Package: br.com.totvs.tds.sdk,
+ br.com.totvs.tds.sdk.wrapper

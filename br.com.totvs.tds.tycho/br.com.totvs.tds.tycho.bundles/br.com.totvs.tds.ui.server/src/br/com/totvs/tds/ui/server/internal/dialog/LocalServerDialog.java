@@ -35,7 +35,7 @@ public class LocalServerDialog extends TitleAreaDialog {
 	@Override
 	public void create() {
 		super.create();
-		setTitle("Adicionar padr�o de exclusão");
+		setTitle(Messages.LocalServerDialog_Add_exclusion_pattern);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class LocalServerDialog extends TitleAreaDialog {
 			}
 		};
 		Label lbtFirstName = new Label(container, SWT.NONE);
-		lbtFirstName.setText("Padr�o de exclusão");
+		lbtFirstName.setText(Messages.LocalServerDialog_Exclusion_pattern);
 		GridData dataFirstName = new GridData();
 		dataFirstName.grabExcessHorizontalSpace = true;
 		dataFirstName.horizontalAlignment = GridData.FILL;
@@ -78,14 +78,14 @@ public class LocalServerDialog extends TitleAreaDialog {
 		String errorMessage = null;
 		exclusionPattern = txtExclusionPattern.getText();
 		if (exclusionPattern.isEmpty()) {
-			errorMessage = "Digite um padr�o de exclusão v�lido.";
+			errorMessage = Messages.LocalServerDialog_Invalid_exclusion_pattern;
 		} else if (exclusionPatternList.contains(exclusionPattern)) {
-			errorMessage = "Padr�o de exclusão existente.";
+			errorMessage = Messages.LocalServerDialog_Already_exist_exclusion_pattern;
 		} else {
 			try {
 				Pattern.compile(exclusionPattern);
 			} catch (PatternSyntaxException pse) {
-				errorMessage = "IncludeListLabelDecorator expressão regular digitada não � v�lida.";
+				errorMessage = Messages.LocalServerDialog_Invalid_regexp;
 			}
 		}
 		setErrorMessage(errorMessage);

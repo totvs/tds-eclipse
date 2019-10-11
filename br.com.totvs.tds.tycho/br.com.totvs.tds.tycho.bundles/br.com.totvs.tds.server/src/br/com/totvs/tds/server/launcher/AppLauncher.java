@@ -28,7 +28,7 @@ public class AppLauncher implements ILaunchesListener {
 		this.appName = serverName;
 		this.appFilename = serverFilename;
 		this.appParams = appServerParams;
-		this.configName = String.format("_app_%s", appName.toLowerCase());
+		this.configName = String.format("_app_%s", appName.toLowerCase()); //$NON-NLS-1$
 	}
 
 	@Override
@@ -47,13 +47,13 @@ public class AppLauncher implements ILaunchesListener {
 	}
 
 	public void start() {
-		ServerActivator.logStatus(IStatus.INFO, appName, "Iniciando servidor [%s].\n\tAplicação: %s", appName,
+		ServerActivator.logStatus(IStatus.INFO, appName, Messages.AppLauncher_Starting_server, appName,
 				appFilename);
 
 		final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 		manager.addLaunchListener(this);
 		final ILaunchConfigurationType type = manager
-				.getLaunchConfigurationType("org.eclipse.ui.externaltools.ProgramLaunchConfigurationType");
+				.getLaunchConfigurationType("org.eclipse.ui.externaltools.ProgramLaunchConfigurationType"); //$NON-NLS-1$
 		ILaunchConfiguration[] configurations;
 
 		try {
@@ -69,20 +69,20 @@ public class AppLauncher implements ILaunchesListener {
 			final File wkPath = new File(appFilename).getParentFile();
 			final ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(null, configName);
 
-			workingCopy.setAttribute("org.eclipse.ui.externaltools.ATTR_LOCATION", appFilename);
-			workingCopy.setAttribute("org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS", String.join(" ", appParams));
-			workingCopy.setAttribute("org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", wkPath.getCanonicalPath());
+			workingCopy.setAttribute("org.eclipse.ui.externaltools.ATTR_LOCATION", appFilename); //$NON-NLS-1$
+			workingCopy.setAttribute("org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS", String.join(" ", appParams)); //$NON-NLS-1$ //$NON-NLS-2$
+			workingCopy.setAttribute("org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY", wkPath.getCanonicalPath()); //$NON-NLS-1$
 			launch = workingCopy.launch(ILaunchManager.RUN_MODE, new NullProgressMonitor());
 
-			ServerActivator.logStatus(IStatus.INFO, appName, "Servidor [%s] pronto.", appName);
+			ServerActivator.logStatus(IStatus.INFO, Messages.AppLauncher_Server_ready, appName);
 		} catch (final Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, appName, e.getMessage(), e);
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
 	}
 
 	public void stop() {
-		ServerActivator.logStatus(IStatus.INFO, appName, "Solicitada finalização do servidor [%s].", appName);
+		ServerActivator.logStatus(IStatus.INFO, Messages.AppLauncher_Requested_server_termination, appName);
 
 		final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
 		manager.removeLaunchListener(this);
@@ -100,17 +100,16 @@ public class AppLauncher implements ILaunchesListener {
 				final IProcess[] processes = launch.getProcesses();
 				for (final IProcess process : processes) {
 					if (!process.isTerminated()) {
-						ServerActivator.logStatus(IStatus.WARNING, appName,
-								"Aplicação não finalizada corretamente.\n\tAplicação: %s",
-								process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim());
+						ServerActivator.logStatus(IStatus.WARNING, Messages.AppLauncher_Application_not_terminated_correctly,
+								process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim()); //$NON-NLS-1$
 					} else if (process.getExitValue() != 0) {
 						ServerActivator.logStatus(IStatus.WARNING, appName,
-								"Processo finalizado com código de saída [%d].\n\tAplicação: %s",
+								Messages.AppLauncher_Process_terminated_exit_code,
 								process.getExitValue(),
-								process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim());
+								process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim()); //$NON-NLS-1$
 					}
 				}
-				ServerActivator.logStatus(IStatus.INFO, appName, "Aplicação finalizada.\n\tAplicação: %s", appFilename);
+				ServerActivator.logStatus(IStatus.INFO, Messages.AppLauncher_Application_terminated, appFilename);
 //				}
 			} catch (final DebugException e) {
 				e.printStackTrace();

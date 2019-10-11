@@ -18,14 +18,14 @@ public class EditorActivator extends AbstractUIPlugin {
 	private static EditorActivator plugin;
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 
 		plugin = this;
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		plugin = null;
 
 		super.stop(context);
@@ -42,29 +42,28 @@ public class EditorActivator extends AbstractUIPlugin {
 
 	/**
 	 * Utility method to create status.
-	 * 
+	 *
 	 * @param level
 	 * @param message
 	 * @param thr
 	 * @return status
 	 */
-	public static IStatus showStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.showMessage(title, status);
-		
+	public static IStatus showStatus(final int level, final String message, final Object... args) {
+		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.showMessage(status);
+
 		getDefault().getLog().log(status);
 
 		return status;
 	}
 
-	public static IStatus logStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.logMessage(title, status);
-		
+	public static IStatus logStatus(final int level, final String message, final Object... args) {
+		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.logMessage(status);
+
 		getDefault().getLog().log(status);
 
 		return status;
 	}
-	
-	
+
 }

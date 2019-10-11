@@ -9,6 +9,7 @@ import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
 
 public class SlaveRegisterHandler extends ServerHandler {
@@ -31,8 +32,7 @@ public class SlaveRegisterHandler extends ServerHandler {
 
 			parent.addChild(server);
 		} else {
-			ServerActivator.logStatus(IStatus.WARNING, Messages.SlaveRegisterHandler_server_view,
-					Messages.SlaveRegisterHandler_item_not_slave, selection.getName());
+			ServerUIActivator.logStatus(IStatus.WARNING, Messages.SlaveRegisterHandler_item_not_slave, selection.getName());
 		}
 
 		return null;

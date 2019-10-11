@@ -249,11 +249,11 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 			lp.fromMap((Map<String, Object>) attributes.getOrDefault(IServerConstants.LAUNCH_PARAMETERS, null));
 			setWidgtesValue(lp);
 		} catch (final IllegalArgumentException e) {
-			DebugUIActivator.showStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
+			DebugUIActivator.showStatus(IStatus.ERROR, e.getMessage());
 		} catch (final IllegalAccessException e) {
-			DebugUIActivator.showStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
+			DebugUIActivator.showStatus(IStatus.ERROR, e.getMessage());
 		} catch (final CoreException e) {
-			DebugUIActivator.showStatus(IStatus.ERROR, Messages.SmartClientLaunchTab_Performer, e.getMessage());
+			DebugUIActivator.showStatus(IStatus.ERROR, e.getMessage());
 		}
 	}
 
@@ -315,9 +315,9 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		try {
 			configuration.setAttribute(IServerConstants.LAUNCH_PARAMETERS, lp.toMap());
 		} catch (final IllegalArgumentException e) {
-			DebugUIActivator.showStatus(IStatus.WARNING, Messages.SmartClientLaunchTab_Performer, e.getMessage(), e);
+			DebugUIActivator.showStatus(IStatus.WARNING, e.getMessage(), e);
 		} catch (final IllegalAccessException e) {
-			DebugUIActivator.showStatus(IStatus.WARNING, Messages.SmartClientLaunchTab_Performer, e.getMessage(), e);
+			DebugUIActivator.showStatus(IStatus.WARNING, e.getMessage(), e);
 		}
 	}
 

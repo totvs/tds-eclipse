@@ -42,8 +42,8 @@ public interface ServerInterface extends LanguageServer {
 	@JsonRequest("$totvsserver/patchGenerate")
 	public CompletableFuture<PatchGenerateNode> patchGenerate(PatchGenerateData patchGenerateData);
 
-	@JsonRequest("$totvsserver/getPathDirList")
-	public CompletableFuture<PatchDirListNode> getPathDirList(PatchDirListData patchDirListInfo);
+	@JsonRequest("$totvsserver/getPatchDir")
+	public CompletableFuture<PatchDirListNode> getPathDir(PathDirListData pathDirListData);
 
 	@JsonRequest("$totvsserver/validKey")
 	public CompletableFuture<ValidKeyNode> getValidKey(ValidKeyData validKey);

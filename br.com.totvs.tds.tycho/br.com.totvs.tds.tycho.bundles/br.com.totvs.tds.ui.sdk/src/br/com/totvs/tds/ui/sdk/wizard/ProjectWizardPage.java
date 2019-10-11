@@ -14,9 +14,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import br.com.totvs.tds.sdk.wrapper.ProjectVO;
 import br.com.totvs.tds.ui.sdk.widget.IModifyIncludeListener;
 import br.com.totvs.tds.ui.sdk.widget.IncludeConfigurationComposite;
-import br.com.totvs.tds.ui.sdk.wrapper.ProjectVO;
 
 /**
  * Implementation to wizard project page.

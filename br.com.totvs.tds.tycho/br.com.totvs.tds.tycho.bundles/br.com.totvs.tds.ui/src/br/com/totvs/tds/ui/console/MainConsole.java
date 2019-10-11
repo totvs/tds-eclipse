@@ -69,7 +69,7 @@ public final class MainConsole {
 
 	/**
 	 * Inicializa um inv�lucro de um console indicado. Para recuper�-lo, use
-	 * 
+	 *
 	 * @return inv�lucro.
 	 */
 	public ConsoleWrapper getConsoleWrapper() {

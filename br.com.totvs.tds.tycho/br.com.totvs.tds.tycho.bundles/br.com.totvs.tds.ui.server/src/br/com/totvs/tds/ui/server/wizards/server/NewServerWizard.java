@@ -80,11 +80,11 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 					newServer.getParent().addChild(server);
 					finish = true;
 
-					ServerUIActivator.logStatus(IStatus.INFO, Messages.NewServerWizard_server,
-							Messages.NewServerWizard_server_added_warning, server.getName(), server.getAddress());
+					ServerUIActivator.logStatus(IStatus.INFO, Messages.NewServerWizard_server_added_warning, server.getName(),
+							server.getAddress());
 
 				} catch (RuntimeException e) {
-					ServerUIActivator.logStatus(IStatus.ERROR, Messages.NewServerWizard_server, e.getMessage(), e);
+					ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 					newServerPage.setErrorMessage(e.getMessage());
 					server.setProperty(IServerConstants.IMMEDIATE_CONNECTION, false);
 				}

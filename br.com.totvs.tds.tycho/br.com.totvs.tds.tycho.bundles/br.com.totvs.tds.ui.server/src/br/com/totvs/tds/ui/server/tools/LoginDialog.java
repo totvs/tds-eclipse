@@ -124,7 +124,7 @@ public abstract class LoginDialog extends TitleAreaDialog implements ILoginDialo
 
 	private void createServer(final Composite container) {
 		Label lblServer = new Label(container, SWT.NONE);
-		lblServer.setText("Servidor");
+		lblServer.setText(Messages.LoginDialog_Server);
 
 		txtServer = new Text(container, SWT.BORDER);
 		txtServer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));

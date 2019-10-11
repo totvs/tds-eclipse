@@ -30,9 +30,9 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public static IStatus logStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.logMessage(title, status);
+	public static IStatus logStatus(int level, String message, Object... args) {
+		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.logMessage(status);
 
 		getDefault().getLog().log(status);
 
@@ -47,9 +47,9 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 	 * @param thr
 	 * @return status
 	 */
-	public static IStatus showStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.showMessage(title, status);
+	public static IStatus showStatus(int level, int title, String message, Object... args) {
+		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.showMessage(status);
 
 		getDefault().getLog().log(status);
 

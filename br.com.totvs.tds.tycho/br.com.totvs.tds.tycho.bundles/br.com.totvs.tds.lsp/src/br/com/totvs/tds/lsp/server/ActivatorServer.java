@@ -10,23 +10,25 @@ import org.eclipse.core.runtime.FileLocator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import br.com.totvs.tds.lsp.server.model.Messages;
+
 public class ActivatorServer implements BundleActivator {
 
 	private static ActivatorServer plugins;
 
 	@Override
-	public void start(BundleContext context) throws Exception {
+	public void start(final BundleContext context) throws Exception {
 		plugins = this;
-		
+
 	}
 
 	@Override
-	public void stop(BundleContext context) throws Exception {
+	public void stop(final BundleContext context) throws Exception {
 		plugins = null;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return caminho compledo do execut�vel DA
 	 * @throws IOException
 	 */
@@ -35,23 +37,32 @@ public class ActivatorServer implements BundleActivator {
 		if (daPathUrl == null) {
 			daPathUrl = getClass().getResource("/resources/tds-da/debugAdapter"); //$NON-NLS-1$
 		}
-		File daPath = new File(FileLocator.toFileURL(daPathUrl).getPath());
+		final File daPath = new File(FileLocator.toFileURL(daPathUrl).getPath());
+
+		if (!daPath.canExecute()) {
+			System.err.println(
+					String.format(Messages.LSConnectionProvider_LS_insufficient_privileges, daPath.getAbsolutePath()));
+			daPath.setExecutable(true);
+			if (!daPath.canExecute()) {
+				System.err.println(Messages.LSConnectionProvider_Could_not_adjust_privileges);
+			}
+		}
 
 		return daPath.toString();
 	};
 
 	/**
-	 * 
+	 *
 	 * @return argumentos para execução do DA
 	 */
 	public List<String> getDAArgs() {
-		List<String> args = new ArrayList<String>();
-				
+		final List<String> args = new ArrayList<String>();
+
 		return args;
 	}
 
 	public static ActivatorServer getInstance() {
-		
+
 		return ActivatorServer.plugins;
 	}
 

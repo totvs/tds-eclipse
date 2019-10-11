@@ -21,6 +21,7 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.jobs.BuildPatchAttributes;
 import br.com.totvs.tds.server.jobs.BuildPatchProcessType;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.wizards.BuildPatchWizard;
 
 /**
@@ -69,7 +70,7 @@ public class BuildPatchHandler extends ServerHandler {
 				dialog.setHelpAvailable(true);
 				dialog.open();
 			} else {
-				throw new Exception("Nenhum servidor ativo encontrado para utilização desta funcionalidade.");
+				throw new Exception(Messages.BuildPatchHandler_No_active_servers_found);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,7 +91,7 @@ public class BuildPatchHandler extends ServerHandler {
 				}
 			}
 		} catch (CoreException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Geração de Pacote", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 	}
 

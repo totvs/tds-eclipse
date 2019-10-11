@@ -40,20 +40,20 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 			final File file = new File(address.getPath());
 
 			if (!((file.exists() && file.canExecute()))) {
-				throw new RuntimeException("Messages.BaseServerInfo_6");
+				throw new RuntimeException("Messages.BaseServerInfo_6"); //$NON-NLS-1$
 			}
 		} else {
 			if (address == null) {
-				throw new RuntimeException("Messages.BaseServerInfo_7");
+				throw new RuntimeException("Messages.BaseServerInfo_7"); //$NON-NLS-1$
 			}
 
 			// null Host cannot be a valid address
 			if (address.getHost() == null) {
-				throw new RuntimeException("Messages.BaseServerInfo_8");
+				throw new RuntimeException("Messages.BaseServerInfo_8"); //$NON-NLS-1$
 			}
 			// negative port number cannot be in a valid address
 			if (address.getPort() < 0) {
-				throw new RuntimeException("Messages.BaseServerInfo_9");
+				throw new RuntimeException("Messages.BaseServerInfo_9"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -120,7 +120,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 	@Override
 	public String getIconName() {
 
-		return "server";
+		return "server"; //$NON-NLS-1$
 	}
 
 	/*
@@ -189,12 +189,12 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 	 */
 	@Override
 	public void setAppServerPort(final int port) {
-		String host = "//localhost:";
+		String host = "//localhost:"; //$NON-NLS-1$
 
 		if (this.address != null) {
 			final String path = address.getPath();
 			if ((path != null) && !path.isEmpty()) {
-				host = "//" + address.getPath().split(":")[0] + ":";
+				host = "//" + address.getPath().split(":")[0] + ":"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}
 

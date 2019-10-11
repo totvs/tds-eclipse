@@ -5,8 +5,6 @@ import org.eclipse.osgi.util.NLS;
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "br.com.totvs.tds.ui.server.nl.messages"; //$NON-NLS-1$
 
-	public static final String EMPTY_STRING = "";
-
 	public static String NewServerWizardPage_app_server;
 
 	public static String CompilerPreferencePage_include_debug_info_in_advplasp;
@@ -37,13 +35,11 @@ public class Messages extends NLS {
 
 	public static String ImportServersWizard_import_server_list;
 
-	public static String ImportSmartclientServersWizard_impoer_server_wizard_title;
-
-	public static String ImportSmartclientServersWizard_importing_server;
-
 	public static String LoginDialog_identify_yourself;
 
 	public static String LoginDialog_save_Data_in_secure_location;
+
+	public static String LoginDialog_Server;
 
 	public static String LoginHandler_28;
 
@@ -185,6 +181,32 @@ public class Messages extends NLS {
 
 	public static String ServerConfigurationPreferencePage_source_exist_in_rpo_build_patch;
 
+	public static String ServerEditDialog_Address;
+
+	public static String ServerEditDialog_Address_hint;
+
+	public static String ServerEditDialog_AppServer;
+
+	public static String ServerEditDialog_Attributes_edit;
+
+	public static String ServerEditDialog_EMPTY_STRING;
+
+	public static String ServerEditDialog_Local_server;
+
+	public static String ServerEditDialog_Name;
+
+	public static String ServerEditDialog_Port;
+
+	public static String ServerEditDialog_Server_name;
+
+	public static String ServerEditDialog_SmartClient;
+
+	public static String ServerEditDialog_Target;
+
+	public static String ServerEditDialog_Validate;
+
+	public static String ServerEditDialog_Version;
+
 	public static String ServerSelectionPage_group;
 
 	public static String ServerSelectionPage_selection_type_warning;
@@ -221,6 +243,10 @@ public class Messages extends NLS {
 
 	public static String StatusLineControl_connecteds;
 
+	public static String StatusLineControl_Disconect;
+
+	public static String StatusLineControl_EMPTY_STRING;
+
 	public static String StatusLineControl_not_connecteds;
 
 	public static String StatusLineControl_invalid_operation;
@@ -252,6 +278,8 @@ public class Messages extends NLS {
 	public static String DisconnectHandler_disconnect_forced;
 	public static String EditTitleAreaDialog_Edit;
 
+	public static String EMPTY_STRING;
+
 	public static String ExportServersWizard_exporing_server;
 
 	public static String ExportServersWizard_export_server_wizard_title;
@@ -263,6 +291,18 @@ public class Messages extends NLS {
 	public static String ExportServersWizard_server_exported_file_warning;
 
 	public static String ExportServersWizard_server_view;
+
+	public static String GroupEditDialog_Attributes_editr;
+
+	public static String GroupEditDialog_EMPTY_STRING;
+
+	public static String GroupEditDialog_Group_already_exist;
+
+	public static String GroupEditDialog_Group_identifier;
+
+	public static String GroupEditDialog_Name;
+
+	public static String GroupEditDialog_Required_attribute;
 
 	public static String NewGroupWizard_name;
 
@@ -340,7 +380,17 @@ public class Messages extends NLS {
 
 	public static String PatchTreeComposite_internal;
 	public static String NewServerWizardPage_btnCheckButton_text;
+
+	public static String NewServerWizardPage_File_selected_cannot_executed;
+	public static String NewServerWizardPage_Local_server_executable_not_found;
+
+	public static String NewServerWizardPage_Local_server_executable_required;
+
+	public static String NewServerWizardPage_New_server;
+
 	public static String StatusLineControl_lblNewLabel_text;
+
+	public static String StatusLineControl_Selection;
 
 	static {
 		// initialize resource bundle

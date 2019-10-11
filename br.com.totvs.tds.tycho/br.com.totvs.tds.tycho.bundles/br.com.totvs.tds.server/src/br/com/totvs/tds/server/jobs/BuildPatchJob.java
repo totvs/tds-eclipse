@@ -7,9 +7,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -28,7 +30,7 @@ import br.com.totvs.tds.server.interfaces.IServerManager;
  */
 public class BuildPatchJob extends Job {
 
-	private static final String JOB_NAME = "patchBuilderJob";
+	private static final String JOB_NAME = "patchBuilderJob"; //$NON-NLS-1$
 	private BuildPatchAttributes attributes;
 
 	/**
@@ -43,57 +45,53 @@ public class BuildPatchJob extends Job {
 
 	@Override
 	public boolean belongsTo(final Object family) {
-		return (JOB_NAME + "." + this.attributes.getEnvironment()).equals(family);
+		return (JOB_NAME + "." + this.attributes.getEnvironment()).equals(family); //$NON-NLS-1$
 	}
 
 	@Override
 	protected IStatus run(final IProgressMonitor monitor) {
-		monitor.beginTask("Geração de pacote de atualização", 2);
+		monitor.beginTask(Messages.BuildPatchJob_Update_package_generation, 2);
 		monitor.setTaskName(getName());
 
-		ServerActivator.logStatus(IStatus.WARNING, "Geração de Pacote", "Iniciando Geração de Pacote de Atualização");
+		ServerActivator.logStatus(IStatus.WARNING, Messages.BuildPatchJob_Starting_update_package_generation);
 
 		monitor.worked(1);
-		monitor.subTask("Validando parâmetros");
+		monitor.subTask(Messages.BuildPatchJob_Validating_parameters);
 
 		if (attributes.getProcesso().equals(BuildPatchProcessType.BY_WORKAREA) && (attributes.getVerifyFilesRPO())) {
 			final List<String> resourceNames = attributes.getResources();
 
-			ServerActivator.logStatus(IStatus.INFO, "Geração de Pacote",
-					"Validando a existência do(s) recurso(s) no RPO");
+			ServerActivator.logStatus(IStatus.INFO, Messages.BuildPatchJob_Validating_existence_resource);
 			final ArrayList<String> notHas = existFilesRPO(resourceNames);
 
 			if (!notHas.isEmpty()) {
-				String fontes = "";
+				String fontes = ""; //$NON-NLS-1$
 				for (final String fonte : notHas) {
-					fontes += fonte + "\n\t"; // $NON-NLS-2$
+					fontes += fonte + "\n\t"; // $NON-NLS-2$ //$NON-NLS-1$
 				}
 
-				ServerActivator.logStatus(IStatus.ERROR, "Geração de Pacote",
-						"Os fontes a seguir não foram localizados no RPO:\n\t%s", fontes);
+				ServerActivator.logStatus(IStatus.ERROR, Messages.BuildPatchJob_Following_sources_not_found, fontes);
 
-				return ServerActivator.logStatus(IStatus.ERROR, "Geração de Pacote",
-						"O pacote não pode ser gerado. Detalhes no log.");
+				return ServerActivator.logStatus(IStatus.ERROR, Messages.BuildPatchJob_Package_cannot_be_generated);
 			}
 		}
 
 		IStatus ret = Status.CANCEL_STATUS;
 		try {
 			if (attributes.isValid()) {
-				ServerActivator.logStatus(IStatus.INFO, "Geração de Pacote", "Pelo processo: %s",
+				ServerActivator.logStatus(IStatus.INFO, Messages.BuildPatchJob_By_process,
 						attributes.getProcesso().getLabel());
 				ret = doRun(monitor);
 			} else {
-				ret = ServerActivator.showStatus(IStatus.ERROR, "Geração de Pacote",
-						"Atributos de geração inválidos.\n\t%s", attributes.getErrorMessage());
+				ret = ServerActivator.showStatus(IStatus.ERROR, Messages.BuildPatchJob_Invalid_generation_attributes,
+						attributes.getErrorMessage());
 			}
 		} catch (final Exception e) {
-			ret = ServerActivator.showStatus(IStatus.ERROR, "Geração de Pacote", e.getMessage(), e);
+			ret = ServerActivator.showStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
 		if (ret == Status.OK_STATUS) {
-			ServerActivator.showStatus(IStatus.OK, "Geração de Pacote",
-					"Geração do pacote de atualização efetuada com sucesso.\n\tArquivo: %s",
+			ServerActivator.showStatus(IStatus.OK, Messages.BuildPatchJob_Update_package_generation_succeeded,
 					attributes.getOutputFile());
 		}
 
@@ -105,71 +103,65 @@ public class BuildPatchJob extends Job {
 		final IAppServerInfo server = attributes.getServer();
 		monitor.worked(2);
 
-		if (attributes.getProcesso() == BuildPatchProcessType.BY_COMPARISON) {
-			// PATCH generatePatchByComparison incluir aqui tratamento para renomear o
-			// arquivo criado pelo
-			// servidor
-			// o server está criando o arquivo direto na pasta selecionada
-			ret = generatePatchByComparison(monitor);
-		} else {
-			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-			final IServerManager serverManager = serviceLocator.getService(IServerManager.class);
-			final String authorizationCode = serverManager.getAuthorizationKey().getAuthorizationCode();
-			final java.nio.file.Path tempFolder = Files.createTempDirectory("tds");
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+		final IServerManager serverManager = serviceLocator.getService(IServerManager.class);
+		final String authorizationCode = serverManager.getAuthorizationKey().getAuthorizationCode();
+		final java.nio.file.Path tempFolder = Files.createTempDirectory("tds"); //$NON-NLS-1$
 
+		if (attributes.getProcesso() == BuildPatchProcessType.BY_COMPARISON) {
 			final int resultPatchGenerate = lsService.patchGenerate(server.getToken(), authorizationCode,
 					attributes.getEnvironment(), attributes.isLocal(), attributes.getFilename(), tempFolder.toString(),
-					attributes.getResources().toArray(new String[attributes.getResources().size()]),
-					attributes.getMasterPatch(), attributes.getPatchType().getPatchType());
+					new String[0], attributes.getMasterPatch(), attributes.getPatchType().getPatchType());
 
 			if (resultPatchGenerate != 0) {
-				ret = ServerActivator.showStatus(IStatus.ERROR, "Geração de Pacote",
-						"Servidor retornou com erro. Código: %d", resultPatchGenerate);
+				ret = ServerActivator.showStatus(IStatus.ERROR, Messages.BuildPatchJob_Server_returned_error,
+						resultPatchGenerate);
 			} else if (saveToLocalFile(tempFolder)) {
 				ret = Status.OK_STATUS;
 			} else {
-				ret = ServerActivator.showStatus(IStatus.ERROR, "Geração de Pacote",
-						"Não foi possível salvar o pacote gerado. Veja log para detalhes.");
+				ret = ServerActivator.showStatus(IStatus.ERROR, Messages.BuildPatchJob_Unable_save_generated_package);
+			}
+		} else {
+			String[] resources = null;
+
+			if (!attributes.getResourcesFiles().isEmpty()) {
+				final List<String> resourceList = attributes.getResourcesFiles().stream()
+						.filter(resource -> canCompile(resource)).map(IFile::getFullPath).map(IPath::toString)
+						.collect(Collectors.toList());
+				resources = resourceList.toArray(new String[resourceList.size()]);
+			} else {
+				resources = attributes.getResources().toArray(new String[attributes.getResources().size()]);
+			}
+			final int resultPatchGenerate = lsService.patchGenerate(server.getToken(), authorizationCode,
+					attributes.getEnvironment(), attributes.isLocal(), attributes.getFilename(), tempFolder.toString(),
+					resources, attributes.getMasterPatch(), attributes.getPatchType().getPatchType());
+
+			if (resultPatchGenerate != 0) {
+				ret = ServerActivator.showStatus(IStatus.ERROR, Messages.BuildPatchJob_Server_returned_error,
+						resultPatchGenerate);
+			} else if (saveToLocalFile(tempFolder)) {
+				ret = Status.OK_STATUS;
+			} else {
+				ret = ServerActivator.showStatus(IStatus.ERROR, Messages.BuildPatchJob_Unable_save_generated_package);
 			}
 		}
 
 		return ret;
 	}
 
-	private IStatus generatePatchByComparison(final IProgressMonitor monitor) throws Exception {
-		monitor.subTask("Por comparação");
-		final IAppServerInfo server = attributes.getServer();
-		final String patchFilePath = attributes.getPatchFilePath();
-		final String masterPatch = attributes.getMasterPatch();
-
-		final PatchType patchType = attributes.getPatchType();
-		final String currentEnvironment = attributes.getEnvironment();
-
-		if (attributes.isLocal()) {
-			final File tempFolder = new File(
-					attributes.getPatchFilePath() + File.separator + Long.toHexString(new Date().getTime()));
-			tempFolder.mkdir();
-
-//			serverReturn = server.generateLocalCompPatch(currentEnvironment, masterPatch, tempFolder.getAbsolutePath(),
-//					patchType.getPatchType(), "");
-//			if (serverReturn.isOperationOk()) {
-//				this.saveLocalFile(patchType, tempFolder.getAbsolutePath());
-//			}
-			tempFolder.delete();
-		} else {
-//			serverReturn = server.generateCompPatch(currentEnvironment, masterPatch, patchFilePath,
-//					patchType.getPatchType(), "");
-		}
-
-		final IStatus status = null;
-//		if (serverReturn.isOperationOk()) {
-//			status = Status.OK_STATUS;
-//		} else {
-//			throw new TdsException(serverReturn.getReturnMessage());
-//		}
-
-		return status;
+	private boolean canCompile(final IFile resource) {
+//		final IWrapperManager wm = WrapperManager.getInstance();
+//
+//		boolean result = ;
+//
+//		final IProject project = resource.getProject();
+//			final IResourceWrapper wf = wm.getWrapper(file); // testar natureza do projeto
+//
+//			if (!wf.isIgnoreCompile()) {
+//
+//		return result ;
+		return true;
 	}
 
 	/*
@@ -182,11 +174,12 @@ public class BuildPatchJob extends Job {
 			return false;
 		}
 
-		final String[] parts = files[0].getName().split("\\.(?=[^\\.]+$)");
+		final String[] parts = files[0].getName().split("\\.(?=[^\\.]+$)"); //$NON-NLS-1$
 		String filename = attributes.getFilename().trim();
-		filename = (filename.isEmpty()) ? files[0].getName() : filename + "." + parts[parts.length - 1];
+		filename = (filename.isEmpty()) ? files[0].getName()
+				: filename + Messages.BuildPatchJob_19 + parts[parts.length - 1];
 		if (attributes.isPrefix()) {
-			filename = attributes.getEnvironment() + "_" + filename;
+			filename = attributes.getEnvironment() + "_" + filename; //$NON-NLS-1$
 		}
 
 		final File patchFile = Paths.get(attributes.getPatchFilePath(), filename).toFile();
@@ -199,7 +192,7 @@ public class BuildPatchJob extends Job {
 		try {
 			Files.move(files[0].toPath(), patchFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (final IOException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Geração de Pacote", "Cópia de [%s] para [%s].", files[0].toPath(),
+			ServerActivator.logStatus(IStatus.ERROR, Messages.BuildPatchJob_Copy_from_to, files[0].toPath(),
 					patchFile.toPath(), e);
 		}
 
@@ -215,8 +208,8 @@ public class BuildPatchJob extends Job {
 
 		if ((connector != null) && (environment != null)) {
 			try {
-				final LoadRpoMapJob loadMapjob = new LoadRpoMapJob("Carregando RPO", attributes.getServer(),
-						attributes.getEnvironment(), true);
+				final LoadRpoMapJob loadMapjob = new LoadRpoMapJob(Messages.BuildPatchJob_Loading_RPO,
+						attributes.getServer(), attributes.getEnvironment(), true);
 				loadMapjob.schedule();
 				loadMapjob.join();
 
@@ -230,7 +223,7 @@ public class BuildPatchJob extends Job {
 		}
 
 		for (final String nameResourcePath : resourcePathNames) {
-			if (nameResourcePath.endsWith(".ch") || nameResourcePath.endsWith(".CH")) { //$NON-NLS-2$
+			if (nameResourcePath.endsWith(".ch") || nameResourcePath.endsWith(".CH")) { //$NON-NLS-1$//$NON-NLS-2$
 				continue;
 			}
 

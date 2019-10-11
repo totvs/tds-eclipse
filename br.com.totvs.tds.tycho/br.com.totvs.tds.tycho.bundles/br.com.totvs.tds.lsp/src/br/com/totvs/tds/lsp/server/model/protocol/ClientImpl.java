@@ -183,11 +183,13 @@ public class ClientImpl extends LanguageClientImpl {
 		return result;
 	}
 
-	public PatchDirListNode getPathDirList(final PatchDirListData patchDirListInfo) {
+	public PatchDirListNode getPathDirList(final PathDirListData pathDirListData) {
 		final ServerInterface server = (ServerInterface) getLanguageServer();
 		PatchDirListNode result = null;
 
-		final CompletableFuture<PatchDirListNode> future = server.getPathDirList(patchDirListInfo);
+		// thenApplyAsync
+		final CompletableFuture<PatchDirListNode> future = server.getPathDir(pathDirListData);
+
 		try {
 			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
 		} catch (final InterruptedException e) {

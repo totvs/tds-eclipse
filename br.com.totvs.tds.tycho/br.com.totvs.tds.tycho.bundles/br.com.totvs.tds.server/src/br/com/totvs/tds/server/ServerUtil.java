@@ -29,10 +29,10 @@ public class ServerUtil {
 		if (sourceExtensions == null) {
 			sourceExtensions = new ArrayList<String>();
 			
-			String[] extensions = getContentTypeExtensions("br.com.totvs.tds.lsp.advplSource");
+			String[] extensions = getContentTypeExtensions("br.com.totvs.tds.lsp.advplSource"); //$NON-NLS-1$
 			sourceExtensions.addAll(Arrays.asList(extensions));
 
-			extensions = getContentTypeExtensions("br.com.totvs.tds.lsp.advplAspSource");
+			extensions = getContentTypeExtensions("br.com.totvs.tds.lsp.advplAspSource"); //$NON-NLS-1$
 			sourceExtensions.addAll(Arrays.asList(extensions));
 		}
 

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
@@ -31,6 +33,8 @@ public class BuildPatchAttributes implements Cloneable {
 	private List<String> resources = Collections.emptyList();
 	private boolean prefix;
 	private Path outputFile;
+	private IStructuredSelection selection;
+	private List<IFile> files = Collections.emptyList();
 
 	/**
 	 * Valida os atributos de patch.
@@ -40,16 +44,16 @@ public class BuildPatchAttributes implements Cloneable {
 	protected String getErrorMessage() {
 		String message = null;
 		if ((getEnvironment().length() == 0) || (getServer() == null)) {
-			message = "Servidor ou ambiente não informado";
+			message = Messages.BuildPatchAttributes_Server_environment_not_reported;
 		} else if (getPatchFilePath().length() == 0) {
-			message = "Nome do pacote de atualização não informado";
+			message = Messages.BuildPatchAttributes_Update_package_name_not_entered;
 		} else if (getProcesso() == BuildPatchProcessType.UNDEFINED) {
-			message = "Tipo de processo não informado";
+			message = Messages.BuildPatchAttributes_Process_type_not_reported;
 		}
 
 		if (getProcesso() == BuildPatchProcessType.BY_COMPARISON) {
 			if (getMasterPatch().length() == 0) {
-				message = "RPO mestre não infomado";
+				message = Messages.BuildPatchAttributes_Uninformed_master_rpo;
 			}
 		}
 
@@ -306,7 +310,7 @@ public class BuildPatchAttributes implements Cloneable {
 		try {
 			return (BuildPatchAttributes) super.clone();
 		} catch (final CloneNotSupportedException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Pacote de Atualização", e.getMessage(), e);
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
 		return null;
@@ -327,5 +331,26 @@ public class BuildPatchAttributes implements Cloneable {
 
 	public void setOutputFile(final Path path) {
 		this.outputFile = path;
+	}
+
+	public IStructuredSelection geSelection() {
+
+		return this.selection;
+	}
+
+	public void setSelection(final IStructuredSelection selection) {
+		this.selection = selection;
+	}
+
+	public List<IFile> getResourceFiles() {
+		return this.files;
+	}
+
+	public void setResourcesFiles(final List<IFile> files) {
+		this.files = files;
+	}
+
+	public List<IFile> getResourcesFiles() {
+		return this.files;
 	}
 }

@@ -30,12 +30,12 @@ final public class AuthorizationKey implements IAuthorizationKey {
 	private boolean overridePermission;
 
 	private void load() {
-		authorizationFile = "";
+		authorizationFile = ""; //$NON-NLS-1$
 		errorMessage = null;
-		idFile = "";
-		generatedAt = "";
-		validUntil = "";
-		authorizationCode = "";
+		idFile = ""; //$NON-NLS-1$
+		generatedAt = ""; //$NON-NLS-1$
+		validUntil = ""; //$NON-NLS-1$
+		authorizationCode = ""; //$NON-NLS-1$
 		overridePermission = false;
 
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
@@ -48,15 +48,15 @@ final public class AuthorizationKey implements IAuthorizationKey {
 				final ISecurePreferences secureNode = securePreference.node(SECURE_NODE);
 
 				try {
-					authorizationFile = secureNode.get(AUTHORIZATION_FILE, "");
-					idFile = secureNode.get(ID_FILE, "");
-					generatedAt = secureNode.get(GENERATED_AT, "");
-					validUntil = secureNode.get(VALID_UNTIL, "");
+					authorizationFile = secureNode.get(AUTHORIZATION_FILE, ""); //$NON-NLS-1$
+					idFile = secureNode.get(ID_FILE, ""); //$NON-NLS-1$
+					generatedAt = secureNode.get(GENERATED_AT, ""); //$NON-NLS-1$
+					validUntil = secureNode.get(VALID_UNTIL, ""); //$NON-NLS-1$
 					overridePermission = secureNode.getBoolean(OVERRIDE_PERMISSION, false);
-					authorizationCode = secureNode.get(AUTHORIZATION_CODE, "");
+					authorizationCode = secureNode.get(AUTHORIZATION_CODE, ""); //$NON-NLS-1$
 				} catch (final StorageException e) {
-					ServerActivator.logStatus(IStatus.ERROR, "Chave de Compilação", e.getMessage(), e);
-					errorMessage = "Não foi possível recuperar dados. Vela log para detalhes.";
+					ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+					errorMessage = Messages.AuthorizationKey_Unable_retrieve_data;
 				}
 			}
 		}
@@ -82,7 +82,7 @@ final public class AuthorizationKey implements IAuthorizationKey {
 
 		final File file = new File(authorizationFile);
 		if (!file.exists()) {
-			errorMessage = "Arquivo de autorização não localizado ou inválido.";
+			errorMessage = Messages.AuthorizationKey_Authorization_file_not_found_or_invalid;
 		} else {
 			try {
 				final InputStream inStream = Files.newInputStream(file.toPath(), StandardOpenOption.READ);
@@ -92,19 +92,19 @@ final public class AuthorizationKey implements IAuthorizationKey {
 				final Properties props = lsService.validKey(inStream);
 
 				if (props.isEmpty()) {
-					errorMessage = "Arquivo de autorização não localizado ou inválido.";
+					errorMessage = Messages.AuthorizationKey_Authorization_file_not_found_or_invalid;
 				} else {
-					idFile = props.getOrDefault("ID", "").toString();
-					generatedAt = props.getOrDefault("GENERATION", "").toString();
-					validUntil = props.getOrDefault("VALIDATION", "").toString();
-					authorizationCode = props.getOrDefault("KEY", "").toString();
-					overridePermission = props.getOrDefault("PERMISSION", "0").toString().equals("1");
+					idFile = props.getOrDefault("ID", "").toString(); //$NON-NLS-1$ //$NON-NLS-2$
+					generatedAt = props.getOrDefault("GENERATION", "").toString(); //$NON-NLS-1$ //$NON-NLS-2$
+					validUntil = props.getOrDefault("VALIDATION", "").toString(); //$NON-NLS-1$ //$NON-NLS-2$
+					authorizationCode = props.getOrDefault("KEY", "").toString(); //$NON-NLS-1$ //$NON-NLS-2$
+					overridePermission = props.getOrDefault("PERMISSION", "0").toString().equals("1"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				}
 				if (authorizationCode.isEmpty()) {
-					errorMessage = "Autorização inválida.";
+					errorMessage = Messages.AuthorizationKey_Invalid_authorization;
 				}
 			} catch (final IOException e) {
-				ServerActivator.logStatus(IStatus.ERROR, "Chave de Compilação", e.getMessage(), e);
+				ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 				errorMessage = e.getLocalizedMessage();
 			}
 		}
@@ -167,7 +167,7 @@ final public class AuthorizationKey implements IAuthorizationKey {
 			securePreference.flush();
 			load();
 		} catch (final IOException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Chave de Compilação", e.getMessage(), e);
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			this.errorMessage = e.getLocalizedMessage();
 		}
 
@@ -189,10 +189,10 @@ final public class AuthorizationKey implements IAuthorizationKey {
 
 			secureNode.flush();
 		} catch (final StorageException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Chave de Compilação", e.getMessage(), e);
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			this.errorMessage = e.getLocalizedMessage();
 		} catch (final IOException e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Chave de Compilação", e.getMessage(), e);
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			this.errorMessage = e.getLocalizedMessage();
 		}
 

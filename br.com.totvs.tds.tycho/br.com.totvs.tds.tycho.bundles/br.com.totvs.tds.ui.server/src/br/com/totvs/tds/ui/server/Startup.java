@@ -23,8 +23,6 @@ import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IStartup;
 
-import br.com.totvs.tds.ui.server.nl.Messages;
-
 @SuppressWarnings("restriction")
 public class Startup implements IStartup {
 
@@ -62,7 +60,7 @@ public class Startup implements IStartup {
 				}
 			}
 		} catch (CoreException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.Startup_Initialize, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
 		return file;
@@ -128,7 +126,7 @@ public class Startup implements IStartup {
 			}
 
 		} catch (CoreException e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, Messages.Startup_Initialize, e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 	}
 }

@@ -10,7 +10,7 @@ import br.com.totvs.tds.ui.console.MainConsole;
 /**
  * The activator class controls the plug-in life cycle.
  */
-public final class TDSUIActivator extends AbstractUIPlugin  {
+public final class TDSUIActivator extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "br.com.totvs.tds.ui"; //$NON-NLS-1$
@@ -29,7 +29,7 @@ public final class TDSUIActivator extends AbstractUIPlugin  {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.
 	 * BundleContext)
 	 */
@@ -44,7 +44,7 @@ public final class TDSUIActivator extends AbstractUIPlugin  {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
@@ -56,7 +56,7 @@ public final class TDSUIActivator extends AbstractUIPlugin  {
 
 	/**
 	 * Returns the shared instance.
-	 * 
+	 *
 	 * @return the shared instance
 	 */
 	public static TDSUIActivator getDefault() {
@@ -73,24 +73,24 @@ public final class TDSUIActivator extends AbstractUIPlugin  {
 
 	/**
 	 * Utility method to create status.
-	 * 
+	 *
 	 * @param level
 	 * @param message
 	 * @param thr
 	 * @return status
 	 */
-	public static IStatus showStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.showMessage(title, status);
+	public static IStatus showStatus(final int level, final int title, final String message, final Object... args) {
+		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.showMessage(status);
 
 		getDefault().getLog().log(status);
 
 		return status;
 	}
 
-	public static IStatus logStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.logMessage(title, status);
+	public static IStatus logStatus(final int level, final int title, final String message, final Object... args) {
+		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.logMessage(status);
 
 		getDefault().getLog().log(status);
 

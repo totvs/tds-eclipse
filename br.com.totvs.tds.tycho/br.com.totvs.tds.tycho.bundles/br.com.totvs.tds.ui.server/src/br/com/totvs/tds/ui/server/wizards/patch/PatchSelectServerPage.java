@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
@@ -70,8 +71,8 @@ public class PatchSelectServerPage extends WizardPage {
 		super("patchSelectServerPage"); //$NON-NLS-1$
 
 		setImageDescriptor(ServerUIIcons.getBuildPatch());
-		setTitle("Geração de pacote de Atualização");
-		setDescription("Este assistente o auxiliar\u00E1 na geração do pacote de Atualização.");
+		setTitle(Messages.PatchSelectServerPage_Patch_generation);
+		setDescription(Messages.PatchSelectServerPage_This_wizard_assist_you_build_patch);
 
 		this.buildAttributes = attributes;
 	}
@@ -95,20 +96,20 @@ public class PatchSelectServerPage extends WizardPage {
 	private String checkForErrorInPage(final boolean hasEnvironmentSelected,
 			final boolean hasMultiEnvironmentSelected) {
 		String errorMessage = null;
-		final String requiredField = "[%s] Atributo obrigat\u00F3rio";
+		final String requiredField = Messages.PatchSelectServerPage_Attribute_requited;
 		//
 		if (cmbServer.getItems().length == 0) {
-			errorMessage = "não existe servidor conectado para geração do pacote de Atualização.";
+			errorMessage = Messages.PatchSelectServerPage_Server_not_connected;
 		} else if (buildAttributes.getServer() == null) {
-			errorMessage = String.format(requiredField, "Servidor");
+			errorMessage = String.format(requiredField, Messages.PatchSelectServerPage_Server);
 		} else if (!hasEnvironmentSelected) {
-			errorMessage = String.format(requiredField, "Ambiente");
+			errorMessage = String.format(requiredField, Messages.PatchSelectServerPage_Environment);
 		} else if (buildAttributes.getProcesso() == BuildPatchProcessType.UNDEFINED) {
-			errorMessage = "Selecionar o processo de geração pacote.";
+			errorMessage = Messages.PatchSelectServerPage_Select_generation_process;
 		} else if (buildAttributes.getProcesso().equals(BuildPatchProcessType.BY_RPO) && hasMultiEnvironmentSelected) {
-			errorMessage = "O processo selecionado não permite a seleção de mais de um ambiente.";
+			errorMessage = Messages.PatchSelectServerPage_Selected_process_not_allow_more_one_environment;
 		} else if (buildAttributes.getPatchFilePath().isEmpty()) {
-			errorMessage = String.format(requiredField, "Salvar em");
+			errorMessage = String.format(requiredField, Messages.PatchSelectServerPage_SaveTo);
 		} else if (buildAttributes.isLocal()) {
 			errorMessage = checkForErrorOfLocalProcess();
 		}
@@ -130,20 +131,20 @@ public class PatchSelectServerPage extends WizardPage {
 		}
 
 		try {
-			File file = new File(buildAttributes.getPatchFilePath(), buildAttributes.getFilename() + "." + type);
+			File file = new File(buildAttributes.getPatchFilePath(), buildAttributes.getFilename() + "." + type); //$NON-NLS-1$
 
 			if (!file.getParentFile().exists()) {
-				errorMessage = "Caminho do arquivo não � v�lido ou inexistente.";
+				errorMessage = Messages.PatchSelectServerPage_File_path_invalid_nonexistent;
 			} else if (file.exists() && !buildAttributes.isOverwrite()) {
 				overwriteSectionEnable(true);
 				overwriteSelection(false);
-				errorMessage = String.format(
-						"Arquivo %s Já existe. Informe outro caminho/nome ou confirme a regravação.", file.getName());
+				errorMessage = String.format(Messages.PatchSelectServerPage_File_already_exists, file.getName());
 			} else if (file.exists() && buildAttributes.isOverwrite()) {
-				setMessage(String.format("O arquivo %s ser� sobrescrito.", file.getName()), WARNING);
+				setMessage(String.format(Messages.PatchSelectServerPage_File_will_overwritten, file.getName()),
+						WARNING);
 			} else {
 				if (buildAttributes.getEnvironmentsList().size() > 1) {
-					setMessage("Mais de um ambiente selecionado. Arquivos existentes ser�o sobrescritos.", WARNING);
+					setMessage(Messages.PatchSelectServerPage_More_one_selected_environment_files_overwritten, WARNING);
 				} else {
 					setMessage(null, WARNING);
 				}
@@ -151,7 +152,7 @@ public class PatchSelectServerPage extends WizardPage {
 				overwriteSelection(false);
 			}
 		} catch (final Exception e) {
-			ServerUIActivator.logStatus(IStatus.ERROR, "Geração de Pacote", e.getMessage(), e);
+			ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			errorMessage = e.getMessage();
 		}
 
@@ -182,7 +183,7 @@ public class PatchSelectServerPage extends WizardPage {
 		container.setLayout(new GridLayout(3, false));
 
 		final Label lblServer = new Label(container, SWT.NONE);
-		lblServer.setText("Servidor");
+		lblServer.setText(Messages.PatchSelectServerPage_Server);
 
 		cmbServer = new Combo(container, SWT.READ_ONLY);
 		cmbServer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -205,7 +206,7 @@ public class PatchSelectServerPage extends WizardPage {
 
 		final Label lblAmbiente = new Label(container, SWT.NONE);
 		lblAmbiente.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
-		lblAmbiente.setText("Ambientes");
+		lblAmbiente.setText(Messages.PatchSelectServerPage_Environments);
 
 		treeViewerEnvironments = new CheckboxTreeViewer(container, SWT.BORDER);
 		final Tree treeEnvironments = treeViewerEnvironments.getTree();
@@ -227,7 +228,7 @@ public class PatchSelectServerPage extends WizardPage {
 		new Label(container, SWT.NONE);
 
 		final Label lblProcess = new Label(container, SWT.NONE);
-		lblProcess.setText("Processo");
+		lblProcess.setText(Messages.PatchSelectServerPage_Process);
 
 		cmbProcesso = new Combo(container, SWT.READ_ONLY);
 		final String[] items = new String[BuildPatchProcessType.values().length - 1];
@@ -249,7 +250,7 @@ public class PatchSelectServerPage extends WizardPage {
 		new Label(container, SWT.NONE);
 
 		final Label lblPacote = new Label(container, SWT.NONE);
-		lblPacote.setText("Salvar em");
+		lblPacote.setText(Messages.PatchSelectServerPage_SaveTo);
 
 		final Composite composite1 = new Composite(container, SWT.NONE);
 		final GridLayout gl_composite1 = new GridLayout(2, false);
@@ -270,7 +271,7 @@ public class PatchSelectServerPage extends WizardPage {
 				dialogChanged();
 			}
 		});
-		cmbWhere.setItems(new String[] { "Local", "Remoto" });
+		cmbWhere.setItems(new String[] { Messages.PatchSelectServerPage_Local, Messages.PatchSelectServerPage_Remote });
 
 		txtPackagePath = new Text(composite1, SWT.BORDER);
 		txtPackagePath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -292,7 +293,7 @@ public class PatchSelectServerPage extends WizardPage {
 				//
 				final String currentEnvironment = buildAttributes.getEnvironment();
 				if (cmbWhere.getSelectionIndex() == 1 && (currentEnvironment == null || currentEnvironment.isEmpty())) {
-					updateStatus("Ambiente não foi selecionado.");
+					updateStatus(Messages.PatchSelectServerPage_Environemnt_not_selected);
 					return;
 				}
 				openDiagFile();
@@ -303,7 +304,7 @@ public class PatchSelectServerPage extends WizardPage {
 
 		final Label lblNewLabel = new Label(container, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
-		lblNewLabel.setText("Arquivo (sem extensão)");
+		lblNewLabel.setText(Messages.PatchSelectServerPage_File_without_extension);
 
 		txtFilename = new Text(container, SWT.BORDER);
 		txtFilename.setText(""); //$NON-NLS-1$
@@ -322,7 +323,7 @@ public class PatchSelectServerPage extends WizardPage {
 		new Label(container, SWT.NONE);
 
 		lblNewLabel1 = new Label(container, SWT.NONE);
-		lblNewLabel1.setText("Deixe em branco para utilizar o nome padr�o.");
+		lblNewLabel1.setText(Messages.PatchSelectServerPage_Leave_blank_default_name);
 		new Label(container, SWT.NONE);
 		isLocalEnabled();
 		new Label(container, SWT.NONE);
@@ -340,7 +341,7 @@ public class PatchSelectServerPage extends WizardPage {
 			}
 		});
 		lblOverwrite = new Label(composite2, SWT.NONE);
-		lblOverwrite.setText("Sobrescrever arquivo existente");
+		lblOverwrite.setText(Messages.PatchSelectServerPage_Override_file);
 		overwriteSectionEnable(false);
 		new Label(container, SWT.NONE);
 
@@ -356,17 +357,13 @@ public class PatchSelectServerPage extends WizardPage {
 					try {
 						refreshEnvironmentsCombo(envs, buildAttributes.getEnvironmentsList());
 					} catch (final Exception e1) {
-						e1.printStackTrace();
-						// TdsLogging.getDefault().showError(SdkUIActivator.PLUGIN_ID, e1);
+						ServerUIActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 					}
 				}
 			});
 		} catch (final Exception e1) {
-			e1.printStackTrace();
-			// TdsLogging.getDefault().showError(SdkUIActivator.PLUGIN_ID, e1.getMessage());
+			ServerUIActivator.logStatus(IStatus.ERROR, e1.getMessage(), e1);
 		}
-
-		dialogChanged();
 	}
 
 	private void dialogChanged() {
@@ -390,7 +387,6 @@ public class PatchSelectServerPage extends WizardPage {
 			nextPage = patchBuilderWizard.getComparasionPage();
 		} else if (buildAttributes.getProcesso() == BuildPatchProcessType.BY_WORKAREA) {
 			final PatchWorkareaPage page = patchBuilderWizard.getWorkareaPage();
-			page.setShowFiles(true);
 			nextPage = page;
 		} else if (buildAttributes.getProcesso() == BuildPatchProcessType.BY_RPO) {
 			nextPage = patchBuilderWizard.getRpoPage();
@@ -449,7 +445,7 @@ public class PatchSelectServerPage extends WizardPage {
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 		final List<IServerInfo> activeServers = serverManager.getActiveServers(IAppServerInfo.class);
 		if (activeServers.isEmpty()) {
-			throw new Exception("Nenhum servidor ativo encontrado para utilização desta funcionalidade.");
+			throw new Exception(Messages.PatchSelectServerPage_No_active_servers);
 		}
 
 		for (final IServerInfo server : activeServers) {
@@ -463,7 +459,8 @@ public class PatchSelectServerPage extends WizardPage {
 		String packagePath = null;
 
 		if (cmbWhere.getSelectionIndex() == 0) {
-			packagePath = ServerUIUtil.openFolderDialog(getShell(), "Geração de pacote de Atualização", null);
+			packagePath = ServerUIUtil.openFolderDialog(getShell(), Messages.PatchSelectServerPage_Build_patch_title,
+					null);
 		} else {
 			// Remote
 //			final IServerDirectoryServerNode serverNode = ServerFileSystemFactory.getInstance()

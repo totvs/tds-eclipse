@@ -26,15 +26,15 @@ import br.com.totvs.tds.ui.TDSMessageHandler;
 
 /**
  * Ativaação do Bundle.
- * 
+ *
  * @author acandido
  */
 public final class ServerActivator extends Plugin {
 
 	private static final String PLUGIN_ID = "br.com.totvs.tds.server"; //$NON-NLS-1$
-	private static final String FILENAME_TDS113 = "br.com.totvs.tds.server.internal.ServerManager.servers";
+	private static final String FILENAME_TDS113 = "br.com.totvs.tds.server.internal.ServerManager.servers"; //$NON-NLS-1$
 
-	private static final String FILENAME_TDS114 = "servers.data";
+	private static final String FILENAME_TDS114 = "servers.data"; //$NON-NLS-1$
 
 	/** Instância do ativador. */
 	private static ServerActivator plugin;
@@ -43,7 +43,7 @@ public final class ServerActivator extends Plugin {
 
 	/**
 	 * Retorna a inst��ncia do adicional.
-	 * 
+	 *
 	 * @return
 	 * @return the bundle activator
 	 */
@@ -53,9 +53,9 @@ public final class ServerActivator extends Plugin {
 
 	private IServerManager serverManagerService;
 
-	/** 
+	/**
 	 * Retorna a propriedade como uma String
-	 * 
+	 *
 	 * @param key
 	 * @return
 	 */
@@ -65,7 +65,7 @@ public final class ServerActivator extends Plugin {
 
 	/**
 	 * Retorna a propriedade como uma String
-	 * 
+	 *
 	 * @param key
 	 * @return
 	 */
@@ -77,17 +77,17 @@ public final class ServerActivator extends Plugin {
 		property.put(key, String.valueOf(timeOut));
 	}
 
-	public void setProperty(String key, Object value) {
+	public void setProperty(final String key, final Object value) {
 		property.put(key, value);
 	}
 
-	public void setProperty(final String key, String value) {
+	public void setProperty(final String key, final String value) {
 		property.put(key, value);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
@@ -99,14 +99,14 @@ public final class ServerActivator extends Plugin {
 
 		try {
 			loadServerList();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
@@ -119,9 +119,9 @@ public final class ServerActivator extends Plugin {
 	}
 
 	private File getServerListFile() {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		File rootWs = workspace.getRoot().getLocation().toFile();
-		File file = new File(rootWs, FILENAME_TDS114); // $NON-NLS-1$
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final File rootWs = workspace.getRoot().getLocation().toFile();
+		final File file = new File(rootWs, FILENAME_TDS114); // $NON-NLS-1$
 
 		return file;
 	}
@@ -130,20 +130,20 @@ public final class ServerActivator extends Plugin {
 	 * Carga da lista de servidores registrados na �rea de trabalho
 	 */
 	private void loadServerList() {
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		File rootWs = workspace.getRoot().getLocation().toFile();
+		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		final File rootWs = workspace.getRoot().getLocation().toFile();
 
 		// faz compatibilização com 11.4
 		File file = new File(rootWs, FILENAME_TDS113); // $NON-NLS-1$
 		if (file.exists()) {
-			logStatus(IStatus.INFO, "Visão Servidor", "Migrando lista de servidores.");
-			Path target = new File(rootWs, FILENAME_TDS114).toPath();
+			logStatus(IStatus.INFO, Messages.ServerActivator_Import_server_list);
+			final Path target = new File(rootWs, FILENAME_TDS114).toPath();
 			try {
 				Files.copy(file.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
 				file.deleteOnExit();
-				logStatus(IStatus.INFO, "Visão Servidor", "Lista de servidores migrada.");
-			} catch (IOException e) {
-				logStatus(IStatus.ERROR, "Visão Servidor", e.getMessage(), e);
+				logStatus(IStatus.INFO, Messages.ServerActivator_Server_list_imported);
+			} catch (final IOException e) {
+				logStatus(IStatus.ERROR, e.getMessage(), e);
 			}
 		}
 		// fim da compatibilização
@@ -151,37 +151,36 @@ public final class ServerActivator extends Plugin {
 		file = getServerListFile();
 
 		if (file.exists()) {
-			logStatus(IStatus.INFO, "Visão Servidor", "Lendo lista de servidores registrados.\n\tArquivo: %s",
-					file.getAbsolutePath());
+			logStatus(IStatus.INFO, Messages.ServerActivator_Reading_registered_servers, file.getAbsolutePath());
 
 			InputStream is = null;
 			try {
 				is = new FileInputStream(file);
 				getServerManager().loadFrom(is);
-			} catch (OptionalDataException e) {
-				showStatus(IStatus.ERROR, "Visão Servidor",
-						"Falha na carga do arquivo de servidores. Provavelmente o arquivo esta danificado.", e);
+			} catch (final OptionalDataException e) {
+				showStatus(IStatus.ERROR,
+						Messages.ServerActivator_Failed_load_server_file, e);
 			} catch (ClassNotFoundException | IOException e) {
-				logStatus(IStatus.ERROR, "Visão Servidor", e.getMessage(), e);
+				logStatus(IStatus.ERROR, e.getMessage(), e);
 			} finally {
 				try {
 					if (is != null) {
 						is.close();
 					}
-				} catch (IOException e) {
+				} catch (final IOException e) {
 				}
 			}
 
-			logStatus(IStatus.INFO, "Visão Servidor", "Lista de servidores registrados carregada.");
+			logStatus(IStatus.INFO, Messages.ServerActivator_List_registered_servers_loaded);
 		}
 	}
 
 	public IServerManager getServerManager() {
 		if (serverManagerService == null) {
-			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 			serverManagerService = serviceLocator.getService(IServerManager.class);
 		}
-		
+
 		return serverManagerService;
 	}
 
@@ -189,24 +188,23 @@ public final class ServerActivator extends Plugin {
 	 * Salva a lista de servidores registrados.
 	 */
 	private void saveServerList() {
-		File file = getServerListFile();
+		final File file = getServerListFile();
 		OutputStream os = null;
 
-		logStatus(IStatus.INFO, "Visão Servidor", "Salvando lista de servidores registrados.\n\tArquivo: %s",
-				file.getAbsolutePath());
+		logStatus(IStatus.INFO, Messages.ServerActivator_Saving_server_list, file.getAbsolutePath());
 
 		try {
 			os = new FileOutputStream(file);
-			IServerManager serverManager = ServerActivator.getDefault().getServerManager();
+			final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 			serverManager.saveTo(os);
-			logStatus(IStatus.INFO, "Visão Servidor", "Lista de servidores registrados salvo.");
-		} catch (IOException e) {
-			logStatus(IStatus.ERROR, "Visão Servidor", e.getMessage(), e);
+			logStatus(IStatus.INFO, Messages.ServerActivator_Server_list_saved);
+		} catch (final IOException e) {
+			logStatus(IStatus.ERROR, e.getMessage(), e);
 		} finally {
 			if (os != null) {
 				try {
 					os.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 				}
 			}
 		}
@@ -214,46 +212,46 @@ public final class ServerActivator extends Plugin {
 
 	/**
 	 * Utility method to create status.
-	 * 
+	 *
 	 * @param level
 	 * @param message
 	 * @param thr
 	 *
 	 * @return status
 	 */
-	public static IStatus createStatus(int level, String message, Throwable thr) {
+	public static IStatus createStatus(final int level, final String message, final Throwable thr) {
 
 		return new Status(level, PLUGIN_ID, 0, message, thr);
 	}
 
 	/**
 	 * Utility method to create status.
-	 * 
+	 *
 	 * @param level
 	 * @param message
 	 * @param thr
 	 * @return status
 	 */
-	public static IStatus showStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.showMessage(title, status);
+	public static IStatus showStatus(final int level, final String message, final Object... args) {
+		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.showMessage(status);
 
 		getDefault().getLog().log(status);
 
 		return status;
 	}
 
-	public static IStatus logStatus(int level, String title, String message, Object... args) {
-		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, title, message, args);
-		TDSMessageHandler.logMessage(title, status);
+	public static IStatus logStatus(final int level, final String message, final Object... args) {
+		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		TDSMessageHandler.logMessage(status);
 
 		getDefault().getLog().log(status);
 
 		return status;
 	}
 
-	public static IStatus logStatus(int level, String title, String message) {
-		return logStatus(level, title, message, TDSMessageHandler._EMPTY_ARGS);
+	public static IStatus logStatus(final int level, final String message) {
+		return logStatus(level, message, TDSMessageHandler._EMPTY_ARGS);
 	}
 
 }

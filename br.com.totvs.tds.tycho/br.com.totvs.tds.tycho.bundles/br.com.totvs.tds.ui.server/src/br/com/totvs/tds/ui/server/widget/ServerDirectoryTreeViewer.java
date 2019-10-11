@@ -34,9 +34,11 @@ public class ServerDirectoryTreeViewer extends TreeViewer {
 
 	public ServerDirectoryTreeViewer(final Composite parent, final boolean multi) {
 		super(parent, (multi ? SWT.MULTI : SWT.NONE) | SWT.BORDER);
-		root = ServerFileSystemFactory.getInstance().createRootNode();
+
+		root = ServerFileSystemFactory.createRootNode();
 		createListener();
 		createContents();
+
 		items = new ArrayList<>();
 		listeners = new ArrayList<>();
 	}
@@ -87,6 +89,7 @@ public class ServerDirectoryTreeViewer extends TreeViewer {
 						}
 					}
 				}
+
 				notifyListener();
 			}
 		};
@@ -104,6 +107,15 @@ public class ServerDirectoryTreeViewer extends TreeViewer {
 		for (IItemSelectionChangedListener listener : listeners) {
 			listener.selectionChanged();
 		}
+	}
+
+	public void addServerDirectoryNode(IServerDirectoryServerNode serverNode, boolean busy) {
+		boolean oldBusy = isBusy();
+		setBusy(busy);
+		
+		addServerDirectoryNode(serverNode);
+		
+		setBusy(oldBusy);
 	}
 
 }

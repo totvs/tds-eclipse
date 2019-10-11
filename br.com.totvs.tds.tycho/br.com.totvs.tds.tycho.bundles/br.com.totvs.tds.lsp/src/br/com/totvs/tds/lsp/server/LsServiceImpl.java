@@ -30,7 +30,8 @@ import br.com.totvs.tds.lsp.server.model.protocol.DisconnectInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsData;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.KeyInfo;
-import br.com.totvs.tds.lsp.server.model.protocol.PatchDirListData;
+import br.com.totvs.tds.lsp.server.model.protocol.PathDirListData;
+import br.com.totvs.tds.lsp.server.model.protocol.PathDirListInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateData;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsData;
@@ -48,6 +49,7 @@ import br.com.totvs.tds.lsp.server.model.protocol.ValidationInfo;
  */
 public final class LsServiceImpl implements ILanguageServerService {
 
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 	private static LsServiceImpl instance;
 
 	/**
@@ -206,21 +208,23 @@ public final class LsServiceImpl implements ILanguageServerService {
 	}
 
 	@Override
-	public void getPathDirList(final String token, final String environment, final String folder,
+	public String[] getPathDirList(final String token, final String environment, final String folder,
 			final boolean includeDir) {
-		final PatchDirListData patchDirListInfo = new PatchDirListData();
-		patchDirListInfo.setConnectionToken(token);
-		patchDirListInfo.setEnvironment(environment);
-		patchDirListInfo.setFolder(folder);
-		patchDirListInfo.setIncludeDir(includeDir);
+		final PathDirListInfo pathDirListInfo = new PathDirListInfo();
 
-		final PatchDirListNode patchDirListNode = ClientImpl.getInstance().getPathDirList(patchDirListInfo);
-//		System.out.println(patchDirListNode);
-//		if (patchDirListNode != null) {
-//			return patchDirListNode.getReturnCode();
-//		}
-//
-//		return -1;
+		pathDirListInfo.setConnectionToken(token);
+		pathDirListInfo.setEnvironment(environment);
+		pathDirListInfo.setFolder(folder);
+		pathDirListInfo.setIncludeDir(includeDir);
+
+		final PathDirListData pathDirListData = new PathDirListData(pathDirListInfo);
+		final PatchDirListNode patchDirListNode = ClientImpl.getInstance().getPathDirList(pathDirListData);
+
+		if (patchDirListNode != null) {
+			return patchDirListNode.getDirectory();
+		}
+
+		return EMPTY_STRING_ARRAY;
 	}
 
 	public static Object getInstance() {

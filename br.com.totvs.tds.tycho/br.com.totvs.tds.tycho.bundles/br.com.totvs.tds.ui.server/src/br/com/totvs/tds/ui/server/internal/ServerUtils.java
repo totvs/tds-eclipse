@@ -25,7 +25,7 @@ public class ServerUtils {
 			stringList.add(string.substring(0, 1).toLowerCase() + string.substring(1).toLowerCase());
 		}
 
-		stringList.add("*.*");
+		stringList.add("*.*"); //$NON-NLS-1$
 
 		return stringList.toArray(new String[stringList.size()]);
 	}

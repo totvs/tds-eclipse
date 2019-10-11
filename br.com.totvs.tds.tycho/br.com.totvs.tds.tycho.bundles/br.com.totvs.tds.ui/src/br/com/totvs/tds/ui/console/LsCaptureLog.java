@@ -82,7 +82,8 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 						final JSONObject error = (JSONObject) json.get("error"); //$NON-NLS-1$
 						final int code = error.getInt("code"); //$NON-NLS-1$
 						final String msg = error.getString("message"); //$NON-NLS-1$
-						TDSUIActivator.logStatus(IStatus.ERROR, Messages.LsCaptureLog_LS_PREFIX, Messages.LsCaptureLog_12, code, msg.replace("\n", "\n\t")); //$NON-NLS-3$ //$NON-NLS-4$
+						TDSUIActivator.logStatus(IStatus.ERROR, -1, Messages.LsCaptureLog_12, code,
+								msg.replace("\n", "\n\t")); // $NON-NLS-3$ //$NON-NLS-4$
 					} catch (final Exception e) {
 						System.out.println("ServerUIActivator.logging()"); //$NON-NLS-1$
 						System.out.println(method);
@@ -110,7 +111,7 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 						i++;
 					}
 
-					TDSUIActivator.logStatus(type, Messages.LsCaptureLog_LS_PREFIX, finalMsg.isEmpty() ? msg : finalMsg);
+					TDSUIActivator.logStatus(type, -1, finalMsg.isEmpty() ? msg : finalMsg);
 				}
 			} else {
 				final String[] lines = message.split("\n"); //$NON-NLS-1$
@@ -154,13 +155,13 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 
 	private void printText(final String level, final StringJoiner text) {
 		if (level.startsWith("[E")) { //$NON-NLS-1$
-			TDSUIActivator.logStatus(IStatus.ERROR, Messages.LsCaptureLog_LS_PREFIX, text.toString());
+			TDSUIActivator.logStatus(IStatus.ERROR, -1, text.toString());
 		} else if (level.startsWith("[I")) { //$NON-NLS-1$
-			TDSUIActivator.logStatus(IStatus.INFO, Messages.LsCaptureLog_LS_PREFIX, text.toString());
+			TDSUIActivator.logStatus(IStatus.INFO, -1, text.toString());
 		} else if (level.startsWith("[W")) { //$NON-NLS-1$
-			TDSUIActivator.logStatus(IStatus.WARNING, Messages.LsCaptureLog_LS_PREFIX, text.toString());
+			TDSUIActivator.logStatus(IStatus.WARNING, -1, text.toString());
 		} else {
-			TDSUIActivator.logStatus(IStatus.OK, Messages.LsCaptureLog_LS_PREFIX, text.toString());
+			TDSUIActivator.logStatus(IStatus.OK, -1, text.toString());
 		}
 	}
 

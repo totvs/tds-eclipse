@@ -83,7 +83,7 @@ public final class ExportTool {
 		// // output pretty printed
 		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		//
-		monitor.subTask("Exportação: Servidores");
+		monitor.subTask(Messages.ExportTool_Export_Servers);
 		monitor.worked(1);
 		//
 		jaxbMarshaller.marshal(xmlroot, file);
@@ -126,7 +126,7 @@ public final class ExportTool {
 	public static XMLServerRoot initializeServerStructure(final ObjectFactory objectFactory) {
 		XMLServerRoot xmlServerRoot = objectFactory.createXMLServerRoot();
 		Group serverTreeRoot = objectFactory.createGroup();
-		serverTreeRoot.setName("Messages.ExportTool_2");
+		serverTreeRoot.setName("Messages.ExportTool_2"); //$NON-NLS-1$
 		xmlServerRoot.setVersion(XMLVersionControl.V_11_3_8);
 		serverTreeRoot.setGroupList(new GroupList());
 		xmlServerRoot.setServerTreeRoot(serverTreeRoot);
@@ -180,8 +180,8 @@ public final class ExportTool {
 	public static Server toServer(final ObjectFactory factory, final IServerInfo serverInfo) {
 		String name = serverInfo.getName();
 		int port = serverInfo.getAppServerPort();
-		String serverType = ""; // serverInfo.getServerType();
-		String timeStamp = ""; // serverInfo.getVersion().getTimestamp();
+		String serverType = ""; // serverInfo.getServerType(); //$NON-NLS-1$
+		String timeStamp = ""; // serverInfo.getVersion().getTimestamp(); //$NON-NLS-1$
 		String version = serverInfo.getVersion();
 
 		Server server = factory.createServer();

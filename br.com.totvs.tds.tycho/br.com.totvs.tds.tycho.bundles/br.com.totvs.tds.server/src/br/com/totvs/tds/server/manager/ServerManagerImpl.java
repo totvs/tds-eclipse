@@ -285,8 +285,8 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 			final long serialVerion = ois.readLong();
 
 			if (serialVerion != CURRENT_SERIAL_VERSION) {
-				ServerActivator.logStatus(IStatus.WARNING, "Gerenciador Servidores",
-						String.format("WARNING: ServerManagerImpl.loadFrom() CurrentVersion %d Load Version %d.",
+				ServerActivator.logStatus(IStatus.WARNING, Messages.ServerManagerImpl_Server_manager,
+						String.format(Messages.ServerManagerImpl_Server_manager_version_warning,
 								CURRENT_SERIAL_VERSION, serialVerion));
 			}
 
@@ -310,13 +310,13 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 			final List<IServerInfo> activeServers = getActiveServers();
 
-			final Job job = new Job("Reconexões") {
+			final Job job = new Job(Messages.ServerManagerImpl_Reconnections) {
 
 				@Override
 				protected IStatus run(final IProgressMonitor monitor) {
 
 					if (!serversRunning.isEmpty()) {
-						monitor.subTask("Iniciando servidores locais");
+						monitor.subTask(Messages.ServerManagerImpl_Startubg_local_server);
 
 						for (final String name : serversRunning) {
 							final IServerInfo server = getServer(name);
@@ -331,9 +331,9 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 					}
 
 					if (!activeServers.isEmpty()) {
-						monitor.subTask("Conexão a servidores");
-						ServerActivator.logStatus(IStatus.INFO, "Conexão",
-								"Efetuando conex\u00E3o ao servidor utilizando credenciais salvas em local seguro.");
+						monitor.subTask(Messages.ServerManagerImpl_Server_connect);
+						ServerActivator.logStatus(IStatus.INFO, Messages.ServerManagerImpl_Connection,
+								Messages.ServerManagerImpl_Connecting_server_credentials_saved);
 
 						final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 						final ILanguageServerService lsService = serviceLocator
@@ -369,19 +369,19 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	protected void doReconnect(final IAppServerInfo serverInfo, final ILanguageServerService lsService) {
 		boolean isLogged = false;
 
-		final String connectMessage = "A conex\u00E3o foi recusada pelo servidor.\n\tAmbiente ou credenciais inv\u00E1lidas\n\tServidor/Ambiente: %s/%s";
+		final String connectMessage = Messages.ServerManagerImpl_Connection_refused_server;
 		try {
 			final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
 			isLogged = serverInfo.authentication(lsService, connectionMap);
 
 			if (!isLogged) {
-				ServerActivator.logStatus(IStatus.ERROR, "Conexão", connectMessage, serverInfo.getName(),
+				ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage, serverInfo.getName(),
 						serverInfo.getCurrentEnvironment());
 			}
 		} catch (final Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, "Conexão", connectMessage, serverInfo.getName(),
+			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage, serverInfo.getName(),
 					serverInfo.getCurrentEnvironment());
-			ServerActivator.logStatus(IStatus.ERROR, "Causa", e.getMessage());
+			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Cause, e.getMessage());
 		}
 	}
 
@@ -494,7 +494,7 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		}
 		// notifica e efetua a troca, se necessário
 		if (change) {
-			firePropertyChange("currentServer", this.currentServer, this.currentServer = newServer);
+			firePropertyChange("currentServer", this.currentServer, this.currentServer = newServer); //$NON-NLS-1$
 		}
 	}
 
@@ -512,24 +512,24 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	public void validate(final String name, final URI address) throws RuntimeException {
 		// Validacao de nome
 		if (!ItemInfo.isValidName(name)) {
-			throw new RuntimeException("RuntimeException.SERVER_INVALIDNAME, Messages.ServerManagerImpl_3, name");
+			throw new RuntimeException("RuntimeException.SERVER_INVALIDNAME, Messages.ServerManagerImpl_3, name"); //$NON-NLS-1$
 		}
 		// Validacao de URI (address)
 		if (address.getHost() == null) {
-			throw new RuntimeException("RuntimeException.URI_INVALIDHOST, Messages.ServerManagerImpl_4, address");
+			throw new RuntimeException("RuntimeException.URI_INVALIDHOST, Messages.ServerManagerImpl_4, address"); //$NON-NLS-1$
 		}
 		if (address.getPort() < 0) {
-			throw new RuntimeException("RuntimeException.URI_INVALIDPORT, Messages.ServerManagerImpl_5, address");
+			throw new RuntimeException("RuntimeException.URI_INVALIDPORT, Messages.ServerManagerImpl_5, address"); //$NON-NLS-1$
 		}
 		// Validacao de duplicidade de nome
 		IServerInfo si = getServer(name);
 		if (si != null) {
-			throw new RuntimeException("RuntimeException.SERVER_DUPLICATEDNAME, Messages.ServerManagerImpl_6, name");
+			throw new RuntimeException("RuntimeException.SERVER_DUPLICATEDNAME, Messages.ServerManagerImpl_6, name"); //$NON-NLS-1$
 		}
 		// Validacao de duplicidade de URI (address)
 		si = getServer(address);
 		if (si != null) {
-			throw new RuntimeException("RuntimeException.SERVER_DUPLICATEDURI, Messages.ServerManagerImpl_7, address");
+			throw new RuntimeException("RuntimeException.SERVER_DUPLICATEDURI, Messages.ServerManagerImpl_7, address"); //$NON-NLS-1$
 		}
 	}
 
@@ -545,7 +545,7 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 	@Override
 	protected void firePropertyChange(final String propertyName, final Object oldValue, final Object newValue) {
-		if (!loading || (propertyName.equals("loading"))) {
+		if (!loading || (propertyName.equals("loading"))) { //$NON-NLS-1$
 			Display.getDefault().syncExec(() -> super.firePropertyChange(propertyName, oldValue, newValue));
 		}
 	}
@@ -554,7 +554,7 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	protected void firePropertyChange(final PropertyChangeEvent event) {
 		Display.getDefault().syncExec(() -> super.firePropertyChange(event));
 
-		if (event.getPropertyName().equals("connected")) {
+		if (event.getPropertyName().equals("connected")) { //$NON-NLS-1$
 			final IAppServerInfo server = (IAppServerInfo) event.getSource();
 			final Boolean isConnected = (Boolean) event.getNewValue();
 

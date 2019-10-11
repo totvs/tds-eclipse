@@ -252,7 +252,7 @@ public class ServerView extends ViewPart {
 						decoratorManager.update(ServerViewDecorator.SERVER_DECORATOR_ID);
 					}
 				} catch (Exception e) {
-					ServerActivator.logStatus(IStatus.ERROR, Messages.ServerView_server_view, e.getMessage(), e);
+					ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 				}
 			}
 		});

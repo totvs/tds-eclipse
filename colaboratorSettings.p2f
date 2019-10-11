@@ -1,13 +1,23 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <?p2f version='1.0.0'?>
 <p2f version='1.0.0'>
-  <ius size='4'>
+  <ius size='6'>
     <iu id='org.eclipse.lsp4e.debug' name='Debug Adapter client for Eclipse IDE (Incubation)' version='0.10.0.201909031808'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/releases/2019-09'/>
       </repositories>
     </iu>
     <iu id='org.eclipse.lsp4e' name='Language Server Protocol client for Eclipse IDE (Incubation)' version='0.11.0.201909090701'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/2019-09'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.m2e.feature.feature.group' name='m2e - Maven Integration for Eclipse (includes Incubating components)' version='1.13.0.20190716-1624'>
+      <repositories size='1'>
+        <repository location='http://download.eclipse.org/releases/2019-09'/>
+      </repositories>
+    </iu>
+    <iu id='org.eclipse.m2e.logback.feature.feature.group' name='m2e - slf4j over logback logging (Optional)' version='1.13.0.20190716-1624'>
       <repositories size='1'>
         <repository location='http://download.eclipse.org/releases/2019-09'/>
       </repositories>

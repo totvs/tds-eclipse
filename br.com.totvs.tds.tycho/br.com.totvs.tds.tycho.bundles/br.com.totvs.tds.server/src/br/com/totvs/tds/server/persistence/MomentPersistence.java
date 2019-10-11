@@ -37,7 +37,7 @@ public class MomentPersistence {
 		}
 		if (ServerActivator.getDefault() != null) {
 			//@@acandido@@ para que quardar a URL?
-			String nUrl = ""; //ServerActivator.getDefault().getURLWorkSpace(); // rootConfig.getURL().getPath();
+			String nUrl = ""; //ServerActivator.getDefault().getURLWorkSpace(); // rootConfig.getURL().getPath(); //$NON-NLS-1$
 			this.url = nUrl + "" + nomeArquivo; //$NON-NLS-1$
 		}
 	}

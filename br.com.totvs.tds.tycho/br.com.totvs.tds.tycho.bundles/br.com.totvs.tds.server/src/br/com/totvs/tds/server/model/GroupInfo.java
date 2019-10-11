@@ -50,7 +50,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 
 		if (isValid) {
 			if (containsNode(child.getName())) {
-				throw new RuntimeException(String.format("Já existe um item com esse nome. Nome: %s", child.getName()));
+				throw new RuntimeException(String.format(Messages.GroupInfo_Already_exist_name, child.getName()));
 			}
 		}
 
@@ -82,7 +82,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	@Override
 	public String getIconName() {
 
-		return "group";
+		return "group"; //$NON-NLS-1$
 	}
 
 	/*

@@ -16,11 +16,10 @@ public class HttpLink implements IHyperlink {
 
 	/**
 	 * Creates a new link to the specified url address
-	 * 
-	 * @param url
-	 *            The url to open.
+	 *
+	 * @param url The url to open.
 	 */
-	public HttpLink(URL url) {
+	public HttpLink(final URL url) {
 		this.url = url;
 	}
 
@@ -35,10 +34,10 @@ public class HttpLink implements IHyperlink {
 	@Override
 	public void linkActivated() {
 		try {
-			IWebBrowser browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser(url.toString());
+			final IWebBrowser browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser(url.toString());
 			browser.openURL(url);
-		} catch (PartInitException e) {
-			TDSUIActivator.logStatus(IStatus.ERROR, Messages.HttpLink_Navigator, e.getMessage(), e);
+		} catch (final PartInitException e) {
+			TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
 		}
 	}
 }

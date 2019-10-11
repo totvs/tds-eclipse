@@ -179,4 +179,6 @@ public interface IAppServerInfo extends IServerInfo {
 	boolean isLocalServer();
 
 	boolean authentication(ILanguageServerService lsService, Map<String, Object> connectionMap);
+
+	String[] getDirectory(String environment, String absolutPath, boolean b);
 }

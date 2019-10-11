@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public interface IItemInfo extends Externalizable {
 
-	public static final String PROPERTY_ISSELECTED = "isSelected";
+	public static final String PROPERTY_ISSELECTED = "isSelected"; //$NON-NLS-1$
 	public static final String SERVERS_ROOT = "ServersRoot"; //$NON-NLS-1$
 
 	/*
