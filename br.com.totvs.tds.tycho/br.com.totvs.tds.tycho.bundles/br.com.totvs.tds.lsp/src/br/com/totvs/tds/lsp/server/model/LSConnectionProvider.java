@@ -22,6 +22,13 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 		setCommands(commands);
 	}
 
+	@Override
+	protected ProcessBuilder createProcessBuilder() {
+		final ProcessBuilder builder = super.createProcessBuilder();
+
+		return builder;
+	}
+
 	/**
 	 *
 	 * @return path to server. Can be null is fragment missing.

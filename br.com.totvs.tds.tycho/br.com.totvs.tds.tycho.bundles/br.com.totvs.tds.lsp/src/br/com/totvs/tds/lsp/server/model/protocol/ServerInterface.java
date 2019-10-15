@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageServer;
 
+import br.com.totvs.tds.lsp.server.model.node.ApplyPatchNode;
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
@@ -50,5 +51,8 @@ public interface ServerInterface extends LanguageServer {
 
 	@JsonRequest("$totvsserver/getId")
 	public CompletableFuture<IdNode> getId();
+
+	@JsonRequest("$totvsserver/patchApply")
+	public CompletableFuture<ApplyPatchNode> patchApply(PatchApplyData patchApplyData);
 
 }

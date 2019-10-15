@@ -40,6 +40,8 @@ public class CompileJob extends Job {
 
 		for (final Entry<String, CompileMapData> compileData : compileMap.entrySet()) {
 			monitor.subTask(String.format(Messages.CompileJob_Project, compileData.getKey()));
+			currentServer.buidlFile(compileData.getValue().getFiles(), compileOptions,
+					compileData.getValue().getIncludePaths());
 
 			lsService.buidlFile(currentServer.getToken(), authorizationCode, currentServer.getCurrentEnvironment(),
 					compileData.getValue().getFiles(), compileOptions, compileData.getValue().getIncludePaths());

@@ -113,7 +113,9 @@ public class ServerSelectionPage extends WizardSelectionPage {
 			}
 		});
 
-		txtParent.setText(parentElement.getName());
+		if (parentElement != null) {
+			txtParent.setText(parentElement.getName());
+		}
 
 		fillServerList();
 		setControl(composite);

@@ -12,23 +12,24 @@ import org.eclipse.core.runtime.content.IContentType;
 @SuppressWarnings("restriction")
 public class ServerUtil {
 
+	private static final byte[] EMPTY_BUFFER = new byte[0];
 	private static List<String> sourceExtensions;
 
 	/**
 	 * Returns the content type extension.
-	 * 
+	 *
 	 * @param contentTypeIdentifier - String
 	 * @return String[]
 	 */
 	private static String[] getContentTypeExtensions(final String contentTypeIdentifier) {
-		IContentType contentType = ContentTypeManager.getInstance().getContentType(contentTypeIdentifier);
+		final IContentType contentType = ContentTypeManager.getInstance().getContentType(contentTypeIdentifier);
 		return (contentType == null) ? (new String[0]) : contentType.getFileSpecs(IContentType.FILE_EXTENSION_SPEC);
 	}
 
-	public static boolean isSourceFile(String fullNameOrExtension) {
+	public static boolean isSourceFile(final String fullNameOrExtension) {
 		if (sourceExtensions == null) {
 			sourceExtensions = new ArrayList<String>();
-			
+
 			String[] extensions = getContentTypeExtensions("br.com.totvs.tds.lsp.advplSource"); //$NON-NLS-1$
 			sourceExtensions.addAll(Arrays.asList(extensions));
 
@@ -36,8 +37,8 @@ public class ServerUtil {
 			sourceExtensions.addAll(Arrays.asList(extensions));
 		}
 
-		IPath path = Path.fromOSString(fullNameOrExtension);
-		String ext = path.getFileExtension().toUpperCase();
+		final IPath path = Path.fromOSString(fullNameOrExtension);
+		final String ext = path.getFileExtension().toUpperCase();
 
 		return sourceExtensions.contains(ext);
 	}

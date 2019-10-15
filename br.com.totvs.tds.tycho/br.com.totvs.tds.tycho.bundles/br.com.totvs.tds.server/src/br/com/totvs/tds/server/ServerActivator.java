@@ -16,7 +16,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 import org.osgi.framework.BundleContext;
@@ -158,8 +157,7 @@ public final class ServerActivator extends Plugin {
 				is = new FileInputStream(file);
 				getServerManager().loadFrom(is);
 			} catch (final OptionalDataException e) {
-				showStatus(IStatus.ERROR,
-						Messages.ServerActivator_Failed_load_server_file, e);
+				showStatus(IStatus.ERROR, Messages.ServerActivator_Failed_load_server_file, e);
 			} catch (ClassNotFoundException | IOException e) {
 				logStatus(IStatus.ERROR, e.getMessage(), e);
 			} finally {
@@ -219,9 +217,8 @@ public final class ServerActivator extends Plugin {
 	 *
 	 * @return status
 	 */
-	public static IStatus createStatus(final int level, final String message, final Throwable thr) {
-
-		return new Status(level, PLUGIN_ID, 0, message, thr);
+	public static IStatus createStatus(final int level, final String message, final Object... args) {
+		return TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
 	}
 
 	/**
@@ -233,7 +230,7 @@ public final class ServerActivator extends Plugin {
 	 * @return status
 	 */
 	public static IStatus showStatus(final int level, final String message, final Object... args) {
-		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		final IStatus status = createStatus(level, message, args);
 		TDSMessageHandler.showMessage(status);
 
 		getDefault().getLog().log(status);
@@ -242,7 +239,7 @@ public final class ServerActivator extends Plugin {
 	}
 
 	public static IStatus logStatus(final int level, final String message, final Object... args) {
-		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
+		final IStatus status = createStatus(level, message, args);
 		TDSMessageHandler.logMessage(status);
 
 		getDefault().getLog().log(status);

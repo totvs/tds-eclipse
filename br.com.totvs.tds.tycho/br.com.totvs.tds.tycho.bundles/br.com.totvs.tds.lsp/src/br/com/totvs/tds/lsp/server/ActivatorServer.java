@@ -14,6 +14,8 @@ import br.com.totvs.tds.lsp.server.model.Messages;
 
 public class ActivatorServer implements BundleActivator {
 
+	public static final String PLUG_IN = "br.com.totvs.tds.lsp.server";
+
 	private static ActivatorServer plugins;
 
 	@Override

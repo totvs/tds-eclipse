@@ -6,7 +6,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 /**
- * �cones utilizados pelo adicional.
+ * Ícones utilizados pelo adicional.
  *
  * @author acandido
  */
@@ -29,17 +29,6 @@ public final class ServerUIIcons {
 	public static ImageDescriptor getBuildPatch() {
 
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/patch_build_wizard.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getCamera() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/camera.png"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the clear
-	 */
-	private static ImageDescriptor getClear() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR);
 	}
 
 	public static ImageDescriptor getCompileKeyLock() {
@@ -78,34 +67,24 @@ public final class ServerUIIcons {
 		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT);
 	}
 
-	private static ImageDescriptor getFileObj() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/file_obj.gif"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the form banner
-	 */
-	private static ImageDescriptor getFormBanner() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/form_banner.gif"); //$NON-NLS-1$
+	public static ImageDescriptor getError() {
+		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_ERROR_TSK);
 	}
 
 	public static Image getFunctionInspector() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/function_rpo.gif").createImage(); //$NON-NLS-1$
 	}
 
-	private static ImageDescriptor getGears() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/gears.gif"); //$NON-NLS-1$
+	public static ImageDescriptor getHelp() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/help.png"); //$NON-NLS-1$
 	}
 
-	private static ImageDescriptor getIndex() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/index.gif"); //$NON-NLS-1$
+	public static ImageDescriptor getInfo() {
+		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK);
 	}
 
-	/**
-	 * @return the log icon
-	 */
-	private static ImageDescriptor getLog() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/log.gif"); //$NON-NLS-1$
+	public static ImageDescriptor getLinkIcon() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/linkDarkGray16x16.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getLogix() {
@@ -114,13 +93,6 @@ public final class ServerUIIcons {
 
 	public static ImageDescriptor getMultiEnvironment() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/check.png"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the newKey
-	 */
-	private static ImageDescriptor getNewKey() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/newkey.gif"); //$NON-NLS-1$
 	}
 
 	public static Image getObjectInspector() {
@@ -157,10 +129,10 @@ public final class ServerUIIcons {
 	}
 
 	/**
-	 * @return the play
+	 * @return the pgmAdvpl
 	 */
-	private static ImageDescriptor getPlay() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/play.gif"); //$NON-NLS-1$
+	public static ImageDescriptor getPgmAdvpl() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/pgm_advpl.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getProtheus() {
@@ -170,10 +142,6 @@ public final class ServerUIIcons {
 	/**
 	 * @return the refreshMessage
 	 */
-	private static ImageDescriptor getRefreshMessage() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/refresh_message.gif"); //$NON-NLS-1$
-	}
-
 	public static ImageDescriptor getRunning() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/running.png"); //$NON-NLS-1$
 	}
@@ -190,37 +158,9 @@ public final class ServerUIIcons {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/slave.png"); //$NON-NLS-1$
 	}
 
-	/**
-	 * @return the stop
-	 */
-	private static ImageDescriptor getStop() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_STOP);
-	}
-
 	public static ImageDescriptor getTemplate() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	/**
-	 * @return the update05Seconds
-	 */
-	private static ImageDescriptor getUpdate05Seconds() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/clock03-16x16.png"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the update15Seconds
-	 */
-	private static ImageDescriptor getUpdate15Seconds() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/clock02-16x16.png"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the update30Seconds
-	 */
-	private static ImageDescriptor getUpdate30Seconds() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/clock01-16x16.png"); //$NON-NLS-1$
 	}
 
 	/**
@@ -237,16 +177,12 @@ public final class ServerUIIcons {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/user_64.png"); //$NON-NLS-1$
 	}
 
-	private static ImageDescriptor getWarning() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/warning.gif"); //$NON-NLS-1$
+	public static ImageDescriptor getWarning() {
+		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_WARN_TSK);
 	}
 
 	public static ImageDescriptor getWarningBigDecorator() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/warning_bigdecorator.gif"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getWarningDecorator() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/warning_decorator.gif"); //$NON-NLS-1$
 	}
 
 	/**
@@ -261,6 +197,10 @@ public final class ServerUIIcons {
 	 */
 	public static ImageDescriptor getWizardServer() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/server_wizard.png"); //$NON-NLS-1$
+	}
+
+	public static ImageDescriptor getZip() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/zip.png"); //$NON-NLS-1$
 	}
 
 	private ServerUIIcons() {

@@ -32,7 +32,8 @@ Require-Bundle: org.eclipse.ui,
  com.google.gson,
  org.eclipse.ui.ide,
  org.eclipse.swt,
- br.com.totvs.tds.ui.sdk
+ br.com.totvs.tds.ui.sdk,
+ org.eclipse.wb.core.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: br.com.totvs.tds.ui.server;
   uses:="org.eclipse.swt.graphics,

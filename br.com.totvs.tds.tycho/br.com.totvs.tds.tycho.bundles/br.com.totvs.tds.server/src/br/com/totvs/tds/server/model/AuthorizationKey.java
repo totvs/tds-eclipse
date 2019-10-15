@@ -20,14 +20,18 @@ import br.com.totvs.tds.server.interfaces.IAuthorizationKey;
 
 final public class AuthorizationKey implements IAuthorizationKey {
 
-	private String authorizationFile;
-	private String machineId;
-	private String errorMessage;
-	private String idFile;
-	private String generatedAt;
-	private String validUntil;
-	private String authorizationCode;
-	private boolean overridePermission;
+	private String authorizationFile = "";
+	private String machineId = "";
+	private String errorMessage = "";
+	private String idFile = "";
+	private String generatedAt = "";
+	private String validUntil = "";
+	private String authorizationCode = "";
+	private boolean overridePermission = false;
+
+	public AuthorizationKey() {
+		load();
+	}
 
 	private void load() {
 		authorizationFile = ""; //$NON-NLS-1$

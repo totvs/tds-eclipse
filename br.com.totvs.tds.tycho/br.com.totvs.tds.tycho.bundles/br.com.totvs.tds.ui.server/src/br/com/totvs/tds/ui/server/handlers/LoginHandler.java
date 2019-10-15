@@ -53,10 +53,7 @@ public class LoginHandler extends ServerHandler {
 		boolean isLogged = false;
 
 		try {
-			IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-			ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-
-			isLogged = connector.authentication(lsService, connectionMap);
+			isLogged = connector.authentication(connectionMap);
 			if (!isLogged) {
 				connectMessage = Messages.LoginHandler_connection_error_1;
 				ServerUIActivator.logStatus(IStatus.ERROR, connectMessage);

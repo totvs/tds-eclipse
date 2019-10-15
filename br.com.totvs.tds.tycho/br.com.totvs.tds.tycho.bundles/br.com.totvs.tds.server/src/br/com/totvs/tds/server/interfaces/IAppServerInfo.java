@@ -1,12 +1,19 @@
 package br.com.totvs.tds.server.interfaces;
 
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.debug.core.ILaunchesListener;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
+import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
+import br.com.totvs.tds.server.jobs.ApplyPatchReturn;
+import br.com.totvs.tds.server.jobs.CleanUpType;
+import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
 import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.server.model.SourceInformation;
 
 /**
  * Interface AppServerInfo.
@@ -178,7 +185,19 @@ public interface IAppServerInfo extends IServerInfo {
 
 	boolean isLocalServer();
 
-	boolean authentication(ILanguageServerService lsService, Map<String, Object> connectionMap);
+	boolean authentication(Map<String, Object> connectionMap);
 
 	String[] getDirectory(String environment, String absolutPath, boolean b);
+
+	IServerReturn _getPatchIntegrity(String env, List<URI> patchFile, boolean local);
+
+	List<SourceInformation> getPatchInfo(String environment, Path serverPatch);
+
+	ApplyPatchReturn applyPatch(String environment, String serverPatch, boolean local, boolean oldPrograms);
+
+	void cleanUp(String environment, CleanUpType cleanupPatch);
+
+	ValidationPatchReturn validPatch(String environment, final List<URI> patchFiles, boolean local);
+
+	void buidlFile(List<String> files, CompileOptions compileOptions, List<String> includePaths);
 }

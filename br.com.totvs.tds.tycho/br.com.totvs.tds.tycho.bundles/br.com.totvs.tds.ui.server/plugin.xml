@@ -116,15 +116,21 @@
        </command>
        <menu
              label="%menu.label.0">
+			<visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+			</visibleWhen>
           <command
                 commandId="br.com.totvs.tds.ui.server.commands.buildPatchCommand"
                 icon="icons/patch_build.png"
                 label="%command.label.5"
                 tooltip="%command.tooltip.4">
           </command>
-			<visibleWhen checkEnabled="false">
-				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
-			</visibleWhen>
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.applyPatchCommand"
+                icon="icons/apply_patch.png"
+                label="Aplicar"
+                tooltip="Aplica pacotes de atualização">
+          </command>
        </menu>
        <command
              commandId="br.com.totvs.tds.ui.server.commands.startServerCommand"
@@ -311,6 +317,11 @@
     	defaultHandler="br.com.totvs.tds.ui.server.handlers.BuildPatchHandler"
         id="br.com.totvs.tds.ui.server.commands.buildPatchCommand"
         name="%command.name.0">
+     </command>
+    <command
+    	defaultHandler="br.com.totvs.tds.ui.server.handlers.ApplyPatchHandler"
+        id="br.com.totvs.tds.ui.server.commands.applyPatchCommand"
+        name="Aplicar Pacote de Atualização">
      </command>
     <command
           categoryId="br.com.totvs.tds.ui.server.commands.category"

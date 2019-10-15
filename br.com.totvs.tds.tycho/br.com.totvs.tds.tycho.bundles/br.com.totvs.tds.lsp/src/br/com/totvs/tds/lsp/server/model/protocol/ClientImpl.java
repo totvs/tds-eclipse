@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 import org.eclipse.lsp4e.LanguageClientImpl;
 import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 
+import br.com.totvs.tds.lsp.server.model.node.ApplyPatchNode;
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
@@ -226,6 +227,24 @@ public class ClientImpl extends LanguageClientImpl {
 
 		final CompletableFuture<IdNode> future = server.getId();
 		IdNode result = null;
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public ApplyPatchNode patchApply(final PatchApplyData patchApplyData) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+
+		final CompletableFuture<ApplyPatchNode> future = server.patchApply(patchApplyData);
+		ApplyPatchNode result = null;
 		try {
 			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
 		} catch (final InterruptedException e) {

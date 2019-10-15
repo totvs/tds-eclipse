@@ -6,6 +6,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.IStatus;
+
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 
@@ -115,5 +117,13 @@ public interface ILanguageServerService {
 	 * @return
 	 */
 	String getMachineId();
+
+	IStatus _getPatchIntegrity(final String token, final String authenticateToken, final String environment,
+			final List<URI> patchFile, final boolean local);
+
+	IStatus validPatch(String token, String authorizationCode, String environment, List<URI> patchFiles, boolean local);
+
+	IStatus applyPatch(String token, String authorizationCode, String environment, String patchFile, boolean local,
+			boolean oldPrograms);
 
 }

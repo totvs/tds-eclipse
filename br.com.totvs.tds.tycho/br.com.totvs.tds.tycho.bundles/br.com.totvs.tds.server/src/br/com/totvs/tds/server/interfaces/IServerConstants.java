@@ -1,7 +1,7 @@
 package br.com.totvs.tds.server.interfaces;
 
 /**
- * Constantes para manipulação de pr�ferencias.
+ * Constantes para uso geral.
  *
  * @author eriky.kashivagui
  *
@@ -162,5 +162,7 @@ public interface IServerConstants {
 	public static final String APP_SERVER_PATH = "app.server.path"; //$NON-NLS-1$
 
 	public static final String LOCAL_SERVER = "local.server"; //$NON-NLS-1$
+
+	public static final String PERMISSIONS_APPLY_PATCH_ALLOWED = "PERMISSIONS_APPLY_PATCH_ALLOWED";
 
 }

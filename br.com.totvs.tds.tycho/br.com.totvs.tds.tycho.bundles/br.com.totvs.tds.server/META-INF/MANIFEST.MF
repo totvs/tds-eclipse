@@ -14,7 +14,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.12.0",
  org.eclipse.debug.core,
  org.eclipse.ui,
  br.com.totvs.tds.ui;bundle-version="11.4.0",
- org.eclipse.equinox.security
+ org.eclipse.equinox.security,
+ org.eclipse.equinox.registry,
+ org.eclipse.core.jobs
 Bundle-Vendor: %Bundle-Vendor
 Automatic-Module-Name: br.com.totvs.tds.server
 Export-Package: br.com.totvs.tds.server;uses:="org.osgi.framework,org.eclipse.core.runtime,br.com.totvs.tds.server.interfaces",
@@ -26,3 +28,4 @@ Export-Package: br.com.totvs.tds.server;uses:="org.osgi.framework,org.eclipse.co
  br.com.totvs.tds.server.persistence,
  br.com.totvs.tds.server.tools,
  br.com.totvs.tds.server.xml
+Import-Package: org.apache.commons.io

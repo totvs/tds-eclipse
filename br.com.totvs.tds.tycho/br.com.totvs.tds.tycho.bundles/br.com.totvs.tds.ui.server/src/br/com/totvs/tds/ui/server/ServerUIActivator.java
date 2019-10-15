@@ -47,7 +47,7 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 	 * @param thr
 	 * @return status
 	 */
-	public static IStatus showStatus(int level, int title, String message, Object... args) {
+	public static IStatus showStatus(int level, String message, Object... args) {
 		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
 		TDSMessageHandler.showMessage(status);
 

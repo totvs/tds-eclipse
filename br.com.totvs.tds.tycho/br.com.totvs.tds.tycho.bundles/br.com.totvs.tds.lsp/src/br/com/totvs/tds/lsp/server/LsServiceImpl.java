@@ -8,6 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
+import br.com.totvs.tds.lsp.server.model.node.ApplyPatchNode;
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
@@ -30,10 +34,12 @@ import br.com.totvs.tds.lsp.server.model.protocol.DisconnectInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsData;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.KeyInfo;
-import br.com.totvs.tds.lsp.server.model.protocol.PathDirListData;
-import br.com.totvs.tds.lsp.server.model.protocol.PathDirListInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.PatchApplyData;
+import br.com.totvs.tds.lsp.server.model.protocol.PatchApplyInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateData;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.PathDirListData;
+import br.com.totvs.tds.lsp.server.model.protocol.PathDirListInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsData;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.SlaveData;
@@ -280,10 +286,109 @@ public final class LsServiceImpl implements ILanguageServerService {
 		return machineId;
 	}
 
-	/*
-	 * languageClient.sendRequest('$totvsserver/getId') .then((response: any) => {
-	 * if (response.id) { currentPanel.webview.postMessage({ command: "setID", 'id':
-	 * response.id }); } }, (err) => { vscode.window.showErrorMessage(err); });
-	 *
-	 */
+	@Override
+	public IStatus _getPatchIntegrity(final String token, final String authenticateToken, final String environment,
+			final List<URI> patchFile, final boolean local) {
+
+		final String[] patchArray = new String[patchFile.size()];
+		for (int i = 0; i < patchArray.length; i++) {
+			patchArray[i] = patchFile.get(i).toString();
+			if (patchArray[i].startsWith("file:/")) {
+				patchArray[i] = patchArray[i].substring(6);
+			}
+		}
+		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
+
+		patchApplyInfo.setConnectionToken(token);
+		patchApplyInfo.setAuthenticateToken(authenticateToken);
+		patchApplyInfo.setEnvironment(environment);
+		patchApplyInfo.setPatchUris(patchArray);
+		patchApplyInfo.setLocal(local);
+		patchApplyInfo.setValidatePatch(true);
+		patchApplyInfo.setApplyOldProgram(false);
+
+		final PatchApplyData patchApplyData = new PatchApplyData(patchApplyInfo);
+		final ApplyPatchNode applyPatchNode = ClientImpl.getInstance().patchApply(patchApplyData);
+
+		IStatus status = Status.OK_STATUS;
+		if (applyPatchNode == null) {
+			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
+					"Erro desconhecido. Verifique o log de console do servidor.");
+		} else if (applyPatchNode.getReturnCode() != 0) {
+			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
+					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
+		}
+
+		return status;
+	}
+
+	@Override
+	public IStatus validPatch(final String token, final String authorizationCode, final String environment,
+			final List<URI> patchFiles, final boolean local) {
+		final String[] patchArray = new String[patchFiles.size()];
+		for (int i = 0; i < patchArray.length; i++) {
+			patchArray[i] = patchFiles.get(i).toString();
+			if (patchArray[i].startsWith("file:/")) {
+				patchArray[i] = patchArray[i].substring(6);
+			}
+		}
+		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
+
+		patchApplyInfo.setConnectionToken(token);
+		patchApplyInfo.setAuthenticateToken(authorizationCode);
+		patchApplyInfo.setEnvironment(environment);
+		patchApplyInfo.setPatchUris(patchArray);
+		patchApplyInfo.setLocal(local);
+		patchApplyInfo.setValidatePatch(true);
+		patchApplyInfo.setApplyOldProgram(false);
+
+		final PatchApplyData patchApplyData = new PatchApplyData(patchApplyInfo);
+		final ApplyPatchNode applyPatchNode = ClientImpl.getInstance().patchApply(patchApplyData);
+
+		IStatus status = Status.OK_STATUS;
+		if (applyPatchNode == null) {
+			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
+					"Erro desconhecido. Verifique o log de console do servidor.");
+		} else if (applyPatchNode.getReturnCode() != 0) {
+			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
+					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
+		}
+
+		return status;
+	}
+
+	@Override
+	public IStatus applyPatch(final String token, final String authorizationCode, final String environment,
+			final String patchFile, final boolean local, final boolean oldPrograms) {
+		final String[] patchArray = new String[1];
+		patchArray[0] = patchFile;
+		if (patchArray[0].startsWith("file:/")) {
+			patchArray[0] = patchArray[0].substring(6);
+		}
+
+		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
+
+		patchApplyInfo.setConnectionToken(token);
+		patchApplyInfo.setAuthenticateToken(authorizationCode);
+		patchApplyInfo.setEnvironment(environment);
+		patchApplyInfo.setPatchUris(patchArray);
+		patchApplyInfo.setLocal(local);
+		patchApplyInfo.setValidatePatch(false);
+		patchApplyInfo.setApplyOldProgram(oldPrograms);
+
+		final PatchApplyData patchApplyData = new PatchApplyData(patchApplyInfo);
+		final ApplyPatchNode applyPatchNode = ClientImpl.getInstance().patchApply(patchApplyData);
+
+		IStatus status = Status.OK_STATUS;
+		if (applyPatchNode == null) {
+			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
+					"Erro desconhecido. Verifique o log de console do servidor.");
+		} else if (applyPatchNode.getReturnCode() != 0) {
+			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
+					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
+		}
+
+		return status;
+	}
+
 }

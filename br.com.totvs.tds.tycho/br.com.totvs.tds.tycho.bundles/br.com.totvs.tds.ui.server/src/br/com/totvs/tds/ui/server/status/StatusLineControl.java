@@ -38,7 +38,6 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.menus.WorkbenchWindowControlContribution;
 import org.eclipse.ui.services.IServiceLocator;
-import org.eclipse.wb.swt.ResourceManager;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
@@ -224,7 +223,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				popupMenu.setVisible(true);
 			}
 		});
-		this.tbServerItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/server.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		this.tbServerItem.setImage(ServerUIIcons.getServer().createImage());
 
 		this.tbUserItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbUserItem.addSelectionListener(new SelectionAdapter() {
@@ -233,7 +232,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				System.out.println("StatusLineControl.fill(...).new SelectionAdapter() {...}.widgetSelected()"); //$NON-NLS-1$
 			}
 		});
-		this.tbUserItem.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/user.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		this.tbUserItem.setImage(ServerUIIcons.getUser().createImage());
 
 		this.tbCompileKeyItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbCompileKeyItem.addSelectionListener(new SelectionAdapter() {
@@ -255,8 +254,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				openSelectOrganization();
 			}
 		});
-		this.tbOrganizationItem
-				.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui.server", "icons/organizations.png")); //$NON-NLS-1$ //$NON-NLS-2$
+		this.tbOrganizationItem.setImage(ServerUIIcons.getOrganizations().createImage());
 
 		updateStatusPanel();
 

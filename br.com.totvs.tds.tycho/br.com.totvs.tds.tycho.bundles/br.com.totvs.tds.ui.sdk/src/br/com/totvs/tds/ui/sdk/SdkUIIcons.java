@@ -65,13 +65,6 @@ public final class SdkUIIcons {
 	}
 
 	/**
-	 * @return the pgmAdvpl
-	 */
-	private static ImageDescriptor getPgmAdvpl() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/project/pgm_advpl.png"); //$NON-NLS-1$
-	}
-
-	/**
 	 * @return the ignoreCompile
 	 */
 	private static ImageDescriptor getIgnoreCompile() {
@@ -108,33 +101,8 @@ public final class SdkUIIcons {
 	}
 
 	/**
-	 * @return the info
-	 */
-	private static ImageDescriptor getInfo() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK);
-	}
-
-	/**
-	 * @return the warning
-	 */
-	private static ImageDescriptor getWarning() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_WARN_TSK);
-	}
-
-	/**
-	 * @return the error
-	 */
-	private static ImageDescriptor getError() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_ERROR_TSK);
-	}
-
-	/**
 	 * @return the new
 	 */
-	private static ImageDescriptor getHelp() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/help.gif"); //$NON-NLS-1$
-	}
-
 	private static ImageDescriptor getBrAmarelo() {
 		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_amarelo.png"); //$NON-NLS-1$
 	}
@@ -173,14 +141,6 @@ public final class SdkUIIcons {
 
 	private static ImageDescriptor getBrPreto() {
 		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_preto.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getLinkIcon() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/linkDarkGray16x16.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getZip() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/zip.gif"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getSearch() {

@@ -19,10 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.services.IServiceLocator;
 
-import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAuthorizationKey;
@@ -286,8 +283,8 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 			if (serialVerion != CURRENT_SERIAL_VERSION) {
 				ServerActivator.logStatus(IStatus.WARNING, Messages.ServerManagerImpl_Server_manager,
-						String.format(Messages.ServerManagerImpl_Server_manager_version_warning,
-								CURRENT_SERIAL_VERSION, serialVerion));
+						String.format(Messages.ServerManagerImpl_Server_manager_version_warning, CURRENT_SERIAL_VERSION,
+								serialVerion));
 			}
 
 			final IGroupInfo rootGroupAux = (IGroupInfo) ois.readObject();
@@ -335,13 +332,9 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 						ServerActivator.logStatus(IStatus.INFO, Messages.ServerManagerImpl_Connection,
 								Messages.ServerManagerImpl_Connecting_server_credentials_saved);
 
-						final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-						final ILanguageServerService lsService = serviceLocator
-								.getService(ILanguageServerService.class);
-
 						for (final IServerInfo serverInfo : activeServers) {
 							if (serverInfo instanceof IAppServerInfo) {
-								doReconnect((IAppServerInfo) serverInfo, lsService);
+								doReconnect((IAppServerInfo) serverInfo);
 							}
 						}
 					}
@@ -366,21 +359,21 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		}
 	}
 
-	protected void doReconnect(final IAppServerInfo serverInfo, final ILanguageServerService lsService) {
+	protected void doReconnect(final IAppServerInfo serverInfo) {
 		boolean isLogged = false;
 
 		final String connectMessage = Messages.ServerManagerImpl_Connection_refused_server;
 		try {
 			final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
-			isLogged = serverInfo.authentication(lsService, connectionMap);
+			isLogged = serverInfo.authentication(connectionMap);
 
 			if (!isLogged) {
-				ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage, serverInfo.getName(),
-						serverInfo.getCurrentEnvironment());
+				ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage,
+						serverInfo.getName(), serverInfo.getCurrentEnvironment());
 			}
 		} catch (final Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage, serverInfo.getName(),
-					serverInfo.getCurrentEnvironment());
+			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage,
+					serverInfo.getName(), serverInfo.getCurrentEnvironment());
 			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Cause, e.getMessage());
 		}
 	}
