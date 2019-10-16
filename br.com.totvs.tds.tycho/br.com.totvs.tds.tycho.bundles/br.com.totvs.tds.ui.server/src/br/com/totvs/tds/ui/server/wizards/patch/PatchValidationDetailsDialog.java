@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn;
-import br.com.totvs.tds.server.jobs.ApplyPatchMode;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchMode;
 
 /**
  * Exibe detalhes da valida��o do Patch.

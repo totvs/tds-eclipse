@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -85,21 +86,36 @@ public final class TDSUtil {
 		return (Boolean.TRUE.toString().equals(System.getProperty("isTest", Boolean.FALSE.toString()))); //$NON-NLS-1$
 	}
 
-	public static String fileDialog(final Shell shell, final String[] filter, final String[] filterNames,
-			final boolean multiSelecion) {
+	public static String[] multFileDialog(final Shell shell, final String[] filter, final String[] filterNames) {
+		if (isRunningInTestMode()) {
+			return new String[] { System.getProperty("return") }; //$NON-NLS-1$
+		}
+
+		final FileDialog dialog = new FileDialog(shell, SWT.MULTI);
+		dialog.setFilterExtensions(filter);
+		dialog.setFilterNames(filterNames);
+		dialog.open();
+
+		final String folder = dialog.getFilterPath();
+
+		final String[] files = dialog.getFileNames();
+		for (int i = 0; i < files.length; i++) {
+			files[i] = Paths.get(folder, files[i]).toString();
+		}
+
+		return files;
+	}
+
+	public static String fileDialog(final Shell shell, final String[] filter, final String[] filterNames) {
 		if (isRunningInTestMode()) {
 			return System.getProperty("return"); //$NON-NLS-1$
 		}
 
-		final FileDialog dialog = new FileDialog(shell, multiSelecion ? SWT.MULTI : SWT.NONE);
+		final FileDialog dialog = new FileDialog(shell, SWT.NONE);
 		dialog.setFilterExtensions(filter);
 		dialog.setFilterNames(filterNames);
 
 		return dialog.open();
-	}
-
-	public static String fileDialog(final Shell shell, final String[] filter, final String[] filterNames) {
-		return fileDialog(shell, filter, filterNames, false);
 	}
 
 	public static String fileDialog(final Shell shell) {

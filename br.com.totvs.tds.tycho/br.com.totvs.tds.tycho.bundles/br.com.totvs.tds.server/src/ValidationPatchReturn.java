@@ -2,8 +2,8 @@
 import java.util.List;
 
 import br.com.totvs.tds.server.interfaces.IValidationPatchReturn;
-import br.com.totvs.tds.server.jobs.ApplyPatchMode;
 import br.com.totvs.tds.server.jobs.ServerReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchMode;
 
 /**
  * ValidationPatchReturn.

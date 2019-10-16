@@ -23,8 +23,6 @@ public class Messages extends NLS {
 
 	public static String CompilerPreferencePage_show_apppre_command;
 
-	public static String ConnectHandler_connect;
-
 	public static String ImportServerMergePage_import_merge_page_title;
 
 	public static String ImportServerMergePage_keep_servers;

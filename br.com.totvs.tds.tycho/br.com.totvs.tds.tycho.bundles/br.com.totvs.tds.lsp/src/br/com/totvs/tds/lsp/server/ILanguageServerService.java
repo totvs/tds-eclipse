@@ -118,12 +118,12 @@ public interface ILanguageServerService {
 	 */
 	String getMachineId();
 
-	IStatus _getPatchIntegrity(final String token, final String authenticateToken, final String environment,
-			final List<URI> patchFile, final boolean local);
+	IStatus getPatchIntegrity(final String token, final String authenticateToken, final String environment,
+			final URI patchFile, final boolean local);
 
-	IStatus validPatch(String token, String authorizationCode, String environment, List<URI> patchFiles, boolean local);
+	IStatus validPatch(String token, String authorizationCode, String environment, URI patchFile, boolean local);
 
-	IStatus applyPatch(String token, String authorizationCode, String environment, String patchFile, boolean local,
+	IStatus applyPatch(String token, String authorizationCode, String environment, URI patchFile, boolean local,
 			boolean oldPrograms);
 
 }

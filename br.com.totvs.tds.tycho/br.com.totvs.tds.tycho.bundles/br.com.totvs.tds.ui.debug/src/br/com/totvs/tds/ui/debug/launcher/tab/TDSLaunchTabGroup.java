@@ -12,7 +12,6 @@ import org.eclipse.debug.ui.sourcelookup.SourceLookupTab;
 /**
  * Agrupa as preferencias de execução, depuração e coverage de aplicações TOTVS.
  *
- * @author daniel.yampolschi
  * @author acandido
  *
  */

@@ -6,9 +6,10 @@ import org.eclipse.ui.PlatformUI;
 
 /**
  * Icons to be used from all UI plugins.
- * 
+ *
+ * @author acandido
  * @author daniel.yampolschi
- * 
+ *
  */
 public final class TDSUIIcons {
 

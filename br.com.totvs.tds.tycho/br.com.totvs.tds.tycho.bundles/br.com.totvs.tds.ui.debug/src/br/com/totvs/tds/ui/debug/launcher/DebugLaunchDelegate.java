@@ -36,7 +36,7 @@ import br.com.totvs.tds.ui.debug.model.DAPDebugTarget;
 /**
  * The Class that defines the launcher.
  *
- * @author daniel.yampolschi
+ * @author acandido
  *
  */
 @SuppressWarnings("restriction")
@@ -70,7 +70,8 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		DebugUIActivator.logStatus(IStatus.INFO, modeTitle, Messages.DebugLaunchDelegate_Starting_SmartClient);
 
 		if (monitor.isCanceled()) {
-			DebugUIActivator.logStatus(IStatus.CANCEL, modeTitle, Messages.DebugLaunchDelegate_SmartClient_execution_canceled);
+			DebugUIActivator.logStatus(IStatus.CANCEL, modeTitle,
+					Messages.DebugLaunchDelegate_SmartClient_execution_canceled);
 			return;
 		}
 
@@ -172,7 +173,8 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		this.lp = new LaunchParameters(params);
 
 		if (lp == null) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_Executor_parameters_invalid));
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR,
+					Messages.DebugLaunchDelegate_Executor_parameters_invalid));
 		}
 
 		final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
@@ -188,7 +190,8 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 
 		environment = server.getCurrentEnvironment();
 		if ((environment == null) || (environment.isEmpty())) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_No_environment_selected));
+			throw new CoreException(
+					DebugUIActivator.showStatus(IStatus.ERROR, Messages.DebugLaunchDelegate_No_environment_selected));
 		}
 
 		final File smartClientFile = new File(server.getSmartClientPath());

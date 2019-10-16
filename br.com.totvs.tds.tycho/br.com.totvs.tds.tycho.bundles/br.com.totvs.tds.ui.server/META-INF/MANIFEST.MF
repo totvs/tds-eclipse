@@ -50,7 +50,6 @@ Export-Package: br.com.totvs.tds.ui.server;
    br.com.totvs.tds.server.xml",
  br.com.totvs.tds.ui.server.commands;uses:="br.com.totvs.tds.server.ui.handlers,org.eclipse.core.commands",
  br.com.totvs.tds.ui.server.dialog,
- br.com.totvs.tds.ui.server.exception,
  br.com.totvs.tds.ui.server.fileSystem,
  br.com.totvs.tds.ui.server.handlers;uses:="br.com.totvs.tds.server.interfaces,org.eclipse.core.commands",
  br.com.totvs.tds.ui.server.internal;x-internal:=true,

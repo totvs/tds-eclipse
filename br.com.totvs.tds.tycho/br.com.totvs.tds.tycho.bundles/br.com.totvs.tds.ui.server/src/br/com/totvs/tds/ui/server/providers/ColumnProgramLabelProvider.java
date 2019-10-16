@@ -3,14 +3,15 @@ package br.com.totvs.tds.ui.server.providers;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn;
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn.MessageType;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn.MessageType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 /**
  * The Label Provider for the Column Program.
  *
  * @author daniel.yampolschi
+ * @author acandido
  *
  */
 public class ColumnProgramLabelProvider extends ColumnLabelProvider {

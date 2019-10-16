@@ -10,8 +10,8 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 
-import br.com.totvs.tds.server.jobs.ApplyPatchAttributes;
-import br.com.totvs.tds.server.jobs.ApplyPatchJob;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchAttributes;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchJob;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 
 /**

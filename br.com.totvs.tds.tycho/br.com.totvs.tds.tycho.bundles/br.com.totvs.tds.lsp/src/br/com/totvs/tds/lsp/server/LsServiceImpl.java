@@ -287,18 +287,15 @@ public final class LsServiceImpl implements ILanguageServerService {
 	}
 
 	@Override
-	public IStatus _getPatchIntegrity(final String token, final String authenticateToken, final String environment,
-			final List<URI> patchFile, final boolean local) {
-
-		final String[] patchArray = new String[patchFile.size()];
-		for (int i = 0; i < patchArray.length; i++) {
-			patchArray[i] = patchFile.get(i).toString();
-			if (patchArray[i].startsWith("file:/")) {
-				patchArray[i] = patchArray[i].substring(6);
-			}
+	public IStatus getPatchIntegrity(final String token, final String authenticateToken, final String environment,
+			final URI patchFile, final boolean local) {
+		final String[] patchArray = new String[1];
+		patchArray[0] = patchFile.toString();
+		if (patchArray[0].startsWith("file://")) {
+			patchArray[0] = patchArray[0].substring(8);
 		}
-		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
 
+		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
 		patchApplyInfo.setConnectionToken(token);
 		patchApplyInfo.setAuthenticateToken(authenticateToken);
 		patchApplyInfo.setEnvironment(environment);
@@ -324,16 +321,14 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 	@Override
 	public IStatus validPatch(final String token, final String authorizationCode, final String environment,
-			final List<URI> patchFiles, final boolean local) {
-		final String[] patchArray = new String[patchFiles.size()];
-		for (int i = 0; i < patchArray.length; i++) {
-			patchArray[i] = patchFiles.get(i).toString();
-			if (patchArray[i].startsWith("file:/")) {
-				patchArray[i] = patchArray[i].substring(6);
-			}
+			final URI patchFile, final boolean local) {
+		final String[] patchArray = new String[1];
+		patchArray[0] = patchFile.toString();
+		if (patchArray[0].startsWith("file://")) {
+			patchArray[0] = patchArray[0].substring(8);
 		}
-		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
 
+		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
 		patchApplyInfo.setConnectionToken(token);
 		patchApplyInfo.setAuthenticateToken(authorizationCode);
 		patchApplyInfo.setEnvironment(environment);
@@ -359,11 +354,11 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 	@Override
 	public IStatus applyPatch(final String token, final String authorizationCode, final String environment,
-			final String patchFile, final boolean local, final boolean oldPrograms) {
+			final URI patchFile, final boolean local, final boolean oldPrograms) {
 		final String[] patchArray = new String[1];
-		patchArray[0] = patchFile;
-		if (patchArray[0].startsWith("file:/")) {
-			patchArray[0] = patchArray[0].substring(6);
+		patchArray[0] = patchFile.toString();
+		if (patchArray[0].startsWith("file://")) {
+			patchArray[0] = patchArray[0].substring(8);
 		}
 
 		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();

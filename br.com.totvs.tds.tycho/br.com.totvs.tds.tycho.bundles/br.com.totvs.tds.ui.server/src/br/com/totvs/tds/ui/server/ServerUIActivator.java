@@ -39,6 +39,14 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 		return status;
 	}
 
+	public static IStatus logStatus(IStatus status) {
+		TDSMessageHandler.showMessage(status);
+
+		getDefault().getLog().log(status);
+
+		return status;
+	}
+
 	/**
 	 * Utility method to create status.
 	 *
@@ -49,7 +57,7 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 	 */
 	public static IStatus showStatus(int level, String message, Object... args) {
 		IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
-		TDSMessageHandler.showMessage(status);
+		TDSMessageHandler.logMessage(status);
 
 		getDefault().getLog().log(status);
 

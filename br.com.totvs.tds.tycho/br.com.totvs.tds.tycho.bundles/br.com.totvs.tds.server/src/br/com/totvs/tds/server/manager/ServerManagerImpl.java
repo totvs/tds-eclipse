@@ -329,7 +329,7 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 					if (!activeServers.isEmpty()) {
 						monitor.subTask(Messages.ServerManagerImpl_Server_connect);
-						ServerActivator.logStatus(IStatus.INFO, Messages.ServerManagerImpl_Connection,
+						ServerActivator.logStatus(IStatus.INFO,
 								Messages.ServerManagerImpl_Connecting_server_credentials_saved);
 
 						for (final IServerInfo serverInfo : activeServers) {
@@ -368,12 +368,12 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 			isLogged = serverInfo.authentication(connectionMap);
 
 			if (!isLogged) {
-				ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage,
-						serverInfo.getName(), serverInfo.getCurrentEnvironment());
+				ServerActivator.logStatus(IStatus.ERROR, connectMessage, serverInfo.getName(),
+						serverInfo.getCurrentEnvironment());
 			}
 		} catch (final Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection, connectMessage,
-					serverInfo.getName(), serverInfo.getCurrentEnvironment());
+			ServerActivator.logStatus(IStatus.ERROR, connectMessage, serverInfo.getName(),
+					serverInfo.getCurrentEnvironment());
 			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Cause, e.getMessage());
 		}
 	}

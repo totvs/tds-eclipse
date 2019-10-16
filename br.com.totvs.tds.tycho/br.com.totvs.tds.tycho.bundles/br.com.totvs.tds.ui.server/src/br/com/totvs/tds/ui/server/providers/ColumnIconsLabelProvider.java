@@ -19,7 +19,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.events.HyperlinkAdapter;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
 import br.com.totvs.tds.ui.TDSUtil;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;

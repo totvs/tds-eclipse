@@ -35,10 +35,9 @@ import br.com.totvs.tds.server.interfaces.IServerConstants;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerReturn;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
-import br.com.totvs.tds.server.jobs.ApplyPatchReturn;
-import br.com.totvs.tds.server.jobs.CleanUpType;
 import br.com.totvs.tds.server.jobs.ServerReturn;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchReturn;
 
 /**
  * Base de servidores Protheus.
@@ -614,11 +613,11 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public IServerReturn _getPatchIntegrity(final String environment, final List<URI> patchFiles, final boolean local) {
+	public IServerReturn getPatchIntegrity(final String environment, final URI patchFiles, final boolean local) {
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
-		final IStatus status = lsService._getPatchIntegrity(getToken(), getAuthorizationCode(), environment, patchFiles,
+		final IStatus status = lsService.getPatchIntegrity(getToken(), getAuthorizationCode(), environment, patchFiles,
 				local);
 
 		final IServerReturn serverReturn = new ServerReturn(status.isOK(), status.getMessage());
@@ -633,21 +632,20 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public ValidationPatchReturn validPatch(final String environment, final List<URI> patchFiles, final boolean local) {
+	public ValidationPatchReturn validPatch(final String environment, final URI patchFile, final boolean local) {
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
-		final IStatus status = lsService.validPatch(getToken(), getAuthorizationCode(), environment, patchFiles, local);
+		final IStatus status = lsService.validPatch(getToken(), getAuthorizationCode(), environment, patchFile, local);
 
-		final IServerReturn serverReturn = new ServerReturn(status.isOK(), status.getMessage());
-
-		final ValidationPatchReturn validationPatchReturn = new ValidationPatchReturn();
+		final ValidationPatchReturn validationPatchReturn = new ValidationPatchReturn(status.isOK(),
+				status.getMessage());
 
 		return validationPatchReturn;
 	}
 
 	@Override
-	public ApplyPatchReturn applyPatch(final String environment, final String serverPatch, final boolean local,
+	public ApplyPatchReturn applyPatch(final String environment, final URI serverPatch, final boolean local,
 			final boolean oldPrograms) {
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
@@ -661,12 +659,6 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 				serverReturn.getReturnMessage());
 
 		return applyPatchReturn;
-	}
-
-	@Override
-	public void cleanUp(final String environment, final CleanUpType cleanupPatch) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private String getAuthorizationCode() {

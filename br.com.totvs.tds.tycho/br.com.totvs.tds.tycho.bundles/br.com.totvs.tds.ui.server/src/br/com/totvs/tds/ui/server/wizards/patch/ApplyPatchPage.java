@@ -2,6 +2,7 @@ package br.com.totvs.tds.ui.server.wizards.patch;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +18,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -50,11 +52,11 @@ import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerReturn;
-import br.com.totvs.tds.server.jobs.ApplyPatchAttributes;
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn;
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn.MessageType;
-import br.com.totvs.tds.server.jobs.ApplyPatchMode;
-import br.com.totvs.tds.server.jobs.ProcessPatchJob;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchAttributes;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn.MessageType;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchMode;
+import br.com.totvs.tds.server.jobs.applyPatch.ValidatePatchJob;
 import br.com.totvs.tds.server.model.SourceInformation;
 import br.com.totvs.tds.ui.TDSUtil;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
@@ -71,6 +73,7 @@ import br.com.totvs.tds.ui.server.widget.ServerDirectoryDialog;
  * The apply patch page definition.
  *
  * @author daniel.yampolschi
+ * @author acandido
  *
  */
 
@@ -142,7 +145,7 @@ public class ApplyPatchPage extends WizardPage {
 		serverManager = serviceLocator.getService(IServerManager.class);
 	}
 
-	private boolean addFilesToTheTree(final String[] fileNames, boolean local) throws IOException {
+	private void addFilesToTheTree(final String[] fileNames, boolean local) throws IOException {
 
 		for (String fileName : fileNames) {
 			if (fileName != null && !fileName.isEmpty()) {
@@ -155,8 +158,6 @@ public class ApplyPatchPage extends WizardPage {
 				}
 			}
 		}
-
-		return true;
 	}
 
 	private void addPatchesFromZip(final String fullPathFile) throws IOException {
@@ -249,7 +250,7 @@ public class ApplyPatchPage extends WizardPage {
 		btnAddPathFile.setText("Adicionar");
 
 		btnAutoValidate = new Button(compBrowse, SWT.CHECK);
-		btnAutoValidate.setToolTipText("Valida em segundo plano o pacote recem adicionado.");
+		btnAutoValidate.setToolTipText("Valida o pacote recem adicionado.");
 		btnAutoValidate.setSelection(true);
 		btnAutoValidate.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, true, 1, 1));
 		btnAutoValidate.setText("Validar");
@@ -396,7 +397,7 @@ public class ApplyPatchPage extends WizardPage {
 
 		lblInfoPackage = new Label(container, SWT.NONE);
 		lblInfoPackage.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
-		lblInfoPackage.setText("Detalhes do pacote selecionado.");
+		lblInfoPackage.setToolTipText("Detalhes do pacote selecionado.");
 
 		try {
 			initialize();
@@ -444,25 +445,26 @@ public class ApplyPatchPage extends WizardPage {
 			public void widgetSelected(final SelectionEvent e) {
 				try {
 					selectApplyPatchFileDialog();
-					dialogChanged();
 
 					if (btnAutoValidate.getSelection()) {
-						ProcessPatchJob pp = new ProcessPatchJob("autoValidade", attributes) {
+						try {
+							getWizard().getContainer().run(true, true, new IRunnableWithProgress() {
 
-							@Override
-							protected IStatus run(IProgressMonitor monitor) {
-								IStatus status = null;
+								@Override
+								public void run(IProgressMonitor monitor)
+										throws InvocationTargetException, InterruptedException {
+									monitor.beginTask("Validação de Pacote", IProgressMonitor.UNKNOWN);
 
-								try {
-									status = doValidatePatchs(monitor);
-								} catch (Exception e) {
-									status = new Status(IStatus.ERROR, ServerUIActivator.PLUGIN_ID, e.getMessage(), e);
-									e.printStackTrace();
+									ValidatePatchJob pp = new ValidatePatchJob(attributes);
+									pp.schedule();
+									while (pp.getState() == Job.RUNNING) {
+										pp.join(3000, monitor);
+									}
 								}
-								return status;
-							}
-						};
-						pp.join();
+							});
+						} catch (InvocationTargetException | InterruptedException e1) {
+							ServerUIActivator.showStatus(IStatus.ERROR, e1.getMessage(), e1);
+						}
 
 						showValidationErrors();
 					}
@@ -474,6 +476,15 @@ public class ApplyPatchPage extends WizardPage {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+
+				Display.getCurrent().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						dialogChanged();
+					}
+				});
+
 			}
 		};
 
@@ -504,33 +515,29 @@ public class ApplyPatchPage extends WizardPage {
 	}
 
 	private void dialogChanged() {
-		try {
-			String serverMessage = verifyServerConditions();
-			if (serverMessage != null) {
-				updateStatus(serverMessage);
-				return;
-			}
-			List<ApplyPatchFileReturn> applyPatchFilesReturn = attributes.getApplyPatchFilesReturn();
-			if (applyPatchFilesReturn == null || applyPatchFilesReturn.isEmpty()) {
-				updateStatus("Selecionar ao menos um pacote de atualiza\\u00E7\\u00E3o.");
-				return;
-			} else {
-				btnRemoveAppliedPatchFile.setEnabled(false);
-				// verifica o estado dos Pacotes de atualizações na tabela
-				for (ApplyPatchFileReturn applyPatchFileReturn : applyPatchFilesReturn) {
-					MessageType messageType = applyPatchFileReturn.getMessageType();
-					if (messageType.equals(MessageType.OK)) {
-						updateStatus("Existem pacotes j\\u00E1 aplicados. Remova-os para prosseguir.");
-						btnRemoveAppliedPatchFile.setEnabled(true);
-						return;
-					}
+		String serverMessage = verifyServerConditions();
+		if (serverMessage != null) {
+			updateStatus(serverMessage);
+			return;
+		}
+		List<ApplyPatchFileReturn> applyPatchFilesReturn = attributes.getApplyPatchFilesReturn();
+		if (applyPatchFilesReturn == null || applyPatchFilesReturn.isEmpty()) {
+			updateStatus("Selecionar ao menos um pacote de atualiza\\u00E7\\u00E3o.");
+			return;
+		} else {
+			btnRemoveAppliedPatchFile.setEnabled(false);
+			// verifica o estado dos Pacotes de atualizações na tabela
+			for (ApplyPatchFileReturn applyPatchFileReturn : applyPatchFilesReturn) {
+				MessageType messageType = applyPatchFileReturn.getMessageType();
+				if (messageType.equals(MessageType.OK)) {
+					updateStatus("Existem pacotes já aplicados. Remova-os para prosseguir.");
+					btnRemoveAppliedPatchFile.setEnabled(true);
+					return;
 				}
 			}
-			updateStatus(null);
-			tableViewer.refresh();
-		} catch (Exception e) {
-			ServerUIActivator.showStatus(IStatus.ERROR, e.getMessage(), e);
 		}
+		updateStatus(null);
+		tableViewer.refresh();
 	}
 
 	// private void addLinkToItems() {
@@ -676,20 +683,6 @@ public class ApplyPatchPage extends WizardPage {
 		}
 	}
 
-	/**
-	 * Open a dialog to the user select the patch and <br>
-	 * adds the file selected to the attributes.
-	 *
-	 * @param fFileNames
-	 * @return <b>true</b> - if the file was added to the attributes.
-	 * @throws IOException
-	 */
-	private boolean openLocalFileDialog() throws IOException {
-		String fileFullPath = TDSUtil.fileDialog(getShell(), patchFilterExtensions, patchFilterNames, true);
-
-		return addFilesToTheTree(fileFullPath.split(";"), true);
-	}
-
 	private void openRemoteFileDialog() {
 		// Remote
 //		IServerDirectoryServerNode serverNode = NodeFactory.getInstance()
@@ -800,20 +793,14 @@ public class ApplyPatchPage extends WizardPage {
 		dialogChanged();
 	}
 
-	private boolean selectApplyPatchFileDialog() throws IOException {
-		boolean canUpdateTable = false;
-
+	private void selectApplyPatchFileDialog() throws IOException {
 		if (cmbLocation.getSelectionIndex() == 0) {
-			// LOCAL
-			canUpdateTable = openLocalFileDialog();
+			String[] fileFullPath = TDSUtil.multFileDialog(getShell(), patchFilterExtensions, patchFilterNames);
+
+			addFilesToTheTree(fileFullPath, true);
 		} else {
-			// REMOTE
 			openRemoteFileDialog();
 		}
-//		if (canUpdateTable) {
-//			refreshTable(false);
-//		}
-		return canUpdateTable;
 	}
 
 	private void selectServer() throws Exception {
@@ -838,9 +825,11 @@ public class ApplyPatchPage extends WizardPage {
 		this.currentSelection = currentSelection;
 
 		if (this.currentSelection != null) {
-			lblInfoPackage.setText(String.format("Pacote: %s (~%.2f KB) Situação: %s",
+			lblInfoPackage.setText(String.format("Pacote: %s (~%.2f KB) Situação: %s/%s",
 					currentSelection.getPatchFullPath(), currentSelection.getSize() / 1024.0,
-					currentSelection.isValidated() ? "OK" : "Com erro ou restrição"));
+					currentSelection.getMessageType().getSituation(), currentSelection.getApplyMode().getText()));
+		} else {
+			lblInfoPackage.setText(lblInfoPackage.getToolTipText());
 		}
 	}
 
@@ -849,10 +838,8 @@ public class ApplyPatchPage extends WizardPage {
 		String env = attributes.getEnvironment();
 		boolean local = currentSelection.isLocal();
 
-		ArrayList<URI> patchList = new ArrayList<URI>();
-		patchList.add(currentSelection.getPatchFile().toFile().toURI());
-
-		IServerReturn serverReturn = server._getPatchIntegrity(env, patchList, local);
+		URI uri = currentSelection.getPatchFile().toFile().toURI();
+		IServerReturn serverReturn = server.getPatchIntegrity(env, uri, local);
 		if (serverReturn.isOperationOk()) {
 			MessageDialog.openInformation(getShell(), "Integridade do Pacote de Atualização",
 					serverReturn.getReturnMessage());
@@ -929,7 +916,6 @@ public class ApplyPatchPage extends WizardPage {
 
 			if (modeSave != null) {
 				applyPatchFileReturn.setApplyMode(modeSave);
-				dialogChanged();
 			}
 		}
 	}
@@ -945,7 +931,7 @@ public class ApplyPatchPage extends WizardPage {
 		setPageComplete(message == null);
 	}
 
-	private String verifyServerConditions() throws Exception {
+	private String verifyServerConditions() {
 		String message = null;
 		if (cmbServer.getItems().length == 0) {
 			message = "Não existe servidor conectado para aplicação do pacote de atualização.";

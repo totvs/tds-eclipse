@@ -7,25 +7,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.FilenameUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.jobs.ApplyPatchAttributes;
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
 import br.com.totvs.tds.server.model.SourceInformation;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 

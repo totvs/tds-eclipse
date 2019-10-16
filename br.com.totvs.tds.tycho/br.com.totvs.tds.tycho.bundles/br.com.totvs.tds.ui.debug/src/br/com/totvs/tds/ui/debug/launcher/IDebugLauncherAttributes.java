@@ -1,26 +1,30 @@
 package br.com.totvs.tds.ui.debug.launcher;
 
 /**
- * 
- * Interface respons�vel por prover constantes que representam campos de configuração do SmartClient e Coverage.
- * 
+ *
+ * Interface respons�vel por prover constantes que representam campos de
+ * configuração do SmartClient e Coverage.
+ *
  * @author AUDRIN
  *
  */
 public interface IDebugLauncherAttributes {
 
 	/**
-	 * The Enum to define the language and it's code that must be passed to the SmartClient.
-	 * 
-	 * @author daniel.yampolschi
+	 * The Enum to define the language and it's code that must be passed to the
+	 * SmartClient.
+	 *
+	 * @author acandido
+	 *
 	 *
 	 */
 	enum SCLanguages {
-		PORTUGUESE(1, SCLanguages.getPTString()), SPANISH(2, SCLanguages.getESString()), ENGLISH(3,
-				SCLanguages.getENString());
+		PORTUGUESE(1, SCLanguages.getPTString()), SPANISH(2, SCLanguages.getESString()),
+		ENGLISH(3, SCLanguages.getENString());
+
 		private int code;
 		private String languageName;
-		
+
 		public static final String PT = "Portugu�s"; //$NON-NLS-1$
 		public static final String EN = "Ingl�s"; //$NON-NLS-1$
 		public static final String ES = "Espanhol"; //$NON-NLS-1$
@@ -54,7 +58,7 @@ public interface IDebugLauncherAttributes {
 		/**
 		 * Return the enum associated with the String _informed. <br>
 		 * If this String _is not existent, it defaults to PORTUGUESE.
-		 * 
+		 *
 		 * @param languageString
 		 * @return
 		 */

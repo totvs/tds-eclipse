@@ -2,14 +2,15 @@ package br.com.totvs.tds.ui.server.providers;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn;
-import br.com.totvs.tds.server.jobs.ApplyPatchFileReturn.MessageType;
-import br.com.totvs.tds.server.jobs.ApplyPatchMode;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn.MessageType;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchMode;
 
 /**
  * The application label provider.
  *
  * @author daniel.yampolschi
+ * @author acandido
  *
  */
 public class ColumnAplicationLabelProvider extends ColumnLabelProvider {
@@ -22,25 +23,10 @@ public class ColumnAplicationLabelProvider extends ColumnLabelProvider {
 			MessageType messageType = applyPatchFileReturn.getMessageType();
 
 			if ((messageType != null) && (messageType.equals(MessageType.DUPLICATE_FILE))) {
-				return "Pacote em duplicidade. Somente o primeiro será processado.";
+				return messageType.getSituation();
 			}
 
-			if (applyMode == null) {
-				return "Indefinido";
-			}
-
-			switch (applyMode) {
-			case VALIDATE_PATCH:
-				return "Validar pacote";
-			case APPLY_ALL:
-				return "Aplicar todos";
-			case APPLY_NEWEST_ONLY:
-				return "Somente atualizados";
-			case VALIDATE_ERROR:
-				return "Erro de validação";
-			default:
-				return null;
-			}
+			return applyMode.getText();
 		}
 		return null;
 	}

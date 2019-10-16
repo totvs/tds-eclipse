@@ -9,9 +9,8 @@ import org.eclipse.debug.core.ILaunchesListener;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
-import br.com.totvs.tds.server.jobs.ApplyPatchReturn;
-import br.com.totvs.tds.server.jobs.CleanUpType;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchReturn;
 import br.com.totvs.tds.server.model.RPOTypeElement;
 import br.com.totvs.tds.server.model.SourceInformation;
 
@@ -189,15 +188,13 @@ public interface IAppServerInfo extends IServerInfo {
 
 	String[] getDirectory(String environment, String absolutPath, boolean b);
 
-	IServerReturn _getPatchIntegrity(String env, List<URI> patchFile, boolean local);
-
 	List<SourceInformation> getPatchInfo(String environment, Path serverPatch);
 
-	ApplyPatchReturn applyPatch(String environment, String serverPatch, boolean local, boolean oldPrograms);
+	ValidationPatchReturn validPatch(String environment, final URI patchFile, boolean local);
 
-	void cleanUp(String environment, CleanUpType cleanupPatch);
+	ApplyPatchReturn applyPatch(String environment, URI serverPatch, boolean local, boolean oldPrograms);
 
-	ValidationPatchReturn validPatch(String environment, final List<URI> patchFiles, boolean local);
+	IServerReturn getPatchIntegrity(String env, URI patchFile, boolean local);
 
 	void buidlFile(List<String> files, CompileOptions compileOptions, List<String> includePaths);
 }
