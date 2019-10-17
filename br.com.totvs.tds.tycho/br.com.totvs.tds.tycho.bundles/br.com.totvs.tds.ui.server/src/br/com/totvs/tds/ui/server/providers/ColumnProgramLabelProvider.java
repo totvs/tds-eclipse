@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
-import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn.MessageType;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchState;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 /**
@@ -16,23 +16,17 @@ import br.com.totvs.tds.ui.server.ServerUIIcons;
  */
 public class ColumnProgramLabelProvider extends ColumnLabelProvider {
 
-	private boolean showFullPath = false;
-
 	@Override
 	public Image getImage(final Object element) {
-		Image validoImage = null;
 		ApplyPatchFileReturn applyPatchFileReturn = (ApplyPatchFileReturn) element;
-		MessageType messageType = applyPatchFileReturn.getMessageType();
+		ApplyPatchState patchState = applyPatchFileReturn.getPatchState();
 
-		if (messageType != null) {
-			validoImage = getImageByMessageType(messageType);
-		}
-
-		return validoImage;
+		return getImageState(patchState);
 	}
 
-	private Image getImageByMessageType(final MessageType messageType) {
+	private Image getImageState(final ApplyPatchState messageType) {
 		Image image = null;
+
 		switch (messageType) {
 		case NEW:
 			image = ServerUIIcons.getHelp().createImage();
@@ -47,12 +41,13 @@ public class ColumnProgramLabelProvider extends ColumnLabelProvider {
 			image = ServerUIIcons.getWarning().createImage();
 			break;
 		case ERROR:
-		case DUPLICATE_FILE:
+		case DUPLICATE:
 			image = ServerUIIcons.getError().createImage();
 			break;
 		default:
 			break;
 		}
+
 		return image;
 	}
 
@@ -60,26 +55,6 @@ public class ColumnProgramLabelProvider extends ColumnLabelProvider {
 	public String getText(final Object element) {
 		ApplyPatchFileReturn applyPatchFileReturn = (ApplyPatchFileReturn) element;
 
-		String text = applyPatchFileReturn.getPatchFile().lastSegment(); // nome do arquivo
-		if (showFullPath) {
-			text = (applyPatchFileReturn.getOriginalFile() == null) ? applyPatchFileReturn.getPatchFullPath()
-					: applyPatchFileReturn.getOriginalFile();
-		}
-
-		return text;
-	}
-
-	/**
-	 * @return the showFullPath
-	 */
-	public boolean isShowFullPath() {
-		return showFullPath;
-	}
-
-	/**
-	 * @param showFullPath the showFullPath to set
-	 */
-	public void setShowFullPath(boolean showFullPath) {
-		this.showFullPath = showFullPath;
+		return applyPatchFileReturn.getPatchFile().lastSegment(); // nome do arquivo
 	}
 }

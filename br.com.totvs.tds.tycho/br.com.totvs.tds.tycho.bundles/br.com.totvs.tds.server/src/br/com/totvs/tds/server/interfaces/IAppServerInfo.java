@@ -194,7 +194,5 @@ public interface IAppServerInfo extends IServerInfo {
 
 	ApplyPatchReturn applyPatch(String environment, URI serverPatch, boolean local, boolean oldPrograms);
 
-	IServerReturn getPatchIntegrity(String env, URI patchFile, boolean local);
-
 	void buidlFile(List<String> files, CompileOptions compileOptions, List<String> includePaths);
 }

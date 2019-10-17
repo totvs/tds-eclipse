@@ -118,9 +118,6 @@ public interface ILanguageServerService {
 	 */
 	String getMachineId();
 
-	IStatus getPatchIntegrity(final String token, final String authenticateToken, final String environment,
-			final URI patchFile, final boolean local);
-
 	IStatus validPatch(String token, String authorizationCode, String environment, URI patchFile, boolean local);
 
 	IStatus applyPatch(String token, String authorizationCode, String environment, URI patchFile, boolean local,

@@ -287,46 +287,10 @@ public final class LsServiceImpl implements ILanguageServerService {
 	}
 
 	@Override
-	public IStatus getPatchIntegrity(final String token, final String authenticateToken, final String environment,
-			final URI patchFile, final boolean local) {
-		final String[] patchArray = new String[1];
-		patchArray[0] = patchFile.toString();
-		if (patchArray[0].startsWith("file://")) {
-			patchArray[0] = patchArray[0].substring(8);
-		}
-
-		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
-		patchApplyInfo.setConnectionToken(token);
-		patchApplyInfo.setAuthenticateToken(authenticateToken);
-		patchApplyInfo.setEnvironment(environment);
-		patchApplyInfo.setPatchUris(patchArray);
-		patchApplyInfo.setLocal(local);
-		patchApplyInfo.setValidatePatch(true);
-		patchApplyInfo.setApplyOldProgram(false);
-
-		final PatchApplyData patchApplyData = new PatchApplyData(patchApplyInfo);
-		final ApplyPatchNode applyPatchNode = ClientImpl.getInstance().patchApply(patchApplyData);
-
-		IStatus status = Status.OK_STATUS;
-		if (applyPatchNode == null) {
-			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
-					"Erro desconhecido. Verifique o log de console do servidor.");
-		} else if (applyPatchNode.getReturnCode() != 0) {
-			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
-					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
-		}
-
-		return status;
-	}
-
-	@Override
 	public IStatus validPatch(final String token, final String authorizationCode, final String environment,
 			final URI patchFile, final boolean local) {
 		final String[] patchArray = new String[1];
-		patchArray[0] = patchFile.toString();
-		if (patchArray[0].startsWith("file://")) {
-			patchArray[0] = patchArray[0].substring(8);
-		}
+		patchArray[0] = convertURI(patchFile);
 
 		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
 		patchApplyInfo.setConnectionToken(token);
@@ -343,7 +307,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 		IStatus status = Status.OK_STATUS;
 		if (applyPatchNode == null) {
 			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
-					"Erro desconhecido. Verifique o log de console do servidor.");
+					"Erro desconhecido. Verifique o log de console.");
 		} else if (applyPatchNode.getReturnCode() != 0) {
 			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
 					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
@@ -352,14 +316,21 @@ public final class LsServiceImpl implements ILanguageServerService {
 		return status;
 	}
 
+	private String convertURI(final URI uri) {
+		String convertedUri = uri.toString();
+
+		convertedUri = convertedUri.replace("file:///", ""); //$NON-NLS-1$
+		convertedUri = convertedUri.replace("file://", ""); //$NON-NLS-1$
+		convertedUri = convertedUri.replace("file:/", ""); //$NON-NLS-1$
+
+		return convertedUri;
+	}
+
 	@Override
 	public IStatus applyPatch(final String token, final String authorizationCode, final String environment,
 			final URI patchFile, final boolean local, final boolean oldPrograms) {
 		final String[] patchArray = new String[1];
-		patchArray[0] = patchFile.toString();
-		if (patchArray[0].startsWith("file://")) {
-			patchArray[0] = patchArray[0].substring(8);
-		}
+		patchArray[0] = convertURI(patchFile);
 
 		final PatchApplyInfo patchApplyInfo = new PatchApplyInfo();
 
@@ -377,7 +348,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 		IStatus status = Status.OK_STATUS;
 		if (applyPatchNode == null) {
 			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
-					"Erro desconhecido. Verifique o log de console do servidor.");
+					"Erro desconhecido. Verifique o log de console.");
 		} else if (applyPatchNode.getReturnCode() != 0) {
 			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
 					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));

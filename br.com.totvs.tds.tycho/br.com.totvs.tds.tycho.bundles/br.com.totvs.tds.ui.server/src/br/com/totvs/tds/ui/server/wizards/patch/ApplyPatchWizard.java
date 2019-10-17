@@ -53,9 +53,8 @@ public class ApplyPatchWizard extends Wizard implements IWorkbenchWizard {
 	public boolean performFinish() {
 		boolean performFinish = false;
 		//
-		final ApplyPatchJob applyJob = new ApplyPatchJob("ApplyPatch", attributes); //$NON-NLS-1$
-		// cria um IRunnableWithProgress para rodar uma tarefa longa dentro do
-		// Assistente
+		final ApplyPatchJob applyJob = new ApplyPatchJob(attributes); // $NON-NLS-1$
+
 		IRunnableWithProgress op = new IRunnableWithProgress() {
 			@Override
 			public void run(final IProgressMonitor monitor) throws InvocationTargetException {

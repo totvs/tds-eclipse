@@ -1,5 +1,6 @@
 package br.com.totvs.tds.server.jobs;
 
+import java.util.Collections;
 import java.util.List;
 
 import br.com.totvs.tds.server.interfaces.IValidationPatchReturn;
@@ -13,9 +14,8 @@ import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchMode;
  */
 public class ValidationPatchReturn extends ServerReturn implements IValidationPatchReturn {
 
-	private List<String[]> oldPrograms;
-	private boolean isSigned = false;
-	private ApplyPatchMode applyPatchMode;
+	private List<String[]> oldPrograms = Collections.emptyList();
+	private ApplyPatchMode applyPatchMode = ApplyPatchMode.NEED_VALIDATE;;
 
 	/**
 	 * Construtor.
@@ -62,14 +62,6 @@ public class ValidationPatchReturn extends ServerReturn implements IValidationPa
 	@Override
 	public final void setOldPrograms(final List<String[]> oldProgramsReturn) {
 		this.oldPrograms = oldProgramsReturn;
-	}
-
-	public boolean isSigned() {
-		return isSigned;
-	}
-
-	public void setSigned(final boolean isSigned) {
-		this.isSigned = isSigned;
 	}
 
 	public void setApplyPatchMode(final ApplyPatchMode applyPatchMode) {

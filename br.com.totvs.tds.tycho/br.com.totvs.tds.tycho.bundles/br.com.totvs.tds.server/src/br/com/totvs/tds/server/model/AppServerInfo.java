@@ -613,19 +613,6 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public IServerReturn getPatchIntegrity(final String environment, final URI patchFiles, final boolean local) {
-		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-
-		final IStatus status = lsService.getPatchIntegrity(getToken(), getAuthorizationCode(), environment, patchFiles,
-				local);
-
-		final IServerReturn serverReturn = new ServerReturn(status.isOK(), status.getMessage());
-
-		return serverReturn;
-	}
-
-	@Override
 	public List<SourceInformation> getPatchInfo(final String environment, final Path serverPatch) {
 		// TODO Auto-generated method stub
 		return null;

@@ -9,7 +9,6 @@ import org.eclipse.ui.PlatformUI;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn.MessageType;
 
 /**
  * Atributos para aplicaão de patchs.
@@ -20,7 +19,6 @@ public class ApplyPatchAttributes implements Cloneable {
 	private String environment;
 	private List<IServerInfo> activeServers;
 	private IAppServerInfo currentAppServer;
-	private List<String> resources;
 
 	public ApplyPatchAttributes() {
 
@@ -44,12 +42,12 @@ public class ApplyPatchAttributes implements Cloneable {
 	 * @param applyPatchFilesReturn the applyPatchFilesReturn to set
 	 */
 	public void addApplyPatchFileReturn(final ApplyPatchFileReturn applyPatchFileReturn) {
-		final String source = applyPatchFileReturn.getOriginalFile().toLowerCase();
+		final String source = applyPatchFileReturn.getPatchFile().makeAbsolute().toOSString().toLowerCase();
 
 		for (final ApplyPatchFileReturn item : getApplyPatchFilesReturn()) {
-			final String target = item.getOriginalFile().toLowerCase();
+			final String target = item.getPatchFile().makeAbsolute().toOSString().toLowerCase();
 			if (source.equals(target)) {
-				applyPatchFileReturn.setMessageType(MessageType.DUPLICATE_FILE);
+				applyPatchFileReturn.setPatchState(ApplyPatchState.DUPLICATE);
 				break;
 			}
 		}
@@ -111,6 +109,5 @@ public class ApplyPatchAttributes implements Cloneable {
 	}
 
 	public void setResources(final List<String> resources) {
-		this.resources = resources;
 	}
 }

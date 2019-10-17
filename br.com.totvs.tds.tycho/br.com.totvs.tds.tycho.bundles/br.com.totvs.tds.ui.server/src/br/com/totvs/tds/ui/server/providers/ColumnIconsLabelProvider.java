@@ -31,7 +31,7 @@ public class ColumnIconsLabelProvider extends ColumnLabelProvider {
 	private void addImageHyperLink(final ApplyPatchFileReturn applyPatchFileReturn, final Composite composite,
 			final TableItem item) {
 		if (applyPatchFileReturn != null) {
-			String documentationURL = applyPatchFileReturn.getDocumentationURL();
+			String documentationURL = ""; // applyPatchFileReturn.getDocumentationURL();
 			if (documentationURL != null && !documentationURL.isEmpty()) {
 				int iconColumnIndex = 3;
 				ImageHyperlink link = createImageHyperLinkItem(documentationURL, composite);

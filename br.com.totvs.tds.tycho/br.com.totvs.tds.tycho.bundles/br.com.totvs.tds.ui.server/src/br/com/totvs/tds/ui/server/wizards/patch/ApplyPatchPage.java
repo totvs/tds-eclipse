@@ -3,7 +3,6 @@ package br.com.totvs.tds.ui.server.wizards.patch;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -51,14 +49,15 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.interfaces.IServerReturn;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchAttributes;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
-import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn.MessageType;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchMode;
+import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchState;
 import br.com.totvs.tds.server.jobs.applyPatch.ValidatePatchJob;
 import br.com.totvs.tds.server.model.SourceInformation;
 import br.com.totvs.tds.ui.TDSUtil;
+import br.com.totvs.tds.ui.dialog.DualListItem;
+import br.com.totvs.tds.ui.dialog.DualSelectorDialog;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.fileSystem.IServerDirectoryItemNode;
@@ -90,7 +89,7 @@ public class ApplyPatchPage extends WizardPage {
 	private Button btnRemovePathFile;
 	private Button btnRemoveAppliedPatchFile;
 	private Button btnDetailPathFile;
-	private Button btnIntegrity;
+	private Button btnValidate;
 
 	private SelectionListener serverSelectionListener;
 	private SelectionListener environmentSelectionListener;
@@ -126,7 +125,6 @@ public class ApplyPatchPage extends WizardPage {
 	private Label lblInfoPackage;
 
 	private Button btnAutoValidate;
-	// private boolean appliedPatches;
 
 	/**
 	 * Create the wizard.
@@ -173,8 +171,7 @@ public class ApplyPatchPage extends WizardPage {
 			if (validPatchExtensions.contains(fileExtension.toLowerCase())) {
 				ApplyPatchFileReturn applyPatchFileReturn = createApplyPatchFileReturn(file.getAbsolutePath(), true);
 				applyPatchFileReturn.setTemporary(true);
-				applyPatchFileReturn.setOriginalFile(fullPathFile.toString().concat("#").concat(file.getName()));
-				applyPatchFileReturn.setMessageType(MessageType.NEW_ZIP);
+				applyPatchFileReturn.setPatchState(ApplyPatchState.NEW_ZIP);
 				attributes.addApplyPatchFileReturn(applyPatchFileReturn);
 
 				patchFound = true;
@@ -219,9 +216,9 @@ public class ApplyPatchPage extends WizardPage {
 			@Override
 			public String getText(final Object element) {
 				ApplyPatchFileReturn applyPatchFileReturn = (ApplyPatchFileReturn) element;
-				MessageType messageType = applyPatchFileReturn.getMessageType();
+				ApplyPatchState messageType = applyPatchFileReturn.getPatchState();
 				String msg = applyPatchFileReturn.getValidationMessage();
-				if (messageType != null && messageType.equals(MessageType.OK) && (msg == null || msg.isEmpty())) {
+				if (ApplyPatchState.OK.equals(messageType) && (msg == null || msg.isEmpty())) {
 					return "OK";
 				}
 				return msg == null ? "" : msg;
@@ -283,17 +280,17 @@ public class ApplyPatchPage extends WizardPage {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				showPatchDetails(currentSelection);
+				showPatchDetails(currentSelection.getPatchFile().toOSString());
 			}
 		});
 
-		btnIntegrity = new Button(compBrowse, SWT.NONE);
-		btnIntegrity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnIntegrity.setText("Integridade");
-		btnIntegrity.setEnabled(false);
-		btnIntegrity.setToolTipText("Verifica se o pacote de atualização está válido");
+		btnValidate = new Button(compBrowse, SWT.NONE);
+		btnValidate.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnValidate.setText("Validar");
+		btnValidate.setEnabled(false);
+		btnValidate.setToolTipText("Verifica se o pacote de atualização é válido");
 
-		btnIntegrity.addSelectionListener(new SelectionListener() {
+		btnValidate.addSelectionListener(new SelectionListener() {
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
@@ -302,11 +299,7 @@ public class ApplyPatchPage extends WizardPage {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				try {
-					showIntegrity(currentSelection);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				doValidate(currentSelection);
 			}
 		});
 
@@ -344,7 +337,7 @@ public class ApplyPatchPage extends WizardPage {
 		if (attributes != null) {
 			List<ApplyPatchFileReturn> applyPatchFilesReturn = attributes.getApplyPatchFilesReturn();
 			for (ApplyPatchFileReturn applyPatchFileReturn : applyPatchFilesReturn) {
-				if (applyPatchFileReturn.getMessageType().equals(MessageType.OK)) {
+				if (applyPatchFileReturn.getPatchState().equals(ApplyPatchState.OK)) {
 					deleteTemporaryPatchFile(applyPatchFileReturn);
 				}
 			}
@@ -447,26 +440,7 @@ public class ApplyPatchPage extends WizardPage {
 					selectApplyPatchFileDialog();
 
 					if (btnAutoValidate.getSelection()) {
-						try {
-							getWizard().getContainer().run(true, true, new IRunnableWithProgress() {
-
-								@Override
-								public void run(IProgressMonitor monitor)
-										throws InvocationTargetException, InterruptedException {
-									monitor.beginTask("Validação de Pacote", IProgressMonitor.UNKNOWN);
-
-									ValidatePatchJob pp = new ValidatePatchJob(attributes);
-									pp.schedule();
-									while (pp.getState() == Job.RUNNING) {
-										pp.join(3000, monitor);
-									}
-								}
-							});
-						} catch (InvocationTargetException | InterruptedException e1) {
-							ServerUIActivator.showStatus(IStatus.ERROR, e1.getMessage(), e1);
-						}
-
-						showValidationErrors();
+						doValidate(null);
 					}
 				} catch (IllegalArgumentException exception) {
 					ServerUIActivator.showStatus(IStatus.ERROR, exception.getMessage(), exception);
@@ -476,15 +450,6 @@ public class ApplyPatchPage extends WizardPage {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
-				Display.getCurrent().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						dialogChanged();
-					}
-				});
-
 			}
 		};
 
@@ -506,8 +471,7 @@ public class ApplyPatchPage extends WizardPage {
 
 	private void deleteTemporaryPatchFile(final ApplyPatchFileReturn applyPatchFileReturn) {
 		if (applyPatchFileReturn.isTemporary()) {
-			String patchFullPath = applyPatchFileReturn.getPatchFullPath();
-			File tmpFile = new File(patchFullPath);
+			File tmpFile = applyPatchFileReturn.getPatchFile().toFile();
 			if (tmpFile.exists()) {
 				tmpFile.delete();
 			}
@@ -520,24 +484,57 @@ public class ApplyPatchPage extends WizardPage {
 			updateStatus(serverMessage);
 			return;
 		}
+
+		tableViewer.refresh();
+
 		List<ApplyPatchFileReturn> applyPatchFilesReturn = attributes.getApplyPatchFilesReturn();
-		if (applyPatchFilesReturn == null || applyPatchFilesReturn.isEmpty()) {
+		if (applyPatchFilesReturn.isEmpty()) {
 			updateStatus("Selecionar ao menos um pacote de atualiza\\u00E7\\u00E3o.");
 			return;
 		} else {
 			btnRemoveAppliedPatchFile.setEnabled(false);
-			// verifica o estado dos Pacotes de atualizações na tabela
+
 			for (ApplyPatchFileReturn applyPatchFileReturn : applyPatchFilesReturn) {
-				MessageType messageType = applyPatchFileReturn.getMessageType();
-				if (messageType.equals(MessageType.OK)) {
+				ApplyPatchMode applyMode = applyPatchFileReturn.getApplyMode();
+				if (applyMode.ordinal() >= ApplyPatchMode.APPLIED.ordinal()) {
 					updateStatus("Existem pacotes já aplicados. Remova-os para prosseguir.");
 					btnRemoveAppliedPatchFile.setEnabled(true);
 					return;
 				}
 			}
 		}
+
 		updateStatus(null);
-		tableViewer.refresh();
+	}
+
+	protected void doValidate(ApplyPatchFileReturn target) {
+		ValidatePatchJob pp = new ValidatePatchJob(attributes);
+		pp.setTarget(target);
+
+		try {
+			getWizard().getContainer().run(true, true, new IRunnableWithProgress() {
+
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+					monitor.beginTask("Validação de Pacote", IProgressMonitor.UNKNOWN);
+					pp.schedule();
+
+					do {
+						pp.join(2000, monitor);
+					} while (pp.getState() == Job.RUNNING);
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e1) {
+			ServerUIActivator.showStatus(IStatus.ERROR, e1.getMessage(), e1);
+		}
+
+		// verifica o estado da execução do Job
+		IStatus result = pp.getResult();
+		if (result == null || !result.isOK()) {
+			showValidationErrors();
+		}
+
+		dialogChanged();
 	}
 
 	// private void addLinkToItems() {
@@ -710,51 +707,38 @@ public class ApplyPatchPage extends WizardPage {
 	private List<File> openSelectorPatches(String zipFilename, List<File> sourceList) {
 		List<File> resultList = new ArrayList<File>();
 
-//		List<DualListItem> sourceFiles = new ArrayList<DualListItem>();
-//		List<DualListItem> selectedFiles = new ArrayList<DualListItem>();
-//
-//		IAppServerInfo server = attributes.getCurrentAppServer();
-//		String environment = attributes.getEnvironment();
-//		String prefixTarget = ""; //$NON-NLS-1$
-//		try {
-//			IServerIniEnvironment environmentInfo = server.getServerIni().getSectionEnvironment(environment);
-//			prefixTarget = environmentInfo.getRpoName().toUpperCase();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			prefixTarget = "@"; //$NON-NLS-1$
-//		}
-//
-//		for (File file : sourceList) {
-//			String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
-//			if (validPatchExtensions.contains(fileExtension)) {
-//				DualListItem dli = new DualListItem(file.getName(), file);
-//				dli.setSelected(file.getName().toUpperCase().startsWith(prefixTarget));
-//
-//				sourceFiles.add(dli);
-//			}
-//		}
-//
-//		if (sourceFiles.isEmpty()) {
-//			setErrorMessage(Messages.ApplyPatchPage_36);
-//		} else if (sourceFiles.size() == 1) {
-//			selectedFiles.add(sourceFiles.get(0));
-//		} else {
-//			String msg = String.format(Messages.ApplyPatchPage_38, zipFilename);
-//			DualSelectorDialog dialog = new DualSelectorDialog(shell, Messages.ApplyPatchPage_39, msg, this.getImage());
-//			dialog.setTitleSource(Messages.ApplyPatchPage_40);
-//			dialog.setTitleTarget(Messages.ApplyPatchPage_40);
-//			dialog.setItems(sourceFiles);
-//
-//			if (dialog.open() == Window.OK) {
-//				for (DualListItem item : dialog.getItems()) {
-//					if (item.isSelected()) {
-//						resultList.add((File) item.getData());
-//					}
-//				}
-//
-//			}
-//		}
+		List<DualListItem> sourceFiles = new ArrayList<DualListItem>();
+		List<DualListItem> selectedFiles = new ArrayList<DualListItem>();
+
+		for (File file : sourceList) {
+			String fileExtension = FilenameUtils.getExtension(file.getName()).toLowerCase();
+			if (validPatchExtensions.contains(fileExtension)) {
+				DualListItem dli = new DualListItem(file.getName(), file);
+
+				sourceFiles.add(dli);
+			}
+		}
+
+		if (sourceFiles.isEmpty()) {
+			setErrorMessage("O arquivo selecionado não contem pacotes para seleção.");
+		} else if (sourceFiles.size() == 1) {
+			selectedFiles.add(sourceFiles.get(0));
+		} else {
+			String msg = "Selecione os pacotes para aplicação";
+			DualSelectorDialog dialog = new DualSelectorDialog(getShell(),
+					"Sele\u00E7\u00E3o de pacotes de atualiza\u00E7\u00E3o", msg, this.getImage());
+			dialog.setTitleSource("Pacotes");
+			dialog.setTitleTarget("Pacotes");
+			dialog.setItems(sourceFiles);
+
+			if (dialog.open() == Window.OK) {
+				for (DualListItem item : dialog.getItems()) {
+					if (item.isSelected()) {
+						resultList.add((File) item.getData());
+					}
+				}
+			}
+		}
 
 		return resultList;
 	}
@@ -781,8 +765,8 @@ public class ApplyPatchPage extends WizardPage {
 		}
 		List<ApplyPatchFileReturn> appliedPatchFiles = new ArrayList<ApplyPatchFileReturn>();
 		for (ApplyPatchFileReturn applyPatchFileReturn : applyPatchFilesReturn) {
-			MessageType messageType = applyPatchFileReturn.getMessageType();
-			if (messageType.equals(MessageType.OK)) {
+			ApplyPatchMode applyMode = applyPatchFileReturn.getApplyMode();
+			if (applyMode.ordinal() >= ApplyPatchMode.APPLIED.ordinal()) {
 				appliedPatchFiles.add(applyPatchFileReturn);
 			}
 		}
@@ -826,31 +810,11 @@ public class ApplyPatchPage extends WizardPage {
 
 		if (this.currentSelection != null) {
 			lblInfoPackage.setText(String.format("Pacote: %s (~%.2f KB) Situação: %s/%s",
-					currentSelection.getPatchFullPath(), currentSelection.getSize() / 1024.0,
-					currentSelection.getMessageType().getSituation(), currentSelection.getApplyMode().getText()));
+					currentSelection.getPatchFile().toOSString(), currentSelection.getSize() / 1024.0,
+					currentSelection.getPatchState().getSituation(), currentSelection.getApplyMode().getText()));
 		} else {
 			lblInfoPackage.setText(lblInfoPackage.getToolTipText());
 		}
-	}
-
-	protected void showIntegrity(final ApplyPatchFileReturn currentSelection) throws Exception {
-		IAppServerInfo server = attributes.getCurrentAppServer();
-		String env = attributes.getEnvironment();
-		boolean local = currentSelection.isLocal();
-
-		URI uri = currentSelection.getPatchFile().toFile().toURI();
-		IServerReturn serverReturn = server.getPatchIntegrity(env, uri, local);
-		if (serverReturn.isOperationOk()) {
-			MessageDialog.openInformation(getShell(), "Integridade do Pacote de Atualização",
-					serverReturn.getReturnMessage());
-		} else {
-			updateStatus("O pacote de atualização não está integro.");
-			ServerUIActivator.logStatus(IStatus.ERROR, serverReturn.getReturnMessage());
-		}
-	}
-
-	private void showPatchDetails(final ApplyPatchFileReturn applyPatchFileReturn) {
-		showPatchDetails(applyPatchFileReturn.getPatchFullPath());
 	}
 
 	/*
@@ -903,11 +867,11 @@ public class ApplyPatchPage extends WizardPage {
 		List<ApplyPatchFileReturn> applyPatchFilesReturnList = attributes.getApplyPatchFilesReturn();
 
 		for (ApplyPatchFileReturn applyPatchFileReturn : applyPatchFilesReturnList) {
-			if (applyPatchFileReturn.getMessageType() == MessageType.ERROR) {
+			if (applyPatchFileReturn.getPatchState() == ApplyPatchState.ERROR) {
 				updateStatus("Um dos pacotes de atualizações contem erros.");
 				break;
 			}
-			if (applyPatchFileReturn.getApplyMode() == ApplyPatchMode.VALIDATE_ERROR && modeSave == null) {
+			if (applyPatchFileReturn.getPatchState() == ApplyPatchState.ERROR && modeSave == null) {
 				showValidationError(applyPatchFileReturn);
 				if (modeSave == null) {
 					break;
@@ -923,7 +887,7 @@ public class ApplyPatchPage extends WizardPage {
 	private void updateButtons() {
 		btnRemovePathFile.setEnabled(currentSelection != null);
 		btnDetailPathFile.setEnabled(currentSelection != null);
-		btnIntegrity.setEnabled(currentSelection != null);
+		btnValidate.setEnabled(currentSelection != null);
 	}
 
 	private void updateStatus(final String message) {

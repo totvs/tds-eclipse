@@ -4,37 +4,30 @@ package br.com.totvs.tds.server.jobs.applyPatch;
  * Modos de aplicação do pacote.
  */
 public enum ApplyPatchMode {
-
-	/**
-	 * Only validates the Patch file.
-	 */
-	VALIDATE_PATCH 
-	/**
-	 * Apply all sources.
-	 */
-	,APPLY_ALL 
-	/**
-	 * Apply only the sources that have a newer date then the one in the RPO.
-	 */
-	,APPLY_NEWEST_ONLY 
-	/**
-	 * Inidicates that there was an error on the patch validation.
-	 */
-	,VALIDATE_ERROR;
+	// não mudar a ordem. há operações que dependem do método ordinal()
+	NEED_VALIDATE, // necessita validar
+	VALIDATE_PATCH, // validado
+	APPLY_ALL, // aplicar todos os fontes
+	APPLY_NEWEST_ONLY, // aplicar somente fontes mais novos
+	APPLIED, // aplicado
+	NOT_APPLIED; // não aplicado devido a erro
 
 	public String getText() {
 		switch (ApplyPatchMode.this) {
+		case NEED_VALIDATE:
+			return "Validar";
 		case VALIDATE_PATCH:
-			return "Validar pacote";
+			return "Pacote validado";
 		case APPLY_ALL:
 			return "Aplicar todos";
 		case APPLY_NEWEST_ONLY:
 			return "Somente atualizados";
-		case VALIDATE_ERROR:
-			return "Erro de validação";
+		case APPLIED:
+			return "Aplicado";
+		case NOT_APPLIED:
+			return "Não aplicado";
 		default:
 			return null;
 		}
-	} 
+	}
 }
-

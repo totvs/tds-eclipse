@@ -185,10 +185,7 @@ public class PatchValidationDetailsDialog extends Dialog {
 	private void dialogChanged() {
 		boolean enabled = false;
 		applyMode = ApplyPatchMode.VALIDATE_PATCH;
-		//
-		// XXX SOURCESTAMP: Projeto do Source Stamp interrompido por tempo indeterminado
-		// if (!enablePatchSignedOption || patchSigned ||
-		// btnApplySignedPatch.getSelection()) {
+
 		if (btnApplyAll != null && btnApplyAll.getSelection()) {
 			applyMode = ApplyPatchMode.APPLY_ALL;
 			enabled = true;
@@ -196,16 +193,10 @@ public class PatchValidationDetailsDialog extends Dialog {
 			applyMode = ApplyPatchMode.APPLY_NEWEST_ONLY;
 			enabled = true;
 		}
-		// XXX SOURCESTAMP: Projeto do Source Stamp interrompido por tempo indeterminado
-		// else if (btnApplySignedPatch != null && btnApplySignedPatch.getSelection()) {
-		// applyMode = ApplyPatchMode.UNSIGNED;
-		// enabled = true;
-		// }
 
 		if (btnSave != null) {
 			isSaveAction = btnSave.getSelection();
 		}
-		// }
 		//
 		getButton(OK).setEnabled(enabled);
 	}
