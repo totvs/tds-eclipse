@@ -12,6 +12,7 @@ import br.com.totvs.tds.lsp.server.model.node.ApplyPatchNode;
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
+import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
@@ -245,6 +246,24 @@ public class ClientImpl extends LanguageClientImpl {
 
 		final CompletableFuture<ApplyPatchNode> future = server.patchApply(patchApplyData);
 		ApplyPatchNode result = null;
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public InspectorFunctionsNode inspectorFunctions(final InspectorFunctionsData inspectorFunctionsData) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+
+		final CompletableFuture<InspectorFunctionsNode> future = server.inspectorFunctions(inspectorFunctionsData);
+		InspectorFunctionsNode result = null;
 		try {
 			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
 		} catch (final InterruptedException e) {

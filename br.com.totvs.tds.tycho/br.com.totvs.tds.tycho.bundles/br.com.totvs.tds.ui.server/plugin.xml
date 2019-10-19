@@ -3,6 +3,8 @@
 <plugin>
 	<extension
 		 point="org.eclipse.ui.views">
+		 <category id="br.com.totvs.tds" name="TDS">
+		 </category>
 		<view
         allowMultiple="false"
         category="br.com.totvs.tds"
@@ -132,6 +134,54 @@
                 tooltip="Aplica pacotes de atualização">
           </command>
        </menu>
+       
+       <menu
+             label="RPO">
+			<visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isEnvironment" />
+			</visibleWhen>
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.inspectRpoCommand"
+                icon="icons/function.png"
+                label="Funções"
+                tooltip="Apresenta lista de funções.">
+             <parameter
+                   name="br.com.totvs.tds.ui.server.rpoTypeElementParameter"
+                   value="function">
+             </parameter>
+          </command>
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.inspectRpoCommand"
+                icon="icons/source.png"
+                label="Fontes"
+                tooltip="Apresenta lista de fontes.">
+             <parameter
+                   name="br.com.totvs.tds.ui.server.rpoTypeElementParameter"
+                   value="source">
+             </parameter>
+          </command>
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.inspectRpoCommand"
+                icon="icons/resource.png"
+                label="Recurso"
+                tooltip="Apresenta lista de recursos.">
+             <parameter
+                   name="br.com.totvs.tds.ui.server.rpoTypeElementParameter"
+                   value="resource">
+             </parameter>
+          </command>
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.inspectRpoCommand"
+                icon="icons/object.png"
+                label="Objetos"
+                tooltip="Apresenta lista de objetos (Fontes+Recursos).">
+             <parameter
+                   name="br.com.totvs.tds.ui.server.rpoTypeElementParameter"
+                   value="object">
+             </parameter>
+          </command>
+       </menu>
+       
        <command
              commandId="br.com.totvs.tds.ui.server.commands.startServerCommand"
              icon="icons/start_server.png"
@@ -199,7 +249,7 @@
                    label="%toolbar.label">
                    <!-- contorno devido a um bug no eclipse, que corta a contribuição-->
         	<command
-                      commandId="dummy"
+			commandId="dummy"
                       icon="icons/img1x24.png"
                       style="push">
                 </command>
@@ -324,6 +374,17 @@
         name="Aplicar Pacote de Atualização">
      </command>
     <command
+    	defaultHandler="br.com.totvs.tds.ui.server.handlers.InspectorRpoHandler"
+        id="br.com.totvs.tds.ui.server.commands.inspectRpoCommand"
+        name="Inspetor de RPO">
+       <commandParameter
+             id="br.com.totvs.tds.ui.server.rpoTypeElementParameter"
+             name="rpoTypeElement"
+             optional="false">
+       </commandParameter>
+     </command>
+     
+    <command
           categoryId="br.com.totvs.tds.ui.server.commands.category"
           defaultHandler="br.com.totvs.tds.ui.server.handlers.StartServerHandler"
           description="%command.description.0"
@@ -382,6 +443,16 @@
 			<count value="1" />
 				<iterate ifEmpty="false">
 					<instanceof value="br.com.totvs.tds.server.interfaces.IAppServerInfo">
+				</instanceof>
+			</iterate>
+		</and>
+    </definition>
+    <definition
+          id="br.com.totvs.tds.ui.server.isEnvironment">
+		<and>
+			<count value="1" />
+				<iterate ifEmpty="false">
+					<instanceof value="br.com.totvs.tds.server.interfaces.IEnvironmentInfo">
 				</instanceof>
 			</iterate>
 		</and>

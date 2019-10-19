@@ -15,5 +15,5 @@ Export-Package: br.com.totvs.tds.lsp.server;uses:="org.osgi.framework,br.com.tot
  br.com.totvs.tds.lsp.server.model;uses:="org.eclipse.lsp4e.server",
  br.com.totvs.tds.lsp.server.model.node,
  br.com.totvs.tds.lsp.server.model.protocol;uses:="org.eclipse.lsp4j.services,org.eclipse.lsp4e,br.com.totvs.tds.lsp.server.model.node"
-Bundle-ActivationPolicy: lazy
 Bundle-Activator: br.com.totvs.tds.lsp.server.ActivatorServer
+Bundle-ActivationPolicy: lazy

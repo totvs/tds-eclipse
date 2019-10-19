@@ -1,8 +1,10 @@
 package br.com.totvs.tds.server.interfaces;
 
 import java.net.URI;
+import java.util.List;
 
 import br.com.totvs.tds.server.ServerOsType;
+import br.com.totvs.tds.server.model.RPOTypeElement;
 
 /**
  * Interface com informações para servidor (ServerInfo).
@@ -217,4 +219,7 @@ public interface IServerInfo extends IItemInfo {
 	 * @param smartClientPath, caminho smart client
 	 */
 	void setSmartClientPath(String smartClientPath);
+
+	List<IRpoElement> getRpoMap(String environment, RPOTypeElement typeElement, boolean includeTRes);
+
 }

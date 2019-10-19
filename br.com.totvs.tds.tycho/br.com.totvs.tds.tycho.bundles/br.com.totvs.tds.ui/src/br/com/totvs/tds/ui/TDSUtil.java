@@ -48,7 +48,7 @@ public final class TDSUtil {
 	}
 
 	/**
-	 * Verifica se a plataforma � Linux.
+	 * Verifica se a plataforma é Linux.
 	 *
 	 * @return true caso seja Linux
 	 */
@@ -114,6 +114,20 @@ public final class TDSUtil {
 		final FileDialog dialog = new FileDialog(shell, SWT.NONE);
 		dialog.setFilterExtensions(filter);
 		dialog.setFilterNames(filterNames);
+
+		return dialog.open();
+	}
+
+	public static String fileSaveDialog(final Shell shell, final String[] filter, final String[] filterNames,
+			final String defaultFilename) {
+		if (isRunningInTestMode()) {
+			return System.getProperty("return"); //$NON-NLS-1$
+		}
+
+		final FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+		dialog.setFilterExtensions(filter);
+		dialog.setFilterNames(filterNames);
+		dialog.setFileName(defaultFilename);
 
 		return dialog.open();
 	}

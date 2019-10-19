@@ -5,7 +5,7 @@
 <booleanAttribute key="automaticAdd" value="true"/>
 <booleanAttribute key="automaticValidate" value="false"/>
 <stringAttribute key="bootstrap" value=""/>
-<stringAttribute key="checked" value="org.eclipse.lsp4e"/>
+<stringAttribute key="checked" value="org.eclipse.core.jobs,org.eclipse.core.runtime,org.eclipse.e4.ui.workbench,org.eclipse.lsp4e"/>
 <booleanAttribute key="clearConfig" value="true"/>
 <booleanAttribute key="clearws" value="false"/>
 <booleanAttribute key="clearwslog" value="false"/>
@@ -32,11 +32,11 @@
 <mapEntry key="org.eclipse.core.contenttype/debug" value="false"/>
 <mapEntry key="org.eclipse.core.expressions/debug/TypeExtensionManager" value="false"/>
 <mapEntry key="org.eclipse.core.expressions/tracePropertyResolving" value="false"/>
-<mapEntry key="org.eclipse.core.jobs/jobs" value="false"/>
-<mapEntry key="org.eclipse.core.jobs/jobs/beginend" value="false"/>
-<mapEntry key="org.eclipse.core.jobs/jobs/errorondeadlock" value="false"/>
-<mapEntry key="org.eclipse.core.jobs/jobs/locks" value="false"/>
-<mapEntry key="org.eclipse.core.jobs/jobs/shutdown" value="false"/>
+<mapEntry key="org.eclipse.core.jobs/jobs" value="true"/>
+<mapEntry key="org.eclipse.core.jobs/jobs/beginend" value="true"/>
+<mapEntry key="org.eclipse.core.jobs/jobs/errorondeadlock" value="true"/>
+<mapEntry key="org.eclipse.core.jobs/jobs/locks" value="true"/>
+<mapEntry key="org.eclipse.core.jobs/jobs/shutdown" value="true"/>
 <mapEntry key="org.eclipse.core.net/debug" value="false"/>
 <mapEntry key="org.eclipse.core.net/systemproviders" value="false"/>
 <mapEntry key="org.eclipse.core.resources/build/delta" value="false"/>
@@ -73,7 +73,7 @@
 <mapEntry key="org.eclipse.core.resources/save/tree" value="false"/>
 <mapEntry key="org.eclipse.core.resources/strings" value="false"/>
 <mapEntry key="org.eclipse.core.runtime/compatibility/debug" value="false"/>
-<mapEntry key="org.eclipse.core.runtime/debug" value="false"/>
+<mapEntry key="org.eclipse.core.runtime/debug" value="true"/>
 <mapEntry key="org.eclipse.core.runtime/debug/context" value="false"/>
 <mapEntry key="org.eclipse.core.runtime/perf" value="false"/>
 <mapEntry key="org.eclipse.core.runtime/perf/success" value="false"/>
@@ -115,7 +115,7 @@
 <mapEntry key="org.eclipse.e4.ui.workbench.swt/trace/workbench" value="false"/>
 <mapEntry key="org.eclipse.e4.ui.workbench/debug" value="false"/>
 <mapEntry key="org.eclipse.e4.ui.workbench/trace" value="false"/>
-<mapEntry key="org.eclipse.e4.ui.workbench/trace/commands" value="false"/>
+<mapEntry key="org.eclipse.e4.ui.workbench/trace/commands" value="true"/>
 <mapEntry key="org.eclipse.e4.ui.workbench/trace/eclipse.context" value="false"/>
 <mapEntry key="org.eclipse.e4.ui.workbench/trace/eclipse.context.verbose" value="false"/>
 <mapEntry key="org.eclipse.e4.ui.workbench/trace/focus" value="false"/>

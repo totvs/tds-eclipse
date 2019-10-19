@@ -11,12 +11,15 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
@@ -41,7 +44,8 @@ import br.com.totvs.tds.server.model.RootInfo;
  *
  * @author acandido
  */
-public final class ServerManagerImpl extends AbstractBean implements IServerManager, PropertyChangeListener {
+public final class ServerManagerImpl extends AbstractBean
+		implements IServerManager, PropertyChangeListener, IJobChangeListener {
 
 	private static final long CURRENT_SERIAL_VERSION = 2L;
 
@@ -54,6 +58,8 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	private ByteArrayOutputStream tempSave;
 	protected IAppServerInfo auxCurrentServer;
 	private IAuthorizationKey authorizationKey;
+
+	private boolean firstReconnectTry = true;
 
 	/**
 	 * Construtor.
@@ -307,11 +313,23 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 			final List<IServerInfo> activeServers = getActiveServers();
 
-			final Job job = new Job(Messages.ServerManagerImpl_Reconnections) {
+			startLocalServesAndConnections(serversRunning, activeServers, 3000);
+		} finally {
+			hookChangeListener(rootGroupInfo);
+			setLoading(false);
+			refresh();
+		}
+	}
 
-				@Override
-				protected IStatus run(final IProgressMonitor monitor) {
+	private void startLocalServesAndConnections(final List<String> serversRunning,
+			final List<IServerInfo> activeServers, final int delay) {
 
+		final Job job = new Job(Messages.ServerManagerImpl_Reconnections) {
+
+			@Override
+			protected IStatus run(final IProgressMonitor monitor) {
+
+				try {
 					if (!serversRunning.isEmpty()) {
 						monitor.subTask(Messages.ServerManagerImpl_Startubg_local_server);
 
@@ -345,18 +363,15 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 						ServerManagerImpl.this.setCurrentServer(null);
 					}
 
-					monitor.done();
-
 					return Status.OK_STATUS;
+				} catch (final Exception e) {
+					return ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 				}
-			};
+			}
+		};
 
-			job.schedule();
-		} finally {
-			hookChangeListener(rootGroupInfo);
-			setLoading(false);
-			refresh();
-		}
+		job.addJobChangeListener(this);
+		job.schedule(delay);
 	}
 
 	protected void doReconnect(final IAppServerInfo serverInfo) {
@@ -584,6 +599,53 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	public IAuthorizationKey getAuthorizationKey() {
 
 		return authorizationKey;
+	}
+
+	@Override
+	public void aboutToRun(final IJobChangeEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void awake(final IJobChangeEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void done(final IJobChangeEvent event) {
+		final IStatus result = event.getResult();
+
+		if (!result.isOK()) {
+			if (firstReconnectTry) {
+				ServerActivator.logStatus(IStatus.WARNING,
+						"Processo de reconexão falhou em sua primeira tentativa.\n\tTentando mais uma vez");
+				startLocalServesAndConnections(Collections.emptyList(), getActiveServers(), 3000);
+			} else {
+				ServerActivator.logStatus(IStatus.ERROR, "Processo de reconexão falhou em suas tentativas.");
+			}
+			firstReconnectTry = false;
+		}
+
+	}
+
+	@Override
+	public void running(final IJobChangeEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void scheduled(final IJobChangeEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void sleeping(final IJobChangeEvent event) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

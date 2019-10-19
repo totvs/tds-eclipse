@@ -8,6 +8,7 @@ import java.util.Properties;
 
 import org.eclipse.core.runtime.IStatus;
 
+import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 
@@ -122,5 +123,7 @@ public interface ILanguageServerService {
 
 	IStatus applyPatch(String token, String authorizationCode, String environment, URI patchFile, boolean local,
 			boolean oldPrograms);
+
+	InspectorFunctionsNode inspectorFunctions(String token, String environment);
 
 }

@@ -52,17 +52,4 @@ public abstract class ServerHandler extends AbstractHandler {
 		return elements;
 	}
 
-//	/**
-//	 * Called by the framework to allow the handler to update its enabled state by
-//	 * extracting the same information available at execution time. Clients may
-//	 * override if they need to extract information from the application context.
-//	 *
-//	 * @param evaluationContext the application context. May be <code>null</code>
-//	 * @since 3.4
-//	 * @see #setBaseEnabled(boolean)
-//	 */
-//	@Override
-//	public void setEnabled(Object evaluationContext) {
-//		this.evaluationContext = evaluationContext;
-//	}
 }

@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.content.IContentType;
 @SuppressWarnings("restriction")
 public class ServerUtil {
 
-	private static final byte[] EMPTY_BUFFER = new byte[0];
 	private static List<String> sourceExtensions;
 
 	/**
@@ -38,9 +37,9 @@ public class ServerUtil {
 		}
 
 		final IPath path = Path.fromOSString(fullNameOrExtension);
-		final String ext = path.getFileExtension().toUpperCase();
+		final String ext = path.getFileExtension() == null ? path.lastSegment() : path.getFileExtension().toUpperCase();
 
-		return sourceExtensions.contains(ext);
+		return sourceExtensions.contains(ext.trim().toUpperCase());
 	}
 
 }

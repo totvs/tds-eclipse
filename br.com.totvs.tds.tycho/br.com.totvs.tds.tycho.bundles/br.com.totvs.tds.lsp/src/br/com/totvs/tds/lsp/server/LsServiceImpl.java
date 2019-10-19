@@ -15,6 +15,7 @@ import br.com.totvs.tds.lsp.server.model.node.ApplyPatchNode;
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
+import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
@@ -31,6 +32,8 @@ import br.com.totvs.tds.lsp.server.model.protocol.CompilationInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 import br.com.totvs.tds.lsp.server.model.protocol.DisconnectData;
 import br.com.totvs.tds.lsp.server.model.protocol.DisconnectInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.InspectorFunctionsData;
+import br.com.totvs.tds.lsp.server.model.protocol.InspectorFunctionsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsData;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.KeyInfo;
@@ -357,4 +360,17 @@ public final class LsServiceImpl implements ILanguageServerService {
 		return status;
 	}
 
+	@Override
+	public InspectorFunctionsNode inspectorFunctions(final String token, final String environment) {
+		final InspectorFunctionsInfo inspectorFunctionsInfo = new InspectorFunctionsInfo();
+
+		inspectorFunctionsInfo.setConnectionToken(token);
+		inspectorFunctionsInfo.setEnvironment(environment);
+
+		final InspectorFunctionsData inspectorFunctionsData = new InspectorFunctionsData(inspectorFunctionsInfo);
+		final InspectorFunctionsNode inspectorFunctionsNode = ClientImpl.getInstance()
+				.inspectorFunctions(inspectorFunctionsData);
+
+		return inspectorFunctionsNode;
+	}
 }

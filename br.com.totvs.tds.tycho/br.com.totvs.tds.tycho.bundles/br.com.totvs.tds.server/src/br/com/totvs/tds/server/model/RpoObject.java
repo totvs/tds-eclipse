@@ -8,9 +8,8 @@ import br.com.totvs.tds.server.interfaces.IRpoElement;
 public class RpoObject implements IRpoElement {
 
 	private String name = ""; //$NON-NLS-1$
-	private Date date = null; //$NON-NLS-1$
+	private Date date = null; // $NON-NLS-1$
 	private boolean visible = true;
-	private RPOTypeElement type;
 
 	/**
 	 * @return the name
@@ -21,12 +20,11 @@ public class RpoObject implements IRpoElement {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	@Override
 	public void setName(final String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	/**
@@ -38,8 +36,7 @@ public class RpoObject implements IRpoElement {
 	}
 
 	/**
-	 * @param date
-	 *            the date to set
+	 * @param date the date to set
 	 */
 	@Override
 	public void setDate(final Date date) {
@@ -55,8 +52,7 @@ public class RpoObject implements IRpoElement {
 	}
 
 	/**
-	 * @param visible
-	 *            the visible to set
+	 * @param visible the visible to set
 	 */
 	@Override
 	public void setVisible(final boolean visible) {
@@ -64,7 +60,7 @@ public class RpoObject implements IRpoElement {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	public String toString() {
@@ -81,19 +77,17 @@ public class RpoObject implements IRpoElement {
 	@Override
 	public RPOTypeElement getType() {
 
-		return type;
+		return RPOTypeElement.UNKNOWN;
 	}
 
 	@Override
-	public void setType(RPOTypeElement type) {
-		this.type = type;
-	}
-
-	@Override
-	public void setDate(String date) {
+	public void setDate(final String date) {
 		try {
-			this.date = SDF.parse(date);
-		} catch (ParseException e) {
+			this.date = SDF.parse(date.trim());
+			if (date == null) {
+				System.out.println("RpoObject.setDate()");
+			}
+		} catch (final ParseException e) {
 			e.printStackTrace();
 		}
 	}

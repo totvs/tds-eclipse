@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.debug.core.ILaunchesListener;
@@ -23,6 +25,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
+import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 import br.com.totvs.tds.server.ServerUtil;
@@ -31,6 +34,10 @@ import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IOrganization;
+import br.com.totvs.tds.server.interfaces.IRpoElement;
+import br.com.totvs.tds.server.interfaces.IRpoFunction;
+import br.com.totvs.tds.server.interfaces.IRpoResource;
+import br.com.totvs.tds.server.interfaces.IRpoSource;
 import br.com.totvs.tds.server.interfaces.IServerConstants;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerReturn;
@@ -506,12 +513,6 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public RPOTypeElement getRPOTypeElement(final String fullNameOrExtension) {
-		// FIX tratar os outros tipos
-		return ServerUtil.isSourceFile(fullNameOrExtension) ? RPOTypeElement.PROGRAM : RPOTypeElement.RESOURCE;
-	}
-
-	@Override
 	public void setLocalServer(final boolean localServer) {
 		setPersistentProperty(IServerConstants.LOCAL_SERVER, localServer);
 	}
@@ -665,4 +666,110 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 				includePaths);
 	}
 
+	@Override
+	public List<IRpoElement> getRpoMap(final String environment, final RPOTypeElement typeElement,
+			final boolean includeTRes) {
+		if (RPOTypeElement.FUNCTION.equals(typeElement)) {
+			final List<IRpoElement> programMap = getObjectMap(environment, includeTRes, true, false);
+			return getFunctionMap(environment, programMap);
+		} else if (RPOTypeElement.OBJECT.equals(typeElement)) {
+			return getObjectMap(environment, includeTRes, true, true);
+		} else if (RPOTypeElement.PROGRAM.equals(typeElement)) {
+			final List<IRpoElement> programMap = getObjectMap(environment, includeTRes, true, true);
+			getFunctionMap(environment, programMap);
+			return programMap;
+		} else if (RPOTypeElement.RESOURCE.equals(typeElement)) {
+			return getObjectMap(environment, includeTRes, false, true);
+		}
+
+		return Collections.emptyList();
+	}
+
+	private List<IRpoElement> getObjectMap(final String environment, final boolean includeTRes,
+			final boolean includeSource, final boolean includeResource) {
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+		final List<String> inspectorFunctionsNode = lsService.getProgramMap(getToken(), environment, includeTRes);
+		final ArrayList<IRpoElement> rpoElements = new ArrayList<IRpoElement>();
+		final ArrayList<IRpoElement> sourcesElements = new ArrayList<IRpoElement>();
+
+		if (inspectorFunctionsNode != null) {
+			final List<String> functions = inspectorFunctionsNode;
+			final Pattern pattern = Pattern.compile("(.+)?\\.(.+)\\((.+)\\)", Pattern.CASE_INSENSITIVE);
+
+			for (final String function : functions) {
+				final Matcher m = pattern.matcher(function);
+
+				if (m.find()) {
+					final String name = m.group(1);
+					final String extension = m.group(2);
+					final String date = m.group(3);
+
+					if (includeSource && ServerUtil.isSourceFile(extension)) {
+						final IRpoSource source = new RpoSource();
+						source.setName(String.format("%s.%s", name == null ? "" : name, extension));
+						source.setDate(date);
+						rpoElements.add(source);
+						sourcesElements.add(source);
+					} else if (includeResource && !ServerUtil.isSourceFile(extension)) {
+						final IRpoResource resource = new RpoResource();
+						resource.setName(String.format("%s.%s", name == null ? "" : name, extension));
+						resource.setDate(date);
+						rpoElements.add(resource);
+					}
+				}
+			}
+		}
+
+		if (includeSource && includeResource) {
+			getFunctionMap(environment, sourcesElements);
+		}
+
+		return rpoElements;
+
+	}
+
+	private List<IRpoElement> getFunctionMap(final String environment, final List<IRpoElement> sourceList) {
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+		final InspectorFunctionsNode inspectorFunctionsNode = lsService.inspectorFunctions(getToken(), environment);
+		final Map<String, IRpoSource> sourceMap = new HashMap<String, IRpoSource>();
+		final ArrayList<IRpoElement> rpoElements = new ArrayList<IRpoElement>();
+
+		if (inspectorFunctionsNode != null) {
+
+			if (inspectorFunctionsNode.getMessage().equals("Success")) {
+				final String[] functions = inspectorFunctionsNode.getFunctions();
+				final Pattern pattern = Pattern.compile("(.+)\\((.+):([0-9]+)\\)", Pattern.CASE_INSENSITIVE);
+
+				for (final String function : functions) {
+					if (function.startsWith("#")) {
+						continue;
+					}
+
+					final Matcher m = pattern.matcher(function);
+
+					if (m.find()) {
+						final String functionName = m.group(1).trim();
+						final String programName = m.group(2).trim();
+						final String line = m.group(3).trim();
+
+						IRpoSource source = sourceMap.get(programName);
+						if (source == null) {
+							source = (IRpoSource) sourceList.stream().filter(e -> e.getName().equals(programName))
+									.findFirst().get();
+							sourceMap.put(programName, source);
+							// rpoElements.add(source);
+						}
+
+						final IRpoFunction rpoFunction = source.addFunction(functionName, line);
+						rpoElements.add(rpoFunction);
+					}
+				}
+			}
+
+		}
+
+		return rpoElements;
+	}
 }

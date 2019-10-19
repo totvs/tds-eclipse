@@ -26,6 +26,4 @@ public interface IRpoElement {
 
 	void setVisible(boolean visible);
 
-	public void setType(RPOTypeElement type);
-
 }

@@ -9,6 +9,7 @@ import br.com.totvs.tds.lsp.server.model.node.ApplyPatchNode;
 import br.com.totvs.tds.lsp.server.model.node.AuthenticationNode;
 import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
+import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
@@ -54,5 +55,8 @@ public interface ServerInterface extends LanguageServer {
 
 	@JsonRequest("$totvsserver/patchApply")
 	public CompletableFuture<ApplyPatchNode> patchApply(PatchApplyData patchApplyData);
+
+	@JsonRequest("$totvsserver/inspectorFunctions")
+	public CompletableFuture<InspectorFunctionsNode> inspectorFunctions(InspectorFunctionsData inspectorFunctionsData);
 
 }

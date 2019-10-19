@@ -1,7 +1,6 @@
 package br.com.totvs.tds.ui.server;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
@@ -71,8 +70,8 @@ public final class ServerUIIcons {
 		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_ERROR_TSK);
 	}
 
-	public static Image getFunctionInspector() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/function_rpo.gif").createImage(); //$NON-NLS-1$
+	public static ImageDescriptor getFunction() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/function.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getHelp() {
@@ -95,8 +94,8 @@ public final class ServerUIIcons {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/check.png"); //$NON-NLS-1$
 	}
 
-	public static Image getObjectInspector() {
-		return ServerUIActivator.getDefault().getImageDescriptor("icons/object_rpo.png").createImage(); //$NON-NLS-1$
+	public static ImageDescriptor getObject() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/object.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getOk() {
@@ -139,6 +138,10 @@ public final class ServerUIIcons {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/protheus.png"); //$NON-NLS-1$
 	}
 
+	public static ImageDescriptor getResource() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/resource.png"); //$NON-NLS-1$
+	}
+
 	/**
 	 * @return the refreshMessage
 	 */
@@ -156,6 +159,10 @@ public final class ServerUIIcons {
 
 	public static ImageDescriptor getSlave() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/slave.png"); //$NON-NLS-1$
+	}
+
+	public static ImageDescriptor getSource() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/source.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getTemplate() {

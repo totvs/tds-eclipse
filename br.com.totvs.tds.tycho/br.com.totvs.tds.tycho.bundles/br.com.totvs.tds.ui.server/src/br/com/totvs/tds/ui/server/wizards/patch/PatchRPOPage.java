@@ -575,8 +575,8 @@ public class PatchRPOPage extends WizardPage {
 			loadMapjob = null;
 		}
 
-		loadMapjob = new LoadRpoMapJob("Carregando RPO", attributes.getServer(), attributes.getEnvironment(),
-				tltmTRes.getSelection());
+		loadMapjob = new LoadRpoMapJob(attributes.getServer(), attributes.getEnvironment(), tltmTRes.getSelection(),
+				RPOTypeElement.OBJECT);
 		loadMapjob.schedule();
 
 		try {
@@ -593,7 +593,7 @@ public class PatchRPOPage extends WizardPage {
 						}
 
 						if (loadMapjob.getResult().isOK()) {
-							leftElements = loadMapjob.getRpoMap();
+							leftElements = loadMapjob.getList();
 						} else {
 							leftElements = new ArrayList<IRpoElement>();
 						}

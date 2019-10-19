@@ -11,7 +11,6 @@ import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchReturn;
-import br.com.totvs.tds.server.model.RPOTypeElement;
 import br.com.totvs.tds.server.model.SourceInformation;
 
 /**
@@ -178,8 +177,6 @@ public interface IAppServerInfo extends IServerInfo {
 
 	ILaunchesListener getLauncher();
 
-	RPOTypeElement getRPOTypeElement(String fullNameOrExtension);
-
 	void setLocalServer(boolean localServer);
 
 	boolean isLocalServer();
@@ -195,4 +192,5 @@ public interface IAppServerInfo extends IServerInfo {
 	ApplyPatchReturn applyPatch(String environment, URI serverPatch, boolean local, boolean oldPrograms);
 
 	void buidlFile(List<String> files, CompileOptions compileOptions, List<String> includePaths);
+
 }
