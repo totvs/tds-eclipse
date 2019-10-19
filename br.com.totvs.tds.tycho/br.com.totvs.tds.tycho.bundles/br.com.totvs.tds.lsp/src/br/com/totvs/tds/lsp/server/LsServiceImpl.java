@@ -30,6 +30,8 @@ import br.com.totvs.tds.lsp.server.model.protocol.ClientImpl;
 import br.com.totvs.tds.lsp.server.model.protocol.CompilationData;
 import br.com.totvs.tds.lsp.server.model.protocol.CompilationInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
+import br.com.totvs.tds.lsp.server.model.protocol.DefragRpoData;
+import br.com.totvs.tds.lsp.server.model.protocol.DefragRpoInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.DisconnectData;
 import br.com.totvs.tds.lsp.server.model.protocol.DisconnectInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorFunctionsData;
@@ -372,5 +374,16 @@ public final class LsServiceImpl implements ILanguageServerService {
 				.inspectorFunctions(inspectorFunctionsData);
 
 		return inspectorFunctionsNode;
+	}
+
+	@Override
+	public void defragRPO(final String token, final String environment) {
+		final DefragRpoInfo defragRPOInfo = new DefragRpoInfo();
+
+		defragRPOInfo.setConnectionToken(token);
+		defragRPOInfo.setEnvironment(environment);
+
+		final DefragRpoData defragRPOData = new DefragRpoData(defragRPOInfo);
+		ClientImpl.getInstance().defragRpo(defragRPOData);
 	}
 }

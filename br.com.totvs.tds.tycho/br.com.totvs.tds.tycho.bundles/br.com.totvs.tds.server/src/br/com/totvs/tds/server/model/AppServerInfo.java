@@ -772,4 +772,12 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 		return rpoElements;
 	}
+
+	@Override
+	public void defragRPO(final String environment, final boolean clearPatchLog) {
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+
+		lsService.defragRPO(getToken(), environment);
+	}
 }

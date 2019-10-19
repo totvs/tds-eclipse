@@ -59,4 +59,7 @@ public interface ServerInterface extends LanguageServer {
 	@JsonRequest("$totvsserver/inspectorFunctions")
 	public CompletableFuture<InspectorFunctionsNode> inspectorFunctions(InspectorFunctionsData inspectorFunctionsData);
 
+	@JsonRequest("$totvsserver/defragRpo")
+	public CompletableFuture<?> defragRpo(DefragRpoData defragRPOData);
+
 }

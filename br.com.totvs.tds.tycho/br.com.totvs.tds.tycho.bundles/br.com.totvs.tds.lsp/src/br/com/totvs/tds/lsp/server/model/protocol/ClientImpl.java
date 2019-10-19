@@ -277,4 +277,19 @@ public class ClientImpl extends LanguageClientImpl {
 		return result;
 	}
 
+	public void defragRpo(final DefragRpoData defragRPOData) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+
+		final CompletableFuture<?> future = server.defragRpo(defragRPOData);
+		try {
+			future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (final ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

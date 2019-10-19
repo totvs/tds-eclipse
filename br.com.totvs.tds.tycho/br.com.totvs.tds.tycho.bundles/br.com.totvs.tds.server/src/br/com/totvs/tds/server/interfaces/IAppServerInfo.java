@@ -193,4 +193,6 @@ public interface IAppServerInfo extends IServerInfo {
 
 	void buidlFile(List<String> files, CompileOptions compileOptions, List<String> includePaths);
 
+	void defragRPO(String environment, boolean clearPatchLog);
+
 }

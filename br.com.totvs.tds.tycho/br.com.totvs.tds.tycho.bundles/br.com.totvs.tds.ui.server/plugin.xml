@@ -180,6 +180,16 @@
                    value="object">
              </parameter>
           </command>
+          <command
+                commandId="br.com.totvs.tds.ui.server.commands.maintenanceRpoCommand"
+                icon="icons/rpo.png"
+                label="Desfragmentar"
+                tooltip="Elimina fragmentos do RPO diminuindo o tamanho do mesmo.">
+             <parameter
+                   name="br.com.totvs.tds.ui.server.rpoOperationtParameter"
+                   value="defrag">
+             </parameter>
+          </command>
        </menu>
        
        <command
@@ -248,8 +258,7 @@
                    id="br.com.totvs.tds.server.ui.toolbar.status"
                    label="%toolbar.label">
                    <!-- contorno devido a um bug no eclipse, que corta a contribuição-->
-        	<command
-			commandId="dummy"
+        		<command commandId="dummy"
                       icon="icons/img1x24.png"
                       style="push">
                 </command>
@@ -383,7 +392,16 @@
              optional="false">
        </commandParameter>
      </command>
-     
+    <command
+    	defaultHandler="br.com.totvs.tds.ui.server.handlers.MaintenanceRpoHandler"
+        id="br.com.totvs.tds.ui.server.commands.maintenanceRpoCommand"
+        name="Manutenção de RPO">
+       <commandParameter
+             id="br.com.totvs.tds.ui.server.rpoOperationtParameter"
+             name="rpoOperation"
+             optional="false">
+       </commandParameter>
+     </command>
     <command
           categoryId="br.com.totvs.tds.ui.server.commands.category"
           defaultHandler="br.com.totvs.tds.ui.server.handlers.StartServerHandler"

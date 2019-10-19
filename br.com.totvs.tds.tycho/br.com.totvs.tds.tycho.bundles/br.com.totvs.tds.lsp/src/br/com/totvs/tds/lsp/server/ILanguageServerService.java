@@ -126,4 +126,6 @@ public interface ILanguageServerService {
 
 	InspectorFunctionsNode inspectorFunctions(String token, String environment);
 
+	void defragRPO(String token, String environment);
+
 }
