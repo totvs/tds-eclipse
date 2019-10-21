@@ -10,9 +10,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 
-import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
-import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 
@@ -33,18 +31,14 @@ public class CompileJob extends Job {
 		monitor.beginTask(Messages.CompileJob_Resource_compilation, compileMap.size() + 1);
 
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-		final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
+		final IServerManager serverManager = serviceLocator.getService(IServerManager.class);
 		final IAppServerInfo currentServer = serverManager.getCurrentServer();
-		final String authorizationCode = serverManager.getAuthorizationKey().getAuthorizationCode();
 
 		for (final Entry<String, CompileMapData> compileData : compileMap.entrySet()) {
 			monitor.subTask(String.format(Messages.CompileJob_Project, compileData.getKey()));
+
 			currentServer.buidlFile(compileData.getValue().getFiles(), compileOptions,
 					compileData.getValue().getIncludePaths());
-
-			lsService.buidlFile(currentServer.getToken(), authorizationCode, currentServer.getCurrentEnvironment(),
-					compileData.getValue().getFiles(), compileOptions, compileData.getValue().getIncludePaths());
 
 			monitor.worked(1);
 		}
