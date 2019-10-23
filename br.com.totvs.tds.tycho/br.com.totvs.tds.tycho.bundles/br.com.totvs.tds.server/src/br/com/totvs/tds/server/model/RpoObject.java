@@ -84,9 +84,6 @@ public class RpoObject implements IRpoElement {
 	public void setDate(final String date) {
 		try {
 			this.date = SDF.parse(date.trim());
-			if (date == null) {
-				System.out.println("RpoObject.setDate()");
-			}
 		} catch (final ParseException e) {
 			e.printStackTrace();
 		}

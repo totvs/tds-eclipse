@@ -1,14 +1,9 @@
 package br.com.totvs.tds.ui.server;
 
-import java.util.List;
-
-import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-import br.com.totvs.tds.server.interfaces.IGroupInfo;
-import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.ui.TDSUtil;
 
@@ -32,23 +27,6 @@ public final class ServerUIUtil {
 			}
 		}
 	};
-
-	private static boolean hasChildrenChecked(final IItemInfo parentInfo, final CheckboxTreeViewer checkboxTreeViewer) {
-		boolean hasChildrenChecked = false;
-		if (checkboxTreeViewer != null) {
-			if (parentInfo instanceof IGroupInfo) {
-				IGroupInfo groupInfo = (IGroupInfo) parentInfo;
-				List<IItemInfo> children = groupInfo.getChildren();
-				for (IItemInfo childInfo : children) {
-					hasChildrenChecked = checkboxTreeViewer.getChecked(childInfo);
-					if (hasChildrenChecked) {
-						break;
-					}
-				}
-			}
-		}
-		return hasChildrenChecked;
-	}
 
 	/**
 	 * Gets the host and check if it is localhost or 127.0.0.*

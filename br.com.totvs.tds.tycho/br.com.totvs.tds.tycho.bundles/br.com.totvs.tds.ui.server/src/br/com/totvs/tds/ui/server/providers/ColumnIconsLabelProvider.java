@@ -76,8 +76,8 @@ public class ColumnIconsLabelProvider extends ColumnLabelProvider {
 
 	@Override
 	public Image getImage(final Object element) {
-		Image image = ServerUIIcons.getLinkIcon().createImage();
-		return super.getImage(element);
+
+		return ServerUIIcons.getLinkIcon().createImage();
 	}
 
 	@Override

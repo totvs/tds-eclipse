@@ -6,7 +6,6 @@ import org.eclipse.core.runtime.IStatus;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
-import br.com.totvs.tds.ui.server.nl.Messages;
 
 /**
  * Conecta ao servidor selecionado.

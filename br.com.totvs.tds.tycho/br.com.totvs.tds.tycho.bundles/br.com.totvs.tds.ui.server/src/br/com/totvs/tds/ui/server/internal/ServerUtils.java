@@ -1,8 +1,6 @@
 package br.com.totvs.tds.ui.server.internal;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -16,19 +14,6 @@ import br.com.totvs.tds.ui.server.wizards.server.INIFile.INIProperty;
 import br.com.totvs.tds.ui.server.wizards.server.INIFile.INISection;
 
 public class ServerUtils {
-
-	private static String[] buildVariants(String[] strings) {
-		List<String> stringList = Arrays.asList(strings);
-
-		for (String string : strings) {
-			stringList.add(string.toLowerCase());
-			stringList.add(string.substring(0, 1).toLowerCase() + string.substring(1).toLowerCase());
-		}
-
-		stringList.add("*.*"); //$NON-NLS-1$
-
-		return stringList.toArray(new String[stringList.size()]);
-	}
 
 	public static String[] doProcessSmartClientIni(String smartClientPath) {
 		IPath scPath = Path.fromOSString(smartClientPath);
@@ -54,27 +39,12 @@ public class ServerUtils {
 	}
 
 	public static String doSelectAppServer(Shell shell) {
-//		if (TDSUtil.isLinux()) {
-//			dialog.setFilterExtensions(buildVariants(IServerConstants.APP_SERVER_EXECUTABLES_LINUX));
-//		} else if (TDSUtil.isWindows()) {
-//			dialog.setFilterExtensions(IServerConstants.APP_SERVER_EXECUTABLES_WIN);
-//		} else {
-//			dialog.setFilterExtensions(buildVariants(IServerConstants.APP_SERVER_EXECUTABLES_MAC));
-//		}
 
 		return TDSUtil.fileDialog(shell);
 	}
 
 	public static String doSelectSmartClient(Shell shell) {
 		FileDialog dialog = new FileDialog(shell);
-
-//		if (TDSUtil.isLinux()) {
-//			dialog.setFilterExtensions(buildVariants(IServerConstants.SMARTCLIENT_EXECUTABLES_LINUX));
-//		} else if (TDSUtil.isWindows()) {
-//			dialog.setFilterExtensions(IServerConstants.SMARTCLIENT_EXECUTABLES_WIN);
-//		} else {
-//			dialog.setFilterExtensions(buildVariants(IServerConstants.SMARTCLIENT_EXECUTABLES_MAC));
-//		}
 
 		String result = dialog.open();
 

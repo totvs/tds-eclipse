@@ -249,6 +249,7 @@ public abstract class BaseServerInfo extends ItemInfo implements IServerInfo {
 	 */
 	@Override
 	public void doReadExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
+		@SuppressWarnings("unused")
 		final long serialVerion = in.readLong();
 
 		address = (URI) in.readObject();

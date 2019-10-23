@@ -1,10 +1,11 @@
 package br.com.totvs.tds.sdk;
 
 import org.eclipse.core.runtime.IStatus;
-import org.osgi.framework.BundleActivator;
+import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
-public class SdkActivator implements BundleActivator {
+public class SdkActivator extends Plugin {
 
 	private static final String PLUGIN_ID = "br.com.totvs.tds.sdk";
 	private static SdkActivator plugin;
@@ -29,14 +30,11 @@ public class SdkActivator implements BundleActivator {
 	}
 
 	public static IStatus logStatus(final int level, final String message, final Object... args) {
-//		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
-//		TDSMessageHandler.logMessage(status);
+		final IStatus status = new Status(level, PLUGIN_ID, String.format(message, args));
 //
-//		getDefault().getLog().log(status);
-		System.out.println("SdkActivator.logStatus()");
-		System.out.println(message);
+		getDefault().getLog().log(status);
 
-		return null; // status;
+		return status;
 	}
 
 }

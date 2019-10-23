@@ -21,6 +21,11 @@ Require-Bundle: org.eclipse.swtbot.go,
  org.hamcrest.core,
  br.com.totvs.tds.ui.sdk
 Automatic-Module-Name: br.com.totvs.tds.server.ui.test
-Export-Package: br.com.totvs.tds.ui.editor 
+Export-Package: br.com.totvs.tds.ui;x-internal:=true,
+ br.com.totvs.tds.ui.bot;x-internal:=true,
+ br.com.totvs.tds.ui.editor,
+ br.com.totvs.tds.ui.patch;x-internal:=true,
+ br.com.totvs.tds.ui.screen;x-internal:=true,
+ br.com.totvs.tds.ui.server;x-internal:=true
 Bundle-Activator: br.com.totvs.tds.ui.TestActivator
 Import-Package: br.com.totvs.tds.server.jobs

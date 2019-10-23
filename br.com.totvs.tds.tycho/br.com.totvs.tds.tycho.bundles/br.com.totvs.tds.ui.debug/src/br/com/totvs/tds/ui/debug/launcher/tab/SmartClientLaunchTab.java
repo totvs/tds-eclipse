@@ -283,14 +283,6 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		chkSplash.setSelection(launchParameters.isNotShowSplash());
 		cmbLanguage.setText(launchParameters.getLanguage());
 
-		final String mode = ""; //$NON-NLS-1$
-		if (mode == "run") { //$NON-NLS-1$
-			// chkStopAtFirstKnowSource.setSelection(launchParameters.isStopAtFirtLine());
-//			chkTableSync.setSelection(launchParameters.isEnableTableSync());
-//			chkTrace.setSelection(launchParameters.isTrace());
-//			chkLogFile.setSelection(launchParameters.isLogFile());
-//			chkI.setSelection(launchParameters.isIgnoreFilesNotInWS());
-		}
 	}
 
 	@Override

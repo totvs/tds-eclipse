@@ -100,6 +100,7 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 	 * @param path the path
 	 * @return the image descriptor
 	 */
+	@SuppressWarnings("deprecation")
 	public ImageDescriptor getImageDescriptor(final String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}

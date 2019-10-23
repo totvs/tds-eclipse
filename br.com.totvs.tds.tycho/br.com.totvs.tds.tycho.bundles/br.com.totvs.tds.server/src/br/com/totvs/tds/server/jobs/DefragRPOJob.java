@@ -46,8 +46,6 @@ public class DefragRPOJob extends Job {
 
 	@Override
 	protected IStatus run(final IProgressMonitor monitor) {
-		final boolean abort = false;
-		final boolean disconnect = false;
 
 		monitor.beginTask("Desfragmentação de RPO", environments.length); //$NON-NLS-1$
 
@@ -58,34 +56,9 @@ public class DefragRPOJob extends Job {
 			if (monitor.isCanceled()) {
 				return Status.CANCEL_STATUS;
 			}
+
+			monitor.worked(1);
 		}
-//			TdsLogging.getDefault().logError("Erro :\"IOException\""); //$NON-NLS-1$
-//			e.printStackTrace();
-//		} catch (final InterruptedException e) {
-//			abort = true;
-//			TdsLogging.getDefault().logError("Erro :\"InterruptedException\""); //$NON-NLS-1$
-//			e.printStackTrace();
-//		} catch (final NullPointerException e) {
-//			abort = true;
-//			TdsLogging.getDefault().logError("Erro :\"NullPointerException\""); //$NON-NLS-1$
-//			e.printStackTrace();
-//		} catch (final Exception e) {
-//			abort = true;
-//			TdsLogging.getDefault().logError("Erro :\"Exception\""); //$NON-NLS-1$
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				serverConnector.endBuild(abort);
-//				if (disconnect) {
-//					serverConnector.disconnect();
-//				}
-//			} catch (final Exception e) {
-//				TdsLogging.getDefault().logError("Erro :\"Exception\""); //$NON-NLS-1$
-//				e.printStackTrace();
-//			}
-//			monitor.worked(1);
-//			monitor.done();
-//		}
 
 		return Status.OK_STATUS;
 	}

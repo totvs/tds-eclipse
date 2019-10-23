@@ -58,27 +58,6 @@ public final class SdkUIIcons {
 	}
 
 	/**
-	 * @return the environment
-	 */
-	private static ImageDescriptor getEnvironment() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/project/import.gif"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the ignoreCompile
-	 */
-	private static ImageDescriptor getIgnoreCompile() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/folder/ignoreCompile.gif"); //$NON-NLS-1$
-	}
-
-	/**
-	 * @return the ok
-	 */
-	private static ImageDescriptor getOk() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/ok.png"); //$NON-NLS-1$
-	}
-
-	/**
 	 * @return the add
 	 */
 	public static ImageDescriptor getAdd() {
@@ -90,57 +69,6 @@ public final class SdkUIIcons {
 	 */
 	public static ImageDescriptor getDel() {
 		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE);
-	}
-
-	/**
-	 * 
-	 * @return the cut
-	 */
-	private static ImageDescriptor getEdit() {
-		return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_CUT);
-	}
-
-	/**
-	 * @return the new
-	 */
-	private static ImageDescriptor getBrAmarelo() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_amarelo.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrAzul() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_azul.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrBranco() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_branco.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrCinza() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_cinza.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrLaranja() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_laranja.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrMarrom() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_marrom.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrVerde() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_verde.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrVermelho() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_vermelho.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrPink() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_pink.png"); //$NON-NLS-1$
-	}
-
-	private static ImageDescriptor getBrPreto() {
-		return SdkUIActivator.getDefault().getImageDescriptor("icons/legends/br_preto.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getSearch() {

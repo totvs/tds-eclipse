@@ -61,6 +61,7 @@ Export-Package: br.com.totvs.tds.ui.server;
  br.com.totvs.tds.ui.server.nl,
  br.com.totvs.tds.ui.server.preferences;uses:="org.eclipse.core.runtime.preferences",
  br.com.totvs.tds.ui.server.preferences.page;uses:="org.eclipse.ui,org.eclipse.jface.util,org.eclipse.jface.preference",
+ br.com.totvs.tds.ui.server.providers;x-internal:=true,
  br.com.totvs.tds.ui.server.status;
   uses:="org.eclipse.jface.action,
    org.eclipse.swt.graphics,
