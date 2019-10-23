@@ -94,6 +94,11 @@ public class LaunchParameters {
 	private boolean enableTableSync;
 
 	/**
+	 * Pause to attach in DA process.
+	 */
+	private boolean enableLaunchPauseToDebug;
+
+	/**
 	 * Show command line
 	 */
 	private boolean showCommandLine;
@@ -106,7 +111,7 @@ public class LaunchParameters {
 		this.enableProfile = false;
 		this.wsCacheFiles = false;
 		this.bIgnoreFilesNotInWS = false;
-		this.trace = false;
+		this.trace = true;
 		this.enableTableSync = false;
 		this.program = ""; //$NON-NLS-1$
 		this.cwb = ""; //$NON-NLS-1$
@@ -114,17 +119,18 @@ public class LaunchParameters {
 		this.logFile = ""; //$NON-NLS-1$
 		this.programArguments = new ArrayList<String>();
 		this.workspaceFolders = new ArrayList<String>();
+		this.enableLaunchPauseToDebug = false;
 	}
 
-	public LaunchParameters(Map<String, Object> params) {
+	public LaunchParameters(final Map<String, Object> params) {
 		this();
 
 		try {
 			fromMap(params);
-		} catch (IllegalArgumentException e) {
+		} catch (final IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -140,7 +146,7 @@ public class LaunchParameters {
 	/**
 	 * @param program the program to set
 	 */
-	public void setMainProgram(String program) {
+	public void setMainProgram(final String program) {
 		this.program = program;
 	}
 
@@ -154,7 +160,7 @@ public class LaunchParameters {
 	/**
 	 * @param enableMultiThread the enableMultiThread to set
 	 */
-	public void setEnableMultiThread(boolean enableMultiThread) {
+	public void setEnableMultiThread(final boolean enableMultiThread) {
 		this.enableMultiThread = enableMultiThread;
 	}
 
@@ -168,23 +174,9 @@ public class LaunchParameters {
 	/**
 	 * @param enableProfile the enableProfile to set
 	 */
-	public void setEnableProfile(boolean enableProfile) {
+	public void setEnableProfile(final boolean enableProfile) {
 		this.enableProfile = enableProfile;
 	}
-
-//	/**
-//	 * @return the isMultiSession
-//	 */
-//	public boolean isMultiSession() {
-//		return multiSession;
-//	}
-
-//	/**
-//	 * @param isMultiSession the isMultiSession to set
-//	 */
-//	public void setMultiSession( boolean isMultiSession) {
-//		this.multiSession = isMultiSession;
-//	}
 
 	/**
 	 * @return the isAccessibilityMode
@@ -196,7 +188,7 @@ public class LaunchParameters {
 	/**
 	 * @param isAccessibilityMode the isAccessibilityMode to set
 	 */
-	public void setAccessibilityMode(boolean isAccessibilityMode) {
+	public void setAccessibilityMode(final boolean isAccessibilityMode) {
 		this.isAccessibilityMode = isAccessibilityMode;
 	}
 
@@ -210,7 +202,7 @@ public class LaunchParameters {
 	/**
 	 * @param doNotShowSplash the doNotShowSplash to set
 	 */
-	public void setDoNotShowSplash(boolean doNotShowSplash) {
+	public void setDoNotShowSplash(final boolean doNotShowSplash) {
 		this.doNotShowSplash = doNotShowSplash;
 	}
 
@@ -224,7 +216,7 @@ public class LaunchParameters {
 	/**
 	 * @param language the language to set
 	 */
-	public void setLanguage(String language) {
+	public void setLanguage(final String language) {
 		this.language = language;
 	}
 
@@ -238,7 +230,7 @@ public class LaunchParameters {
 	/**
 	 * @param trace the trace to set
 	 */
-	public void setTrace(boolean trace) {
+	public void setTrace(final boolean trace) {
 		this.trace = trace;
 	}
 
@@ -252,7 +244,7 @@ public class LaunchParameters {
 	/**
 	 * @param logFile the logFile to set
 	 */
-	public void setLogFile(String logFile) {
+	public void setLogFile(final String logFile) {
 		this.logFile = logFile;
 	}
 
@@ -266,7 +258,7 @@ public class LaunchParameters {
 	/**
 	 * @param ignoreFilesNotInWS the bIgnoreFilesNotInWS to set
 	 */
-	public void setIgnoreFilesNotInWS(boolean ignoreFilesNotInWS) {
+	public void setIgnoreFilesNotInWS(final boolean ignoreFilesNotInWS) {
 		this.bIgnoreFilesNotInWS = ignoreFilesNotInWS;
 	}
 
@@ -280,7 +272,7 @@ public class LaunchParameters {
 	/**
 	 * @param enableTableSync the enableTableSync to set
 	 */
-	public void setEnableTableSync(boolean enableTableSync) {
+	public void setEnableTableSync(final boolean enableTableSync) {
 		this.enableTableSync = enableTableSync;
 	}
 
@@ -299,23 +291,23 @@ public class LaunchParameters {
 //	}
 
 	/**
-	 * 
+	 *
 	 * @return mapa com as valores das propriedades
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
 	public Map<String, Object> toMap() throws IllegalArgumentException, IllegalAccessException {
-		Map<String, Object> map = new HashMap<String, Object>();
+		final Map<String, Object> map = new HashMap<String, Object>();
 
-		for (Field field : LaunchParameters.class.getDeclaredFields()) {
-			Object value = field.get(this);
+		for (final Field field : LaunchParameters.class.getDeclaredFields()) {
+			final Object value = field.get(this);
 			if (value != null) {
-				Class<?> type = field.getType();
+				final Class<?> type = field.getType();
 
 				if (type.getSimpleName().equals("List")) { //$NON-NLS-1$
-					List<?> list = (List<?>) value;
+					final List<?> list = (List<?>) value;
 
-					String listStr = list.stream().map(n -> String.valueOf(n)).collect(Collectors.joining("\t")); //$NON-NLS-1$
+					final String listStr = list.stream().map(n -> String.valueOf(n)).collect(Collectors.joining("\t")); //$NON-NLS-1$
 
 					map.put(field.getName(), listStr);
 				} else {
@@ -328,21 +320,21 @@ public class LaunchParameters {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param map, com os valores a serem armazenados
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	public void fromMap(Map<String, Object> map) throws IllegalArgumentException, IllegalAccessException {
+	public void fromMap(final Map<String, Object> map) throws IllegalArgumentException, IllegalAccessException {
 		if (map != null) {
-			for (Field field : LaunchParameters.class.getDeclaredFields()) {
+			for (final Field field : LaunchParameters.class.getDeclaredFields()) {
 				if (map.containsKey(field.getName())) {
-					Object value = map.get(field.getName());
+					final Object value = map.get(field.getName());
 					if (value == null) {
 						continue;
 					}
 
-					Class<?> type = field.getType();
+					final Class<?> type = field.getType();
 					if (type.isPrimitive()) {
 						if (field.getType().getName().equals("boolean")) { //$NON-NLS-1$
 							field.setBoolean(this, Boolean.valueOf(value.toString()));
@@ -350,12 +342,12 @@ public class LaunchParameters {
 							field.setInt(this, Integer.valueOf(value.toString()));
 						}
 					} else if (type.getSimpleName().equals("List")) { //$NON-NLS-1$
-						String listStr = (String) value;
+						final String listStr = (String) value;
 
 						if (!listStr.isEmpty()) {
-							List<?> listAux = Arrays.asList(listStr.split("\t")); //$NON-NLS-1$
+							final List<?> listAux = Arrays.asList(listStr.split("\t")); //$NON-NLS-1$
 							@SuppressWarnings("unchecked")
-							List<Object> listObj = (List<Object>) field.get(this);
+							final List<Object> listObj = (List<Object>) field.get(this);
 							listObj.clear();
 							listObj.addAll(listAux);
 							field.set(this, listObj);
@@ -380,7 +372,7 @@ public class LaunchParameters {
 	/**
 	 * @param isMultiSession the isMultiSession to set
 	 */
-	public void setMultiSession(boolean isMultiSession) {
+	public void setMultiSession(final boolean isMultiSession) {
 		this.isMultiSession = isMultiSession;
 	}
 
@@ -394,7 +386,7 @@ public class LaunchParameters {
 	/**
 	 * @param cwb the cwb to set
 	 */
-	public void setCwb(String cwb) {
+	public void setCwb(final String cwb) {
 		this.cwb = cwb;
 	}
 
@@ -408,7 +400,7 @@ public class LaunchParameters {
 	/**
 	 * @param wsCacheFiles the wsCacheFiles to set
 	 */
-	public void setWsCacheFiles(boolean wsCacheFiles) {
+	public void setWsCacheFiles(final boolean wsCacheFiles) {
 		this.wsCacheFiles = wsCacheFiles;
 	}
 
@@ -422,7 +414,7 @@ public class LaunchParameters {
 	/**
 	 * @param programArguments the programArguments to set
 	 */
-	public void setProgramArguments(List<String> programArguments) {
+	public void setProgramArguments(final List<String> programArguments) {
 		this.programArguments = programArguments;
 	}
 
@@ -436,7 +428,7 @@ public class LaunchParameters {
 	/**
 	 * @param showCommandLine the showCommandLine to set
 	 */
-	public void setShowCommandLine(boolean showCommandLine) {
+	public void setShowCommandLine(final boolean showCommandLine) {
 		this.showCommandLine = showCommandLine;
 	}
 
@@ -444,7 +436,7 @@ public class LaunchParameters {
 	 * @return lista de argumentos para o SmartCLient
 	 */
 	public List<String> getLineArguments() {
-		List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<String>();
 
 		if (this.isMultiSession) {
 			result.add("-M"); //$NON-NLS-1$
@@ -457,16 +449,30 @@ public class LaunchParameters {
 		}
 
 		if (!this.language.isEmpty()) {
-			SCLanguages language = IDebugLauncherAttributes.SCLanguages.getEnum(this.language);
+			final SCLanguages language = IDebugLauncherAttributes.SCLanguages.getEnum(this.language);
 			result.add(String.format("-L=%d", language.getCode())); //$NON-NLS-1$
 		}
 
 		result.add(String.format("-P=%s", this.program)); //$NON-NLS-1$
-		for (String value : this.programArguments) {
+		for (final String value : this.programArguments) {
 			result.add(String.format("-A %s", value)); //$NON-NLS-1$
 		}
 
 		return result;
+	}
+
+	/**
+	 * @return the enableLaunchPauseToDebug
+	 */
+	public boolean isEnableLaunchPauseToDebug() {
+		return enableLaunchPauseToDebug;
+	}
+
+	/**
+	 * @param enableLaunchPauseToDebug the enableLaunchPauseToDebug to set
+	 */
+	public void setEnableLaunchPauseToDebug(final boolean enableLaunchPauseToDebug) {
+		this.enableLaunchPauseToDebug = enableLaunchPauseToDebug;
 	}
 
 }

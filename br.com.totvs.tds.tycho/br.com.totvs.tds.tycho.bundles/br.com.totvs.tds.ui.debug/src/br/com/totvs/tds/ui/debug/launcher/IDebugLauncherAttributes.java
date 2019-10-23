@@ -19,15 +19,16 @@ public interface IDebugLauncherAttributes {
 	 *
 	 */
 	enum SCLanguages {
-		PORTUGUESE(1, SCLanguages.getPTString()), SPANISH(2, SCLanguages.getESString()),
-		ENGLISH(3, SCLanguages.getENString());
+		PORTUGUESE(1, SCLanguages.PT), //
+		SPANISH(2, SCLanguages.ES), //
+		ENGLISH(3, SCLanguages.ES);
 
 		private int code;
 		private String languageName;
 
-		public static final String PT = "Portugu�s"; //$NON-NLS-1$
-		public static final String EN = "Ingl�s"; //$NON-NLS-1$
-		public static final String ES = "Espanhol"; //$NON-NLS-1$
+		public static final String PT = "Português"; //$NON-NLS-1$
+		public static final String EN = "English"; //$NON-NLS-1$
+		public static final String ES = "Espanol"; //$NON-NLS-1$
 
 		SCLanguages(final int code, final String languageName) {
 			this.code = code;
@@ -41,18 +42,6 @@ public interface IDebugLauncherAttributes {
 
 		public int getCode() {
 			return this.code;
-		}
-
-		private static String getPTString() {
-			return PT;
-		}
-
-		private static String getENString() {
-			return EN;
-		}
-
-		private static String getESString() {
-			return ES;
 		}
 
 		/**

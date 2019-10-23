@@ -31,7 +31,7 @@ public class ActivatorServer implements BundleActivator {
 
 	/**
 	 *
-	 * @return caminho compledo do execut�vel DA
+	 * @return caminho completo do executável DA
 	 * @throws IOException
 	 */
 	public String getDACommand() throws IOException {
@@ -59,6 +59,11 @@ public class ActivatorServer implements BundleActivator {
 	 */
 	public List<String> getDAArgs() {
 		final List<String> args = new ArrayList<String>();
+
+		// ao iniciar, aguarda 30 segundos para que possa fazer um "attach"
+		// args.add("--wait-for-attach");
+		// args.add("30000"); // milisegundos
+		//////////////////////////////////////////////
 
 		return args;
 	}

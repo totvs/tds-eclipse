@@ -15,13 +15,7 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 	public LSConnectionProvider() {
 		super();
 
-		final String server = getServer();
-
 		final List<String> commands = new ArrayList<String>();
-		if (server.endsWith(".exe")) {
-			commands.add("cmd");
-			commands.add("/c");
-		}
 		commands.add(getServer());
 		commands.addAll(getArguments());
 

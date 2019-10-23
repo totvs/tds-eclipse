@@ -43,8 +43,7 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 	private Text txtParameters;
 
 	// argumentos
-	private Button chkMultiSelection;
-	// private Button chLayers;
+	private Button chkMultiSession;
 	private Button chkSplash;
 	private Button chkLanguage;
 	private Combo cmbLanguage;
@@ -133,11 +132,11 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		grpArgumentos.setLayout(glGrpArgumentos);
 		grpArgumentos.setText(Messages.SmartClientLaunchTab_Arguments);
 
-		chkMultiSelection = new Button(grpArgumentos, SWT.CHECK);
-		chkMultiSelection.setToolTipText(Messages.SmartClientLaunchTab_Allows_running_more_instances_SmartClient);
-		chkMultiSelection.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		chkMultiSelection.setText(Messages.SmartClientLaunchTab_Multiple_sessions);
-		chkMultiSelection.addSelectionListener(defaultSelectionListener);
+		chkMultiSession = new Button(grpArgumentos, SWT.CHECK);
+		chkMultiSession.setToolTipText(Messages.SmartClientLaunchTab_Allows_running_more_instances_SmartClient);
+		chkMultiSession.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		chkMultiSession.setText(Messages.SmartClientLaunchTab_Multiple_sessions);
+		chkMultiSession.addSelectionListener(defaultSelectionListener);
 
 		chkAccess = new Button(grpArgumentos, SWT.CHECK);
 		chkAccess.setToolTipText(Messages.SmartClientLaunchTab_Activates_accessibility_module);
@@ -171,23 +170,26 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		grpOptions.setText(Messages.SmartClientLaunchTab_Options);
 		chkEnableProfile = new Button(grpOptions, SWT.CHECK);
 		chkEnableProfile.setText(Messages.SmartClientLaunchTab_Execution_Profile);
+		new Label(grpOptions, SWT.NONE);
+
+		chkStopAtFirstKnowSource = new Button(grpOptions, SWT.CHECK);
+		chkStopAtFirstKnowSource.setEnabled(false);
+		chkStopAtFirstKnowSource.setText(Messages.SmartClientLaunchTab_Stop_first_known_source);
 
 		chkMultiThread = new Button(grpOptions, SWT.CHECK);
 		chkMultiThread.setText(Messages.SmartClientLaunchTab_Multi_thread);
+		chkMultiThread.addSelectionListener(defaultSelectionListener);
+		new Label(grpOptions, SWT.NONE);
 
-		chkStopAtFirstKnowSource = new Button(grpOptions, SWT.CHECK);
-		chkStopAtFirstKnowSource.setText(Messages.SmartClientLaunchTab_Stop_first_known_source);
+		lblpOuSuperior = new Label(grpOptions, SWT.WRAP);
+		lblpOuSuperior.setEnabled(false);
+		lblpOuSuperior.setText(Messages.SmartClientLaunchTab_P17_or_higher);
 
 		chkShowCommandLine = new Button(grpOptions, SWT.CHECK);
 		chkShowCommandLine.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		chkShowCommandLine.setSelection(true);
 		chkShowCommandLine.setText(Messages.SmartClientLaunchTab_Display_command_line);
-
-		lblpOuSuperior = new Label(grpOptions, SWT.WRAP);
-		lblpOuSuperior.setText(Messages.SmartClientLaunchTab_P17_or_higher);
-		// lblpOuSuperior.setFont(SWTResourceManager.getFont("Segoe UI", 8,
-		// SWT.ITALIC));
-		chkMultiThread.addSelectionListener(defaultSelectionListener);
+		new Label(grpOptions, SWT.NONE);
 		chkShowCommandLine.addSelectionListener(defaultSelectionListener);
 		chkEnableProfile.addSelectionListener(defaultSelectionListener);
 		chkStopAtFirstKnowSource.addSelectionListener(defaultSelectionListener);
@@ -276,7 +278,7 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		chkMultiThread.setSelection(launchParameters.isEnableMultiThread());
 		chkShowCommandLine.setSelection(launchParameters.isShowCommandLine());
 		chkEnableProfile.setSelection(launchParameters.isEnableProfile());
-		chkMultiThread.setSelection(launchParameters.isMultiSession());
+		chkMultiSession.setSelection(launchParameters.isMultiSession());
 		chkAccess.setSelection(launchParameters.isAccessibilityMode());
 		chkSplash.setSelection(launchParameters.isNotShowSplash());
 		cmbLanguage.setText(launchParameters.getLanguage());
@@ -299,12 +301,13 @@ public class SmartClientLaunchTab extends AbstractLaunchConfigurationTab {
 		lp.setEnableMultiThread(chkMultiThread.getSelection());
 		lp.setShowCommandLine(chkShowCommandLine.getSelection());
 		lp.setEnableProfile(chkEnableProfile.getSelection());
-		lp.setMultiSession(chkMultiSelection.getSelection());
+		lp.setMultiSession(chkMultiSession.getSelection());
 		lp.setAccessibilityMode(chkAccess.getSelection());
 		lp.setDoNotShowSplash(chkSplash.getSelection());
 		lp.setLanguage(cmbLanguage.getText().trim());
-		lp.setTrace(false);
-		lp.setLogFile(""); //$NON-NLS-1$
+		lp.setTrace(true);
+		lp.setEnableLaunchPauseToDebug(false);
+		lp.setLogFile("r:\\debug.log"); //$NON-NLS-1$
 		lp.setIgnoreFilesNotInWS(false);
 		lp.setEnableTableSync(false);
 

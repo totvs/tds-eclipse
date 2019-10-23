@@ -34,7 +34,7 @@
       </content-type>
       <content-type
             base-type="br.com.totvs.tds.ls.protheus"
-            file-extensions="PRW, PRG, PRX, PPP, CH"
+            file-extensions="PRW, PRG, PRX, PPP, CH, TLPP"
             id="br.com.totvs.tds.lsp.advplSource"
             name="%content-type.name.0"
             priority="normal">
@@ -52,6 +52,13 @@
             file-patterns="*.PPX_*, *.ERX_*"
             id="br.com.totvs.tds.lsp.advplWorkfile"
             name="%content-type.name.2"
+            priority="normal">
+      </content-type>
+      <content-type
+            base-type="br.com.totvs.tds.ls.protheus"
+            file-patterns="PER, 4GL"
+            id="br.com.totvs.tds.lsp.4glSource"
+            name="Fonte 4GL"
             priority="normal">
       </content-type>
    </extension>

@@ -17,7 +17,11 @@ Require-Bundle: org.eclipse.ui,
  br.com.totvs.tds.ui.server,
  br.com.totvs.tds.server,
  br.com.totvs.tds.ui,
- org.eclipse.debug.core
+ org.eclipse.debug.core,
+ org.eclipse.ui.workbench.texteditor,
+ org.eclipse.ui.workbench,
+ org.eclipse.text,
+ org.eclipse.jface.text;bundle-version="3.15.300"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: br.com.totvs.tds.ui.debug
 Bundle-ActivationPolicy: lazy
@@ -36,3 +40,4 @@ Export-Package: br.com.totvs.tds.ui.debug;uses:="org.osgi.framework,org.eclipse.
  br.com.totvs.tds.ui.debug.launcher.tab;uses:="org.eclipse.swt.widgets,org.eclipse.debug.ui,org.eclipse.debug.core",
  br.com.totvs.tds.ui.debug.model;uses:="org.eclipse.lsp4e.debug.debugmodel,org.eclipse.debug.core"
 Eclipse-RegisterBuddy: org.eclipse.swtbot.swt.finder
+Import-Package: org.eclipse.jface.text.source

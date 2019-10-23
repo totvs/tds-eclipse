@@ -92,15 +92,10 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		}
 
 		final List<String> daargs = ActivatorServer.getInstance().getDAArgs();
-		// ao iniciar, aguarda 30 segudos para que possa fazer um "attach"
-		// daargs.add("--wait-for-attach");
-		// daargs.add("30000"); // milisegundos
-		//////////////////////////////////////////////
 
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MODE, DSPPlugin.DSP_MODE_LAUNCH);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_ARGS, daargs);
-		wk.setAttribute(DSPPlugin.ATTR_DSP_PARAM, getDspParam(mode, lp));
 		wk.setAttribute(DSPPlugin.ATTR_DSP_PARAM, getDspParam(mode, lp));
 
 		try {
@@ -133,7 +128,7 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		params.put("buildVersion", server.getVersion()); //$NON-NLS-1$
 		params.put("environment", environment); //$NON-NLS-1$
 		params.put("serverName", server.getName()); //$NON-NLS-1$
-		params.put("authToken", server.getToken()); //$NON-NLS-1$
+		params.put("token", server.getToken()); //$NON-NLS-1$
 		// params.put("publicKey", server.getToken());
 		params.put("noDebug", !mode.equals(ILaunchManager.DEBUG_MODE)); //$NON-NLS-1$
 		params.put("smartclientBin", server.getSmartClientPath()); //$NON-NLS-1$
