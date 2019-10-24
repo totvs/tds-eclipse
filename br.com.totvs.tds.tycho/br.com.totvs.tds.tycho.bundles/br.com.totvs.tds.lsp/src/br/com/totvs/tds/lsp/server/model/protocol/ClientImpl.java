@@ -47,7 +47,6 @@ public class ClientImpl extends LanguageClientImpl {
 
 		final CompletableFuture<AuthenticationNode> future = server.authentication(authenticationData);
 		try {
-			// future.thenAcceptAsync(action)
 			result = future.get(LS_AUTHENTICATION_TIMEOUT, TimeUnit.SECONDS);
 		} catch (final InterruptedException e) {
 			// TODO Auto-generated catch block

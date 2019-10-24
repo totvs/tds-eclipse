@@ -16,7 +16,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.ILaunchesListener;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
@@ -524,36 +527,58 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 	@Override
 	public boolean authentication(final Map<String, Object> connectionMap) {
-		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
-		final String environment = (String) connectionMap.get(IServerConstants.ENVIRONMENT);
-		final String user = (String) connectionMap.get(IServerConstants.USERNAME);
-		final String password = (String) connectionMap.get(IServerConstants.PASSWORD);
-		final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(), environment, user,
-				password, getServerType().getCode());
-		final boolean isLogged = token != null;
+		final Job job = new Job("Identificação") {
+			@Override
+			public IStatus run(final IProgressMonitor monitor) {
 
-		if (isLogged) {
-			final List<String> permissions = lsService.serverPermissions(token);
-			connectionMap.put(IServerConstants.TOKEN, token);
-			connectionMap.put(IServerConstants.PERMISSIONS, permissions);
-		} else {
-			connectionMap.put(IServerConstants.TOKEN, ""); //$NON-NLS-1$
-			connectionMap.put(IServerConstants.PERMISSIONS, ""); //$NON-NLS-1$
-		}
+				try {
+					final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+					final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
-		this.connectionMap.putAll(connectionMap);
+					final String environment = (String) connectionMap.get(IServerConstants.ENVIRONMENT);
+					final String user = (String) connectionMap.get(IServerConstants.USERNAME);
+					final String password = (String) connectionMap.get(IServerConstants.PASSWORD);
+					final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(),
+							environment, user, password, getServerType().getCode());
+					final boolean isLogged = token != null;
 
-		setConnected(isLogged);
-		setCurrentEnvironment(environment);
+					if (isLogged) {
+						final List<String> permissions = lsService.serverPermissions(token);
+						connectionMap.put(IServerConstants.TOKEN, token);
+						connectionMap.put(IServerConstants.PERMISSIONS, permissions);
+					} else {
+						connectionMap.put(IServerConstants.TOKEN, ""); //$NON-NLS-1$
+						connectionMap.put(IServerConstants.PERMISSIONS, ""); //$NON-NLS-1$
+					}
 
-		final IItemInfo searchNode = searchEnvironment(environment);
-		if (searchNode instanceof IEnvironmentInfo) {
-			((IEnvironmentInfo) searchNode).setCredentialValidated(isLogged);
-		}
+					AppServerInfo.this.connectionMap.putAll(connectionMap);
 
-		return isLogged;
+					setConnected(isLogged);
+					setCurrentEnvironment(environment);
+
+					final IItemInfo searchNode = searchEnvironment(environment);
+					if (searchNode instanceof IEnvironmentInfo) {
+						((IEnvironmentInfo) searchNode).setCredentialValidated(isLogged);
+					}
+				} catch (final Exception e) {
+					e.printStackTrace();
+					System.out.println("AppServerInfo.authentication()");
+					System.out.println("AppServerInfo.authentication()");
+					System.out.println("AppServerInfo.authentication()");
+					System.out.println("AppServerInfo.authentication()");
+					System.out.println("AppServerInfo.authentication()");
+					return new Status(IStatus.ERROR, "xxxxxx", e.getMessage(), e);
+
+				}
+
+				return Status.OK_STATUS;
+			}
+		};
+
+		job.schedule();
+
+		return true; // isLogged;
 	}
 
 	private String getNodeServerKey(final String environment) {
