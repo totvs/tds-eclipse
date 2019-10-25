@@ -15,8 +15,8 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
@@ -92,7 +92,7 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 	 * @param element
 	 * @param decoration
 	 */
-	private void decorate(final IServerInfo element, final IDecoration decoration) {
+	private void decorate(final IAppServerInfo element, final IDecoration decoration) {
 		element.getPersistentPropertyBoolean("isDuplicated"); //$NON-NLS-1$
 
 		if (element.isConnected()) {
@@ -129,8 +129,8 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 	public void decorate(final Object element, final IDecoration decoration) {
 		if (element instanceof IServerSlaveHubInfo) {
 			// doNothing
-		} else if (element instanceof IServerInfo) {
-			decorate((IServerInfo) element, decoration);
+		} else if (element instanceof IAppServerInfo) {
+			decorate((IAppServerInfo) element, decoration);
 		} else if (element instanceof IEnvironmentInfo) {
 			decorate((IEnvironmentInfo) element, decoration);
 		} else if (element instanceof IAppServerSlaveInfo) {
@@ -143,8 +143,8 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 	public Font decorateFont(final Object element) {
 		Font font = null;
 		//
-		IServerInfo currentServer = serverManager.getCurrentServer();
-		if (element instanceof IServerInfo) {
+		IAppServerInfo currentServer = serverManager.getCurrentServer();
+		if (element instanceof IAppServerInfo) {
 			if (element.equals(currentServer)) {
 				font = CURRENT_FONT;
 			}

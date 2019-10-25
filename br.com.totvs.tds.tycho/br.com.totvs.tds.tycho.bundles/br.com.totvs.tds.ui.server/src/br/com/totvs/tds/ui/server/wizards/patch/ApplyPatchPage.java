@@ -47,7 +47,7 @@ import com.google.common.io.Files;
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchAttributes;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
@@ -590,14 +590,14 @@ public class ApplyPatchPage extends WizardPage {
 	// return link;
 	// }
 
-	public IServerInfo getSelectedAppServer() {
+	public IAppServerInfo getSelectedAppServer() {
 		int selectionIndex = cmbServer.getSelectionIndex();
 		if (selectionIndex == -1) {
 			return null;
 		}
 		String serverName = cmbServer.getItem(selectionIndex);
-		IServerInfo iServerInfo = serverMap.get(serverName);
-		return iServerInfo;
+		IAppServerInfo IAppServerInfo = serverMap.get(serverName);
+		return IAppServerInfo;
 	}
 
 	private void initialize() throws Exception {
@@ -632,14 +632,14 @@ public class ApplyPatchPage extends WizardPage {
 	}
 
 	private void loadServers() {
-		List<IServerInfo> activeServers = attributes.getServerList();
+		List<IAppServerInfo> activeServers = attributes.getServerList();
 
 		if (activeServers.isEmpty()) {
 			ServerUIActivator.showStatus(IStatus.ERROR,
 					"Nenhum servidor ativo encontrado para utilização desta funcionalidade.");
 		}
 
-		for (IServerInfo server : activeServers) {
+		for (IAppServerInfo server : activeServers) {
 			String serverName = server.getName();
 			cmbServer.add(serverName);
 			serverMap.put(serverName, (IAppServerInfo) server);

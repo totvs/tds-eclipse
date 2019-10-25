@@ -21,14 +21,14 @@ public interface IServerManager {
 	 *
 	 * @return lista de servidores conectados
 	 */
-	List<IServerInfo> getActiveServers();
+	List<IAppServerInfo> getActiveServers();
 
 	/**
 	 * Recupera uma lista de servidores não conectados, sem filtrar o tipo.
 	 *
 	 * @return lista de servidores conectados
 	 */
-	List<IServerInfo> getInactiveServers(Class<? extends IServerInfo> clazz);
+	List<IAppServerInfo> getInactiveServers(Class<? extends IAppServerInfo> clazz);
 
 	/**
 	 * Recupera uma lista de servidores conectados, de determinado tipo.
@@ -37,7 +37,7 @@ public interface IServerManager {
 	 *
 	 * @return lista de servidores conectados
 	 */
-	List<IServerInfo> getActiveServers(Class<? extends IServerInfo> clazz);
+	List<IAppServerInfo> getActiveServers(Class<? extends IAppServerInfo> clazz);
 
 	/**
 	 * Recupera o servidor corrente.
@@ -57,7 +57,7 @@ public interface IServerManager {
 	 */
 	IGroupInfo getItems();
 
-	List<IServerInfo> getMonitoringServers();
+	List<IAppServerInfo> getMonitoringServers();
 
 	/**
 	 * Recupera um servidor a partir de seu nome.
@@ -65,7 +65,7 @@ public interface IServerManager {
 	 * @param name , nome do servidor alvo.
 	 * @return the server information, se não localizado retorna null.
 	 */
-	IServerInfo getServer(String name);
+	IAppServerInfo getServer(String name);
 
 	/**
 	 * Recupera um servidor a partir de seu endereço.
@@ -73,21 +73,21 @@ public interface IServerManager {
 	 * @param address , endereço alvo.
 	 * @return the server information, se não localizado retorna null.
 	 */
-	IServerInfo getServer(URI address);
+	IAppServerInfo getServer(URI address);
 
 	/**
 	 * Recupera uma lista de servidores, sem filtrar o tipo.
 	 *
 	 * @return lista de servidores
 	 */
-	List<IServerInfo> getServers();
+	List<IAppServerInfo> getServers();
 
 	/**
 	 * Recupera uma lista de servidores, de determinado tipo.
 	 *
 	 * @return lista de servidores
 	 */
-	List<IServerInfo> getServers(Class<? extends IServerInfo> clazzServerInfo);
+	List<IAppServerInfo> getServers(Class<? extends IAppServerInfo> clazzServerInfo);
 
 	/**
 	 * Recupera a quantidade de servidores registrados.

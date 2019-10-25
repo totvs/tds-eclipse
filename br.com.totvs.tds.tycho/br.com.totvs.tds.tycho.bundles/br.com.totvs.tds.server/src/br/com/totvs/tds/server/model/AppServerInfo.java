@@ -3,6 +3,7 @@
  */
 package br.com.totvs.tds.server.model;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -31,6 +32,8 @@ import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
+import br.com.totvs.tds.server.ServerActivator;
+import br.com.totvs.tds.server.ServerOsType;
 import br.com.totvs.tds.server.ServerUtil;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
@@ -45,22 +48,31 @@ import br.com.totvs.tds.server.interfaces.IServerConstants;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerReturn;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
+import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.server.jobs.ServerReturn;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchReturn;
 
 /**
- * Base de servidores Protheus.
+ * Servidor Protheus.
  *
  * @author acandido
  */
-public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
+public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final long CURRENT_SERIAL_VERSION = 3L;
+	private static final long CURRENT_VERSION = 1L;
+
+	private URI address;
+
+	private String computerName;
+
+	private boolean connected;
+
+	private ServerType serverType;
 
 	private IOrganization currentOrganization;
 
@@ -158,7 +170,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.IServerInfo#getCurrentEnvironment()
+	 * @see br.com.totvs.tds.server.IAppServerInfo#getCurrentEnvironment()
 	 */
 	@Override
 	public String getCurrentEnvironment() {
@@ -204,7 +216,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.IServerInfo#getVersion()
+	 * @see br.com.totvs.tds.server.IAppServerInfo#getVersion()
 	 */
 	@Override
 	public String getVersion() {
@@ -215,7 +227,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.server.interfaces.IServerInfo#isMonitoring()
+	 * @see br.com.totvs.server.interfaces.IAppServerInfo#isMonitoring()
 	 */
 	@Override
 	public boolean isMonitoring() {
@@ -226,7 +238,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.server.interfaces.IServerInfo#isShowConsole()
+	 * @see br.com.totvs.server.interfaces.IAppServerInfo#isShowConsole()
 	 */
 	@Override
 	public boolean isShowConsole() {
@@ -237,8 +249,8 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * br.com.totvs.tds.server.internal.IServerInfo#removeChild(br.com.totvs.tds.
-	 * server.internal.IServerInfo)
+	 * br.com.totvs.tds.server.internal.IAppServerInfo#removeChild(br.com.totvs.tds.
+	 * server.internal.IAppServerInfo)
 	 */
 	@Override
 	public void removeEnvironment(final IEnvironmentInfo child) {
@@ -252,7 +264,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * br.com.totvs.tds.server.internal.IServerInfo#searchNode(java.lang.String)
+	 * br.com.totvs.tds.server.internal.IAppServerInfo#searchNode(java.lang.String)
 	 */
 	@Override
 	public IEnvironmentInfo searchEnvironment(final String searchEnvironment) {
@@ -273,7 +285,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 			connectionMap.remove("token"); //$NON-NLS-1$
 		}
 
-		super.setConnected(connected);
+		firePropertyChange("connected", this.connected, this.connected = connected); //$NON-NLS-1$
 	}
 
 	/*
@@ -290,8 +302,8 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see
-	 * br.com.totvs.tds.server.IServerInfo#setCurrentEnvironment(java.lang.String)
+	 * @see br.com.totvs.tds.server.IAppServerInfo#setCurrentEnvironment(java.lang.
+	 * String)
 	 */
 	@Override
 	public void setCurrentEnvironment(final String newEnvironment) {
@@ -305,7 +317,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.IServerInfo#setEnvironments(java.util.List)
+	 * @see br.com.totvs.tds.server.IAppServerInfo#setEnvironments(java.util.List)
 	 */
 	@Override
 	public void setEnvironments(final List<String> environments) throws RuntimeException {
@@ -325,7 +337,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.server.interfaces.IServerInfo#setMonitoring(boolean)
+	 * @see br.com.totvs.server.interfaces.IAppServerInfo#setMonitoring(boolean)
 	 */
 	@Override
 	public void setMonitoring(final boolean monitoring) {
@@ -349,7 +361,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.server.interfaces.IServerInfo#setShowConsole(boolean)
+	 * @see br.com.totvs.server.interfaces.IAppServerInfo#setShowConsole(boolean)
 	 */
 	@Override
 	public void setShowConsole(final boolean showConsole) {
@@ -359,7 +371,7 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.IServerInfo#setVersion(java.lang.String)
+	 * @see br.com.totvs.tds.server.IAppServerInfo#setVersion(java.lang.String)
 	 */
 	@Override
 	public void setVersion(final String version) {
@@ -384,9 +396,11 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 		this.hub.clear();
 	}
 
-	@Override
-	public void loadSlaves(final ILanguageServerService lsService) {
+	private void loadSlaves() {
 		unloadSlavesLoadBalance();
+
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 		final SlaveDataNode[] slaveList = lsService.getSlaveList(getToken());
 
 		for (final SlaveDataNode slaveNode : slaveList) {
@@ -398,22 +412,20 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doReadExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
-		super.doReadExternal(in);
+		@SuppressWarnings("unused")
+		final long version = in.readLong();
+
+		address = (URI) in.readObject();
+		serverType = (ServerType) in.readObject();
+
 		//
 		try {
-			final long version = in.readLong();
-			if (version >= 1L) {
-				currentEnvironment = (String) in.readObject();
-				multiEnvironmentSelection = (List<String>) in.readObject();
-			}
-			if (version >= 2L) {
-				currentOrganization = (IOrganization) in.readObject();
-			}
-			if (version >= 3L) {
-				final boolean connected = in.readBoolean();
-				setUseSecureStorage(in.readBoolean());
-				setConnected(connected && loadLoginInfo());
-			}
+			currentEnvironment = (String) in.readObject();
+			multiEnvironmentSelection = (List<String>) in.readObject();
+			currentOrganization = (IOrganization) in.readObject();
+			final boolean connected = in.readBoolean();
+			setUseSecureStorage(in.readBoolean());
+			setConnected(connected && loadLoginInfo());
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -425,15 +437,14 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 	@Override
 	public void doWriteExternal(final ObjectOutput out) throws IOException {
-		super.doWriteExternal(out);
-		//
-		out.writeLong(CURRENT_SERIAL_VERSION);
-		// 1L
+		out.writeLong(CURRENT_VERSION);
+
+		out.writeObject(address);
+		out.writeObject(serverType);
+
 		out.writeObject(currentEnvironment);
 		out.writeObject(multiEnvironmentSelection);
-		// 2L
 		out.writeObject(currentOrganization);
-		// 3L
 		final boolean isSecureStorage = getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
 				.equals(true);
 		out.writeBoolean(isConnected());
@@ -487,16 +498,6 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public void doCustomValid() throws RuntimeException {
-		super.doCustomValid();
-
-		if (getSmartClientPath().isEmpty()) {
-			throw new RuntimeException(Messages.AppServerInfo_File_required_SmartClient);
-		}
-
-	}
-
-	@Override
 	public boolean isRunning() {
 		return this.launcher != null;
 	}
@@ -532,53 +533,59 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 			@Override
 			public IStatus run(final IProgressMonitor monitor) {
 
-				try {
-					final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-					final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+				final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+				final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
-					final String environment = (String) connectionMap.get(IServerConstants.ENVIRONMENT);
-					final String user = (String) connectionMap.get(IServerConstants.USERNAME);
-					final String password = (String) connectionMap.get(IServerConstants.PASSWORD);
-					final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(),
-							environment, user, password, getServerType().getCode());
-					final boolean isLogged = token != null;
+				final String environment = (String) connectionMap.get(IServerConstants.ENVIRONMENT);
+				final String user = (String) connectionMap.get(IServerConstants.USERNAME);
+				final String password = (String) connectionMap.get(IServerConstants.PASSWORD);
+				final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(),
+						environment, user, password, getServerType().getCode());
+				final boolean isLogged = token != null;
 
-					if (isLogged) {
-						final List<String> permissions = lsService.serverPermissions(token);
-						connectionMap.put(IServerConstants.TOKEN, token);
-						connectionMap.put(IServerConstants.PERMISSIONS, permissions);
-					} else {
-						connectionMap.put(IServerConstants.TOKEN, ""); //$NON-NLS-1$
-						connectionMap.put(IServerConstants.PERMISSIONS, ""); //$NON-NLS-1$
-					}
-
-					AppServerInfo.this.connectionMap.putAll(connectionMap);
-
-					setConnected(isLogged);
-					setCurrentEnvironment(environment);
-
-					final IItemInfo searchNode = searchEnvironment(environment);
-					if (searchNode instanceof IEnvironmentInfo) {
-						((IEnvironmentInfo) searchNode).setCredentialValidated(isLogged);
-					}
-				} catch (final Exception e) {
-					e.printStackTrace();
-					System.out.println("AppServerInfo.authentication()");
-					System.out.println("AppServerInfo.authentication()");
-					System.out.println("AppServerInfo.authentication()");
-					System.out.println("AppServerInfo.authentication()");
-					System.out.println("AppServerInfo.authentication()");
-					return new Status(IStatus.ERROR, "xxxxxx", e.getMessage(), e);
-
+				if (isLogged) {
+					final List<String> permissions = lsService.serverPermissions(token);
+					connectionMap.put(IServerConstants.TOKEN, token);
+					connectionMap.put(IServerConstants.PERMISSIONS, permissions);
+				} else {
+					connectionMap.put(IServerConstants.TOKEN, ""); //$NON-NLS-1$
+					connectionMap.put(IServerConstants.PERMISSIONS, ""); //$NON-NLS-1$
 				}
 
-				return Status.OK_STATUS;
+				AppServerInfo.this.connectionMap.putAll(connectionMap);
+
+				setConnected(isLogged);
+				setCurrentEnvironment(environment);
+
+				if (isLogged) {
+					loadSlaves();
+				}
+
+				final IItemInfo searchNode = searchEnvironment(environment);
+				if (searchNode instanceof IEnvironmentInfo) {
+					((IEnvironmentInfo) searchNode).setCredentialValidated(isLogged);
+				}
+
+				if (isLogged) {
+					return Status.OK_STATUS;
+				}
+
+				if (AppServerInfo.this.getErrorMessage() != null) {
+					return ServerActivator.logStatus(IStatus.ERROR, AppServerInfo.this.getErrorMessage());
+				}
+
+				return ServerActivator.logStatus(IStatus.ERROR, "Não foi possível estabelecer conexão com o servidor.");
 			}
 		};
 
 		job.schedule();
 
 		return true; // isLogged;
+	}
+
+	protected String getErrorMessage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private String getNodeServerKey(final String environment) {
@@ -692,18 +699,18 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public List<IRpoElement> getRpoMap(final String environment, final RPOTypeElement typeElement,
+	public List<IRpoElement> getRpoMap(final String environment, final RpoTypeElement typeElement,
 			final boolean includeTRes) {
-		if (RPOTypeElement.FUNCTION.equals(typeElement)) {
+		if (RpoTypeElement.FUNCTION.equals(typeElement)) {
 			final List<IRpoElement> programMap = getObjectMap(environment, includeTRes, true, false);
 			return getFunctionMap(environment, programMap);
-		} else if (RPOTypeElement.OBJECT.equals(typeElement)) {
+		} else if (RpoTypeElement.OBJECT.equals(typeElement)) {
 			return getObjectMap(environment, includeTRes, true, true);
-		} else if (RPOTypeElement.PROGRAM.equals(typeElement)) {
+		} else if (RpoTypeElement.PROGRAM.equals(typeElement)) {
 			final List<IRpoElement> programMap = getObjectMap(environment, includeTRes, true, true);
 			getFunctionMap(environment, programMap);
 			return programMap;
-		} else if (RPOTypeElement.RESOURCE.equals(typeElement)) {
+		} else if (RpoTypeElement.RESOURCE.equals(typeElement)) {
 			return getObjectMap(environment, includeTRes, false, true);
 		}
 
@@ -805,4 +812,192 @@ public class AppServerInfo extends BaseServerInfo implements IAppServerInfo {
 
 		lsService.defragRPO(getToken(), environment);
 	}
+
+	/**
+	 * Valida se o endereço ou caminho do execut�vel � valido.<br>
+	 *
+	 * @param address URI to check
+	 * @param local   indica se a aplicação servidora � local ou remota.
+	 * @throws RuntimeException dado inv�lido.
+	 */
+	public static void isValidAddress(final URI address, final boolean local) throws RuntimeException {
+		// null URI cannot be a valid address
+		if (local) {
+			final File file = new File(address.getPath());
+
+			if (!((file.exists() && file.canExecute()))) {
+				throw new RuntimeException("Messages.BaseServerInfo_6"); //$NON-NLS-1$
+			}
+		} else {
+			if (address == null) {
+				throw new RuntimeException("Messages.BaseServerInfo_7"); //$NON-NLS-1$
+			}
+
+			// null Host cannot be a valid address
+			if (address.getHost() == null) {
+				throw new RuntimeException("Messages.BaseServerInfo_8"); //$NON-NLS-1$
+			}
+			// negative port number cannot be in a valid address
+			if (address.getPort() < 0) {
+				throw new RuntimeException("Messages.BaseServerInfo_9"); //$NON-NLS-1$
+			}
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.internal.ItemInfo#doCustomValid()
+	 */
+	@Override
+	public void doCustomValid() throws RuntimeException {
+
+		isValidAddress(getAddress(), false);
+
+		if (getSmartClientPath().isEmpty()) {
+			throw new RuntimeException(Messages.AppServerInfo_File_required_SmartClient);
+		}
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#getAddress()
+	 */
+	@Override
+	public URI getAddress() {
+		return address;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#getAppServerPort()
+	 */
+	@Override
+	public int getAppServerPort() {
+		return (getAddress() == null) ? 0 : getAddress().getPort();
+	}
+
+	@Override
+	public String getComputerName() {
+		return computerName;
+	}
+
+	@Override
+	public String getIconName() {
+
+		return "server"; //$NON-NLS-1$
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#getServerOsType()
+	 */
+	@Override
+	public ServerOsType getServerOsType() {
+		return (ServerOsType) getProperty("serverOsType"); //$NON-NLS-1$
+	}
+
+	@Override
+	public ServerType getServerType() {
+
+		return this.serverType;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#isBlockedToConnection()
+	 */
+	@Override
+	public boolean isBlockedToConnection() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#isConnected()
+	 */
+	@Override
+	public boolean isConnected() {
+		return connected;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#getConsoleLog()
+	 */
+	@Override
+	public boolean isConsoleLog() {
+		return getPersistentPropertyBoolean("consoleLog"); //$NON-NLS-1$
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#setAddress(java.net.URI)
+	 */
+	@Override
+	public void setAddress(final URI address) {
+		firePropertyChange("address", this.address, address); //$NON-NLS-1$
+		this.address = address;
+		setComputerName(address.toString());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#setAppServerPort(int)
+	 */
+	@Override
+	public void setAppServerPort(final int port) {
+		String host = "//localhost:"; //$NON-NLS-1$
+
+		if (this.address != null) {
+			final String path = address.getPath();
+			if ((path != null) && !path.isEmpty()) {
+				host = "//" + address.getPath().split(":")[0] + ":"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			}
+		}
+
+		setAddress(URI.create(host + String.valueOf(port))); // $NON-NLS-1$
+	}
+
+	@Override
+	public void setComputerName(final String computerName) {
+		this.computerName = computerName;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#setConsoleLog(boolean)
+	 */
+	@Override
+	public void setConsoleLog(final boolean show) {
+		setPersistentProperty("consoleLog", show); //$NON-NLS-1$
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see br.com.totvs.tds.server.IAppServerInfo#setServerOsType(br.com.totvs.tds.
+	 * server.ServerOsType)
+	 */
+	@Override
+	public void setServerOsType(final ServerOsType serverOsType) {
+		setProperty("serverOsType", serverOsType); //$NON-NLS-1$
+	}
+
+	@Override
+	public void setServerType(final ServerType serverType) {
+		this.serverType = serverType;
+	}
+
 }

@@ -2,7 +2,7 @@ package br.com.totvs.tds.server.interfaces;
 
 public interface IServerSlaveHubInfo extends IItemInfo {
 
-	IServerInfo getMasterLoadBalance();
+	IAppServerInfo getMasterLoadBalance();
 
 	boolean isEmpty();
 

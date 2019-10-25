@@ -24,7 +24,7 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IRpoElement;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.server.model.RpoTypeElement;
 
 /**
  * Job para construção de pacotes de atualização.
@@ -210,7 +210,7 @@ public class BuildPatchJob extends Job {
 		if ((connector != null) && (environment != null)) {
 			try {
 				final LoadRpoMapJob loadMapjob = new LoadRpoMapJob(attributes.getServer(), attributes.getEnvironment(),
-						true, RPOTypeElement.OBJECT);
+						true, RpoTypeElement.OBJECT);
 				loadMapjob.schedule();
 				loadMapjob.join();
 

@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.IStatus;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.model.GroupInfo;
 import br.com.totvs.tds.server.xml.Group;
@@ -124,7 +124,7 @@ public class ImportTools {
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 
 		for (Server server : serverList) {
-			IServerInfo serverInfo = null;
+			IAppServerInfo serverInfo = null;
 			try {
 				serverInfo = serverManager.newAppServer(server.getName());
 				//serverInfo.setServerType(server.getServerType());
@@ -165,7 +165,7 @@ public class ImportTools {
 	}
 
 	//TODO: tratamento de rename na importação
-	private static void verifyNameChanged(final IServerInfo serverInfo) {
+	private static void verifyNameChanged(final IAppServerInfo serverInfo) {
 		System.out.println("ImportTools.verifyNameChanged()"); //$NON-NLS-1$
 //		boolean nameChanged = (boolean) serverInfo.getProperty(IServerConstants.PROPERTY_NAME_CHANGED);
 //		if (nameChanged) {

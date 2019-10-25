@@ -3,7 +3,7 @@ package br.com.totvs.tds.server.interfaces;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.server.model.RpoTypeElement;
 
 public interface IRpoElement {
 
@@ -14,7 +14,7 @@ public interface IRpoElement {
 
 	public String getName();
 
-	public RPOTypeElement getType();
+	public RpoTypeElement getType();
 
 	public boolean isVisible();
 

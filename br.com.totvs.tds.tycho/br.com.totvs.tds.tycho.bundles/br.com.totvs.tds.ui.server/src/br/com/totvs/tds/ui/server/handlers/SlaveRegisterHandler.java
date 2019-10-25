@@ -29,10 +29,12 @@ public class SlaveRegisterHandler extends ServerHandler {
 			server.setAddress(slave.getAddress());
 			server.setServerType(slave.getServerType());
 			server.setVersion(master.getVersion());
+			server.setSmartClientPath(master.getSmartClientPath());
 
 			parent.addChild(server);
 		} else {
-			ServerUIActivator.logStatus(IStatus.WARNING, Messages.SlaveRegisterHandler_item_not_slave, selection.getName());
+			ServerUIActivator.logStatus(IStatus.WARNING, Messages.SlaveRegisterHandler_item_not_slave,
+					selection.getName());
 		}
 
 		return null;

@@ -9,8 +9,8 @@ import java.net.URI;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
+import br.com.totvs.tds.server.interfaces.ServerType;
 
 /**
  * Base de servidores Protheus.
@@ -28,7 +28,7 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 	private URI addres;
 
 	/**
-	 * Construtor.
+	 * S Construtor.
 	 *
 	 * @param name
 	 */
@@ -63,7 +63,7 @@ public class AppServerSlaveInfo extends ItemInfo implements IAppServerSlaveInfo 
 	 */
 	@Override
 	public IAppServerInfo getMaster() {
-		return (IAppServerInfo) this.hub.getMasterLoadBalance();
+		return this.hub.getMasterLoadBalance();
 	}
 
 	/**

@@ -24,7 +24,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
@@ -305,7 +305,7 @@ public class NewServerWizardPage extends WizardPage {
 		}
 
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
-		IServerInfo server = serverManager.getServer(serverName);
+		IAppServerInfo server = serverManager.getServer(serverName);
 		if (server != null) {
 			updateStatus(Messages.NewServerWizardPage_server_name_invalid);
 			return;

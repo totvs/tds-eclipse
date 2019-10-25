@@ -7,10 +7,11 @@ import java.util.Map;
 
 import org.eclipse.debug.core.ILaunchesListener;
 
-import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
+import br.com.totvs.tds.server.ServerOsType;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchReturn;
+import br.com.totvs.tds.server.model.RpoTypeElement;
 import br.com.totvs.tds.server.model.SourceInformation;
 
 /**
@@ -19,7 +20,163 @@ import br.com.totvs.tds.server.model.SourceInformation;
  * @author leo.watanabe
  *
  */
-public interface IAppServerInfo extends IServerInfo {
+public interface IAppServerInfo extends IItemInfo {
+
+	/**
+	 * Recupera o endereço.
+	 *
+	 * @return the address
+	 */
+	URI getAddress();
+
+	/**
+	 * Retorna a porta de conexão.
+	 *
+	 * @return porta de conexão çãoplicação servidora.
+	 */
+	int getAppServerPort();
+
+	/**
+	 * Recupera o nome do computador.
+	 *
+	 * @return
+	 */
+	String getComputerName();
+
+	/**
+	 * @return estado da conexão.
+	 */
+	boolean isConnected();
+
+	/**
+	 * Retorna o tipo de OS do elemento.
+	 *
+	 * @return the type element.
+	 */
+	ServerOsType getServerOsType();
+
+	/**
+	 * Tipo de servidor
+	 *
+	 * @return then server type
+	 */
+	ServerType getServerType();
+
+	/**
+	 * s�oeturn Versão do servidor.
+	 */
+	String getVersion();
+
+	/**
+	 * @return caminho smart client
+	 */
+	String getSmartClientPath();
+
+	/**
+	 * @return estado de bloqueio ou não.
+	 */
+	boolean isBlockedToConnection();
+
+	/**
+	 * @return indica se o console de servidor local deve ser apresentado ou não.
+	 */
+	boolean isConsoleLog();
+
+	/**
+	 * @return estado de monitoramento
+	 */
+	boolean isMonitoring();
+
+	/**
+	 * @return çãoado de apresemyação do console do servidor.
+	 *
+	 */
+	boolean isShowConsole();
+
+	/**
+	 * Ajusta o endereço.
+	 *
+	 * @param address endereço URI �nico do elemento.
+	 */
+	void setAddress(URI address);
+
+	/**
+	 * Ajustção porta de conexão a aplicação servidora.
+	 *
+	 * @param port porta do servidor
+	 */
+	void setAppServerPort(int port);
+
+	/**
+	 * Ajusta o nome do computador.
+	 *
+	 * @param computerName
+	 */
+	void setComputerName(String computerName);
+
+	/**
+	 * Status da conexão.
+	 *
+	 * @param connected
+	 */
+	void setConnected(boolean connected);
+
+	/**
+	 * Ajusta a apresentação ou não do log de console do servidor local.
+	 *
+	 * @param show apresenta ou não o log de console.
+	 */
+	void setConsoleLog(boolean show);
+
+	/**
+	 * Estado de monitoramento.
+	 *
+	 * @param monitoring
+	 */
+	void setMonitoring(boolean monitoring);
+
+	/**
+	 * Ajusta o tipo de SO do elemento.
+	 *
+	 * @param osType the OS type element.
+	 */
+	void setServerOsType(ServerOsType osType);
+
+	/**
+	 * Ajusta o tipo de servidor do elemento.
+	 *
+	 * @param serverType type of element.
+	 */
+	void setServerType(ServerType serverType);
+
+	/**
+	 * Estado de apresentação do console do servidor.
+	 *
+	 * @param showConsole
+	 */
+	void setShowConsole(boolean showConsole);
+
+	/**
+	 * Ajusta a Versão do servidor.
+	 *
+	 * @param version Versão do servidor.
+	 */
+	void setVersion(String version);
+
+	/**
+	 * Ajusta caminho do SmartCLient.
+	 *
+	 * @param smartClientPath, caminho smart client
+	 */
+	void setSmartClientPath(String smartClientPath);
+
+	/**
+	 * @param environment
+	 * @param typeElement
+	 * @param includeTRes
+	 * @return mapa de RPO do tipo indicado, com ou sem arquivos *.TRES.
+	 */
+	List<IRpoElement> getRpoMap(String environment, RpoTypeElement typeElement, boolean includeTRes);
 
 	/**
 	 * Adiciona um ambiente.
@@ -133,13 +290,6 @@ public interface IAppServerInfo extends IServerInfo {
 	 * @throws Exception
 	 */
 	void unloadEnvironments();
-
-	/**
-	 * Efetua a carga de informações de configuração de slave
-	 *
-	 * @param lsService
-	 */
-	void loadSlaves(ILanguageServerService lsService);
 
 	/**
 	 * @return Lista de organizações

@@ -51,7 +51,7 @@ import br.com.totvs.tds.server.interfaces.IRpoElement;
 import br.com.totvs.tds.server.interfaces.IRpoFunction;
 import br.com.totvs.tds.server.interfaces.IRpoSource;
 import br.com.totvs.tds.server.jobs.LoadRpoMapJob;
-import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.server.model.RpoTypeElement;
 import br.com.totvs.tds.ui.TDSUtil;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
@@ -70,7 +70,7 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 	 */
 	protected class ElementFilter extends ItemsFilter {
 
-		final private Set<RPOTypeElement> objectTypeSet;
+		final private Set<RpoTypeElement> objectTypeSet;
 
 		/**
 		 * Creates new instance
@@ -79,7 +79,7 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 		 * @param showDerived flag which determine showing derived elements
 		 * @param typeMask
 		 */
-		public ElementFilter(Set<RPOTypeElement> objectTypeSet) {
+		public ElementFilter(Set<RpoTypeElement> objectTypeSet) {
 			super();
 
 			this.objectTypeSet = objectTypeSet;
@@ -125,9 +125,9 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 
 			if (isConsistentItem(item)) {
 				IRpoElement element = (IRpoElement) item;
-				RPOTypeElement objectType = element.getType();
+				RpoTypeElement objectType = element.getType();
 
-				if (objectTypeSet.contains(RPOTypeElement.OBJECT) || objectTypeSet.contains(objectType)) {
+				if (objectTypeSet.contains(RpoTypeElement.OBJECT) || objectTypeSet.contains(objectType)) {
 					result = matchName(element);
 				}
 				element.setVisible(result);
@@ -259,7 +259,7 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 
 	private static final String EXTEND_AREA_HEIGHT = "extendAreaHeight";
 
-	private RPOTypeElement objectType = RPOTypeElement.FUNCTION;
+	private RpoTypeElement objectType = RpoTypeElement.FUNCTION;
 
 	private Composite extendedArea;
 	private ShowFunctionAction showFunctions;
@@ -363,14 +363,14 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 
 	@Override
 	protected ItemsFilter createFilter() {
-		Set<RPOTypeElement> objectTypeSet = Collections.synchronizedSet(EnumSet.noneOf(RPOTypeElement.class));
+		Set<RpoTypeElement> objectTypeSet = Collections.synchronizedSet(EnumSet.noneOf(RpoTypeElement.class));
 
-		if (getObjectType().equals(RPOTypeElement.OBJECT)) {
+		if (getObjectType().equals(RpoTypeElement.OBJECT)) {
 			if (showSource.isChecked()) {
-				objectTypeSet.add(RPOTypeElement.PROGRAM);
+				objectTypeSet.add(RpoTypeElement.PROGRAM);
 			}
 			if (showResource.isChecked()) {
-				objectTypeSet.add(RPOTypeElement.RESOURCE);
+				objectTypeSet.add(RpoTypeElement.RESOURCE);
 			}
 		} else {
 			objectTypeSet.add(getObjectType());
@@ -420,7 +420,7 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 
 	@Override
 	protected void fillViewMenu(IMenuManager menuManager) {
-		if (getObjectType().equals(RPOTypeElement.OBJECT)) {
+		if (getObjectType().equals(RpoTypeElement.OBJECT)) {
 			showSource = new ShowSourceAction();
 			showSource.setChecked(true);
 			menuManager.add(showSource);
@@ -582,7 +582,7 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 	/**
 	 * @return the objectType
 	 */
-	public RPOTypeElement getObjectType() {
+	public RpoTypeElement getObjectType() {
 		return objectType;
 	}
 
@@ -644,7 +644,7 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 	/**
 	 * @param objectType the objectType to set
 	 */
-	public void setObjectType(RPOTypeElement objectType) {
+	public void setObjectType(RpoTypeElement objectType) {
 		this.objectType = objectType;
 		setTitle(String.format("Inspeção de RPO: %s", this.objectType.getTitle()));
 

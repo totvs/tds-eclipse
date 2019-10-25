@@ -75,9 +75,9 @@ public class RpoObject implements IRpoElement {
 	}
 
 	@Override
-	public RPOTypeElement getType() {
+	public RpoTypeElement getType() {
 
-		return RPOTypeElement.UNKNOWN;
+		return RpoTypeElement.UNKNOWN;
 	}
 
 	@Override

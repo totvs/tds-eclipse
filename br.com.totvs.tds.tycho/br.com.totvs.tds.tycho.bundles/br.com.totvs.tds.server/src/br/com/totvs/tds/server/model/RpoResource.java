@@ -10,8 +10,8 @@ public class RpoResource extends RpoObject implements IRpoResource {
 	 * @see br.com.totvs.osgi.messageservice.entity.IRpoElement#getType()
 	 */
 	@Override
-	public RPOTypeElement getType() {
-		return RPOTypeElement.RESOURCE;
+	public RpoTypeElement getType() {
+		return RpoTypeElement.RESOURCE;
 	}
 
 }

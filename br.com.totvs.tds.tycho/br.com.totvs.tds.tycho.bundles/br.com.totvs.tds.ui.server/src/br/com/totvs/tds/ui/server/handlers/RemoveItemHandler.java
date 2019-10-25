@@ -20,7 +20,7 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -32,7 +32,7 @@ import br.com.totvs.tds.ui.server.nl.Messages;
  */
 public final class RemoveItemHandler extends ServerHandler {
 
-	private void disconectServer(IServerInfo server) {
+	private void disconectServer(IAppServerInfo server) {
 		IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		ICommandService commandService = serviceLocator.getService(ICommandService.class);
 
@@ -106,8 +106,8 @@ public final class RemoveItemHandler extends ServerHandler {
 								continue;
 							}
 						}
-					} else if (itemInfo instanceof IServerInfo) {
-						IServerInfo server = (IServerInfo) itemInfo;
+					} else if (itemInfo instanceof IAppServerInfo) {
+						IAppServerInfo server = (IAppServerInfo) itemInfo;
 						if (server.isConnected()) {
 							ServerUIActivator.logStatus(IStatus.WARNING, Messages.RemoveItemHandler_desconnect_process,
 									server.getName());

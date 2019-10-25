@@ -3,7 +3,7 @@ package br.com.totvs.tds.server.model;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
 
 /**
@@ -26,8 +26,8 @@ public class ServerSlaveHubInfo extends GroupInfo implements IServerSlaveHubInfo
 	}
 
 	@Override
-	public IServerInfo getMasterLoadBalance() {
-		return (IServerInfo) getParent();
+	public IAppServerInfo getMasterLoadBalance() {
+		return (IAppServerInfo) getParent();
 	}
 
 	@Override

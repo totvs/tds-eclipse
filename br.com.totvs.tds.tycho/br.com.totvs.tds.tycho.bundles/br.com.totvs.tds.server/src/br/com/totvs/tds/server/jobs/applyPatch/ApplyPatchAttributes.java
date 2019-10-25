@@ -7,7 +7,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 
 /**
@@ -17,7 +17,7 @@ public class ApplyPatchAttributes implements Cloneable {
 
 	private List<ApplyPatchFileReturn> applyPatchFilesReturn = new ArrayList<ApplyPatchFileReturn>();
 	private String environment;
-	private List<IServerInfo> activeServers;
+	private List<IAppServerInfo> activeServers;
 	private IAppServerInfo currentAppServer;
 
 	public ApplyPatchAttributes() {
@@ -98,7 +98,7 @@ public class ApplyPatchAttributes implements Cloneable {
 		return newInstance;
 	}
 
-	public List<IServerInfo> getServerList() {
+	public List<IAppServerInfo> getServerList() {
 		if (activeServers == null) {
 			final IWorkbench serviceLocator = PlatformUI.getWorkbench();
 			final IServerManager serverManager = serviceLocator.getService(IServerManager.class);

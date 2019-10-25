@@ -45,7 +45,7 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerConstants;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -230,7 +230,7 @@ public class ServerView extends ViewPart {
 //							parameters.put("br.com.totvs.tds.ui.server.command.loginDialog", //$NON-NLS-1$
 //									"br.com.totvs.tds.ui.server.tools.ProtheusLoginDialog"); //$NON-NLS-1$
 //						}
-						if (itemSelect instanceof IServerInfo) {
+						if (itemSelect instanceof IAppServerInfo) {
 							command = commandService.getCommand("br.com.totvs.tds.ui.server.command.editItem"); //$NON-NLS-1$
 						} else if (itemSelect instanceof IEnvironmentInfo) {
 							command = commandService.getCommand("br.com.totvs.tds.ui.server.command.login"); //$NON-NLS-1$
@@ -289,7 +289,6 @@ public class ServerView extends ViewPart {
 							IAppServerInfo server = (IAppServerInfo) data;
 							if ((boolean) server.getProperty(IServerConstants.IMMEDIATE_CONNECTION)) {
 								viewer.getTree().setSelection(treeItem);
-
 							}
 						}
 					}
@@ -300,16 +299,7 @@ public class ServerView extends ViewPart {
 					}
 					viewer.refresh(parent);
 				} else if (evt.getPropertyName().equals("connected")) { //$NON-NLS-1$
-					Boolean connected = Boolean.valueOf(evt.getNewValue().toString());
 					IAppServerInfo server = (IAppServerInfo) evt.getSource();
-
-					if (connected) {
-						IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-						ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-
-						server.loadSlaves(lsService);
-					}
-
 					viewer.refresh(server);
 				} else {
 					viewer.refresh();
@@ -394,7 +384,7 @@ public class ServerView extends ViewPart {
 	public void saveState(IMemento memento) {
 		IPreferenceStore preferenceStore = ServerUIActivator.getDefault().getPreferenceStore();
 		int reconnect = preferenceStore.getInt(IServerConstants.RECONNECT_POLICIES);
-		List<IServerInfo> serversToSave = new ArrayList<IServerInfo>();
+		List<IAppServerInfo> serversToSave = new ArrayList<IAppServerInfo>();
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 
 		memento.putBoolean(ACTION_SELECT_MONITOR, false); // actionSelectToMonitor.isChecked()
@@ -411,7 +401,7 @@ public class ServerView extends ViewPart {
 
 		if (!serversToSave.isEmpty()) {
 			IMemento activeServers = memento.createChild(ACTIVE_SERVERS);
-			for (IServerInfo serverInfo : serversToSave) {
+			for (IAppServerInfo serverInfo : serversToSave) {
 				IMemento server = activeServers.createChild(SERVER);
 
 				server.putString("id", serverInfo.getId().toString()); //$NON-NLS-1$

@@ -18,7 +18,7 @@ public class RootInfo extends GroupInfo implements IRootInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.internal.IServerInfo#containsNode(java.lang.
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#containsNode(java.lang.
 	 * String )
 	 */
 

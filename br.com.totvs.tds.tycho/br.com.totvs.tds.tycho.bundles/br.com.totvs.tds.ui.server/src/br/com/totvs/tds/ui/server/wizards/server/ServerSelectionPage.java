@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Text;
 
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
+import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
 

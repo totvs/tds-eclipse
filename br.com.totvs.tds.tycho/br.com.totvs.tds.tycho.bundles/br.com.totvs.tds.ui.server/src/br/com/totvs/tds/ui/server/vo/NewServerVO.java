@@ -2,7 +2,7 @@ package br.com.totvs.tds.ui.server.vo;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
+import br.com.totvs.tds.server.interfaces.ServerType;
 
 /**
  * informações utilizadas pelos assistentes.

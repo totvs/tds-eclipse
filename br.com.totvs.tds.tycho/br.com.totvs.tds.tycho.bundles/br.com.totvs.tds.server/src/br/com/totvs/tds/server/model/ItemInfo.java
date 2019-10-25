@@ -12,7 +12,7 @@ import br.com.totvs.tds.server.interfaces.IItemInfo;
 
 /**
  * Contem informação b�sica sobre item.<br>
- * 
+ *
  * @author acandido
  */
 public abstract class ItemInfo extends AbstractBean implements IItemInfo {
@@ -26,21 +26,21 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	/**
 	 * Valida se o nome � um identificador v�lido.
-	 * 
+	 *
 	 * @param name nome a verificar
 	 * @return <code>true</code> ou <code>false</code> indicando a validado do nome.
 	 */
 	public static boolean isValidName(final String name) {
 		// an empty or null string cannot be a valid identifier
-		if (name == null || name.length() == 0) {
+		if ((name == null) || (name.length() == 0)) {
 			return false;
 		}
-		Pattern p = Pattern.compile(VALID_PATTERN);
-		Matcher m = p.matcher(name);
+		final Pattern p = Pattern.compile(VALID_PATTERN);
+		final Matcher m = p.matcher(name);
 		return m.matches();
 	}
 
-	/** Identificador �nico. */
+	/** Identificador único. */
 	private UUID id = UUID.randomUUID();
 	private String messageError;
 	private IItemInfo parent;
@@ -58,7 +58,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	/**
 	 * Construtor.
-	 * 
+	 *
 	 * @param name nome do item.
 	 */
 	public ItemInfo(final String name) {
@@ -83,7 +83,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see br.com.totvs.tds.server.IItemInfo#getMessageError()
 	 */
 	@Override
@@ -103,7 +103,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	@Override
 	public final int getPersistentInteger(final String key) {
-		String value = persistentProperties.getProperty(key);
+		final String value = persistentProperties.getProperty(key);
 		return Integer.getInteger(getPersistentProperty(value));
 	}
 
@@ -114,7 +114,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	@Override
 	public final boolean getPersistentPropertyBoolean(final String key) {
-		String value = persistentProperties.getProperty(key);
+		final String value = persistentProperties.getProperty(key);
 		return Boolean.valueOf(value);
 	}
 
@@ -149,7 +149,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 //
 //		IServerManager serverManager = ServerManagerFactory.getInstance();
 //
-//		for (IServerInfo serverInfo : serverManager.getServers()) {
+//		for (IAppServerInfo serverInfo : serverManager.getServers()) {
 //			if (serverInfo.getName().equalsIgnoreCase(name)) {
 //				return true;
 //			}
@@ -176,7 +176,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	@Override
 	public final void setPersistentProperty(final String key, final String value) {
-		Object oldValue = persistentProperties.get(key);
+		final Object oldValue = persistentProperties.get(key);
 		if (value == null) {
 			persistentProperties.remove(key);
 		} else {

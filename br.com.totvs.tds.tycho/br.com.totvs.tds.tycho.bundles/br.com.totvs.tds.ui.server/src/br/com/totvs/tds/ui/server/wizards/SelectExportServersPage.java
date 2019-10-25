@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.tools.ExportTool;
 import br.com.totvs.tds.server.xml.Group;
@@ -150,7 +150,7 @@ public class SelectExportServersPage extends WizardPage {
 				} else {
 //					ServerUIUtil.unCheckParents(nodeElement, serverTreeRoot, checkboxTreeViewer);
 				}
-				if (!(nodeElement instanceof IServerInfo)) {
+				if (!(nodeElement instanceof IAppServerInfo)) {
 					checkboxTreeViewer.setSubtreeChecked(nodeElement, event.getChecked());
 				}
 				dialogChanged();

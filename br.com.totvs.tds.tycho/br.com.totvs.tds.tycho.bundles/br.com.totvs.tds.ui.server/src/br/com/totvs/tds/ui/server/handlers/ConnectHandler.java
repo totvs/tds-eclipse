@@ -14,7 +14,7 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 
@@ -64,7 +64,7 @@ public class ConnectHandler extends ServerHandler {
 
 	@Override
 	public boolean isEnabled() {
-		IServerInfo server = (IServerInfo) getSelection();
+		IAppServerInfo server = (IAppServerInfo) getSelection();
 		return server != null && !server.isConnected() && super.isEnabled();
 	}
 

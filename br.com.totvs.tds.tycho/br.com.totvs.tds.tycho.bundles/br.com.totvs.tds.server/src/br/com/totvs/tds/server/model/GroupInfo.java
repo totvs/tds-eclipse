@@ -75,7 +75,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.internal.IServerInfo#containsNode(java.lang.
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#containsNode(java.lang.
 	 * String )
 	 */
 
@@ -88,7 +88,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.internal.IServerInfo#hasChildren()
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#hasChildren()
 	 */
 	@Override
 	public boolean hasChildren() {
@@ -98,8 +98,8 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.internal.IServerInfo#removeChild(br.com.totvs
-	 * .tds.server.internal.IServerInfo)
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#removeChild(br.com.totvs
+	 * .tds.server.internal.IAppServerInfo)
 	 */
 	@Override
 	public void removeChild(final IItemInfo child) {
@@ -120,7 +120,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * br.com.totvs.tds.server.internal.IServerInfo#searchNode(java.lang.String)
+	 * br.com.totvs.tds.server.internal.IAppServerInfo#searchNode(java.lang.String)
 	 */
 	@Override
 	public IItemInfo searchNode(final String name) {
@@ -145,7 +145,7 @@ public class GroupInfo extends ItemInfo implements IGroupInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.internal.IServerInfo#size()
+	 * @see br.com.totvs.tds.server.internal.IAppServerInfo#size()
 	 */
 	@Override
 	public int size() {

@@ -1,6 +1,6 @@
 package br.com.totvs.tds.server.model;
 
-public enum RPOTypeElement {
+public enum RpoTypeElement {
 	FUNCTION("0", Messages.RPOTypeElement_Function), //$NON-NLS-1$
 	OBJECT("1", Messages.RPOTypeElement_Rpo_object), //$NON-NLS-1$
 	PROGRAM("2", Messages.RPOTypeElement_Source), //$NON-NLS-1$
@@ -9,7 +9,7 @@ public enum RPOTypeElement {
 	final private String rpoCode;
 	final private String title;
 
-	private RPOTypeElement(String rpoCode, String title) {
+	private RpoTypeElement(String rpoCode, String title) {
 		this.rpoCode = rpoCode;
 		this.title = title;
 	}

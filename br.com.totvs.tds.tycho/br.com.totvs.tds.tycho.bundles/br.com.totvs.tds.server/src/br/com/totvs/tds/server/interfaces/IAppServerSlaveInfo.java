@@ -2,8 +2,6 @@ package br.com.totvs.tds.server.interfaces;
 
 import java.net.URI;
 
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
-
 /**
  * Interface AppServerSlaveInfo.
  *

@@ -43,8 +43,8 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IOrganization;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.ISubsidiary;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
@@ -158,7 +158,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 
 	private void addServerIntoMenuList(final IAppServerInfo server) {
 		final String activeEnvironment = server.getCurrentEnvironment();
-		final IServerInfo activeServer = serverManager.getCurrentServer();
+		final IAppServerInfo activeServer = serverManager.getCurrentServer();
 		final MenuItem menuItem = new MenuItem(popupMenu, SWT.CASCADE);
 
 		menuItem.setText(" " + server.getName()); //$NON-NLS-1$
@@ -286,7 +286,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			addServerIntoMenuList(activerServer);
 		}
 
-		List<IServerInfo> servers = serverManager.getActiveServers(IAppServerInfo.class);
+		List<IAppServerInfo> servers = serverManager.getActiveServers(IAppServerInfo.class);
 		servers.remove(activerServer);
 
 		if (!servers.isEmpty()) {
@@ -294,7 +294,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			final MenuItem serverItems = new MenuItem(popupMenu, SWT.PUSH);
 			serverItems.setText(Messages.StatusLineControl_connecteds);
 			serverItems.setEnabled(false);
-			for (final IServerInfo server : servers) {
+			for (final IAppServerInfo server : servers) {
 				if (server instanceof IAppServerInfo)
 					addServerIntoMenuList((IAppServerInfo) server);
 			}
@@ -306,7 +306,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 			final MenuItem connectedServersTitle = new MenuItem(popupMenu, SWT.PUSH);
 			connectedServersTitle.setEnabled(false);
 			connectedServersTitle.setText(Messages.StatusLineControl_not_connecteds);
-			for (final IServerInfo server : servers) {
+			for (final IAppServerInfo server : servers) {
 				if (server instanceof IAppServerInfo)
 					addServerIntoMenuList((IAppServerInfo) server);
 			}
@@ -328,10 +328,10 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 	 *
 	 * @param unorderedList Lista que será organizada
 	 */
-	private void getOrderedActiveServers(final List<IServerInfo> unorderedList) {
-		Collections.sort(unorderedList, new Comparator<IServerInfo>() {
+	private void getOrderedActiveServers(final List<IAppServerInfo> unorderedList) {
+		Collections.sort(unorderedList, new Comparator<IAppServerInfo>() {
 			@Override
-			public int compare(final IServerInfo o1, final IServerInfo o2) {
+			public int compare(final IAppServerInfo o1, final IAppServerInfo o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
 		});

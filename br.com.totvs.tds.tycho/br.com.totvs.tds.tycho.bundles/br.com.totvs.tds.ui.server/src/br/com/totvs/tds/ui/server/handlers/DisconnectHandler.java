@@ -8,7 +8,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -49,7 +49,7 @@ public class DisconnectHandler extends ServerHandler {
 
 	@Override
 	public boolean isEnabled() {
-		IServerInfo item = (IServerInfo) getSelection();
+		IAppServerInfo item = (IAppServerInfo) getSelection();
 		return item.isConnected() && super.isEnabled();
 	}
 

@@ -8,9 +8,9 @@ public class RpoFunction extends RpoObject implements IRpoFunction {
 	private String lineNumber;
 
 	@Override
-	public RPOTypeElement getType() {
+	public RpoTypeElement getType() {
 
-		return RPOTypeElement.FUNCTION;
+		return RpoTypeElement.FUNCTION;
 	}
 
 	/**

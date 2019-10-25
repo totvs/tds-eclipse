@@ -29,7 +29,6 @@ import br.com.totvs.tds.server.interfaces.IAuthorizationKey;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IRootInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
 import br.com.totvs.tds.server.model.AbstractBean;
@@ -71,14 +70,14 @@ public final class ServerManagerImpl extends AbstractBean
 	}
 
 	@Override
-	public List<IServerInfo> getActiveServers() {
-		return getActiveServers(IServerInfo.class);
+	public List<IAppServerInfo> getActiveServers() {
+		return getActiveServers(IAppServerInfo.class);
 	}
 
-	private List<IServerInfo> getServers(final Class<? extends IServerInfo> clazz, final boolean connected) {
-		final List<IServerInfo> list = new ArrayList<IServerInfo>();
+	private List<IAppServerInfo> getServers(final Class<? extends IAppServerInfo> clazz, final boolean connected) {
+		final List<IAppServerInfo> list = new ArrayList<IAppServerInfo>();
 		//
-		for (final IServerInfo server : getServers(clazz)) {
+		for (final IAppServerInfo server : getServers(clazz)) {
 			if (server.isConnected() == connected) {
 				list.add(server);
 			}
@@ -88,13 +87,13 @@ public final class ServerManagerImpl extends AbstractBean
 	}
 
 	@Override
-	public List<IServerInfo> getInactiveServers(final Class<? extends IServerInfo> clazz) {
+	public List<IAppServerInfo> getInactiveServers(final Class<? extends IAppServerInfo> clazz) {
 		//
 		return getServers(clazz, false);
 	}
 
 	@Override
-	public List<IServerInfo> getActiveServers(final Class<? extends IServerInfo> clazz) {
+	public List<IAppServerInfo> getActiveServers(final Class<? extends IAppServerInfo> clazz) {
 		//
 		return getServers(clazz, true);
 	}
@@ -147,11 +146,11 @@ public final class ServerManagerImpl extends AbstractBean
 	}
 
 	@Override
-	public List<IServerInfo> getMonitoringServers() {
-		final List<IServerInfo> list = new ArrayList<IServerInfo>();
-		final List<IServerInfo> servers = getActiveServers();
+	public List<IAppServerInfo> getMonitoringServers() {
+		final List<IAppServerInfo> list = new ArrayList<IAppServerInfo>();
+		final List<IAppServerInfo> servers = getActiveServers();
 
-		for (final IServerInfo si : servers) {
+		for (final IAppServerInfo si : servers) {
 			if (si.isMonitoring()) {
 				list.add(si);
 			}
@@ -166,10 +165,10 @@ public final class ServerManagerImpl extends AbstractBean
 	 * @see br.com.totvs.tds.server.IServerService#getServer(String);
 	 */
 	@Override
-	public IServerInfo getServer(final String name) {
-		IServerInfo getServer = null;
+	public IAppServerInfo getServer(final String name) {
+		IAppServerInfo getServer = null;
 		if (name != null) {
-			for (final IServerInfo server : getServers(IServerInfo.class)) {
+			for (final IAppServerInfo server : getServers(IAppServerInfo.class)) {
 				if (name.equalsIgnoreCase(server.getName())) {
 					getServer = server;
 					break;
@@ -185,10 +184,10 @@ public final class ServerManagerImpl extends AbstractBean
 	 * @see br.com.totvs.tds.server.IServerService#getServer(URI);
 	 */
 	@Override
-	public IServerInfo getServer(final URI address) {
-		IServerInfo ret = null;
+	public IAppServerInfo getServer(final URI address) {
+		IAppServerInfo ret = null;
 		//
-		for (final IServerInfo server : getServers()) {
+		for (final IAppServerInfo server : getServers()) {
 			if ((server.getAddress() != null) && server.getAddress().equals(address)) {
 				ret = server;
 				break;
@@ -204,22 +203,22 @@ public final class ServerManagerImpl extends AbstractBean
 	 * @see br.com.totvs.tds.server.IServerService#getServerList()
 	 */
 	@Override
-	public List<IServerInfo> getServers() {
-		return getServers(IServerInfo.class);
+	public List<IAppServerInfo> getServers() {
+		return getServers(IAppServerInfo.class);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.IServerManager#getServers(Class<IServerInfo>)
+	 * @see br.com.totvs.tds.server.IServerManager#getServers(Class<IAppServerInfo>)
 	 */
 	@Override
-	public List<IServerInfo> getServers(final Class<? extends IServerInfo> clazzServerInfo) {
-		final List<IServerInfo> list = new ArrayList<IServerInfo>();
+	public List<IAppServerInfo> getServers(final Class<? extends IAppServerInfo> clazzServerInfo) {
+		final List<IAppServerInfo> list = new ArrayList<IAppServerInfo>();
 		//
 		for (final IItemInfo server : rootGroupInfo.toList(clazzServerInfo)) {
-			if (server instanceof IServerInfo) {
-				list.add((IServerInfo) server);
+			if (server instanceof IAppServerInfo) {
+				list.add((IAppServerInfo) server);
 			}
 		}
 		//
@@ -311,7 +310,7 @@ public final class ServerManagerImpl extends AbstractBean
 			final List<String> serversRunning = (ArrayList<String>) ois.readObject();
 			ois.close();
 
-			final List<IServerInfo> activeServers = getActiveServers();
+			final List<IAppServerInfo> activeServers = getActiveServers();
 
 			startLocalServesAndConnections(serversRunning, activeServers, 3000);
 		} finally {
@@ -322,7 +321,7 @@ public final class ServerManagerImpl extends AbstractBean
 	}
 
 	private void startLocalServesAndConnections(final List<String> serversRunning,
-			final List<IServerInfo> activeServers, final int delay) {
+			final List<IAppServerInfo> activeServers, final int delay) {
 
 		final Job job = new Job(Messages.ServerManagerImpl_Reconnections) {
 
@@ -334,9 +333,9 @@ public final class ServerManagerImpl extends AbstractBean
 						monitor.subTask(Messages.ServerManagerImpl_Startubg_local_server);
 
 						for (final String name : serversRunning) {
-							final IServerInfo server = getServer(name);
+							final IAppServerInfo server = getServer(name);
 							if (server instanceof IAppServerInfo) {
-								final IAppServerInfo appServer = (IAppServerInfo) server;
+								final IAppServerInfo appServer = server;
 								final LocalAppServerLauncher launcher = new LocalAppServerLauncher(appServer.getName(),
 										appServer.getAppServerPath());
 								launcher.start();
@@ -347,22 +346,25 @@ public final class ServerManagerImpl extends AbstractBean
 
 					if (!activeServers.isEmpty()) {
 						monitor.subTask(Messages.ServerManagerImpl_Server_connect);
-						ServerActivator.logStatus(IStatus.INFO,
+						ServerActivator.logStatus(IStatus.WARNING,
 								Messages.ServerManagerImpl_Connecting_server_credentials_saved);
 
-						for (final IServerInfo serverInfo : activeServers) {
-							if (serverInfo instanceof IAppServerInfo) {
-								doReconnect((IAppServerInfo) serverInfo);
-							}
+						for (final IAppServerInfo serverInfo : activeServers) {
+							ServerActivator.logStatus(IStatus.INFO,
+									"Reconexão automática.\n\tServidor: %s (%s)\n\tAmbiente: %s\n\tUsuário: %s",
+									serverInfo.getName(), serverInfo.getAddress(), serverInfo.getCurrentEnvironment(),
+									serverInfo.getUsername());
+							doReconnect(serverInfo);
 						}
 					}
 
-					if ((auxCurrentServer != null) && (auxCurrentServer.isConnected())) {
-						ServerManagerImpl.this.setCurrentServer(auxCurrentServer);
-					} else {
-						ServerManagerImpl.this.setCurrentServer(null);
-					}
-
+					Display.getDefault().syncExec(() -> {
+						if ((auxCurrentServer != null) && (auxCurrentServer.isConnected())) {
+							ServerManagerImpl.this.setCurrentServer(auxCurrentServer);
+						} else {
+							ServerManagerImpl.this.setCurrentServer(null);
+						}
+					});
 					return Status.OK_STATUS;
 				} catch (final Exception e) {
 					return ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
@@ -377,18 +379,17 @@ public final class ServerManagerImpl extends AbstractBean
 	protected void doReconnect(final IAppServerInfo serverInfo) {
 		boolean isLogged = false;
 
-		final String connectMessage = Messages.ServerManagerImpl_Connection_refused_server;
 		try {
 			final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
 			isLogged = serverInfo.authentication(connectionMap);
 
 			if (!isLogged) {
-				ServerActivator.logStatus(IStatus.ERROR, connectMessage, serverInfo.getName(),
-						serverInfo.getCurrentEnvironment());
+				ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection_refused_server,
+						serverInfo.getName(), serverInfo.getCurrentEnvironment());
 			}
 		} catch (final Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, connectMessage, serverInfo.getName(),
-					serverInfo.getCurrentEnvironment());
+			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection_refused_server,
+					serverInfo.getName(), serverInfo.getCurrentEnvironment());
 			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Cause, e.getMessage());
 		}
 	}
@@ -471,9 +472,9 @@ public final class ServerManagerImpl extends AbstractBean
 		oos.writeObject(currentServer);
 
 		final List<String> serversRunning = new ArrayList<String>();
-		for (final IServerInfo server : getServers()) {
+		for (final IAppServerInfo server : getServers()) {
 			if (server instanceof IAppServerInfo) {
-				if (((IAppServerInfo) server).isRunning()) {
+				if (server.isRunning()) {
 					serversRunning.add(server.getName());
 				}
 			}
@@ -487,7 +488,7 @@ public final class ServerManagerImpl extends AbstractBean
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.tds.server.IServerManager#setCurrentServer(IServerInfo)
+	 * @see br.com.totvs.tds.server.IServerManager#setCurrentServer(IAppServerInfo)
 	 */
 	@Override
 	public void setCurrentServer(final IAppServerInfo newServer) {
@@ -518,23 +519,26 @@ public final class ServerManagerImpl extends AbstractBean
 	 */
 	@Override
 	public void validate(final String name, final URI address) throws RuntimeException {
-		// Validacao de nome
+		// Validação de nome
 		if (!ItemInfo.isValidName(name)) {
 			throw new RuntimeException("RuntimeException.SERVER_INVALIDNAME, Messages.ServerManagerImpl_3, name"); //$NON-NLS-1$
 		}
-		// Validacao de URI (address)
+
+		// Validação de URI (address)
 		if (address.getHost() == null) {
 			throw new RuntimeException("RuntimeException.URI_INVALIDHOST, Messages.ServerManagerImpl_4, address"); //$NON-NLS-1$
 		}
 		if (address.getPort() < 0) {
 			throw new RuntimeException("RuntimeException.URI_INVALIDPORT, Messages.ServerManagerImpl_5, address"); //$NON-NLS-1$
 		}
-		// Validacao de duplicidade de nome
-		IServerInfo si = getServer(name);
+
+		// Validação de duplicidade de nome
+		IAppServerInfo si = getServer(name);
 		if (si != null) {
 			throw new RuntimeException("RuntimeException.SERVER_DUPLICATEDNAME, Messages.ServerManagerImpl_6, name"); //$NON-NLS-1$
 		}
-		// Validacao de duplicidade de URI (address)
+
+		// Validação de duplicidade de URI (address)
 		si = getServer(address);
 		if (si != null) {
 			throw new RuntimeException("RuntimeException.SERVER_DUPLICATEDURI, Messages.ServerManagerImpl_7, address"); //$NON-NLS-1$
@@ -552,23 +556,18 @@ public final class ServerManagerImpl extends AbstractBean
 	}
 
 	@Override
-	protected void firePropertyChange(final String propertyName, final Object oldValue, final Object newValue) {
-		if (!loading || (propertyName.equals("loading"))) { //$NON-NLS-1$
-			Display.getDefault().syncExec(() -> super.firePropertyChange(propertyName, oldValue, newValue));
-		}
-	}
-
-	@Override
 	protected void firePropertyChange(final PropertyChangeEvent event) {
-		Display.getDefault().syncExec(() -> super.firePropertyChange(event));
+		if (!loading || (event.getPropertyName().equals("loading"))) { //$NON-NLS-1$
+			if (event.getPropertyName().equals("connected")) { //$NON-NLS-1$
+				final IAppServerInfo server = (IAppServerInfo) event.getSource();
+				final Boolean isConnected = (Boolean) event.getNewValue();
 
-		if (event.getPropertyName().equals("connected")) { //$NON-NLS-1$
-			final IAppServerInfo server = (IAppServerInfo) event.getSource();
-			final Boolean isConnected = (Boolean) event.getNewValue();
-
-			if (!isConnected && (this.currentServer != null) && (this.currentServer.equals(server))) {
-				setCurrentServer(null);
+				if (!isConnected && (this.currentServer != null) && (this.currentServer.equals(server))) {
+					setCurrentServer(null);
+				}
 			}
+
+			Display.getDefault().syncExec(() -> super.firePropertyChange(event));
 		}
 	}
 

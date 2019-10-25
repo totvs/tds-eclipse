@@ -37,8 +37,8 @@ public class RpoSource extends RpoObject implements IRpoSource {
 	 * @see br.com.totvs.osgi.messageservice.entity.IRpoElement#getType()
 	 */
 	@Override
-	public RPOTypeElement getType() {
-		return RPOTypeElement.PROGRAM;
+	public RpoTypeElement getType() {
+		return RpoTypeElement.PROGRAM;
 	}
 
 }

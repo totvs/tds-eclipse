@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Tree;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.jobs.BuildPatchAttributes;
 import br.com.totvs.tds.server.jobs.BuildPatchProcessType;
@@ -60,7 +60,7 @@ public class PatchSelectServerPage extends WizardPage {
 	private Label lblOverwrite;
 	private CheckboxTreeViewer treeViewerEnvironments;
 
-	private Map<String, IServerInfo> serverMap = new HashMap<String, IServerInfo>();
+	private Map<String, IAppServerInfo> serverMap = new HashMap<String, IAppServerInfo>();
 
 	/**
 	 * Create the wizard.
@@ -443,12 +443,12 @@ public class PatchSelectServerPage extends WizardPage {
 	 */
 	private void loadServers() throws Exception {
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
-		final List<IServerInfo> activeServers = serverManager.getActiveServers(IAppServerInfo.class);
+		final List<IAppServerInfo> activeServers = serverManager.getActiveServers(IAppServerInfo.class);
 		if (activeServers.isEmpty()) {
 			throw new Exception(Messages.PatchSelectServerPage_No_active_servers);
 		}
 
-		for (final IServerInfo server : activeServers) {
+		for (final IAppServerInfo server : activeServers) {
 			final String serverName = server.getName();
 			cmbServer.add(serverName);
 			serverMap.put(serverName, server);

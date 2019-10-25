@@ -11,8 +11,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IRpoElement;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
-import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.model.RpoTypeElement;
 
 /**
  * Job to load all functions from the server.
@@ -22,14 +22,14 @@ import br.com.totvs.tds.server.model.RPOTypeElement;
  *
  */
 public class LoadRpoMapJob extends Job {
-	protected IServerInfo server;
+	protected IAppServerInfo server;
 	protected String environment;
 	private List<IRpoElement> rpoElements = Collections.emptyList();
-	private RPOTypeElement objectType;
+	private RpoTypeElement objectType;
 	private boolean includeTRes;
 
 	public LoadRpoMapJob(final IAppServerInfo server, final String environment, final boolean includeTRes,
-			final RPOTypeElement objectType) {
+			final RpoTypeElement objectType) {
 		super(String.format("Carregando mapa RPO: %s", objectType.getTitle()));
 
 		this.server = server;

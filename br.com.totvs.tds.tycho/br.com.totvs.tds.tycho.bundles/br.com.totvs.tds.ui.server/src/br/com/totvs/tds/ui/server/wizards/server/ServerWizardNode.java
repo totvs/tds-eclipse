@@ -8,8 +8,8 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo.ServerType;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.vo.NewServerVO;
 import br.com.totvs.tds.ui.server.wizards.INewItemWizard;
@@ -92,7 +92,7 @@ public class ServerWizardNode implements IWizardNode {
 		if (wizard == null) {
 			try {
 				IServerManager serverManager = ServerActivator.getDefault().getServerManager();
-				IServerInfo server = serverManager.newAppServer("Novo"); //$NON-NLS-1$
+				IAppServerInfo server = serverManager.newAppServer("Novo"); //$NON-NLS-1$
 				newServer.setServer((IAppServerInfo) server);
 				server.setServerType(newServer.getServerType());
 				wizard = new NewServerWizard(newServer);

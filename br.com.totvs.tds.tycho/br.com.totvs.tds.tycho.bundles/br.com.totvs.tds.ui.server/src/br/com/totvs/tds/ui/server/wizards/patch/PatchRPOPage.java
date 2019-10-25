@@ -52,7 +52,7 @@ import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IRpoElement;
 import br.com.totvs.tds.server.jobs.BuildPatchAttributes;
 import br.com.totvs.tds.server.jobs.LoadRpoMapJob;
-import br.com.totvs.tds.server.model.RPOTypeElement;
+import br.com.totvs.tds.server.model.RpoTypeElement;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
@@ -73,9 +73,9 @@ public class PatchRPOPage extends WizardPage {
 
 			if (element instanceof IRpoElement) {
 				IRpoElement node = (IRpoElement) element;
-				RPOTypeElement type = node.getType();
-				result = ((RPOTypeElement.PROGRAM.equals(type) && program)
-						|| (!RPOTypeElement.PROGRAM.equals(type) && resource));
+				RpoTypeElement type = node.getType();
+				result = ((RpoTypeElement.PROGRAM.equals(type) && program)
+						|| (!RpoTypeElement.PROGRAM.equals(type) && resource));
 
 				if (result && (pattern != null)) {
 					result = pattern.matcher(node.getName()).matches();
@@ -576,7 +576,7 @@ public class PatchRPOPage extends WizardPage {
 		}
 
 		loadMapjob = new LoadRpoMapJob(attributes.getServer(), attributes.getEnvironment(), tltmTRes.getSelection(),
-				RPOTypeElement.OBJECT);
+				RpoTypeElement.OBJECT);
 		loadMapjob.schedule();
 
 		try {

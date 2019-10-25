@@ -16,7 +16,7 @@ import org.eclipse.osgi.service.datalocation.Location;
 
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.xml.Group;
 import br.com.totvs.tds.server.xml.Group.GroupList;
 import br.com.totvs.tds.server.xml.ObjectFactory;
@@ -55,7 +55,7 @@ public final class ExportTool {
 		Group groupToReturn = null;
 		if (nodeElement instanceof IGroupInfo) {
 			groupToReturn = addGroup(serverTreeFactory, root, parentGroup, nodeElement);
-		} else if (nodeElement instanceof IServerInfo) {
+		} else if (nodeElement instanceof IAppServerInfo) {
 			groupToReturn = addServer(serverTreeFactory, root, parentGroup, nodeElement);
 		}
 		return groupToReturn;
@@ -171,13 +171,13 @@ public final class ExportTool {
 	}
 
 	/**
-	 * Converts a IServerInfo to an entity Server to be added to the XML file.
+	 * Converts a IAppServerInfo to an entity Server to be added to the XML file.
 	 *
 	 * @param factory
 	 * @param serverInfo
 	 * @return
 	 */
-	public static Server toServer(final ObjectFactory factory, final IServerInfo serverInfo) {
+	public static Server toServer(final ObjectFactory factory, final IAppServerInfo serverInfo) {
 		String name = serverInfo.getName();
 		int port = serverInfo.getAppServerPort();
 		String serverType = ""; // serverInfo.getServerType(); //$NON-NLS-1$
@@ -224,7 +224,7 @@ public final class ExportTool {
 
 	private static Group addServer(final ObjectFactory serverTreeFactory, final Group serverTreeRoot,
 			final Group fParentGroup, final IItemInfo nodeElement) {
-		Server server = ExportTool.toServer(serverTreeFactory, (IServerInfo) nodeElement);
+		Server server = ExportTool.toServer(serverTreeFactory, (IAppServerInfo) nodeElement);
 		List<Server> serverList = null;
 		Group parentGroup = fParentGroup;
 		if (parentGroup == null) {
@@ -293,12 +293,12 @@ public final class ExportTool {
 
 	final Location rootConfig = Platform.getConfigurationLocation();
 
-	// private HashMap<String, IServerInfo> convertToMap(Set<Entry<String,
-	// IServerInfo>> serversSet) {
-	// HashMap<String, IServerInfo> map = new HashMap<String, IServerInfo>();
-	// for (Entry<String, IServerInfo> node : serversSet) {
+	// private HashMap<String, IAppServerInfo> convertToMap(Set<Entry<String,
+	// IAppServerInfo>> serversSet) {
+	// HashMap<String, IAppServerInfo> map = new HashMap<String, IAppServerInfo>();
+	// for (Entry<String, IAppServerInfo> node : serversSet) {
 	// String serverName = node.getKey();
-	// IServerInfo serverInfo = node.getValue();
+	// IAppServerInfo serverInfo = node.getValue();
 	// map.put(serverName, serverInfo);
 	// }
 	// return map;

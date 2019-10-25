@@ -22,7 +22,7 @@ import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -64,7 +64,7 @@ public class ServerStateLoaderJob extends Job {
 	 * @throws NotEnabledException
 	 * @throws NotDefinedException @
 	 */
-	private boolean connectAndLogin(MultiStatus status, IServerInfo serverInfo)
+	private boolean connectAndLogin(MultiStatus status, IAppServerInfo serverInfo)
 			throws ExecutionException, NotDefinedException, NotEnabledException, NotHandledException {
 		IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		ICommandService commandService = serviceLocator.getService(ICommandService.class);
@@ -99,7 +99,7 @@ public class ServerStateLoaderJob extends Job {
 
 		if (targetServers != null) {
 			for (String name : targetServers) {
-				IServerInfo serverInfo = serverManager.getServer(name);
+				IAppServerInfo serverInfo = serverManager.getServer(name);
 
 				if (serverInfo != null) {
 					try {
@@ -133,7 +133,7 @@ public class ServerStateLoaderJob extends Job {
 		}
 
 		if ((currentServer != null) && !currentServer.isEmpty()) {
-			IServerInfo serverInfo = serverManager.getServer(currentServer);
+			IAppServerInfo serverInfo = serverManager.getServer(currentServer);
 
 			if (serverInfo != null) {
 				serverManager.setCurrentServer((IAppServerInfo) serverInfo);

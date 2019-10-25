@@ -7,7 +7,7 @@ import org.eclipse.swt.custom.BusyIndicator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerConstants;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -70,7 +70,7 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 
 			@Override
 			public void run() {
-				IServerInfo server = newServer.getServer();
+				IAppServerInfo server = newServer.getServer();
 
 				try {
 					if (newServer.isImmediateConnection()) {

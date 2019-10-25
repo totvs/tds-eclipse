@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.tools.ExportTool;
 import br.com.totvs.tds.server.tools.ImportTools;
@@ -175,8 +175,8 @@ public class ImportServersWizard extends Wizard {
 		List<Server> serverInfoList = new ArrayList<Server>();
 		List<Group> groupInfoList = new ArrayList<Group>();
 		for (Object object : selectedItems) {
-			if (object instanceof IServerInfo) {
-				Server server = ExportTool.toServer(factory, (IServerInfo) object);
+			if (object instanceof IAppServerInfo) {
+				Server server = ExportTool.toServer(factory, (IAppServerInfo) object);
 				serverInfoList.add(server);
 			} else if (object instanceof IGroupInfo) {
 				Group group = ExportTool.toGroup(factory, (IGroupInfo) object);

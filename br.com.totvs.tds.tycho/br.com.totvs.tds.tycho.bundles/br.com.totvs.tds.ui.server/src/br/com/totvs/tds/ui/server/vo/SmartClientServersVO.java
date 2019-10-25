@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 
 public class SmartClientServersVO {
 
-	private List<IServerInfo> advplAppServers;
+	private List<IAppServerInfo> advplAppServers;
 
-	private final Map<String, IServerInfo> mapServersSelecionados = new HashMap<String, IServerInfo>();
+	private final Map<String, IAppServerInfo> mapServersSelecionados = new HashMap<String, IAppServerInfo>();
 
 	private String serverTypeApp;
 
@@ -19,11 +19,11 @@ public class SmartClientServersVO {
 
 	private IGroupInfo targetNode;
 
-	public List<IServerInfo> getAdvplAppServers() {
+	public List<IAppServerInfo> getAdvplAppServers() {
 		return advplAppServers;
 	}
 
-	public Map<String, IServerInfo> getServersSelecionados() {
+	public Map<String, IAppServerInfo> getServersSelecionados() {
 		return mapServersSelecionados;
 	}
 
@@ -39,7 +39,7 @@ public class SmartClientServersVO {
 		return targetNode;
 	}
 
-	public void setAdvplAppServers(List<IServerInfo> advplAppServers) {
+	public void setAdvplAppServers(List<IAppServerInfo> advplAppServers) {
 		this.advplAppServers = advplAppServers;
 	}
 

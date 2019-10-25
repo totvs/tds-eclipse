@@ -33,7 +33,7 @@ import org.eclipse.ui.PlatformUI;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.tools.ExportTool;
 import br.com.totvs.tds.server.tools.ImportTools;
@@ -184,7 +184,7 @@ public class SelectImportServersPage extends WizardPage {
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				IItemInfo nodeElement = (IItemInfo) event.getElement();
 				boolean checked = event.getChecked();
-				if (!(nodeElement instanceof IServerInfo)) {
+				if (!(nodeElement instanceof IAppServerInfo)) {
 					checkboxTreeViewer.setSubtreeChecked(nodeElement, checked);
 				}
 				Object[] checkedElements = checkboxTreeViewer.getCheckedElements();
@@ -214,8 +214,8 @@ public class SelectImportServersPage extends WizardPage {
 		Map<String, IItemInfo> map = getAttributes().getItemsSelected();
 		map.clear();
 		for (Object element : checkboxTreeViewer.getCheckedElements()) {
-			if (element instanceof IServerInfo) {
-				map.put(((IServerInfo) element).getName(), (IServerInfo) element);
+			if (element instanceof IAppServerInfo) {
+				map.put(((IAppServerInfo) element).getName(), (IAppServerInfo) element);
 			}
 		}
 		if (txtCaminhoDoPatch.getText().isEmpty()) { // $NON-NLS-1$

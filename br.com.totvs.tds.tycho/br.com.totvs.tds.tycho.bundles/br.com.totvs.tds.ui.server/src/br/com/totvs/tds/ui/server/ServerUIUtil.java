@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-import br.com.totvs.tds.server.interfaces.IServerInfo;
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.ui.TDSUtil;
 
 /**
@@ -34,7 +34,7 @@ public final class ServerUIUtil {
 	 * @param serverInfo
 	 * @return
 	 */
-	public static boolean isLocalhost(final IServerInfo serverInfo) {
+	public static boolean isLocalhost(final IAppServerInfo serverInfo) {
 		String host = serverInfo.getAddress().getHost();
 		return host.equalsIgnoreCase("localhost") || host.startsWith("127.0.0."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
