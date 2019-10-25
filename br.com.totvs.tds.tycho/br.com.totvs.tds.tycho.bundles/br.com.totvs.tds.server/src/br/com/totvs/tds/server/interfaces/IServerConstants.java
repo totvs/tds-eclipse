@@ -151,9 +151,9 @@ public interface IServerConstants {
 
 	public static final String BUILD_VERSION = "build.version"; //$NON-NLS-1$
 
-	public static final String SMARTCLIENT_PATH = Messages.IServerConstants_2;
+	public static final String SMARTCLIENT_PATH = "smartclient.path"; //$NON-NLS-1$
 
-	public static final String IMMEDIATE_CONNECTION = Messages.IServerConstants_3;
+	public static final String IMMEDIATE_CONNECTION = "immediate.connection"; //$NON-NLS-1$
 
 	public static final String LAUNCH_PARAMETERS = "launch.parameters"; //$NON-NLS-1$
 
@@ -163,6 +163,6 @@ public interface IServerConstants {
 
 	public static final String LOCAL_SERVER = "local.server"; //$NON-NLS-1$
 
-	public static final String PERMISSIONS_APPLY_PATCH_ALLOWED = "PERMISSIONS_APPLY_PATCH_ALLOWED";
+	public static final String PERMISSIONS_APPLY_PATCH_ALLOWED = "PERMISSIONS_APPLY_PATCH_ALLOWED"; //$NON-NLS-1$
 
 }

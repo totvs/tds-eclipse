@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.NotEnabledException;
+import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.MenuManager;
@@ -39,13 +43,11 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.IWorkbenchSiteProgressService;
 import org.eclipse.ui.services.IServiceLocator;
 
-import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerConstants;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -264,6 +266,22 @@ public class ServerView extends ViewPart {
 	private void hookNotifications() {
 		propertyChangeListener = new PropertyChangeListener() {
 
+			private TreeItem getTreeItem(TreeItem[] items, IAppServerInfo server) {
+				for (int i = 0; i < items.length; i++) {
+					TreeItem treeItem = items[i];
+					Object data = treeItem.getData();
+					if (data.equals(server)) {
+						if ((boolean) server.getProperty(IServerConstants.IMMEDIATE_CONNECTION)) {
+							return treeItem;
+						}
+					} else {
+						return getTreeItem(treeItem.getItems(), server);
+					}
+				}
+
+				return null;
+			}
+
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
 				if (evt.getPropertyName().equals("_refresh_")) { //$NON-NLS-1$
@@ -281,14 +299,33 @@ public class ServerView extends ViewPart {
 						viewer.expandToLevel(parent, 1);
 					}
 
-					TreeItem[] items = viewer.getTree().getItems();
-					for (int i = 0; i < items.length; i++) {
-						TreeItem treeItem = items[i];
-						Object data = treeItem.getData();
-						if (data.equals(evt.getNewValue())) {
-							IAppServerInfo server = (IAppServerInfo) data;
-							if ((boolean) server.getProperty(IServerConstants.IMMEDIATE_CONNECTION)) {
-								viewer.getTree().setSelection(treeItem);
+					IAppServerInfo server = (IAppServerInfo) evt.getNewValue();
+					if ((boolean) server.getProperty(IServerConstants.IMMEDIATE_CONNECTION)) {
+						TreeItem[] items = viewer.getTree().getItems();
+						TreeItem treeItem = getTreeItem(items, server);
+
+						if (treeItem != null) {
+							viewer.getTree().setSelection(treeItem);
+
+							IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+							ICommandService commandService = serviceLocator.getService(ICommandService.class);
+
+							Command command = commandService
+									.getCommand("br.com.totvs.tds.ui.server.commands.connectCommand"); //$NON-NLS-1$
+
+							ParameterizedCommand pc = ParameterizedCommand.generateCommand(command, null);
+
+							IHandlerService handlerService = serviceLocator.getService(IHandlerService.class);
+							try {
+								handlerService.executeCommand(pc, null);
+							} catch (ExecutionException e) {
+								ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+							} catch (NotDefinedException e) {
+								ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+							} catch (NotEnabledException e) {
+								ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+							} catch (NotHandledException e) {
+								ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 							}
 						}
 					}

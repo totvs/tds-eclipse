@@ -238,9 +238,9 @@ public class NewServerWizardPage extends WizardPage {
 		new Label(topLevel, SWT.NONE);
 
 		btnConnect = new Button(topLevel, SWT.CHECK);
-		this.btnConnect.setEnabled(false);
 		btnConnect.setLayoutData(new GridData(SWT.LEFT, SWT.BOTTOM, false, true, 1, 1));
 		btnConnect.setText(Messages.NewServerWizardPage_immediate_connection);
+		btnConnect.setSelection(true);
 		new Label(topLevel, SWT.NONE);
 
 		txtServerName.addModifyListener(modifyListener);
@@ -272,7 +272,7 @@ public class NewServerWizardPage extends WizardPage {
 
 		//
 		newServer.setImmediateConnection(btnConnect.getSelection());
-
+		//
 		String serverName = txtServerName.getText();
 		if (Messages.EMPTY_STRING.equals(serverName)) { // $NON-NLS-1$
 			updateStatus(Messages.NewServerWizardPage_server_name_required);

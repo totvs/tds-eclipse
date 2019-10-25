@@ -73,15 +73,13 @@ public final class NewServerWizard extends Wizard implements INewItemWizard {
 				IAppServerInfo server = newServer.getServer();
 
 				try {
-					if (newServer.isImmediateConnection()) {
-						server.setProperty(IServerConstants.IMMEDIATE_CONNECTION, true);
-					}
+					server.setProperty(IServerConstants.IMMEDIATE_CONNECTION, newServer.isImmediateConnection());
 
 					newServer.getParent().addChild(server);
 					finish = true;
 
-					ServerUIActivator.logStatus(IStatus.INFO, Messages.NewServerWizard_server_added_warning, server.getName(),
-							server.getAddress());
+					ServerUIActivator.logStatus(IStatus.INFO, Messages.NewServerWizard_server_added_warning,
+							server.getName(), server.getAddress());
 
 				} catch (RuntimeException e) {
 					ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
