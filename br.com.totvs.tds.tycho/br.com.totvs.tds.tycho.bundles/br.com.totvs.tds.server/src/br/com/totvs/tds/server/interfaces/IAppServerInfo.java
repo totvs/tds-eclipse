@@ -5,8 +5,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.debug.core.ILaunchesListener;
-
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 import br.com.totvs.tds.server.ServerOsType;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
@@ -315,34 +313,113 @@ public interface IAppServerInfo extends IItemInfo {
 	 */
 	boolean canPermission(String string);
 
+	/**
+	 * Executável da aplicação Protheus
+	 *
+	 * @param appServerPath
+	 */
 	void setAppServerPath(String appServerPath);
 
+	/**
+	 *
+	 * @return executável da aplicação Protheus
+	 */
 	String getAppServerPath();
 
-	boolean isAppServerLocal();
-
-	boolean isRunning();
-
-	void setLauncher(ILaunchesListener launcher);
-
-	ILaunchesListener getLauncher();
-
+	/**
+	 *
+	 * @param localServer ajusta se é servidor local ou não
+	 */
 	void setLocalServer(boolean localServer);
 
+	/**
+	 *
+	 * @return indicação se é servidor local
+	 */
 	boolean isLocalServer();
 
+	/**
+	 * Autentica/conecta usuário no servidor.
+	 *
+	 * @param connectionMap
+	 * @return resultado da autenticação
+	 */
 	boolean authentication(Map<String, Object> connectionMap);
 
+	/**
+	 *
+	 * @param environment
+	 * @param absolutPath
+	 * @param b
+	 * @return
+	 */
 	String[] getDirectory(String environment, String absolutPath, boolean b);
 
+	/**
+	 *
+	 * @param environment
+	 * @param serverPatch
+	 * @return informações sobre os componentes de um pacote de atualização.
+	 */
 	List<SourceInformation> getPatchInfo(String environment, Path serverPatch);
 
+	/**
+	 *
+	 * @param environment
+	 * @param patchFile
+	 * @param local
+	 * @return validade ou não do pacote de atualização
+	 */
 	ValidationPatchReturn validPatch(String environment, final URI patchFile, boolean local);
 
+	/**
+	 * Aplica um pacote de atualização.
+	 *
+	 * @param environment
+	 * @param serverPatch
+	 * @param local
+	 * @param oldPrograms
+	 * @return resultado da aplicação
+	 */
 	ApplyPatchReturn applyPatch(String environment, URI serverPatch, boolean local, boolean oldPrograms);
 
+	/**
+	 * Compilação de recursos.
+	 *
+	 * @param files
+	 * @param compileOptions
+	 * @param includePaths
+	 */
 	void buidlFile(List<String> files, CompileOptions compileOptions, List<String> includePaths);
 
+	/**
+	 * Efetua a desfragmentação do RPO.
+	 *
+	 * @param environment
+	 * @param clearPatchLog
+	 */
 	void defragRPO(String environment, boolean clearPatchLog);
+
+	/**
+	 *
+	 * @return indica se servidor esta ou não em execução
+	 */
+	boolean isRunning();
+
+	/**
+	 * Inicia a execução do servidor local.
+	 */
+	void start();
+
+	/**
+	 * Para a execução do servidor local.
+	 */
+	void stop();
+
+	/**
+	 * Desconecta do servidor.
+	 *
+	 */
+	void disconnect();
 
 }

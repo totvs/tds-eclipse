@@ -34,6 +34,10 @@ public class ConnectHandler extends ServerHandler {
 			server = (IAppServerInfo) getSelection();
 		}
 
+		if (server.isLocalServer() && !server.isRunning()) {
+			server.start();
+		}
+
 		try {
 			String loginDialog = server.getServerType().getLoginDialog();
 

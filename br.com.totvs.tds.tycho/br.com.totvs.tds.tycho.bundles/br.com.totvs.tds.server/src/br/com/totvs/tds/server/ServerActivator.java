@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OptionalDataException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IWorkspace;
@@ -30,10 +27,8 @@ import br.com.totvs.tds.ui.TDSMessageHandler;
  */
 public final class ServerActivator extends Plugin {
 
-	private static final String PLUGIN_ID = "br.com.totvs.tds.server"; //$NON-NLS-1$
-	private static final String FILENAME_TDS113 = "br.com.totvs.tds.server.internal.ServerManager.servers"; //$NON-NLS-1$
-
-	private static final String FILENAME_TDS114 = "servers.data"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "br.com.totvs.tds.server"; //$NON-NLS-1$
+	private static final String FILENAME_TDS114 = "servers_114.data"; //$NON-NLS-1$
 
 	/** Instância do ativador. */
 	private static ServerActivator plugin;
@@ -50,7 +45,7 @@ public final class ServerActivator extends Plugin {
 		return plugin;
 	}
 
-	private IServerManager serverManagerService;
+	private IServerManager serverManager;
 
 	/**
 	 * Retorna a propriedade como uma String
@@ -129,25 +124,7 @@ public final class ServerActivator extends Plugin {
 	 * Carga da lista de servidores registrados na �rea de trabalho
 	 */
 	private void loadServerList() {
-		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
-		final File rootWs = workspace.getRoot().getLocation().toFile();
-
-		// faz compatibilização com 11.4
-		File file = new File(rootWs, FILENAME_TDS113); // $NON-NLS-1$
-		if (file.exists()) {
-			logStatus(IStatus.INFO, Messages.ServerActivator_Import_server_list);
-			final Path target = new File(rootWs, FILENAME_TDS114).toPath();
-			try {
-				Files.copy(file.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
-				file.deleteOnExit();
-				logStatus(IStatus.INFO, Messages.ServerActivator_Server_list_imported);
-			} catch (final IOException e) {
-				logStatus(IStatus.ERROR, e.getMessage(), e);
-			}
-		}
-		// fim da compatibilização
-
-		file = getServerListFile();
+		final File file = getServerListFile();
 
 		if (file.exists()) {
 			logStatus(IStatus.INFO, Messages.ServerActivator_Reading_registered_servers, file.getAbsolutePath());
@@ -174,12 +151,12 @@ public final class ServerActivator extends Plugin {
 	}
 
 	public IServerManager getServerManager() {
-		if (serverManagerService == null) {
+		if (serverManager == null) {
 			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
-			serverManagerService = serviceLocator.getService(IServerManager.class);
+			serverManager = serviceLocator.getService(IServerManager.class);
 		}
 
-		return serverManagerService;
+		return serverManager;
 	}
 
 	/**
@@ -193,7 +170,7 @@ public final class ServerActivator extends Plugin {
 
 		try {
 			os = new FileOutputStream(file);
-			final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
+			final IServerManager serverManager = getServerManager();
 			serverManager.saveTo(os);
 			logStatus(IStatus.INFO, Messages.ServerActivator_Server_list_saved);
 		} catch (final IOException e) {

@@ -11,18 +11,17 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.ILaunchesListener;
 import org.eclipse.debug.core.model.IProcess;
 
 import br.com.totvs.tds.server.ServerActivator;
 
-public class AppLauncher implements ILaunchesListener {
+public class AppLauncher {
 
 	private ILaunch launch;
-	private String appName;
+	protected String appName;
 	private String appFilename;
 	private String[] appParams;
-	private String configName;
+	final private String configName;
 
 	public AppLauncher(final String serverName, final String serverFilename, final String[] appServerParams) {
 		this.appName = serverName;
@@ -31,27 +30,15 @@ public class AppLauncher implements ILaunchesListener {
 		this.configName = String.format("_app_%s", appName.toLowerCase()); //$NON-NLS-1$
 	}
 
-	@Override
-	public void launchesAdded(final ILaunch[] launches) {
+	public boolean isRunning() {
 
-	}
-
-	@Override
-	public void launchesChanged(final ILaunch[] launches) {
-
-	}
-
-	@Override
-	public void launchesRemoved(final ILaunch[] launches) {
-
+		return (launch != null) && (!launch.isTerminated());
 	}
 
 	public void start() {
-		ServerActivator.logStatus(IStatus.INFO, appName, Messages.AppLauncher_Starting_server, appName,
-				appFilename);
+		ServerActivator.logStatus(IStatus.INFO, appName, Messages.AppLauncher_Starting_server, appName, appFilename);
 
 		final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-		manager.addLaunchListener(this);
 		final ILaunchConfigurationType type = manager
 				.getLaunchConfigurationType("org.eclipse.ui.externaltools.ProgramLaunchConfigurationType"); //$NON-NLS-1$
 		ILaunchConfiguration[] configurations;
@@ -84,37 +71,31 @@ public class AppLauncher implements ILaunchesListener {
 	public void stop() {
 		ServerActivator.logStatus(IStatus.INFO, Messages.AppLauncher_Requested_server_termination, appName);
 
-		final ILaunchManager manager = DebugPlugin.getDefault().getLaunchManager();
-		manager.removeLaunchListener(this);
-
-		if (launch != null) {
+		try {
+			launch.terminate();
 			try {
-				launch.terminate();
-				try {
-					Thread.sleep(3000); // aguarda a finalização do processo propriamente dito
-				} catch (final InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				final IProcess[] processes = launch.getProcesses();
-				for (final IProcess process : processes) {
-					if (!process.isTerminated()) {
-						ServerActivator.logStatus(IStatus.WARNING, Messages.AppLauncher_Application_not_terminated_correctly,
-								process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim()); //$NON-NLS-1$
-					} else if (process.getExitValue() != 0) {
-						ServerActivator.logStatus(IStatus.WARNING, appName,
-								Messages.AppLauncher_Process_terminated_exit_code,
-								process.getExitValue(),
-								process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim()); //$NON-NLS-1$
-					}
-				}
-				ServerActivator.logStatus(IStatus.INFO, Messages.AppLauncher_Application_terminated, appFilename);
-//				}
-			} catch (final DebugException e) {
+				Thread.sleep(3000); // aguarda a finalização do processo propriamente dito
+			} catch (final InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
 
+			final IProcess[] processes = launch.getProcesses();
+			for (final IProcess process : processes) {
+				if (!process.isTerminated()) {
+					ServerActivator.logStatus(IStatus.WARNING,
+							Messages.AppLauncher_Application_not_terminated_correctly,
+							process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim()); //$NON-NLS-1$
+				} else if (process.getExitValue() != 0) {
+					ServerActivator.logStatus(IStatus.WARNING, appName,
+							Messages.AppLauncher_Process_terminated_exit_code, process.getExitValue(),
+							process.getAttribute("org.eclipse.debug.core.ATTR_CMDLINE").trim()); //$NON-NLS-1$
+				}
+			}
+
+			ServerActivator.logStatus(IStatus.INFO, Messages.AppLauncher_Application_terminated, appFilename);
+		} catch (final DebugException e) {
+			e.printStackTrace();
+		}
 	}
 }

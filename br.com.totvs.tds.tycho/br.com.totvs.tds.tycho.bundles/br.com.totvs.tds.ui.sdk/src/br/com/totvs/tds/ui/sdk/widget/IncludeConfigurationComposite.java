@@ -3,7 +3,9 @@ package br.com.totvs.tds.ui.sdk.widget;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -26,6 +28,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.PreferencesUtil;
+import org.eclipse.ui.progress.IProgressConstants;
 
 import br.com.totvs.tds.sdk.wrapper.IWrapperManager;
 import br.com.totvs.tds.ui.TDSUtil;
@@ -40,6 +43,8 @@ import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
  * @author acandido
  */
 public final class IncludeConfigurationComposite extends Composite {
+
+	private IAdaptable project;
 
 	private TreeViewer treeIncludes;
 
@@ -63,6 +68,7 @@ public final class IncludeConfigurationComposite extends Composite {
 
 	private final List<IncludeDataModel> includeList = new ArrayList<IncludeDataModel>();
 	private final List<IModifyIncludeListener> modifyIncludeListeners = new ArrayList<IModifyIncludeListener>(); // changeproperties
+	private Button btnModal;
 
 	/**
 	 * Create the composite.
@@ -70,8 +76,9 @@ public final class IncludeConfigurationComposite extends Composite {
 	 * @param parent , composite
 	 * @param style  , estilo
 	 */
-	public IncludeConfigurationComposite(final Composite parent, final int style) {
-		super(parent, style);
+	public IncludeConfigurationComposite(final Composite parent, final IAdaptable project) {
+		super(parent, SWT.NONE);
+		this.project = project;
 
 		final Composite container = this;
 		container.setLayout(new GridLayout(2, false));
@@ -97,7 +104,7 @@ public final class IncludeConfigurationComposite extends Composite {
 	private void createButtons(final Composite container) {
 		final Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout());
-		composite.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, true, 1, 1));
+		composite.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 1));
 
 		btnGlobal = new Button(composite, SWT.PUSH);
 		btnGlobal.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
@@ -107,8 +114,8 @@ public final class IncludeConfigurationComposite extends Composite {
 
 		btnWorkspace = new Button(composite, SWT.PUSH);
 		btnWorkspace.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
-		btnWorkspace.setToolTipText("Adiciona a �rea de trabalho corrente");
-		btnWorkspace.setText("�rea de Trabalho");
+		btnWorkspace.setToolTipText("Adiciona a área de trabalho corrente");
+		btnWorkspace.setText("área de Trabalho");
 		btnWorkspace.setImage(imgWorkspace);
 
 		btnInc = new Button(composite, SWT.PUSH);
@@ -140,10 +147,15 @@ public final class IncludeConfigurationComposite extends Composite {
 		btnSearch.setToolTipText("Pesquisar pastas com arquivos de definições.");
 		btnSearch.setText("Pesquisar");
 		btnSearch.setImage(imgSearch); // $NON-NLS-1$
+		btnSearch.setEnabled(this.project != null);
+
+		btnModal = new Button(composite, SWT.CHECK);
+		btnModal.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnModal.setText("Modal");
 	}
 
 	/**
-	 * Cria a �rvore para as definições.
+	 * Cria a árvore para as definições.
 	 *
 	 * @param container
 	 */
@@ -155,7 +167,7 @@ public final class IncludeConfigurationComposite extends Composite {
 		treeIncludes = new TreeViewer(container,
 				SWT.BORDER | SWT.SCROLL_PAGE | SWT.MULTI | SWT.FULL_SELECTION | SWT.FILL);
 		final Tree tree = this.treeIncludes.getTree();
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 7));
+		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		treeIncludes.setContentProvider(new IncludeListContentProvider());
 		treeIncludes.setLabelProvider(new IncludeListLabelProvider());
@@ -164,7 +176,7 @@ public final class IncludeConfigurationComposite extends Composite {
 	}
 
 	/**
-	 * Definine as ações dos bot�es.
+	 * Definine as ações dos botões.
 	 */
 	private void actions() {
 		btnWorkspace.addSelectionListener(new SelectionAdapter() {
@@ -303,7 +315,7 @@ public final class IncludeConfigurationComposite extends Composite {
 	}
 
 	/**
-	 * Adiciona uma pasta selecionada a partir da �rea de trabalho.
+	 * Adiciona uma pasta selecionada a partir da área de trabalho.
 	 */
 	private void workspaceInclude() {
 		final ContainerSelectionDialog selectDialog = new ContainerSelectionDialog(getShell(), null, true,
@@ -370,7 +382,7 @@ public final class IncludeConfigurationComposite extends Composite {
 	}
 
 	/**
-	 * Controla a disponibilidade dos bot�es.
+	 * Controla a disponibilidade dos botões.
 	 */
 	private void enabledButtons() {
 		final boolean enabled = true;
@@ -461,9 +473,16 @@ public final class IncludeConfigurationComposite extends Composite {
 		final String result = selectDirectory("Selecione a pasta inicial para a busca.");
 
 		if (!result.isEmpty()) {
-			SdkUIActivator.logStatus(IStatus.WARNING, "Procura",
-					"Iniciando processo de busca de arquivos de definição. Ao final, voc� ser� notificado.\n\tSe desejar pode iniciar nova busca em paralelo.");
+			SdkUIActivator.logStatus(IStatus.WARNING,
+					"Iniciando processo de busca de arquivos de definição.\n\tAo final você receberá uma notificado.");
+
+			final Object[] includes = includeList.stream().map(IIncludeDataModel::getFolder)
+					.collect(Collectors.toList()).toArray();
+
 			final SearchIncludeFoldersJob job = new SearchIncludeFoldersJob(result);
+			job.setProperty(IProgressConstants.PROPERTY_IN_DIALOG, btnModal.getSelection());
+			job.setProperty(SearchIncludeFoldersJob.PROJECT, project);
+			job.setProperty(SearchIncludeFoldersJob.CURRENT_LIST, includes);
 			job.schedule();
 		}
 	}

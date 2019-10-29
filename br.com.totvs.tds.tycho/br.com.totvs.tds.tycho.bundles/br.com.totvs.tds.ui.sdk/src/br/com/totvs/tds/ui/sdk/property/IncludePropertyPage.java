@@ -16,7 +16,7 @@ import br.com.totvs.tds.ui.sdk.widget.IncludeConfigurationComposite;
 
 /**
  * Propriedade do Projeto - definição da lista de busca de includes.
- * 
+ *
  * @author acandido
  */
 public class IncludePropertyPage extends PropertyPage implements IWorkbenchPropertyPage {
@@ -34,15 +34,17 @@ public class IncludePropertyPage extends PropertyPage implements IWorkbenchPrope
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+	 *
+	 * @see
+	 * org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.
+	 * widgets.Composite)
 	 */
 	@Override
 	protected Control createContents(final Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
+		final Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 
-		includeConfiguration = new IncludeConfigurationComposite(container, SWT.NONE);
+		this.includeConfiguration = new IncludeConfigurationComposite(container, getElement());
 		this.includeConfiguration.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		loadData();
@@ -52,7 +54,7 @@ public class IncludePropertyPage extends PropertyPage implements IWorkbenchPrope
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.preference.PreferencePage#performOk()
 	 */
 	@Override
@@ -65,7 +67,7 @@ public class IncludePropertyPage extends PropertyPage implements IWorkbenchPrope
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.jface.preference.PreferencePage#performApply()
 	 */
 	@Override
@@ -81,10 +83,10 @@ public class IncludePropertyPage extends PropertyPage implements IWorkbenchPrope
 	 */
 	private void saveData() {
 		try {
-			IAdaptable element = getElement();
-			IProjectWrapper wrapperProject = (IProjectWrapper) WrapperManager.getInstance().getWrapper(element);
+			final IAdaptable element = getElement();
+			final IProjectWrapper wrapperProject = (IProjectWrapper) WrapperManager.getInstance().getWrapper(element);
 			wrapperProject.setIncludeSearchList(includeConfiguration.getIncludeSelection());
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			e.printStackTrace();
 		}
 	}
@@ -94,10 +96,10 @@ public class IncludePropertyPage extends PropertyPage implements IWorkbenchPrope
 	 */
 	private void loadData() {
 		try {
-			IAdaptable element = getElement();
-			IProjectWrapper wrapperProject = (IProjectWrapper) WrapperManager.getInstance().getWrapper(element);
+			final IAdaptable element = getElement();
+			final IProjectWrapper wrapperProject = (IProjectWrapper) WrapperManager.getInstance().getWrapper(element);
 			includeConfiguration.setIncludeSelection(wrapperProject.getIncludeSearchList());
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

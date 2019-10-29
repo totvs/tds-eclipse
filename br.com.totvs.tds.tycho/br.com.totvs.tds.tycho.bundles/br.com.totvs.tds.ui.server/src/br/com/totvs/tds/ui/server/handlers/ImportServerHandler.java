@@ -1,16 +1,14 @@
 /**
  *
  */
-package br.com.totvs.tds.ui.server.commands;
+package br.com.totvs.tds.ui.server.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
-
-import br.com.totvs.tds.ui.server.handlers.ServerHandler;
 
 /**
  * @author acandido
  */
-public class ImportServerCommand extends ServerHandler {
+public class ImportServerHandler extends ServerHandler {
 
 	/*
 	 * (non-Javadoc)

@@ -30,6 +30,8 @@ public class SlaveRegisterHandler extends ServerHandler {
 			server.setServerType(slave.getServerType());
 			server.setVersion(master.getVersion());
 			server.setSmartClientPath(master.getSmartClientPath());
+			server.setLocalServer(master.isLocalServer());
+			server.setAppServerPath(master.getAppServerPath());
 
 			parent.addChild(server);
 		} else {

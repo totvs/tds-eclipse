@@ -139,7 +139,7 @@ public class ApplyPatchPage extends WizardPage {
 		this.attributes = attributes;
 
 		IWorkbench serviceLocator = PlatformUI.getWorkbench();
-		serviceLocator.getService(ILanguageServerService.class);
+//		serviceLocator.getService(ILanguageServerService.class);
 		serverManager = serviceLocator.getService(IServerManager.class);
 	}
 
@@ -642,7 +642,7 @@ public class ApplyPatchPage extends WizardPage {
 		for (IAppServerInfo server : activeServers) {
 			String serverName = server.getName();
 			cmbServer.add(serverName);
-			serverMap.put(serverName, (IAppServerInfo) server);
+			serverMap.put(serverName, server);
 		}
 	}
 

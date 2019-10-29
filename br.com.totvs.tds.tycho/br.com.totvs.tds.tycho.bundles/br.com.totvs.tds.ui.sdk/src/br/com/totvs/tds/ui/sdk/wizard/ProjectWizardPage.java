@@ -6,8 +6,6 @@ import java.util.Arrays;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -15,12 +13,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import br.com.totvs.tds.sdk.wrapper.ProjectVO;
-import br.com.totvs.tds.ui.sdk.widget.IModifyIncludeListener;
 import br.com.totvs.tds.ui.sdk.widget.IncludeConfigurationComposite;
 
 /**
  * Implementation to wizard project page.
- * 
+ *
  * @author Audrin
  */
 public class ProjectWizardPage extends WizardPage {
@@ -35,7 +32,7 @@ public class ProjectWizardPage extends WizardPage {
 
 	/**
 	 * P�gina principal do Wizard para criar um projeto.
-	 * 
+	 *
 	 * @param pageName
 	 */
 	public ProjectWizardPage(final ISelection selection, final ProjectVO voProject) {
@@ -51,41 +48,30 @@ public class ProjectWizardPage extends WizardPage {
 	@Override
 	public final void createControl(final Composite parent) {
 
-		Composite container = new Composite(parent, SWT.FILL);
-		GridLayout layout = new GridLayout();
+		final Composite container = new Composite(parent, SWT.FILL);
+		final GridLayout layout = new GridLayout();
 		container.setLayout(layout);
 		layout.numColumns = NUM_COLUMNS;
 		layout.verticalSpacing = VERTICAL_SPACING;
 
-		Label labelProject = new Label(container, SWT.NULL);
+		final Label labelProject = new Label(container, SWT.NULL);
 		labelProject.setText(Messages.ProjectWizardPage_Name);
 		txtNameProject = new Text(container, SWT.BORDER | SWT.SINGLE);
 		txtNameProject.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		txtNameProject.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(final ModifyEvent e) {
-				dialogChanged();
-			}
-		});
+		txtNameProject.addModifyListener(e -> dialogChanged());
 
 		new Label(container, SWT.NULL);
 		new Label(container, SWT.NULL);
 
-		GridData gridDataPathList = new GridData(GridData.FILL_BOTH);
+		final GridData gridDataPathList = new GridData(GridData.FILL_BOTH);
 		gridDataPathList.grabExcessHorizontalSpace = true;
 		gridDataPathList.grabExcessVerticalSpace = true;
 		gridDataPathList.horizontalSpan = 2;
 
-		containerIncludePath = new IncludeConfigurationComposite(container, SWT.NONE);
+		containerIncludePath = new IncludeConfigurationComposite(container, null);
 		containerIncludePath.setLayoutData(gridDataPathList);
-		containerIncludePath.addModifyIncludeListener(new IModifyIncludeListener() {
-			@Override
-			public void modifyIncludes() {
-				updateIncludes();
-			}
-		});
+		containerIncludePath.addModifyIncludeListener(() -> updateIncludes());
 
 		initialize();
 		dialogChanged();
@@ -114,7 +100,7 @@ public class ProjectWizardPage extends WizardPage {
 	}
 
 	private void updateIncludes() {
-		String[] includeSelection = containerIncludePath.getIncludeSelection();
+		final String[] includeSelection = containerIncludePath.getIncludeSelection();
 		voProject.includes = new ArrayList<String>(Arrays.asList(includeSelection));
 	}
 

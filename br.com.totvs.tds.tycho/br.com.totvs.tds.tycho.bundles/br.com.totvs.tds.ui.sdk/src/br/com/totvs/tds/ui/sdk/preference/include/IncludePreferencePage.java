@@ -16,7 +16,7 @@ import br.com.totvs.tds.ui.sdk.widget.IncludeConfigurationComposite;
 
 /**
  * Define a PreferencePage de Includes de projetos.
- * 
+ *
  * @author Audrin
  * @author acandido
  */
@@ -36,15 +36,18 @@ public class IncludePreferencePage extends PreferencePage implements IWorkbenchP
 
 	/*
 	 * (non-Javadoc)
-	 * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+	 * 
+	 * @see
+	 * org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.
+	 * widgets.Composite)
 	 */
 	@Override
 	protected Control createContents(final Composite parent) {
-		String globalIncludes = getPreferenceStore().getString(ISDKPreferenceKeys.GLOBAL_INCLUDE);
+		final String globalIncludes = getPreferenceStore().getString(ISDKPreferenceKeys.GLOBAL_INCLUDE);
 
-		Composite container = new Composite(parent, SWT.NONE);
+		final Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
-		cpProjIncludePath = new IncludeConfigurationComposite(container, SWT.NONE);
+		cpProjIncludePath = new IncludeConfigurationComposite(container, null);
 		cpProjIncludePath.setGlobalVisible(false);
 		cpProjIncludePath.setIncludeSelection(globalIncludes);
 
@@ -53,6 +56,7 @@ public class IncludePreferencePage extends PreferencePage implements IWorkbenchP
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performApply()
 	 */
 	@Override
@@ -64,6 +68,7 @@ public class IncludePreferencePage extends PreferencePage implements IWorkbenchP
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.preference.PreferencePage#performOk()
 	 */
 	@Override
@@ -75,6 +80,7 @@ public class IncludePreferencePage extends PreferencePage implements IWorkbenchP
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
@@ -86,9 +92,9 @@ public class IncludePreferencePage extends PreferencePage implements IWorkbenchP
 	 * Salva configuração global.
 	 */
 	private void saveData() {
-		String includeList = cpProjIncludePath.getIncludeSelectionAsString();
+		final String includeList = cpProjIncludePath.getIncludeSelectionAsString();
 
 		getPreferenceStore().setValue(ISDKPreferenceKeys.GLOBAL_INCLUDE, includeList);
-		WrapperManager.getInstance().setGlobalList(includeList.split(IWrapperManager.INCLUDES_SEPARATOR)); //$NON-NLS-1$
+		WrapperManager.getInstance().setGlobalList(includeList.split(IWrapperManager.INCLUDES_SEPARATOR)); // $NON-NLS-1$
 	}
 }

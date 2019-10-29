@@ -15,10 +15,9 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerSlaveInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.interfaces.IServerSlaveHubInfo;
+import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 /**
@@ -46,7 +45,7 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 	private final IServerManager serverManager;
 
 	/**
-	 * Construtor b�sico.
+	 * Construtor básico.
 	 */
 	public ServerViewDecorator() {
 		serverManager = ServerActivator.getDefault().getServerManager();
@@ -55,6 +54,38 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 	@Override
 	public void addListener(final ILabelProviderListener listener) {
 
+	}
+
+	/**
+	 * @param element
+	 * @param decoration
+	 */
+	private void decorate(final IAppServerInfo element, final IDecoration decoration) {
+		element.getPersistentPropertyBoolean("isDuplicated"); //$NON-NLS-1$
+
+		decoration.setFont(decorateFont(element));
+
+		if (element.isConnected()) {
+			decoration.addOverlay(ServerUIIcons.getConnected(), IDecoration.BOTTOM_RIGHT);
+		}
+
+		if (element.isBlockedToConnection()) {
+			decoration.addOverlay(ServerUIIcons.getBlocked(), IDecoration.TOP_RIGHT);
+		}
+
+		if (ServerType.PROTHEUS.equals(element.getServerType())) {
+			decoration.addOverlay(ServerUIIcons.getProtheus(), IDecoration.TOP_LEFT);
+		} else if (ServerType.LOGIX.equals(element.getServerType())) {
+			decoration.addOverlay(ServerUIIcons.getLogix(), IDecoration.TOP_LEFT);
+		}
+
+		if (element.isLocalServer()) {
+			if (element.isRunning()) {
+				decoration.addOverlay(ServerUIIcons.getRunning(), IDecoration.BOTTOM_LEFT);
+			} else {
+				decoration.addOverlay(ServerUIIcons.getStopped(), IDecoration.BOTTOM_LEFT);
+			}
+		}
 	}
 
 	/**
@@ -86,37 +117,6 @@ public class ServerViewDecorator implements ILightweightLabelDecorator, IFontDec
 			decoration.addOverlay(ServerUIIcons.getMultiEnvironment(), IDecoration.BOTTOM_LEFT);
 		}
 		decoration.setFont(decorateFont(element));
-	}
-
-	/**
-	 * @param element
-	 * @param decoration
-	 */
-	private void decorate(final IAppServerInfo element, final IDecoration decoration) {
-		element.getPersistentPropertyBoolean("isDuplicated"); //$NON-NLS-1$
-
-		if (element.isConnected()) {
-			decoration.addOverlay(ServerUIIcons.getConnected(), IDecoration.BOTTOM_RIGHT);
-			decoration.setFont(decorateFont(element));
-			if (element.isBlockedToConnection()) {
-				decoration.addOverlay(ServerUIIcons.getBlocked(), IDecoration.TOP_RIGHT);
-			}
-		}
-
-		if (element instanceof IAppServerInfo) {
-			IAppServerInfo appServerInfo = (IAppServerInfo) element;
-
-			if (ServerType.PROTHEUS.equals(element.getServerType())) {
-				decoration.addOverlay(ServerUIIcons.getProtheus(), IDecoration.TOP_LEFT);
-			} else if (ServerType.LOGIX.equals(element.getServerType())) {
-				decoration.addOverlay(ServerUIIcons.getLogix(), IDecoration.TOP_LEFT);
-			}
-
-			if (appServerInfo.isRunning()) {
-				decoration.addOverlay(ServerUIIcons.getRunning());
-			}
-		}
-
 	}
 
 	/*

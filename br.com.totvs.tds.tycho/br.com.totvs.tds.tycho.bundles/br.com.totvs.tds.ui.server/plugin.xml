@@ -108,6 +108,7 @@
                 </and>
           </visibleWhen>
        </command>
+       
        <command
              commandId="br.com.totvs.tds.ui.server.commands.slaveRegisterCommand"
              icon="icons/registerSlave.png"
@@ -116,6 +117,16 @@
 				<reference definitionId="br.com.totvs.tds.ui.server.isSlave" />
 			</visibleWhen>
        </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.server.commands.activateCommand"
+             icon="icons/activate.png"
+             tooltip="Ativa o ambiente selecionado, colocando-o como corrente.">
+			<visibleWhen checkEnabled="false">
+				<reference definitionId="br.com.totvs.tds.ui.server.isEnvironment" />
+			</visibleWhen>
+       </command>
+
        <menu
              label="%menu.label.0">
 			<visibleWhen checkEnabled="false">
@@ -371,6 +382,11 @@
           defaultHandler="br.com.totvs.tds.ui.server.handlers.SlaveRegisterHandler"
           id="br.com.totvs.tds.ui.server.commands.slaveRegisterCommand"
           name="%command.name.6">
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.server.handlers.ActivateHandler"
+          id="br.com.totvs.tds.ui.server.commands.activateCommand"
+          name="Selecionar">
     </command>
     <command
     	defaultHandler="br.com.totvs.tds.ui.server.handlers.BuildPatchHandler"

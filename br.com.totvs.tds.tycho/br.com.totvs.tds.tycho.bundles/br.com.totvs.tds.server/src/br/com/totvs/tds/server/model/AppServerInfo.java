@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.core.ILaunchesListener;
 import org.eclipse.equinox.security.storage.ISecurePreferences;
 import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
@@ -52,6 +51,8 @@ import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.server.jobs.ServerReturn;
 import br.com.totvs.tds.server.jobs.ValidationPatchReturn;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchReturn;
+import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
+import br.com.totvs.tds.server.rulers.ServerRules;
 
 /**
  * Servidor Protheus.
@@ -92,7 +93,7 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 
 	private boolean showConsole;
 
-	private ILaunchesListener launcher;
+	private LocalAppServerLauncher appLauncher;
 
 	/**
 	 * Construtor.
@@ -423,9 +424,15 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 			currentEnvironment = (String) in.readObject();
 			multiEnvironmentSelection = (List<String>) in.readObject();
 			currentOrganization = (IOrganization) in.readObject();
-			final boolean connected = in.readBoolean();
-			setUseSecureStorage(in.readBoolean());
-			setConnected(connected && loadLoginInfo());
+			setConnected(in.readBoolean());
+			final boolean isSecureStorage = in.readBoolean();
+			setUseSecureStorage(isSecureStorage);
+
+			if (isSecureStorage) {
+				loadLoginInfo();
+			} else {
+				deleteLoginInfo();
+			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -437,7 +444,10 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 
 	@Override
 	public void doWriteExternal(final ObjectOutput out) throws IOException {
-		out.writeLong(CURRENT_VERSION);
+		final boolean isSecureStorage = getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
+				.equals(true);
+
+		out.writeLong(AppServerInfo.CURRENT_VERSION);
 
 		out.writeObject(address);
 		out.writeObject(serverType);
@@ -445,19 +455,15 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 		out.writeObject(currentEnvironment);
 		out.writeObject(multiEnvironmentSelection);
 		out.writeObject(currentOrganization);
-		final boolean isSecureStorage = getConnectionMap().getOrDefault(IServerConstants.USE_SECURE_STORAGE, false)
-				.equals(true);
-		out.writeBoolean(isConnected());
-		out.writeBoolean(isSecureStorage);
 
-		try {
-			if (isSecureStorage) {
-				saveLoginInfo();
-			} else {
-				deleteLoginInfo();
-			}
-		} catch (final StorageException e) {
-			e.printStackTrace();
+		if (isSecureStorage) {
+			out.writeBoolean(isConnected());
+			out.writeBoolean(isSecureStorage);
+			saveLoginInfo();
+		} else {
+			out.writeBoolean(false);
+			out.writeBoolean(false);
+			deleteLoginInfo();
 		}
 	}
 
@@ -493,30 +499,6 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public boolean isAppServerLocal() {
-		return !getAppServerPath().isEmpty();
-	}
-
-	@Override
-	public boolean isRunning() {
-		return this.launcher != null;
-	}
-
-	@Override
-	public void setLauncher(final ILaunchesListener launcher) {
-		firePropertyChange("launcher", this.launcher, this.launcher = launcher); //$NON-NLS-1$
-
-		if (!isRunning()) {
-			setConnected(false);
-		}
-	}
-
-	@Override
-	public ILaunchesListener getLauncher() {
-		return this.launcher;
-	}
-
-	@Override
 	public void setLocalServer(final boolean localServer) {
 		setPersistentProperty(IServerConstants.LOCAL_SERVER, localServer);
 	}
@@ -528,21 +510,29 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 
 	@Override
 	public boolean authentication(final Map<String, Object> connectionMap) {
+		final String environment = (String) connectionMap.get(IServerConstants.ENVIRONMENT);
 
-		final Job job = new Job("Identificação") {
+		final Job job = new Job(String.format("Conexão %s/%s", getName(), environment)) {
 			@Override
 			public IStatus run(final IProgressMonitor monitor) {
-
 				final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 				final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
 				final String environment = (String) connectionMap.get(IServerConstants.ENVIRONMENT);
 				final String user = (String) connectionMap.get(IServerConstants.USERNAME);
 				final String password = (String) connectionMap.get(IServerConstants.PASSWORD);
+
+				monitor.beginTask(String.format("Servidor %s/%s", getName(), environment), 3);
+
+				monitor.setTaskName(String.format("Autenticando-se como %s", user));
+				monitor.worked(1);
+
 				final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(),
 						environment, user, password, getServerType().getCode());
 				final boolean isLogged = token != null;
 
+				monitor.setTaskName("Verificando permissões");
+				monitor.worked(1);
 				if (isLogged) {
 					final List<String> permissions = lsService.serverPermissions(token);
 					connectionMap.put(IServerConstants.TOKEN, token);
@@ -578,6 +568,7 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 			}
 		};
 
+		job.setRule(ServerRules.connectionRule);
 		job.schedule();
 
 		return true; // isLogged;
@@ -592,26 +583,34 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 		return String.format("developerStudio/%s/%s", getId(), environment.toUpperCase()); //$NON-NLS-1$
 	}
 
-	private void deleteLoginInfo() throws StorageException, IOException {
+	private void deleteLoginInfo() {
 		final String node = getNodeServerKey(currentEnvironment);
 		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
 
 		if (securePreference.nodeExists(node)) {
 			final ISecurePreferences credencial = securePreference.node(node);
 			credencial.removeNode();
-			credencial.flush();
+			try {
+				credencial.flush();
+			} catch (final IOException e) {
+				ServerActivator.logStatus(IStatus.WARNING, e.getMessage(), e);
+			}
 		}
 	}
 
-	private void saveLoginInfo() throws StorageException, IOException {
+	private void saveLoginInfo() {
 		final String node = getNodeServerKey(currentEnvironment);
 		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
 		final ISecurePreferences credencial = securePreference.node(node);
 
-		credencial.put(IServerConstants.USERNAME, (String) connectionMap.get(IServerConstants.USERNAME), true);
-		credencial.put(IServerConstants.PASSWORD, (String) connectionMap.get(IServerConstants.PASSWORD), true);
+		try {
+			credencial.put(IServerConstants.USERNAME, (String) connectionMap.get(IServerConstants.USERNAME), true);
+			credencial.put(IServerConstants.PASSWORD, (String) connectionMap.get(IServerConstants.PASSWORD), true);
 
-		credencial.flush();
+			credencial.flush();
+		} catch (StorageException | IOException e) {
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+		}
 	}
 
 	private boolean loadLoginInfo() throws StorageException, IOException {
@@ -998,6 +997,41 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	@Override
 	public void setServerType(final ServerType serverType) {
 		this.serverType = serverType;
+	}
+
+	@Override
+	public boolean isRunning() {
+
+		return (appLauncher != null) && (appLauncher.isRunning());
+	}
+
+	@Override
+	public void start() {
+		if (isRunning()) {
+			stop();
+		}
+
+		appLauncher = new LocalAppServerLauncher(getName(), getAppServerPath());
+		appLauncher.start();
+
+		firePropertyChange("running", false, true);
+	}
+
+	@Override
+	public void stop() {
+		appLauncher.stop();
+		firePropertyChange("running", true, false);
+	}
+
+	@Override
+	public void disconnect() {
+		if (isConnected()) {
+			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+			final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+
+			lsService.disconnect(getName(), getToken());
+			setConnected(false);
+		}
 	}
 
 }

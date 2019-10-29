@@ -11,15 +11,13 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
@@ -30,7 +28,6 @@ import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IRootInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
 import br.com.totvs.tds.server.model.AbstractBean;
 import br.com.totvs.tds.server.model.AppServerInfo;
 import br.com.totvs.tds.server.model.AuthorizationKey;
@@ -43,8 +40,10 @@ import br.com.totvs.tds.server.model.RootInfo;
  *
  * @author acandido
  */
-public final class ServerManagerImpl extends AbstractBean
-		implements IServerManager, PropertyChangeListener, IJobChangeListener {
+public final class ServerManagerImpl extends AbstractBean implements IServerManager, PropertyChangeListener {
+
+	@SuppressWarnings("unused")
+	private static final long serialVersionUID = 1L;
 
 	private static final long CURRENT_SERIAL_VERSION = 2L;
 
@@ -55,10 +54,7 @@ public final class ServerManagerImpl extends AbstractBean
 
 	private IGroupInfo rootGroupInfo;
 	private ByteArrayOutputStream tempSave;
-	protected IAppServerInfo auxCurrentServer;
 	private IAuthorizationKey authorizationKey;
-
-	private boolean firstReconnectTry = true;
 
 	/**
 	 * Construtor.
@@ -167,6 +163,7 @@ public final class ServerManagerImpl extends AbstractBean
 	@Override
 	public IAppServerInfo getServer(final String name) {
 		IAppServerInfo getServer = null;
+
 		if (name != null) {
 			for (final IAppServerInfo server : getServers(IAppServerInfo.class)) {
 				if (name.equalsIgnoreCase(server.getName())) {
@@ -175,6 +172,7 @@ public final class ServerManagerImpl extends AbstractBean
 				}
 			}
 		}
+
 		return getServer;
 	}
 
@@ -282,12 +280,17 @@ public final class ServerManagerImpl extends AbstractBean
 		setLoading(true);
 		unhookChangeListener(rootGroupInfo);
 
+		if (inputStream.available() == 0) {
+			ServerActivator.logStatus(IStatus.WARNING, "Arquivo de servidores vazio.");
+			return;
+		}
+
 		try {
 			final ObjectInputStream ois = new ObjectInputStream(inputStream);
 			final long serialVerion = ois.readLong();
 
 			if (serialVerion != CURRENT_SERIAL_VERSION) {
-				ServerActivator.logStatus(IStatus.WARNING, Messages.ServerManagerImpl_Server_manager,
+				ServerActivator.logStatus(IStatus.WARNING,
 						String.format(Messages.ServerManagerImpl_Server_manager_version_warning, CURRENT_SERIAL_VERSION,
 								serialVerion));
 			}
@@ -304,7 +307,7 @@ public final class ServerManagerImpl extends AbstractBean
 				}
 			}
 
-			auxCurrentServer = (IAppServerInfo) ois.readObject();
+			final String currentServerName = (String) ois.readObject();
 
 			@SuppressWarnings("unchecked")
 			final List<String> serversRunning = (ArrayList<String>) ois.readObject();
@@ -312,7 +315,7 @@ public final class ServerManagerImpl extends AbstractBean
 
 			final List<IAppServerInfo> activeServers = getActiveServers();
 
-			startLocalServesAndConnections(serversRunning, activeServers, 3000);
+			startLocalServesAndConnections(currentServerName, serversRunning, activeServers, 3000);
 		} finally {
 			hookChangeListener(rootGroupInfo);
 			setLoading(false);
@@ -320,13 +323,14 @@ public final class ServerManagerImpl extends AbstractBean
 		}
 	}
 
-	private void startLocalServesAndConnections(final List<String> serversRunning,
+	private void startLocalServesAndConnections(final String currentServerName, final List<String> serversRunning,
 			final List<IAppServerInfo> activeServers, final int delay) {
 
 		final Job job = new Job(Messages.ServerManagerImpl_Reconnections) {
 
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
+				final MultiStatus result = new MultiStatus(ServerActivator.PLUGIN_ID, 0, "Reconexão automática", null);
 
 				try {
 					if (!serversRunning.isEmpty()) {
@@ -334,13 +338,7 @@ public final class ServerManagerImpl extends AbstractBean
 
 						for (final String name : serversRunning) {
 							final IAppServerInfo server = getServer(name);
-							if (server instanceof IAppServerInfo) {
-								final IAppServerInfo appServer = server;
-								final LocalAppServerLauncher launcher = new LocalAppServerLauncher(appServer.getName(),
-										appServer.getAppServerPath());
-								launcher.start();
-								appServer.setLauncher(launcher);
-							}
+							server.start();
 						}
 					}
 
@@ -354,44 +352,52 @@ public final class ServerManagerImpl extends AbstractBean
 									"Reconexão automática.\n\tServidor: %s (%s)\n\tAmbiente: %s\n\tUsuário: %s",
 									serverInfo.getName(), serverInfo.getAddress(), serverInfo.getCurrentEnvironment(),
 									serverInfo.getUsername());
-							doReconnect(serverInfo);
+							result.add(doReconnect(serverInfo));
 						}
 					}
 
 					Display.getDefault().syncExec(() -> {
-						if ((auxCurrentServer != null) && (auxCurrentServer.isConnected())) {
-							ServerManagerImpl.this.setCurrentServer(auxCurrentServer);
+						final IAppServerInfo server = getServer(currentServerName);
+
+						if ((server != null) && (server.isConnected())) {
+							ServerManagerImpl.this.setCurrentServer(server);
 						} else {
 							ServerManagerImpl.this.setCurrentServer(null);
 						}
 					});
-					return Status.OK_STATUS;
 				} catch (final Exception e) {
-					return ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+					result.add(ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e));
 				}
+
+				if (result.isOK()) {
+					return Status.OK_STATUS;
+				}
+
+				return result;
 			}
 		};
-
-		job.addJobChangeListener(this);
 		job.schedule(delay);
 	}
 
-	protected void doReconnect(final IAppServerInfo serverInfo) {
+	protected IStatus doReconnect(final IAppServerInfo serverInfo) {
 		boolean isLogged = false;
+		IStatus result = Status.OK_STATUS;
 
 		try {
 			final Map<String, Object> connectionMap = serverInfo.getConnectionMap();
 			isLogged = serverInfo.authentication(connectionMap);
 
 			if (!isLogged) {
-				ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection_refused_server,
+				result = ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection_refused_server,
 						serverInfo.getName(), serverInfo.getCurrentEnvironment());
 			}
 		} catch (final Exception e) {
-			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection_refused_server,
+			result = ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Connection_refused_server,
 					serverInfo.getName(), serverInfo.getCurrentEnvironment());
 			ServerActivator.logStatus(IStatus.ERROR, Messages.ServerManagerImpl_Cause, e.getMessage());
 		}
+
+		return result;
 	}
 
 	/*
@@ -469,16 +475,16 @@ public final class ServerManagerImpl extends AbstractBean
 		oos.writeLong(CURRENT_SERIAL_VERSION);
 
 		oos.writeObject(rootGroupInfo);
-		oos.writeObject(currentServer);
+		oos.writeObject(currentServer.getName());
 
 		final List<String> serversRunning = new ArrayList<String>();
 		for (final IAppServerInfo server : getServers()) {
-			if (server instanceof IAppServerInfo) {
-				if (server.isRunning()) {
-					serversRunning.add(server.getName());
-				}
+			if (server.isRunning()) {
+				serversRunning.add(server.getName());
+				server.stop();
 			}
 		}
+
 		oos.writeObject(serversRunning);
 
 		oos.flush();
@@ -493,6 +499,7 @@ public final class ServerManagerImpl extends AbstractBean
 	@Override
 	public void setCurrentServer(final IAppServerInfo newServer) {
 		boolean change = false;
+
 		// verifica a necessidade da troca
 		if ((currentServer == null) && (newServer != null)) {
 			change = true;
@@ -599,52 +606,4 @@ public final class ServerManagerImpl extends AbstractBean
 
 		return authorizationKey;
 	}
-
-	@Override
-	public void aboutToRun(final IJobChangeEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void awake(final IJobChangeEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void done(final IJobChangeEvent event) {
-		final IStatus result = event.getResult();
-
-		if (!result.isOK()) {
-			if (firstReconnectTry) {
-				ServerActivator.logStatus(IStatus.WARNING,
-						"Processo de reconexão falhou em sua primeira tentativa.\n\tTentando mais uma vez");
-				startLocalServesAndConnections(Collections.emptyList(), getActiveServers(), 3000);
-			} else {
-				ServerActivator.logStatus(IStatus.ERROR, "Processo de reconexão falhou em suas tentativas.");
-			}
-			firstReconnectTry = false;
-		}
-
-	}
-
-	@Override
-	public void running(final IJobChangeEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void scheduled(final IJobChangeEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void sleeping(final IJobChangeEvent event) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

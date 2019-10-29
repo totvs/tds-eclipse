@@ -6,11 +6,11 @@ import java.beans.PropertyChangeSupport;
 
 /**
  * ModelObject.
- * 
+ *
  * @author leo.watanabe
- * 
+ *
  */
-public class AbstractBean {
+public abstract class AbstractBean {
 
 	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
@@ -30,7 +30,7 @@ public class AbstractBean {
 		changeSupport.removePropertyChangeListener(propertyName, listener);
 	}
 
-	protected void firePropertyChange(PropertyChangeEvent event) {
+	protected void firePropertyChange(final PropertyChangeEvent event) {
 		changeSupport.firePropertyChange(event);
 	}
 

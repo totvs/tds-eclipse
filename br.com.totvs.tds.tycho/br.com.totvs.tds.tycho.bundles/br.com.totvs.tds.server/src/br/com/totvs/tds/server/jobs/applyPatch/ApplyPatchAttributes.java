@@ -3,10 +3,7 @@ package br.com.totvs.tds.server.jobs.applyPatch;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
-
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 
@@ -100,8 +97,7 @@ public class ApplyPatchAttributes implements Cloneable {
 
 	public List<IAppServerInfo> getServerList() {
 		if (activeServers == null) {
-			final IWorkbench serviceLocator = PlatformUI.getWorkbench();
-			final IServerManager serverManager = serviceLocator.getService(IServerManager.class);
+			final IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 			activeServers = serverManager.getActiveServers(IAppServerInfo.class);
 		}
 

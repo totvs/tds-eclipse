@@ -186,7 +186,6 @@ public class ServerEditDialog extends EditTitleAreaDialog {
 
 	@Override
 	protected void doValidadeInput() {
-		// TODO Auto-generated method stub
 		getButton(IDialogConstants.OK_ID).setEnabled(false);
 	}
 
@@ -198,16 +197,14 @@ public class ServerEditDialog extends EditTitleAreaDialog {
 
 	@Override
 	protected void saveInput() {
-		serverInfo.setName(txtServerName.getText());
 		URI uri = (URI.create("//" + txtAddress.getText() + ":" + txtPort.getText())); //$NON-NLS-1$ //$NON-NLS-2$
+
+		serverInfo.setName(txtServerName.getText());
 		serverInfo.setAddress(uri);
 		serverInfo.setSmartClientPath(txtSmartClientPath.getText());
 		serverInfo.setVersion(txtVersion.getText());
-		if (btnLocalServer.getSelection()) {
-			serverInfo.setAppServerPath(txtAppServerPath.getText());
-		} else {
-			serverInfo.setAppServerPath(Messages.ServerEditDialog_EMPTY_STRING);
-		}
+		serverInfo.setAppServerPath(txtAppServerPath.getText());
+		serverInfo.setLocalServer(btnLocalServer.getSelection());
 	}
 
 	@Override
@@ -224,6 +221,6 @@ public class ServerEditDialog extends EditTitleAreaDialog {
 		txtPort.setText(String.valueOf(serverInfo.getAppServerPort()));
 		txtVersion.setText(serverInfo.getVersion());
 		txtAppServerPath.setText(serverInfo.getAppServerPath());
-		btnLocalServer.setEnabled(serverInfo.isAppServerLocal());
+		btnLocalServer.setEnabled(serverInfo.isLocalServer());
 	}
 }

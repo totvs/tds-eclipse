@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.equinox.security,
  br.com.totvs.tds.server;bundle-version="11.4.0",
  br.com.totvs.tds.ui.sdk,
- br.com.totvs.tds.sdk
+ br.com.totvs.tds.sdk,
+ org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: br.com.totvs.tds.ui.sdk
 Bundle-ActivationPolicy: lazy

@@ -3,21 +3,32 @@ package br.com.totvs.tds.ui.sdk.job;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FilenameFilter;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.progress.IProgressConstants;
+import org.eclipse.ui.progress.UIJob;
 
-import br.com.totvs.tds.sdk.wrapper.IWrapperManager;
+import br.com.totvs.tds.sdk.wrapper.IProjectWrapper;
+import br.com.totvs.tds.sdk.wrapper.WrapperManager;
 import br.com.totvs.tds.ui.sdk.SdkUIActivator;
+import br.com.totvs.tds.ui.sdk.SdkUIIcons;
+import br.com.totvs.tds.ui.sdk.dialog.SearchIncludeResultDialog;
 import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
 
-public class SearchIncludeFoldersJob extends Job {
+public class SearchIncludeFoldersJob extends UIJob {
+	public static final QualifiedName PROJECT = new QualifiedName("searchIncludeFoldersJob", "project");
+	public static final QualifiedName CURRENT_LIST = new QualifiedName("searchIncludeFoldersJob", "current.list");
 
 	private String targetFolder;
 	private int countVisitedFolders = 0;
@@ -25,81 +36,112 @@ public class SearchIncludeFoldersJob extends Job {
 	private FileFilter filterFolders;
 	private FilenameFilter filterHeaderFile;
 
-	public SearchIncludeFoldersJob(String targetFolder) {
+	public SearchIncludeFoldersJob(final String targetFolder) {
 		super(String.format(Messages.SearchIncludeFoldersJob_Search_folders_definition_files, targetFolder));
 
 		this.targetFolder = targetFolder;
+
+		setUser(true);
 	}
 
 	@Override
-	protected IStatus run(IProgressMonitor monitor) {
-
+	public IStatus runInUIThread(final IProgressMonitor monitor) {
 		monitor.beginTask(Messages.SearchIncludeFoldersJob_Searching, IProgressMonitor.UNKNOWN);
 
-		filterFolders = new FileFilter() {
+		filterFolders = pathname -> pathname.isDirectory();
+		filterHeaderFile = (dir, name) -> name.toLowerCase().endsWith(".ch") || name.toLowerCase().endsWith(".LOGIX");
 
-			@Override
-			public boolean accept(File pathname) {
-
-				return pathname.isDirectory();
-			}
-		};
-
-		filterHeaderFile = new FilenameFilter() {
-
-			@Override
-			public boolean accept(File dir, String name) {
-
-				return name.toLowerCase().endsWith(".ch") || name.toLowerCase().endsWith(".LOGIX"); // #FIX: header //$NON-NLS-1$ //$NON-NLS-2$
-																									// logix
-			}
-		};
-
-		File dir = new File(targetFolder);
+		final File dir = new File(targetFolder);
 		if (!dir.isDirectory()) {
-			return SdkUIActivator.showStatus(IStatus.ERROR, Messages.SearchIncludeFoldersJob_Target_resource_not_folder, targetFolder);
+			return SdkUIActivator.showStatus(IStatus.ERROR, Messages.SearchIncludeFoldersJob_Target_resource_not_folder,
+					targetFolder);
 		}
 
 		searchFolders(dir, monitor);
 
-		if (monitor.isCanceled() && !folders.isEmpty()) {
-			return SdkUIActivator.showStatus(IStatus.CANCEL, String.format(Messages.SearchIncludeFoldersJob_Partial_search, "dialog:result_search"), //$NON-NLS-2$
-					Messages.SearchIncludeFoldersJob_Folders_were_found,
-					URI.create("dialog:result_search"), folders.size(), countVisitedFolders, //$NON-NLS-1$
-					ISDKPreferenceKeys.RESULT_SEARCH);
-		}
-
 		if (folders.isEmpty()) {
-			return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK, Messages.SearchIncludeFoldersJob_No_definition_files_found,
-					targetFolder);
+			return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK,
+					Messages.SearchIncludeFoldersJob_No_definition_files_found, targetFolder);
 		}
 
-		synchronized (SdkUIActivator.getDefault().getPreferenceStore()) {
-			StringJoiner result = new StringJoiner(IWrapperManager.INCLUDES_SEPARATOR);
+		setProperty(IProgressConstants.ICON_PROPERTY, getImage());
+		if (isModal(this)) {
+			showResults();
+		} else {
+			setProperty(IProgressConstants.KEEP_PROPERTY, Boolean.TRUE);
+			setProperty(IProgressConstants.ACTION_PROPERTY, getCompletedAction());
+		}
 
-			for (String folder : folders) {
-				result.add(folder);
-			}
+		monitor.setTaskName(Messages.SearchIncludeFoldersJob_Search_completed);
 
-			IPreferenceStore ps = SdkUIActivator.getDefault().getPreferenceStore();
-			String actual = ps.getString(ISDKPreferenceKeys.RESULT_SEARCH);
+		if (monitor.isCanceled()) {
+			SdkUIActivator.logStatus(IStatus.CANCEL,
+					Messages.SearchIncludeFoldersJob_Partial_search + "\n\t"
+							+ Messages.SearchIncludeFoldersJob_Folders_were_found,
+					folders.size(), countVisitedFolders, ISDKPreferenceKeys.RESULT_SEARCH);
+		} else {
+			return SdkUIActivator.logStatus(IStatus.OK, Messages.SearchIncludeFoldersJob_Folders_were_found,
+					folders.size(), countVisitedFolders);
+		}
 
-			if (actual != null) {
-				String[] items = actual.split(IWrapperManager.INCLUDES_SEPARATOR);
-				for (String item : items) {
-					if (!folders.contains(item)) {
-						result.add(item);
+		return SdkUIActivator.showStatus(monitor.isCanceled() ? IStatus.CANCEL : IStatus.OK, "Busca finalizada.");
+	}
+
+	protected void showResults() {
+		Display.getDefault().asyncExec(() -> getCompletedAction().run());
+	}
+
+	protected Action getCompletedAction() {
+		return new Action("Busca por pastas de definição") {
+			@Override
+			public void run() {
+				final Object[] currentList = (Object[]) getProperty(SearchIncludeFoldersJob.CURRENT_LIST);
+				final IProject project = (IProject) getProperty(SearchIncludeFoldersJob.PROJECT);
+
+				final SearchIncludeResultDialog dialog = new SearchIncludeResultDialog();
+
+				dialog.setTitle("Pastas com arquivos de definições");
+				dialog.setMessage("Selecione as pastas a ser incluídas na busca.");
+				dialog.setElements(folders);
+				dialog.setBlockOnOpen(true);
+
+				if (dialog.open() == Window.OK) {
+					final Object[] result = dialog.getResult();
+
+					if (result.length > 0) {
+						try {
+							final IProjectWrapper wrapperProject = WrapperManager.getInstance().getWrapper(project);
+							final List<String> selecteds = new ArrayList<String>();
+
+							for (final Object object : currentList) {
+								selecteds.add((String) object);
+							}
+							for (final Object object : result) {
+								selecteds.add((String) object);
+							}
+
+							wrapperProject.setIncludeSearchList(selecteds.toArray(new String[selecteds.size()]));
+						} catch (final CoreException e) {
+							SdkUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
+						}
 					}
 				}
 			}
+		};
+	}
 
-			ps.setValue(ISDKPreferenceKeys.RESULT_SEARCH, result.toString());
+	private boolean isModal(final Job job) {
+		final Boolean isModal = (Boolean) getProperty(IProgressConstants.PROPERTY_IN_DIALOG);
+
+		if (isModal == null) {
+			return false;
 		}
 
-		return SdkUIActivator.showStatus(IStatus.OK, String.format(Messages.SearchIncludeFoldersJob_Search_completed, "dialog:result_search"), //$NON-NLS-2$
-				Messages.SearchIncludeFoldersJob_Folders_were_found,
-				URI.create(Messages.SearchIncludeFoldersJob_15), folders.size(), countVisitedFolders,
-				ISDKPreferenceKeys.RESULT_SEARCH);
+		return isModal.booleanValue();
+	}
+
+	private Image getImage() {
+		return SdkUIIcons.getSearch().createImage();
 	}
 
 	private void searchFolders(final File folder, final IProgressMonitor monitor) {
@@ -112,15 +154,15 @@ public class SearchIncludeFoldersJob extends Job {
 		parcialPath = "..." + parcialPath.substring(targetFolder.length() - 1); //$NON-NLS-1$
 		monitor.subTask(String.format(" #%d [%s]", countVisitedFolders, parcialPath)); //$NON-NLS-1$
 
-		String[] fileList = folder.list(filterHeaderFile);
+		final String[] fileList = folder.list(filterHeaderFile);
 
 		if ((fileList != null) && (fileList.length > 0)) {
 			this.folders.add(folder.getAbsolutePath());
 		}
 
-		File[] folderList = folder.listFiles(filterFolders);
+		final File[] folderList = folder.listFiles(filterFolders);
 		if (folderList != null) {
-			for (File subfolder : folderList) {
+			for (final File subfolder : folderList) {
 				searchFolders(subfolder, monitor);
 			}
 		}

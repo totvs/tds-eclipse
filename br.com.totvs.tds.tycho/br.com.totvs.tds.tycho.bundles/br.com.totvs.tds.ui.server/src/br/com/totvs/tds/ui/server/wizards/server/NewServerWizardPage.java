@@ -24,9 +24,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.launcher.LocalAppServerLauncher;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.internal.ServerUtils;
@@ -383,10 +381,7 @@ public class NewServerWizardPage extends WizardPage {
 				ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
 
 				if (server.isLocalServer()) {
-					LocalAppServerLauncher launcher = new LocalAppServerLauncher(server.getName(),
-							server.getAppServerPath());
-					launcher.start();
-					server.setLauncher(launcher);
+					server.start();
 				}
 
 				String version = lsService.validation(server.getAddress());
@@ -402,8 +397,8 @@ public class NewServerWizardPage extends WizardPage {
 					dialogChanged();
 				}
 
-				if (server.getLauncher() != null) {
-					((LocalAppServerLauncher) server.getLauncher()).stop();
+				if (server.isLocalServer()) {
+					server.stop();
 				}
 			}
 		});

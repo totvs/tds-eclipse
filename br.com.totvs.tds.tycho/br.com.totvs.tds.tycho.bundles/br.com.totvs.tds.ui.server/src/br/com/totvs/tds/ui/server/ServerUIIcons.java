@@ -142,9 +142,6 @@ public final class ServerUIIcons {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/resource.png"); //$NON-NLS-1$
 	}
 
-	/**
-	 * @return the refreshMessage
-	 */
 	public static ImageDescriptor getRunning() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/running.png"); //$NON-NLS-1$
 	}
@@ -163,6 +160,10 @@ public final class ServerUIIcons {
 
 	public static ImageDescriptor getSource() {
 		return ServerUIActivator.getDefault().getImageDescriptor("icons/source.png"); //$NON-NLS-1$
+	}
+
+	public static ImageDescriptor getStopped() {
+		return ServerUIActivator.getDefault().getImageDescriptor("icons/stopped.png"); //$NON-NLS-1$
 	}
 
 	public static ImageDescriptor getTemplate() {

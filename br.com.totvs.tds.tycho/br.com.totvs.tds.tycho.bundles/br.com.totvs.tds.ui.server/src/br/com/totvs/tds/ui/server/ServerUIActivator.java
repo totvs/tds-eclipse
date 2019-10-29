@@ -4,9 +4,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.services.IServiceLocator;
 import org.osgi.framework.BundleContext;
 
+import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.TDSMessageHandler;
 
 /**
@@ -103,6 +106,11 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 	@SuppressWarnings("deprecation")
 	public ImageDescriptor getImageDescriptor(final String path) {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
+	}
+
+	public IServerManager getServerManager() {
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		return serviceLocator.getService(IServerManager.class);
 	}
 
 	/*

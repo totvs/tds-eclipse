@@ -1,66 +1,59 @@
 package br.com.totvs.tds.sdk.wrapper;
 
- import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 
 /**
- * Interface do gerenciador de invï¿½lucro.
- * 
+ * Interface do gerenciador de invólucro.
+ *
  * @author acandido
- * 
+ *
  */
 public interface IWrapperManager {
 
 	String INCLUDES_SEPARATOR = ";"; //$NON-NLS-1$
 
 	/**
-	 * Recupera o invï¿½lucro conforme o tipo de recurso (IResource ou IModelElement).
-	 * 
-	 * @param element
-	 *            , recurso do qual deseja-se o invï¿½lucro.
+	 * Recupera o invï¿½lucro conforme o tipo de recurso (IResource ou
+	 * IModelElement).
+	 *
+	 * @param element , recurso do qual deseja-se o invï¿½lucro.
 	 * @return invï¿½lucro
-	 * 
-	 * @throws CoreException
-	 *             , indica falha de acesso a 'SessionProperties'. <br/>
-	 * 
+	 *
+	 * @throws CoreException , indica falha de acesso a 'SessionProperties'. <br/>
+	 *
 	 */
 	IResourceWrapper getWrapper(Object element) throws CoreException;
 
 	/**
 	 * Recupera o invï¿½lucro conforme o tipo de recurso.
-	 * 
-	 * @param resource
-	 *            , recurso do qual deseja-se o invï¿½lucro.
+	 *
+	 * @param resource , recurso do qual deseja-se o invï¿½lucro.
 	 * @return invï¿½lucro
-	 * 
-	 * @throws CoreException
-	 *             , indica falha de acesso a 'SessionProperties'.
+	 *
+	 * @throws CoreException , indica falha de acesso a 'SessionProperties'.
 	 */
 	IResourceWrapper getWrapper(IResource resource) throws CoreException;
 
 	/**
 	 * Recupera o invï¿½lucro de projetos.
-	 * 
-	 * @param project
-	 *            , recurso do qual deseja-se o invï¿½lucro.
+	 *
+	 * @param project , recurso do qual deseja-se o invï¿½lucro.
 	 * @return invï¿½lucro
-	 * 
-	 * @throws CoreException
-	 *             , indica falha de acesso a 'SessionProperties'.
+	 *
+	 * @throws CoreException , indica falha de acesso a 'SessionProperties'.
 	 */
 	IProjectWrapper getWrapper(IProject project) throws CoreException;
 
 	/**
 	 * Recupera o invï¿½lucro de IWorkspace.
-	 * 
+	 *
 	 * @author Audrin
-	 * @param workspace
-	 *            , workspace do qual deseja-se o invï¿½lucro.
+	 * @param workspace , workspace do qual deseja-se o invï¿½lucro.
 	 * @return invï¿½lucro de IWorkspace
-	 * @throws CoreException
-	 *             , indica falha de acesso a 'SessionProperties'.
+	 * @throws CoreException , indica falha de acesso a 'SessionProperties'.
 	 */
 	IWorkspaceWrapper getWorkspaceWrapper(IWorkspace workspace) throws CoreException;
 
