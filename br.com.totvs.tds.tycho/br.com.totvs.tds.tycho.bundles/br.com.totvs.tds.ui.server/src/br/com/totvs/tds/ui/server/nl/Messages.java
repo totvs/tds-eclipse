@@ -53,7 +53,7 @@ public class Messages extends NLS {
 
 	public static String LoginHandler_connection_in_processs;
 
-	public static String LoginHandler_connection_ok;
+	public static String LoginHandler_connection_solicited;
 
 	public static String LoginHandler_connection_server_identify;
 

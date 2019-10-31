@@ -5,13 +5,13 @@
 <booleanAttribute key="automaticAdd" value="true"/>
 <booleanAttribute key="automaticValidate" value="false"/>
 <stringAttribute key="bootstrap" value=""/>
-<stringAttribute key="checked" value="org.eclipse.debug.core,org.eclipse.lsp4e.debug"/>
+<stringAttribute key="checked" value="org.eclipse.lsp4e.debug"/>
 <booleanAttribute key="clearConfig" value="true"/>
 <booleanAttribute key="clearws" value="false"/>
 <booleanAttribute key="clearwslog" value="false"/>
 <stringAttribute key="configLocation" value="${workspace_loc}/.metadata/.plugins/org.eclipse.pde.core/TDS 11.4"/>
 <booleanAttribute key="default" value="false"/>
-<stringAttribute key="deselected_workspace_plugins" value="br.com.totvs.tds.ui.server.test,org.eclipse.lsp4e"/>
+<stringAttribute key="deselected_workspace_plugins" value="br.com.totvs.tds.ui.server.test"/>
 <booleanAttribute key="includeOptional" value="true"/>
 <stringAttribute key="location" value="${workspace_loc}/../runtime-EclipseApplication"/>
 <stringAttribute key="org.eclipse.debug.core.source_locator_id" value="org.eclipse.pde.ui.launcher.PDESourceLookupDirector"/>
@@ -290,7 +290,7 @@
 <mapEntry key="org.eclipse.jface/trace/toolbarDisposal" value="false"/>
 <mapEntry key="org.eclipse.lsp4e.debug/debug" value="true"/>
 <mapEntry key="org.eclipse.lsp4e.debug/trace/io" value="true"/>
-<mapEntry key="org.eclipse.lsp4e.debug/trace/messages" value="false"/>
+<mapEntry key="org.eclipse.lsp4e.debug/trace/messages" value="true"/>
 <mapEntry key="org.eclipse.lsp4e/debug" value="true"/>
 <mapEntry key="org.eclipse.ltk.core.refactoring/perf/participants/checkConditions" value="300"/>
 <mapEntry key="org.eclipse.ltk.core.refactoring/perf/participants/createChanges" value="300"/>

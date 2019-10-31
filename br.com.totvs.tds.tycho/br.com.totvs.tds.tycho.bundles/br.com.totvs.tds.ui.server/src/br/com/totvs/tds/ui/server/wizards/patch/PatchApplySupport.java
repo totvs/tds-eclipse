@@ -2,21 +2,14 @@ package br.com.totvs.tds.ui.server.wizards.patch;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
-import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;
 import br.com.totvs.tds.server.model.SourceInformation;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 
@@ -78,96 +71,6 @@ public class PatchApplySupport {
 		return patchDetails;
 	}
 
-	private String environment;
-	private IAppServerInfo currentServer;
-
 	Set<IFile> patchFilesSet = new HashSet<IFile>();
-
-	private List<IFile> getFiles(final IContainer container) throws CoreException {
-		List<IFile> files = new ArrayList<IFile>();
-		IResource[] members = container.members();
-		for (IResource iResource : members) {
-			// if (iResource instanceof IContainer) {
-			// files.addAll(getFiles((IContainer) iResource));
-			// } else
-			if (iResource instanceof IFile) {
-				files.add((IFile) iResource);
-			}
-		}
-		return files;
-	}
-
-	private List<IFile> getPatchFiles(final Object resource) throws CoreException {
-		List<IFile> patchFiles = new ArrayList<IFile>();
-		List<IFile> fileList = new ArrayList<IFile>();
-		if (resource instanceof IContainer) {
-			IContainer iContainer = (IContainer) resource;
-			fileList = getFiles(iContainer);
-		} else if (resource instanceof IFile) {
-			IFile iFile = (IFile) resource;
-			fileList.add(iFile);
-		}
-		for (IFile iFile : fileList) {
-			if (isPatchFile(iFile)) {
-				patchFiles.add(iFile);
-			}
-		}
-		return patchFiles;
-	}
-
-	private boolean isPatchFile(final IFile iFile) {
-		boolean isPatchFile = false;
-		String fileExtension = iFile.getFileExtension();
-		if ("PTM".equalsIgnoreCase(fileExtension) || "UPD".equalsIgnoreCase(fileExtension) //$NON-NLS-1$ //$NON-NLS-2$
-				|| "PAK".equalsIgnoreCase(fileExtension)) { //$NON-NLS-1$
-			isPatchFile = true;
-		}
-		return isPatchFile;
-	}
-
-	private List<ApplyPatchFileReturn> patchFilesToApplyPatchFileReturn(final Set<IFile> patchFiles) {
-		List<ApplyPatchFileReturn> patchFilesToApplyPatchFileReturn = new ArrayList<ApplyPatchFileReturn>();
-		ApplyPatchFileReturn applyPatchFileReturn = null;
-		for (IFile iFile : patchFiles) {
-			applyPatchFileReturn = new ApplyPatchFileReturn(iFile.getLocation().toOSString());
-			applyPatchFileReturn.setLocal(true);
-			patchFilesToApplyPatchFileReturn.add(applyPatchFileReturn);
-		}
-		return patchFilesToApplyPatchFileReturn;
-	}
-
-	private void setEnvironmentInternal(final IItemInfo itemInfo) throws Exception {
-		IAppServerInfo serverInfo = null;
-
-		if (itemInfo != null) {
-			if (itemInfo instanceof IEnvironmentInfo) {
-				environment = itemInfo.getName();
-				IItemInfo parent = itemInfo.getParent();
-				if (parent instanceof IAppServerInfo) {
-					serverInfo = (IAppServerInfo) parent;
-					if (serverInfo != null && serverInfo.isConnected()) {
-						currentServer = serverInfo;
-					}
-				}
-			} else if (environment == null && currentServer != null) {
-				environment = currentServer.getCurrentEnvironment();
-			}
-		}
-	}
-
-	private void setServerInternal(final IItemInfo itemInfo) throws Exception {
-		IAppServerInfo serverInfo = null;
-
-		if (itemInfo != null && itemInfo instanceof IAppServerInfo) {
-			serverInfo = (IAppServerInfo) itemInfo;
-			if (serverInfo != null && serverInfo.isConnected()) {
-				currentServer = serverInfo;
-
-				if ((currentServer != null) && (environment == null)) {
-					environment = currentServer.getCurrentEnvironment();
-				}
-			}
-		}
-	}
 
 }

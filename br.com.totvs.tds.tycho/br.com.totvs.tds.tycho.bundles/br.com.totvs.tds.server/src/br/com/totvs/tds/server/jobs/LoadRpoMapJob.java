@@ -11,7 +11,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IRpoElement;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.model.RpoTypeElement;
 
 /**

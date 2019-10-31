@@ -4,7 +4,8 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "br.com.totvs.tds.ui.debug.launcher.messages"; //$NON-NLS-1$
-	public static String DebugLaunchDelegate_COMMAND_LINE_execution;
+	public static String DebugLaunchDelegate_CommandLine_execution;
+	public static String DebugLaunchDelegate_CommandLine_DA_execution;
 	public static String DebugLaunchDelegate_Coverage;
 	public static String DebugLaunchDelegate_Debug;
 	public static String DebugLaunchDelegate_Executor_parameters_invalid;

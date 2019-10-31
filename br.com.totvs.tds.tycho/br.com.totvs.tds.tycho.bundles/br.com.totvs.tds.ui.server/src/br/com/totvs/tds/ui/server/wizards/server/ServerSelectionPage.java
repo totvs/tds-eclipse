@@ -23,6 +23,11 @@ import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseListener;
+import java.util.function.Consumer;
+import org.eclipse.swt.events.MouseEvent;
 
 /**
  * Seleção de assistente para criação de novo servidor.
@@ -81,6 +86,29 @@ public class ServerSelectionPage extends WizardSelectionPage {
 		new Label(composite1, SWT.NONE);
 
 		projectType = new TableViewer(composite);
+		Table table = projectType.getTable();
+		table.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.out
+						.println("ServerSelectionPage.createControl(...).new MouseListener() {...}.mouseDoubleClick()");
+				System.out.println(e);
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 2;
 		projectType.getTable().setLayoutData(gridData);

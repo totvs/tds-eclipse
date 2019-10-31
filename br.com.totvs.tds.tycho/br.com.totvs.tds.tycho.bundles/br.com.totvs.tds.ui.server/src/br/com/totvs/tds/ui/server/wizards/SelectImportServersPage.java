@@ -99,6 +99,7 @@ public class SelectImportServersPage extends WizardPage {
 		return originalName + newExtension;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private void checkServersSelecionados(final TreeItem[] items) {
 		Map<String, IItemInfo> mapFontes = attributes.getItemsSelected();
 		for (int i = 0; i < items.length; i++) {

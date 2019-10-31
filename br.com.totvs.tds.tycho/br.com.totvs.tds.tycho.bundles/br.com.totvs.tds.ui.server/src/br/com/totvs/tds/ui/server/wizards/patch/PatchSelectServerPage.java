@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Tree;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.jobs.BuildPatchAttributes;
 import br.com.totvs.tds.server.jobs.BuildPatchProcessType;

@@ -67,33 +67,20 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 
 	private static final long CURRENT_VERSION = 1L;
 
-	private URI address;
-
-	private String computerName;
-
-	private boolean connected;
-
-	private ServerType serverType;
-
-	private IOrganization currentOrganization;
-
-	private Map<String, Object> connectionMap = new HashMap<String, Object>();
-
-	private String currentEnvironment;
-
-	private final List<IEnvironmentInfo> environments = new ArrayList<IEnvironmentInfo>();
-
-	private IServerSlaveHubInfo hub;
-
+	private volatile URI address;
+	private volatile String computerName;
+	private volatile boolean connected;
+	private volatile ServerType serverType;
+	private volatile IOrganization currentOrganization;
+	private volatile Map<String, Object> connectionMap = new HashMap<String, Object>();
+	private volatile String currentEnvironment;
+	private volatile List<IEnvironmentInfo> environments = new ArrayList<IEnvironmentInfo>();
+	private volatile IServerSlaveHubInfo hub;
 	private volatile boolean monitoring;
-
-	private List<String> multiEnvironmentSelection = new ArrayList<String>();
-
-	private boolean settingBlock;
-
-	private boolean showConsole;
-
-	private LocalAppServerLauncher appLauncher;
+	private volatile List<String> multiEnvironmentSelection = new ArrayList<String>();
+	private volatile boolean settingBlock;
+	private volatile boolean showConsole;
+	private volatile LocalAppServerLauncher appLauncher;
 
 	/**
 	 * Construtor.
@@ -414,27 +401,24 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	@Override
 	public void doReadExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
 		@SuppressWarnings("unused")
+
 		final long version = in.readLong();
 
 		address = (URI) in.readObject();
 		serverType = (ServerType) in.readObject();
 
-		//
-		try {
-			currentEnvironment = (String) in.readObject();
-			multiEnvironmentSelection = (List<String>) in.readObject();
-			currentOrganization = (IOrganization) in.readObject();
-			setConnected(in.readBoolean());
-			final boolean isSecureStorage = in.readBoolean();
-			setUseSecureStorage(isSecureStorage);
+		currentEnvironment = (String) in.readObject();
+		multiEnvironmentSelection = (List<String>) in.readObject();
+		currentOrganization = (IOrganization) in.readObject();
+		final boolean isConnected = in.readBoolean();
+		final boolean isSecureStorage = in.readBoolean();
 
-			if (isSecureStorage) {
-				loadLoginInfo();
-			} else {
-				deleteLoginInfo();
-			}
-		} catch (final Exception e) {
-			e.printStackTrace();
+		setConnected(isConnected);
+		setUseSecureStorage(isSecureStorage);
+		if (isSecureStorage) {
+			loadLoginInfo();
+		} else {
+			deleteLoginInfo();
 		}
 	}
 
@@ -456,13 +440,12 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 		out.writeObject(multiEnvironmentSelection);
 		out.writeObject(currentOrganization);
 
+		out.writeBoolean(isConnected());
+		out.writeBoolean(isSecureStorage);
+
 		if (isSecureStorage) {
-			out.writeBoolean(isConnected());
-			out.writeBoolean(isSecureStorage);
 			saveLoginInfo();
 		} else {
-			out.writeBoolean(false);
-			out.writeBoolean(false);
 			deleteLoginInfo();
 		}
 	}
@@ -613,18 +596,22 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 		}
 	}
 
-	private boolean loadLoginInfo() throws StorageException, IOException {
-		final String node = getNodeServerKey(currentEnvironment);
-		final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
+	private boolean loadLoginInfo() {
+		try {
+			final String node = getNodeServerKey(currentEnvironment);
+			final ISecurePreferences securePreference = SecurePreferencesFactory.getDefault();
 
-		if (securePreference.nodeExists(node)) {
-			final ISecurePreferences credencial = securePreference.node(node);
+			if (securePreference.nodeExists(node)) {
+				final ISecurePreferences credencial = securePreference.node(node);
 
-			connectionMap.put(IServerConstants.ENVIRONMENT, currentEnvironment);
-			connectionMap.put(IServerConstants.USERNAME, credencial.get(IServerConstants.USERNAME, "")); //$NON-NLS-1$
-			connectionMap.put(IServerConstants.PASSWORD, credencial.get(IServerConstants.PASSWORD, "")); //$NON-NLS-1$
+				connectionMap.put(IServerConstants.ENVIRONMENT, currentEnvironment);
+				connectionMap.put(IServerConstants.USERNAME, credencial.get(IServerConstants.USERNAME, "")); //$NON-NLS-1$
+				connectionMap.put(IServerConstants.PASSWORD, credencial.get(IServerConstants.PASSWORD, "")); //$NON-NLS-1$
 
-			return true;
+				return true;
+			}
+		} catch (final Exception e) {
+			ServerActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
 		connectionMap.remove(IServerConstants.ENVIRONMENT);

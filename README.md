@@ -168,7 +168,11 @@ Leitura complementar: [[Fazendo fork]], [[Estrutura do TDS-Eclipse]], [[Diretriz
 
 ## Problemas Conhecidos
 
+## Problemas Conhecidos
+
 1. Incompatibilidade da lista de servidores registrados no [TDS-VSCode](https://github.com/totvs/tds-vscode) ou em **TDS** anteriores a versão 11.4. Assim como, a lista de servidores do **TDS 11.4** também não é compatível com essas aplicações.
 Chamados #11 e #12.
 
 2. Testes automatizados devem ser executados um a um.
+
+3. Em quedas bruscas do AppServer o LS/DA fica com instância presa (intermitente)

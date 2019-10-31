@@ -24,7 +24,7 @@ import org.eclipse.lsp4e.debug.launcher.DSPLaunchDelegate;
 
 import com.google.gson.Gson;
 
-import br.com.totvs.tds.lsp.server.ActivatorServer;
+import br.com.totvs.tds.lsp.server.LspActivator;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerConstants;
@@ -83,7 +83,7 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		if (lp.isShowCommandLine()) {
 			final StringJoiner sj = new StringJoiner("]\n\t[", "[", "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-			sj.add(Messages.DebugLaunchDelegate_COMMAND_LINE_execution);
+			sj.add(Messages.DebugLaunchDelegate_CommandLine_execution);
 			for (final String value : commandLine) {
 				sj.add(value);
 			}
@@ -91,18 +91,29 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 			DebugUIActivator.showStatus(IStatus.INFO, sj.toString());
 		}
 
-		final List<String> daargs = ActivatorServer.getInstance().getDAArgs();
+		try {
+			wk.setAttribute(DSPPlugin.ATTR_DSP_CMD, LspActivator.getInstance().getDACommand());
+		} catch (final IOException e) {
+			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, e.getMessage(), e));
+		}
+		final List<String> daargs = LspActivator.getInstance().getDAArgs();
+
+		if (lp.isShowCommandLine()) {
+			final StringJoiner sj = new StringJoiner("]\n\t[", "[", "]"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+			sj.add(Messages.DebugLaunchDelegate_CommandLine_execution);
+			sj.add(wk.getAttribute(DSPPlugin.ATTR_DSP_CMD, "<>"));
+			for (final String value : daargs) {
+				sj.add(value);
+			}
+
+			DebugUIActivator.showStatus(IStatus.INFO, sj.toString());
+		}
 
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MODE, DSPPlugin.DSP_MODE_LAUNCH);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_MONITOR_DEBUG_ADAPTER, false);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_ARGS, daargs);
 		wk.setAttribute(DSPPlugin.ATTR_DSP_PARAM, getDspParam(mode, lp));
-
-		try {
-			wk.setAttribute(DSPPlugin.ATTR_DSP_CMD, ActivatorServer.getInstance().getDACommand());
-		} catch (final IOException e) {
-			throw new CoreException(DebugUIActivator.showStatus(IStatus.ERROR, e.getMessage(), e));
-		}
 
 		super.launch(wk, mode, launch, monitor);
 	}

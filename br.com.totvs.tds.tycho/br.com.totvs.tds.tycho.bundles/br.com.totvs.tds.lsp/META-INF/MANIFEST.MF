@@ -5,15 +5,15 @@ Bundle-SymbolicName: br.com.totvs.tds.lsp;singleton:=true
 Bundle-Version: 11.4.0.qualifier
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
  org.eclipse.lsp4e,
  org.eclipse.lsp4j,
- org.eclipse.lsp4j.jsonrpc,
- org.eclipse.ui
+ org.eclipse.lsp4j.jsonrpc
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: br.com.totvs.tds.lsp
 Export-Package: br.com.totvs.tds.lsp.server;uses:="org.osgi.framework,br.com.totvs.tds.lsp.server.model.protocol",
  br.com.totvs.tds.lsp.server.model;uses:="org.eclipse.lsp4e.server",
  br.com.totvs.tds.lsp.server.model.node,
  br.com.totvs.tds.lsp.server.model.protocol;uses:="org.eclipse.lsp4j.services,org.eclipse.lsp4e,br.com.totvs.tds.lsp.server.model.node"
-Bundle-Activator: br.com.totvs.tds.lsp.server.ActivatorServer
+Bundle-Activator: br.com.totvs.tds.lsp.server.LspActivator
 Bundle-ActivationPolicy: lazy

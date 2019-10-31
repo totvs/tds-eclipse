@@ -1,6 +1,12 @@
 * Problemas conhecidos
-- Sintaxe destacada não funciona (não reproduzido)
-- Em quedas bruscas do appServer o LS fica com instância presa (intermitente)
+- Em quedas bruscas do appServer o LS/DA fica com instância presa (intermitente)
 
 * Melhorias
 - Inicialização de ambiente master/slave local
+
+* Falta
+- Monitor
+- Assistentes AdvPL
+- Integração com Dicionários de Dados
+- Exemplos AdvPL
+- EGG (necessita refinar a interface e o processo)

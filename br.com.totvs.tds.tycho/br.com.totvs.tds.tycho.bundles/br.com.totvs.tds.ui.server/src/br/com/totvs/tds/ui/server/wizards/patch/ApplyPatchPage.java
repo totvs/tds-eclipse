@@ -44,10 +44,8 @@ import org.eclipse.ui.PlatformUI;
 
 import com.google.common.io.Files;
 
-import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchAttributes;
 import br.com.totvs.tds.server.jobs.applyPatch.ApplyPatchFileReturn;

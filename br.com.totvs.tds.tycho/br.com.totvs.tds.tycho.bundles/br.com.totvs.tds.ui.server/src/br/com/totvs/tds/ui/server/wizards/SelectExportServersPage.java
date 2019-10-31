@@ -28,10 +28,8 @@ import org.eclipse.swt.widgets.TreeItem;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.server.tools.ExportTool;
-import br.com.totvs.tds.server.xml.Group;
 import br.com.totvs.tds.server.xml.ObjectFactory;
 import br.com.totvs.tds.server.xml.XMLServerRoot;
 import br.com.totvs.tds.ui.server.nl.Messages;
@@ -98,6 +96,7 @@ public class SelectExportServersPage extends WizardPage {
 		return fOriginalName + newExtension;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	private void checkServersSelecionados(final TreeItem[] items) {
 		Map<String, IItemInfo> mapFontes = attributes.getItemsSelected();
 		for (int i = 0; i < items.length; i++) {
@@ -139,20 +138,20 @@ public class SelectExportServersPage extends WizardPage {
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
-				IItemInfo nodeElement = (IItemInfo) event.getElement();
-				boolean isChecked = event.getChecked();
-				Group serverTreeRoot = xmlServerRoot.getServerTreeRoot();
-				if (isChecked) {
-					System.out.println(
-							"SelectExportServersPage.createControl(...).new ICheckStateListener() {...}.checkStateChanged()"); //$NON-NLS-1$
-//					ServerUIUtil.checkParents(nodeElement, objectFactory, serverTreeRoot, checkboxTreeViewer);
-//					ServerUIUtil.checkChildren(nodeElement, objectFactory, serverTreeRoot, checkboxTreeViewer);
-				} else {
-//					ServerUIUtil.unCheckParents(nodeElement, serverTreeRoot, checkboxTreeViewer);
-				}
-				if (!(nodeElement instanceof IAppServerInfo)) {
-					checkboxTreeViewer.setSubtreeChecked(nodeElement, event.getChecked());
-				}
+//				IItemInfo nodeElement = (IItemInfo) event.getElement();
+//				boolean isChecked = event.getChecked();
+//				Group serverTreeRoot = xmlServerRoot.getServerTreeRoot();
+//				if (isChecked) {
+//					System.out.println(
+//							"SelectExportServersPage.createControl(...).new ICheckStateListener() {...}.checkStateChanged()"); //$NON-NLS-1$
+////					ServerUIUtil.checkParents(nodeElement, objectFactory, serverTreeRoot, checkboxTreeViewer);
+////					ServerUIUtil.checkChildren(nodeElement, objectFactory, serverTreeRoot, checkboxTreeViewer);
+//				} else {
+////					ServerUIUtil.unCheckParents(nodeElement, serverTreeRoot, checkboxTreeViewer);
+//				}
+//				if (!(nodeElement instanceof IAppServerInfo)) {
+//					checkboxTreeViewer.setSubtreeChecked(nodeElement, event.getChecked());
+//				}
 				dialogChanged();
 			}
 		});

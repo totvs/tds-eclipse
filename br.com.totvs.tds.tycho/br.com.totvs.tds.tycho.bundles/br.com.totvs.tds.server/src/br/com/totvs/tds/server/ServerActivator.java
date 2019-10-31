@@ -178,6 +178,7 @@ public final class ServerActivator extends Plugin {
 		} finally {
 			if (os != null) {
 				try {
+					os.flush();
 					os.close();
 				} catch (final IOException e) {
 				}

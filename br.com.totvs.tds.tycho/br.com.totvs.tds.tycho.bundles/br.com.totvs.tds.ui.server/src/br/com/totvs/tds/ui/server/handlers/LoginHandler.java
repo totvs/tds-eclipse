@@ -75,7 +75,7 @@ public class LoginHandler extends ServerHandler {
 		environment = event.getParameter("environment"); //$NON-NLS-1$
 
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
-		server = (IAppServerInfo) serverManager.getServer(serverName);
+		server = serverManager.getServer(serverName);
 
 		if (server == null) {
 			throw new ExecutionException(String.format(Messages.LoginHandler_29, serverName));
@@ -90,8 +90,7 @@ public class LoginHandler extends ServerHandler {
 					IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 					if (ok) {
 						serverManager.setCurrentServer(server);
-						ServerUIActivator.logStatus(IStatus.OK, Messages.LoginHandler_connection_ok, server.getName(),
-								server.getCurrentEnvironment(), server.getConnectionMap().get(ILoginDialog.USERNAME));
+						ServerUIActivator.logStatus(IStatus.OK, Messages.LoginHandler_connection_solicited, server.getName());
 					} else {
 						serverManager.setCurrentServer(null);
 					}

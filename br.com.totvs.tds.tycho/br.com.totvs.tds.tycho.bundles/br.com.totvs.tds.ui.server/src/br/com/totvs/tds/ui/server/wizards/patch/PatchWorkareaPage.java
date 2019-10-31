@@ -103,7 +103,7 @@ public class PatchWorkareaPage extends WizardExportResourcesPage {
 		return result;
 	}
 
-	private List<IFile> getFiles(List resources) {
+	private List<IFile> getFiles(List<?> resources) {
 		List<IFile> result = new ArrayList<IFile>();
 
 		for (Object element : resources) {

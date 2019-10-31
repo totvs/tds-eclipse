@@ -311,10 +311,10 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		IStatus status = Status.OK_STATUS;
 		if (applyPatchNode == null) {
-			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
+			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN,
 					"Erro desconhecido. Verifique o log de console.");
 		} else if (applyPatchNode.getReturnCode() != 0) {
-			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
+			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
 					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
 		}
 
@@ -352,10 +352,10 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		IStatus status = Status.OK_STATUS;
 		if (applyPatchNode == null) {
-			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN,
+			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN,
 					"Erro desconhecido. Verifique o log de console.");
 		} else if (applyPatchNode.getReturnCode() != 0) {
-			status = new Status(IStatus.ERROR, ActivatorServer.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
+			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
 					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
 		}
 

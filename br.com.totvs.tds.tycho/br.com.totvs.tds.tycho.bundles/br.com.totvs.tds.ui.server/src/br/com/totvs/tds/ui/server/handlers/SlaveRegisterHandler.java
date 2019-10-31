@@ -33,6 +33,11 @@ public class SlaveRegisterHandler extends ServerHandler {
 			server.setLocalServer(master.isLocalServer());
 			server.setAppServerPath(master.getAppServerPath());
 
+			for (String key : server.getPropertyNames​()) {
+				server.setProperty(key, master.getProperty(key));
+			}
+
+			server.setConnected(false);
 			parent.addChild(server);
 		} else {
 			ServerUIActivator.logStatus(IStatus.WARNING, Messages.SlaveRegisterHandler_item_not_slave,

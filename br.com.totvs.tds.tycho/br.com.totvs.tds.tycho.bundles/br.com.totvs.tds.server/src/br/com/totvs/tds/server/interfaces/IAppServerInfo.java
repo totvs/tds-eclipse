@@ -30,7 +30,7 @@ public interface IAppServerInfo extends IItemInfo {
 	/**
 	 * Retorna a porta de conexão.
 	 *
-	 * @return porta de conexão çãoplicação servidora.
+	 * @return porta de conexão da aplicação servidora.
 	 */
 	int getAppServerPort();
 

@@ -12,7 +12,7 @@ import java.beans.PropertyChangeSupport;
  */
 public abstract class AbstractBean {
 
-	private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+	private volatile PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
 	public void addPropertyChangeListener(final PropertyChangeListener listener) {
 		changeSupport.addPropertyChangeListener(listener);

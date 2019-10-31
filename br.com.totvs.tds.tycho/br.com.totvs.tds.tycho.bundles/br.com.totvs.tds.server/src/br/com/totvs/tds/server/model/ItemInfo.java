@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Properties;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +22,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	/** Identificador de versão. */
 	private static final long serialVersionUID = 1L;
-	private static final long SERIAL_ID = 4L;
+	private static final long VERSION_ID = 4L;
 	private static final String VALID_PATTERN = "^[a-zA-Z0-9\\.\\-\\ _@#$]*$"; //$NON-NLS-1$
 
 	/**
@@ -41,13 +42,12 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 	}
 
 	/** Identificador único. */
-	private UUID id = UUID.randomUUID();
-	private String messageError;
-	private IItemInfo parent;
-	private Properties persistentProperties = new Properties();
-	private final Properties properties = new Properties();
-
-	protected String name;
+	private volatile UUID id = UUID.randomUUID();
+	private volatile String messageError;
+	private volatile IItemInfo parent;
+	private volatile Properties persistentProperties = new Properties();
+	private volatile Properties properties = new Properties();
+	protected volatile String name;
 
 	/**
 	 * Construtor.
@@ -203,7 +203,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 
 	@Override
 	public final void readExternal(final ObjectInput in) throws IOException, ClassNotFoundException {
-		in.readLong(); // ignorar SERIAL_ID -- versão
+		in.readLong(); // ignorar VERSION_ID -- versão
 
 		id = (UUID) in.readObject();
 		name = (String) in.readObject();
@@ -215,7 +215,7 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 	@Override
 	public final void writeExternal(final ObjectOutput out) throws IOException {
 		if (isPersistent()) {
-			out.writeLong(SERIAL_ID);
+			out.writeLong(VERSION_ID);
 			//
 			out.writeObject(id);
 			out.writeObject(name);
@@ -223,6 +223,15 @@ public abstract class ItemInfo extends AbstractBean implements IItemInfo {
 			//
 			doWriteExternal(out);
 		}
+	}
+
+	/**
+	 * @return the persistentProperties
+	 */
+	@Override
+	public Set<String> getPropertyNames​() {
+
+		return persistentProperties.stringPropertyNames();
 	}
 
 }
