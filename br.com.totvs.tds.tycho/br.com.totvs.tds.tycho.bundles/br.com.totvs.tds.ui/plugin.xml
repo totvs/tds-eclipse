@@ -34,7 +34,7 @@
        <perspective
              class="br.com.totvs.tds.ui.perspective.AdminPerspectiveFactory"
              icon="icons/servers.gif"
-             id="br.com.totvs.tds.server.adminPerspective"
+             id="br.com.totvs.tds.ui.adminPerspective"
              name="%perspective.name.1">
           <description>
 			%perspective.description.1
@@ -54,7 +54,7 @@
     <extension
           point="org.eclipse.ui.perspectiveExtensions">
        <perspectiveExtension
-             targetID="org.eclipse.ui.resourcePerspective">
+             targetID="*">
           <perspectiveShortcut
                 id="br.com.totvs.tds.sdk.platformPerspective">
           </perspectiveShortcut>
@@ -62,7 +62,7 @@
                 id="br.com.totvs.tds.sdk.developerPerspective">
           </perspectiveShortcut>
           <perspectiveShortcut
-                id="br.com.totvs.tds.server.adminPerspective">
+                id="br.com.totvs.tds.ui.adminPerspective">
           </perspectiveShortcut>
        </perspectiveExtension>
     </extension>

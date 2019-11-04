@@ -11,8 +11,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,9 +23,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.wb.swt.SWTResourceManager;
 
+import br.com.totvs.tds.ui.TDSUIIcons;
 import br.com.totvs.tds.ui.nl.Messages;
 
 public class DualSelector extends Composite {
@@ -44,55 +41,51 @@ public class DualSelector extends Composite {
 
 	/**
 	 * Create the composite.
-	 * 
+	 *
 	 * @param parent
 	 * @param style
 	 */
-	public DualSelector(Composite parent, int style) {
+	public DualSelector(final Composite parent, final int style) {
 		super(parent, style);
-		addDisposeListener(new DisposeListener() {
-			public void widgetDisposed(DisposeEvent e) {
-				toolkit.dispose();
-			}
-		});
-		toolkit.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
+		addDisposeListener(e -> toolkit.dispose());
+		toolkit.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TRANSPARENT));
 		toolkit.adapt(this);
 		toolkit.paintBordersFor(this);
 		setLayout(new GridLayout(4, false));
 
-		Label lblNewLabel_1 = new Label(this, SWT.NONE);
+		final Label lblNewLabel_1 = new Label(this, SWT.NONE);
 		lblNewLabel_1.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(lblNewLabel_1, true, true);
 		lblNewLabel_1.setText(getTitleSource());
 		new Label(this, SWT.NONE);
 
-		Label lblNewLabel_2 = new Label(this, SWT.NONE);
+		final Label lblNewLabel_2 = new Label(this, SWT.NONE);
 		lblNewLabel_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		toolkit.adapt(lblNewLabel_2, true, true);
 		lblNewLabel_2.setText(getTitleTarget());
 		new Label(this, SWT.NONE);
 
 		lstSource = new ListViewer(this, SWT.MULTI | SWT.BORDER);
-		List list = lstSource.getList();
+		final List list = lstSource.getList();
 		list.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				ISelection s = lstSource.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
+			public void mouseDoubleClick(final MouseEvent e) {
+				final ISelection s = lstSource.getSelection();
+				final IStructuredSelection ss = (IStructuredSelection) s;
 				doSelect(ss, true);
 			}
 		});
-		GridData gd_list = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 8);
+		final GridData gd_list = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 8);
 		gd_list.heightHint = 154;
 		list.setLayoutData(gd_list);
 
-		Button btnSelecionar = new Button(this, SWT.NONE);
-		btnSelecionar.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui", "icons/right.gif")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Button btnSelecionar = new Button(this, SWT.NONE);
+		btnSelecionar.setImage(TDSUIIcons.getRight().createImage(true));
 		btnSelecionar.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ISelection s = lstSource.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
+			public void widgetSelected(final SelectionEvent e) {
+				final ISelection s = lstSource.getSelection();
+				final IStructuredSelection ss = (IStructuredSelection) s;
 				doSelect(ss, true);
 			}
 		});
@@ -100,12 +93,12 @@ public class DualSelector extends Composite {
 		toolkit.adapt(btnSelecionar, true, true);
 
 		lstTarget = new ListViewer(this, SWT.MULTI | SWT.BORDER);
-		List list_1 = lstTarget.getList();
+		final List list_1 = lstTarget.getList();
 		list_1.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				ISelection s = lstTarget.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
+			public void mouseDoubleClick(final MouseEvent e) {
+				final ISelection s = lstTarget.getSelection();
+				final IStructuredSelection ss = (IStructuredSelection) s;
 				doSelect(ss, false);
 			}
 		});
@@ -114,21 +107,21 @@ public class DualSelector extends Composite {
 		btnUp = new Button(this, SWT.NONE);
 		btnUp.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ISelection s = lstTarget.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
+			public void widgetSelected(final SelectionEvent e) {
+				final ISelection s = lstTarget.getSelection();
+				final IStructuredSelection ss = (IStructuredSelection) s;
 
 				doReorder(ss, true);
 			}
 		});
-		btnUp.setImage(ResourceManager.getPluginImage(Messages.DualSelector_4, "icons/up.gif")); //$NON-NLS-2$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$ //$NON-NLS-1$
+		btnUp.setImage(TDSUIIcons.getUp().createImage(true));
 		toolkit.adapt(btnUp, true, true);
 
-		Button btnSelecionarTudo = new Button(this, SWT.NONE);
-		btnSelecionarTudo.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui", "icons/double_left.gif")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Button btnSelecionarTudo = new Button(this, SWT.NONE);
+		btnSelecionarTudo.setImage(TDSUIIcons.getDoubleLeft().createImage(true));
 		btnSelecionarTudo.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doSelect(getItems(), true);
 			}
 		});
@@ -138,24 +131,24 @@ public class DualSelector extends Composite {
 		btnDown = new Button(this, SWT.NONE);
 		btnDown.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ISelection s = lstTarget.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
+			public void widgetSelected(final SelectionEvent e) {
+				final ISelection s = lstTarget.getSelection();
+				final IStructuredSelection ss = (IStructuredSelection) s;
 
 				doReorder(ss, false);
 			}
 		});
-		btnDown.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui", "icons/down.gif")); //$NON-NLS-1$ //$NON-NLS-2$
+		btnDown.setImage(TDSUIIcons.getDown().createImage(true));
 		toolkit.adapt(btnDown, true, true);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 
-		Button lblInverterSeleo = new Button(this, SWT.NONE);
-		lblInverterSeleo.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui", "icons/double_direction.gif")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Button lblInverterSeleo = new Button(this, SWT.NONE);
+		lblInverterSeleo.setImage(TDSUIIcons.getDoubleDirection().createImage(true)); // $NON-NLS-1$ //$NON-NLS-2$
 		lblInverterSeleo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		lblInverterSeleo.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doInvertSelect(getItems().toArray());
 			}
 		});
@@ -164,13 +157,13 @@ public class DualSelector extends Composite {
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 
-		Button btnNewButton = new Button(this, SWT.NONE);
-		btnNewButton.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui", "icons/left.gif")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Button btnNewButton = new Button(this, SWT.NONE);
+		btnNewButton.setImage(TDSUIIcons.getLeft().createImage(true));
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ISelection s = lstTarget.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
+			public void widgetSelected(final SelectionEvent e) {
+				final ISelection s = lstTarget.getSelection();
+				final IStructuredSelection ss = (IStructuredSelection) s;
 				doSelect(ss, false);
 			}
 		});
@@ -178,11 +171,11 @@ public class DualSelector extends Composite {
 		toolkit.adapt(btnNewButton, true, true);
 		new Label(this, SWT.NONE);
 
-		Button btnNewButton_1 = new Button(this, SWT.NONE);
-		btnNewButton_1.setImage(ResourceManager.getPluginImage("br.com.totvs.tds.ui", "icons/double_left.gif")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Button btnNewButton_1 = new Button(this, SWT.NONE);
+		btnNewButton_1.setImage(TDSUIIcons.getDoubleLeft().createImage(true));
 		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doSelect(getItems(), false);
 			}
 		});
@@ -195,8 +188,8 @@ public class DualSelector extends Composite {
 		filters[0] = new ViewerFilter() {
 
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				DualListItem dli = (DualListItem) element;
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+				final DualListItem dli = (DualListItem) element;
 				return !dli.isSelected();
 			}
 		};
@@ -208,8 +201,8 @@ public class DualSelector extends Composite {
 		filters[0] = new ViewerFilter() {
 
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-				DualListItem dli = (DualListItem) element;
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
+				final DualListItem dli = (DualListItem) element;
 				return dli.isSelected();
 			}
 		};
@@ -218,9 +211,10 @@ public class DualSelector extends Composite {
 		lstTarget.setContentProvider(ArrayContentProvider.getInstance());
 		lstTarget.setLabelProvider(new LabelProvider());
 		lstTarget.setComparator(new ViewerComparator() {
-			public int compare(Viewer viewer, Object e1, Object e2) {
-				DualListItem dls1 = (DualListItem) e1;
-				DualListItem dls2 = (DualListItem) e2;
+			@Override
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+				final DualListItem dls1 = (DualListItem) e1;
+				final DualListItem dls2 = (DualListItem) e2;
 
 				return dls1.getOrder() - dls2.getOrder();
 			};
@@ -233,9 +227,9 @@ public class DualSelector extends Composite {
 	 * @param selectedItens
 	 * @param upDirection
 	 */
-	protected void doReorder(IStructuredSelection selectedItens, boolean upDirection) {
-		for (Object item : selectedItens.toList()) {
-			DualListItem dualListItem = (DualListItem) item;
+	protected void doReorder(final IStructuredSelection selectedItens, final boolean upDirection) {
+		for (final Object item : selectedItens.toList()) {
+			final DualListItem dualListItem = (DualListItem) item;
 			int order = dualListItem.getOrder();
 
 			order += upDirection ? -1 : 1;
@@ -254,14 +248,13 @@ public class DualSelector extends Composite {
 	}
 
 	/**
-	 * @param items
-	 *            the items to set
+	 * @param items the items to set
 	 */
-	public void setItems(java.util.List<DualListItem> items) {
+	public void setItems(final java.util.List<DualListItem> items) {
 		int order = 0;
 
 		this.items = items;
-		for (DualListItem dualListItem : items) {
+		for (final DualListItem dualListItem : items) {
 			dualListItem.setOrder(order);
 			order++;
 		}
@@ -272,9 +265,9 @@ public class DualSelector extends Composite {
 	}
 
 	public java.util.List<DualListItem> getTargetItems() {
-		java.util.List<DualListItem> result = new ArrayList<DualListItem>();
+		final java.util.List<DualListItem> result = new ArrayList<DualListItem>();
 
-		for (DualListItem item : getItems()) {
+		for (final DualListItem item : getItems()) {
 			if (item.isSelected()) {
 				result.add(item);
 			}
@@ -291,10 +284,9 @@ public class DualSelector extends Composite {
 	}
 
 	/**
-	 * @param titleSource
-	 *            the titleSource to set
+	 * @param titleSource the titleSource to set
 	 */
-	public void setTitleSource(String titleSource) {
+	public void setTitleSource(final String titleSource) {
 		this.titleSource = titleSource;
 	}
 
@@ -306,30 +298,29 @@ public class DualSelector extends Composite {
 	}
 
 	/**
-	 * @param titleTarget
-	 *            the titleTarget to set
+	 * @param titleTarget the titleTarget to set
 	 */
-	public void setTitleTarget(String titleTarget) {
+	public void setTitleTarget(final String titleTarget) {
 		this.titleTarget = titleTarget;
 	}
 
 	/**
 	 * Marca os itens selecionados.
-	 * 
+	 *
 	 * @param ss
 	 */
-	protected void doSelect(IStructuredSelection ss, boolean selected) {
-		for (Object item : ss.toList()) {
-			DualListItem dli = (DualListItem) item;
+	protected void doSelect(final IStructuredSelection ss, final boolean selected) {
+		for (final Object item : ss.toList()) {
+			final DualListItem dli = (DualListItem) item;
 			dli.setSelected(selected);
 		}
 		lstSource.refresh();
 		lstTarget.refresh();
 	}
 
-	protected void doSelect(java.util.List<DualListItem> items, boolean selected) {
-		for (Object item : items) {
-			DualListItem dli = (DualListItem) item;
+	protected void doSelect(final java.util.List<DualListItem> items, final boolean selected) {
+		for (final Object item : items) {
+			final DualListItem dli = (DualListItem) item;
 			dli.setSelected(selected);
 		}
 		lstSource.refresh();
@@ -338,12 +329,12 @@ public class DualSelector extends Composite {
 
 	/**
 	 * Inverte a marca de seleção.
-	 * 
+	 *
 	 * @param objects
 	 */
-	protected void doInvertSelect(Object[] objects) {
-		for (Object item : objects) {
-			DualListItem dli = (DualListItem) item;
+	protected void doInvertSelect(final Object[] objects) {
+		for (final Object item : objects) {
+			final DualListItem dli = (DualListItem) item;
 			dli.setSelected(!dli.isSelected());
 		}
 		lstSource.refresh();
@@ -361,12 +352,12 @@ public class DualSelector extends Composite {
 	/**
 	 * @param showOrder the showOrder to set
 	 */
-	public void setShowOrder(boolean showOrder) {
+	public void setShowOrder(final boolean showOrder) {
 		this.showOrder = showOrder;
-		
+
 		btnUp.setVisible(showOrder);
 		btnDown.setVisible(showOrder);
-		
+
 		this.redraw();
 	}
 }

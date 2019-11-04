@@ -12,10 +12,13 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
@@ -23,11 +26,6 @@ import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.ServerType;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 import br.com.totvs.tds.ui.server.nl.Messages;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseListener;
-import java.util.function.Consumer;
-import org.eclipse.swt.events.MouseEvent;
 
 /**
  * Seleção de assistente para criação de novo servidor.

@@ -4,6 +4,8 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class SortTreeHandler extends AbstractHandler {
@@ -14,7 +16,14 @@ public class SortTreeHandler extends AbstractHandler {
 		Command command = event.getCommand();
 		boolean oldValue = HandlerUtil.toggleCommandState(command);
 
-		return !oldValue; // inverte para retornar o valor corrente
+		IWorkbenchPart wp = HandlerUtil.getActivePart(event);
+		TreeViewer viewer = wp.getAdapter(TreeViewer.class);
+
+		if (viewer != null) {
+			viewer.refresh();
+		}
+
+		return !oldValue;
 	}
 
 }

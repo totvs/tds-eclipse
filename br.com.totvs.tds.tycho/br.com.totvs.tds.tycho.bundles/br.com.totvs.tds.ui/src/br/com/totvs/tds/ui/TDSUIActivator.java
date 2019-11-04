@@ -1,7 +1,6 @@
 package br.com.totvs.tds.ui;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -63,10 +62,6 @@ public final class TDSUIActivator extends AbstractUIPlugin {
 		return plugin;
 	}
 
-	public ImageDescriptor getImageDescriptor(final String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
 	public BundleContext getContext() {
 		return context;
 	}
@@ -79,7 +74,7 @@ public final class TDSUIActivator extends AbstractUIPlugin {
 	 * @param thr
 	 * @return status
 	 */
-	public static IStatus showStatus(final int level, final int title, final String message, final Object... args) {
+	public static IStatus showStatus(final int level, final String message, final Object... args) {
 		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
 		TDSMessageHandler.showMessage(status);
 
@@ -88,7 +83,7 @@ public final class TDSUIActivator extends AbstractUIPlugin {
 		return status;
 	}
 
-	public static IStatus logStatus(final int level, final int title, final String message, final Object... args) {
+	public static IStatus logStatus(final int level, final String message, final Object... args) {
 		final IStatus status = TDSMessageHandler.createStatus(level, PLUGIN_ID, message, args);
 		TDSMessageHandler.logMessage(status);
 

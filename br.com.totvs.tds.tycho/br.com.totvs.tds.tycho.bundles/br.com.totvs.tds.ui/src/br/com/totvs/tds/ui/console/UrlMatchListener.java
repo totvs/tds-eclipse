@@ -23,7 +23,7 @@ public class UrlMatchListener implements IPatternMatchListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.console.IPatternMatchListenerDelegate#connect(org.eclipse.ui.
 	 * console.TextConsole)
@@ -35,7 +35,7 @@ public class UrlMatchListener implements IPatternMatchListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.ui.console.IPatternMatchListenerDelegate#disconnect()
 	 */
 	@Override
@@ -45,7 +45,7 @@ public class UrlMatchListener implements IPatternMatchListener {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.eclipse.ui.console.IPatternMatchListenerDelegate#matchFound(org.eclipse.
 	 * ui.console.PatternMatchEvent)
@@ -65,11 +65,11 @@ public class UrlMatchListener implements IPatternMatchListener {
 
 				console.addHyperlink(link, offset, lenght);
 			} catch (final BadLocationException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
+				TDSUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			} catch (final NumberFormatException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
+				TDSUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 			} catch (final MalformedURLException e) {
-				TDSUIActivator.logStatus(IStatus.ERROR, -1, e.getMessage(), e);
+				TDSUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 				e.printStackTrace();
 			}
 		}

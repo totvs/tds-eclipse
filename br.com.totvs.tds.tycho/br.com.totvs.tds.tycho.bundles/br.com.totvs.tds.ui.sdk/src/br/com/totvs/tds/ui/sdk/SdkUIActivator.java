@@ -1,7 +1,6 @@
 package br.com.totvs.tds.ui.sdk;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -16,7 +15,7 @@ import br.com.totvs.tds.ui.sdk.preference.ISDKPreferenceKeys;
 public class SdkUIActivator extends AbstractUIPlugin implements IPropertyChangeListener {
 
 	// The plug-in ID
-	private static final String PLUGIN_ID = "br.com.totvs.tds.ui.sdk"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "br.com.totvs.tds.ui.sdk"; //$NON-NLS-1$
 
 	// The shared instance
 	private static SdkUIActivator plugin;
@@ -26,17 +25,6 @@ public class SdkUIActivator extends AbstractUIPlugin implements IPropertyChangeL
 	 */
 	public SdkUIActivator() {
 
-	}
-
-	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative
-	 * path.
-	 *
-	 * @param path the path
-	 * @return the image descriptor
-	 */
-	public ImageDescriptor getImageDescriptor(final String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
 	@Override

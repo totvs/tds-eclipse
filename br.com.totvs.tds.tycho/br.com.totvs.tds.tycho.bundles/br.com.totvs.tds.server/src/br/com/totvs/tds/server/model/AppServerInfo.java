@@ -76,7 +76,6 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	private volatile String currentEnvironment;
 	private volatile List<IEnvironmentInfo> environments = new ArrayList<IEnvironmentInfo>();
 	private volatile IServerSlaveHubInfo hub;
-	private volatile boolean monitoring;
 	private volatile List<String> multiEnvironmentSelection = new ArrayList<String>();
 	private volatile boolean settingBlock;
 	private volatile boolean showConsole;
@@ -215,17 +214,6 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see br.com.totvs.server.interfaces.IAppServerInfo#isMonitoring()
-	 */
-	@Override
-	public boolean isMonitoring() {
-
-		return monitoring;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see br.com.totvs.server.interfaces.IAppServerInfo#isShowConsole()
 	 */
 	@Override
@@ -268,7 +256,6 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	@Override
 	public void setConnected(final boolean connected) {
 		if (!connected) {
-			setMonitoring(false);
 			unloadSlavesLoadBalance();
 			connectionMap.remove("token"); //$NON-NLS-1$
 		}
@@ -320,17 +307,6 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 
 		settingBlock = false;
 		firePropertyChange("environments", null, null); //$NON-NLS-1$
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see br.com.totvs.server.interfaces.IAppServerInfo#setMonitoring(boolean)
-	 */
-	@Override
-	public void setMonitoring(final boolean monitoring) {
-		setProperty("users", null); //$NON-NLS-1$
-		firePropertyChange("monitoring", this.monitoring, this.monitoring = monitoring); //$NON-NLS-1$
 	}
 
 	/*

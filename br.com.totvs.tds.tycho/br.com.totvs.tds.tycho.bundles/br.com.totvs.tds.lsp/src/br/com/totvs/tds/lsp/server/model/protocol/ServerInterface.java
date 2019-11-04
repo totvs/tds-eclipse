@@ -16,6 +16,7 @@ import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
 import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 
 public interface ServerInterface extends LanguageServer {
@@ -61,5 +62,8 @@ public interface ServerInterface extends LanguageServer {
 
 	@JsonRequest("$totvsserver/defragRpo")
 	public CompletableFuture<?> defragRpo(DefragRpoData defragRPOData);
+
+	@JsonRequest("$totvsmonitor/getUsers")
+	public CompletableFuture<UsersInfoNode[]> getUsers(UsersInfoData usersInfoData);
 
 }

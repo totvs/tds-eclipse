@@ -58,13 +58,13 @@ public final class IncludeConfigurationComposite extends Composite {
 	private Button btnSearch;
 	private final Link lnkGlobal;
 
-	private final Image imgUp = SdkUIIcons.getUp().createImage();
-	private final Image imgDown = SdkUIIcons.getDown().createImage();
-	private final Image imgAdd = SdkUIIcons.getAdd().createImage();
-	private final Image imgDel = SdkUIIcons.getDel().createImage();
-	private final Image imgWorkspace = SdkUIIcons.getWorkspace().createImage();
-	private final Image imgGlobal = SdkUIIcons.getGlobal().createImage();
-	private final Image imgSearch = SdkUIIcons.getSearch().createImage();
+	private final Image imgUp = SdkUIIcons.getUp().createImage(true);
+	private final Image imgDown = SdkUIIcons.getDown().createImage(true);
+	private final Image imgAdd = SdkUIIcons.getAdd().createImage(true);
+	private final Image imgDel = SdkUIIcons.getDel().createImage(true);
+	private final Image imgWorkspace = SdkUIIcons.getWorkspace().createImage(true);
+	private final Image imgGlobal = SdkUIIcons.getGlobal().createImage(true);
+	private final Image imgSearch = SdkUIIcons.getSearch().createImage(true);
 
 	private final List<IncludeDataModel> includeList = new ArrayList<IncludeDataModel>();
 	private final List<IModifyIncludeListener> modifyIncludeListeners = new ArrayList<IModifyIncludeListener>(); // changeproperties

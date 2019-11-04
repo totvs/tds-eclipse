@@ -23,6 +23,7 @@ import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
 import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationData;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationInfo;
@@ -49,6 +50,8 @@ import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsData;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.SlaveData;
 import br.com.totvs.tds.lsp.server.model.protocol.SlaveInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.UsersInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.UsersInfoData;
 import br.com.totvs.tds.lsp.server.model.protocol.ValidKeyData;
 import br.com.totvs.tds.lsp.server.model.protocol.ValidationData;
 import br.com.totvs.tds.lsp.server.model.protocol.ValidationInfo;
@@ -311,8 +314,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		IStatus status = Status.OK_STATUS;
 		if (applyPatchNode == null) {
-			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN,
-					"Erro desconhecido. Verifique o log de console.");
+			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN, "Erro desconhecido. Verifique o log de console.");
 		} else if (applyPatchNode.getReturnCode() != 0) {
 			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
 					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
@@ -352,8 +354,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		IStatus status = Status.OK_STATUS;
 		if (applyPatchNode == null) {
-			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN,
-					"Erro desconhecido. Verifique o log de console.");
+			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN, "Erro desconhecido. Verifique o log de console.");
 		} else if (applyPatchNode.getReturnCode() != 0) {
 			status = new Status(IStatus.ERROR, LspActivator.PLUG_IN, String.format("Código: %d\n\tArquivos: %s",
 					applyPatchNode.getReturnCode(), applyPatchNode.getFiles()));
@@ -385,5 +386,16 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		final DefragRpoData defragRPOData = new DefragRpoData(defragRPOInfo);
 		ClientImpl.getInstance().defragRpo(defragRPOData);
+	}
+
+	@Override
+	public UsersInfoNode[] getUsersInfo(final String token) {
+		final UsersInfo usersInfo = new UsersInfo();
+		usersInfo.setConnectionToken(token);
+
+		final UsersInfoData usersInfoData = new UsersInfoData(usersInfo);
+		final UsersInfoNode[] usersInfoNodes = ClientImpl.getInstance().usersInfo(usersInfoData);
+
+		return usersInfoNodes;
 	}
 }

@@ -16,7 +16,7 @@
 		<bundles.folder>${project.build.directory}/../../br.com.totvs.tds.tycho.bundles</bundles.folder>
 		<bundle.win32.folder>${bundles.folder}/br.com.totvs.tds.lsp.win32/resources</bundle.win32.folder>
 		<bundle.linux.folder>${bundles.folder}/br.com.totvs.tds.lsp.linux/resources</bundle.linux.folder>
-		<bundle.macosx.folder>${bundles.folder}/br.com.totvs.tds.lsp.macosx/resources</bundle.macosx.folder>
+		<bundle.macos.folder>${bundles.folder}/br.com.totvs.tds.lsp.macosx/resources</bundle.macos.folder>
 		<nodejs.folder>${project.build.directory}/../node_modules</nodejs.folder>
 	</properties>
 
@@ -95,7 +95,7 @@
 						</goals>
 						<configuration>
 							<overwrite>true</overwrite>
-							<outputDirectory>${bundle.macosx.folder}/tds-ls</outputDirectory>
+							<outputDirectory>${bundle.macos.folder}/tds-ls</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${nodejs.folder}/@totvs/tds-ls/bin/mac</directory>
@@ -115,7 +115,7 @@
 						</goals>
 						<configuration>
 							<overwrite>true</overwrite>
-							<outputDirectory>${bundle.macosx.folder}/tds-da</outputDirectory>
+							<outputDirectory>${bundle.macos.folder}/tds-da</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${nodejs.folder}/@totvs/tds-da/bin/mac</directory>

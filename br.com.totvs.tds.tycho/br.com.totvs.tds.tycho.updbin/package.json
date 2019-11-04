@@ -4,7 +4,7 @@
     "lockfileVersion": 1,
     "requires": true,
     "dependencies": {
-        "@totvs/tds-da": "^1.0.33",
-        "@totvs/tds-ls": "^1.0.38"
+        "@totvs/tds-da": "^1.0.37",
+        "@totvs/tds-ls": "^1.0.42"
     }
 }

@@ -100,7 +100,7 @@ public class ResourceManager extends SWTResourceManager {
 		}
 		Image image = m_descriptorImageMap.get(descriptor);
 		if (image == null) {
-			image = descriptor.createImage();
+			image = descriptor.createImage(true);
 			m_descriptorImageMap.put(descriptor, image);
 		}
 		return image;
@@ -174,7 +174,7 @@ public class ResourceManager extends SWTResourceManager {
 				}
 			};
 			//
-			result = compositImageDesc.createImage();
+			result = compositImageDesc.createImage(true);
 			decoratedMap.put(decorator, result);
 		}
 		return result;

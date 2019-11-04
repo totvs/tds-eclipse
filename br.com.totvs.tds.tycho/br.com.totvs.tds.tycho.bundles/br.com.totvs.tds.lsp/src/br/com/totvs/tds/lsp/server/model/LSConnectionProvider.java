@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.lsp4e.server.ProcessStreamConnectionProvider;
+
+import br.com.totvs.tds.lsp.server.LspActivator;
 
 public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 
@@ -69,7 +70,7 @@ public class LSConnectionProvider extends ProcessStreamConnectionProvider {
 	 */
 	private List<String> getArguments() {
 
-		return Collections.emptyList();
+		return LspActivator.getInstance().getLSArgs();
 	}
 
 }

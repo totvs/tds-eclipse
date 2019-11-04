@@ -565,7 +565,7 @@ public class ApplyPatchPage extends WizardPage {
 	// link.setHref(documentationURL);
 	// Cursor cursor = new Cursor(link.getDisplay(), SWT.CURSOR_HAND);
 	// link.setCursor(cursor);
-	// link.setImage(SdkUIIcons.getLinkIcon().createImage());
+	// link.setImage(SdkUIIcons.getLinkIcon().createImage(true));
 	// link.addHyperlinkListener(new HyperlinkAdapter() {
 	// @Override
 	// public void linkActivated(final

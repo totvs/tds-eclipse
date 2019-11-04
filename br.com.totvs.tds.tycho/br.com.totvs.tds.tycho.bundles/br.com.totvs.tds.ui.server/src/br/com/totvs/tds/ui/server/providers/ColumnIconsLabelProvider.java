@@ -49,7 +49,7 @@ public class ColumnIconsLabelProvider extends ColumnLabelProvider {
 		link.setHref(documentationURL);
 		Cursor cursor = new Cursor(link.getDisplay(), SWT.CURSOR_HAND);
 		link.setCursor(cursor);
-		link.setImage(ServerUIIcons.getLinkIcon().createImage());
+		link.setImage(ServerUIIcons.getLinkIcon().createImage(true));
 		link.addHyperlinkListener(new HyperlinkAdapter() {
 			@Override
 			public void linkActivated(final org.eclipse.ui.forms.events.HyperlinkEvent e) {
@@ -77,7 +77,7 @@ public class ColumnIconsLabelProvider extends ColumnLabelProvider {
 	@Override
 	public Image getImage(final Object element) {
 
-		return ServerUIIcons.getLinkIcon().createImage();
+		return ServerUIIcons.getLinkIcon().createImage(true);
 	}
 
 	@Override

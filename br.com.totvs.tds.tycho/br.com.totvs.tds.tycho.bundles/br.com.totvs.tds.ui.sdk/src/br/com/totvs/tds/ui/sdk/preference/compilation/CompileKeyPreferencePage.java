@@ -160,7 +160,7 @@ public class CompileKeyPreferencePage extends PreferencePage implements IWorkben
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 		txtAuthorizationCode = new Text(container, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
-		txtAuthorizationCode.setFont(SWTResourceManager.getFont("Courier New", 9, SWT.NORMAL)); //$NON-NLS-1$
+		txtAuthorizationCode.setFont(SWTResourceManager.getFont("Courier", 9, SWT.NORMAL));
 		txtAuthorizationCode.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 3, 1));
 		txtAuthorizationCode.setEditable(false);
 

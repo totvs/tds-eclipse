@@ -19,11 +19,14 @@ public class LspActivator implements BundleActivator {
 
 	public static final String PLUG_IN = "br.com.totvs.tds.lsp";
 
-	private static final boolean DEBUG = Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/debug")); //$NON-NLS-1$
+	private static final boolean DEBUG = Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/debug")) //$NON-NLS-1$
+			|| true;
 	private static final boolean LOG_DA = (DEBUG
-			&& Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/logDebuggerAdapter"))); //$NON-NLS-1$
+			|| Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/logDebuggerAdapter"))); //$NON-NLS-1$
 	private static final boolean ATTACH_DA = DEBUG
-			&& Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/attachDebuggerAdapter")); //$NON-NLS-1$
+			|| Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/attachDebuggerAdapter")); //$NON-NLS-1$
+	private static final boolean LOG_LS = (DEBUG
+			|| Boolean.parseBoolean(Platform.getDebugOption("br.com.totvs.tds.lsp/logLanguageServer"))); //$NON-NLS-1$
 
 	private static LspActivator plugins;
 
@@ -95,6 +98,26 @@ public class LspActivator implements BundleActivator {
 	public static LspActivator getInstance() {
 
 		return LspActivator.plugins;
+	}
+
+	public List<String> getLSArgs() {
+		final List<String> args = new ArrayList<String>();
+
+		// gera log de execução em arquivo
+		if (LOG_LS) {
+			args.add("--record");
+			args.add("r:\\");
+			args.add("--log-file");
+			args.add("r:\\");
+			args.add("--log-all-to-stderr");
+		}
+
+		return args;
+	}
+
+	public static boolean isDebug() {
+
+		return DEBUG;
 	}
 
 }

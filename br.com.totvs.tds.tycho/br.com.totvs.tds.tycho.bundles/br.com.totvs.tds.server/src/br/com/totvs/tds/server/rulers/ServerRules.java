@@ -47,10 +47,44 @@ public class ServerRules {
 
 	}
 
+	class MonitorRule implements ISchedulingRule {
+
+		final private UUID id;
+
+		public MonitorRule(final UUID id) {
+			this.id = id;
+		}
+
+		@Override
+		public boolean contains(final ISchedulingRule rule) {
+			return rule == this;
+		}
+
+		@Override
+		public boolean isConflicting(final ISchedulingRule rule) {
+			if (rule instanceof MonitorRule) {
+				final MonitorRule MonitorRule = (MonitorRule) rule;
+
+				return this.id.equals(MonitorRule.id);
+			}
+
+			return false;
+		}
+
+	}
+
 	public static ISchedulingRule compileRule(final UUID id) {
+		final ISchedulingRule[] rules = new ISchedulingRule[1];
+		rules[0] = connectionRule;
+		// rules[1] = serverRules.new ServerRule(id);
+
+		return new MultiRule(rules);
+	}
+
+	public static ISchedulingRule monitorRule(final UUID id) {
 		final ISchedulingRule[] rules = new ISchedulingRule[2];
 		rules[0] = connectionRule;
-		rules[1] = serverRules.new ServerRule(id);
+		rules[1] = serverRules.new MonitorRule(id);
 
 		return new MultiRule(rules);
 	}

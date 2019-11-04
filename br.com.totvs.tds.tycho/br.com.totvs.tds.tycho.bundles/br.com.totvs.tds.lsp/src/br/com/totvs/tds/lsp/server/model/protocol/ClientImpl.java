@@ -19,6 +19,7 @@ import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
 import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 
 @SuppressWarnings("restriction")
@@ -289,6 +290,25 @@ public class ClientImpl extends LanguageClientImpl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public UsersInfoNode[] usersInfo(final UsersInfoData usersInfoData) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+		final CompletableFuture<UsersInfoNode[]> future = server.getUsers(usersInfoData);
+		UsersInfoNode[] result = new UsersInfoNode[0];
+
+		try {
+//			future.cancel(true);
+//			future.completeExceptionally((Throwable e) -> {
+//				System.out.println(e);
+//			});
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 }

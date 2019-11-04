@@ -29,20 +29,20 @@ public class ColumnProgramLabelProvider extends ColumnLabelProvider {
 
 		switch (messageType) {
 		case NEW:
-			image = ServerUIIcons.getHelp().createImage();
+			image = ServerUIIcons.getHelp().createImage(true);
 			break;
 		case NEW_ZIP:
-			image = ServerUIIcons.getZip().createImage();
+			image = ServerUIIcons.getZip().createImage(true);
 			break;
 		case OK:
-			image = ServerUIIcons.getOk().createImage();
+			image = ServerUIIcons.getOk().createImage(true);
 			break;
 		case WARNING:
-			image = ServerUIIcons.getWarning().createImage();
+			image = ServerUIIcons.getWarning().createImage(true);
 			break;
 		case ERROR:
 		case DUPLICATE:
-			image = ServerUIIcons.getError().createImage();
+			image = ServerUIIcons.getError().createImage(true);
 			break;
 		default:
 			break;

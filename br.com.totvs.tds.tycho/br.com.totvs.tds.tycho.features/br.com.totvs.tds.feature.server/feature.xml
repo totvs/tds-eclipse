@@ -76,4 +76,11 @@ Ideal para quem administrada servidores na plataforma TOTVS.
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="br.com.totvs.tds.ui.monitor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

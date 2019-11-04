@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
-import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StyledString;
+import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Display;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.ui.server.ServerUIActivator;
+import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 /**
  * Provimento de texto e imagem, para identificação de elementos.
@@ -39,9 +39,9 @@ public class ServerViewLabelProvider extends LabelProvider implements IStyledLab
 		String iconName = item.getIconName();
 
 		if (!resources.containsKey(iconName)) {
-			ImageDescriptor imageDescriptor = ServerUIActivator.getDefault()
+			ImageDescriptor imageDescriptor = ServerUIIcons
 					.getImageDescriptor(String.format("icons/%s.png", item.getIconName())); //$NON-NLS-1$
-			resources.put(iconName, imageDescriptor.createImage());
+			resources.put(iconName, imageDescriptor.createImage(true));
 		}
 
 		return resources.get(iconName);

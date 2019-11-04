@@ -104,7 +104,7 @@ public class PatchInfoComposite extends Composite implements ISelectionChangedLi
 
 		Label lblImgCorrecao = new Label(groupLegenda, SWT.None);
 		lblImgCorrecao.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_CENTER));
-		lblImgCorrecao.setImage(ServerUIIcons.getPatchCorrection().createImage());
+		lblImgCorrecao.setImage(ServerUIIcons.getPatchCorrection().createImage(true));
 
 		Label lblCorrecao = new Label(groupLegenda, SWT.None);
 		lblCorrecao.setText(Messages.PatchInfoComposite_ptm_extension_file);
@@ -112,7 +112,7 @@ public class PatchInfoComposite extends Composite implements ISelectionChangedLi
 
 		// pacote *.pak
 		Label lblImgPacote = new Label(groupLegenda, SWT.None);
-		lblImgPacote.setImage(ServerUIIcons.getPatchPackage().createImage());
+		lblImgPacote.setImage(ServerUIIcons.getPatchPackage().createImage(true));
 		lblImgPacote.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_CENTER));
 
 		Label lblPacote = new Label(groupLegenda, SWT.None);
@@ -122,7 +122,7 @@ public class PatchInfoComposite extends Composite implements ISelectionChangedLi
 		// update *.upd
 		Label lblImgUpdate = new Label(groupLegenda, SWT.None);
 		lblImgUpdate.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_CENTER));
-		lblImgUpdate.setImage(ServerUIIcons.getPatchUpdate().createImage());
+		lblImgUpdate.setImage(ServerUIIcons.getPatchUpdate().createImage(true));
 
 		Label lblUpdate = new Label(groupLegenda, SWT.None);
 		lblUpdate.setText(Messages.PatchInfoComposite_upd_extension);
@@ -300,7 +300,7 @@ public class PatchInfoComposite extends Composite implements ISelectionChangedLi
 			@Override
 			public Image getColumnImage(final Object element, final int columnIndex) {
 				if (columnIndex == 0) {
-					return ServerUIIcons.getTemplate().createImage();
+					return ServerUIIcons.getTemplate().createImage(true);
 				}
 				return null;
 			}

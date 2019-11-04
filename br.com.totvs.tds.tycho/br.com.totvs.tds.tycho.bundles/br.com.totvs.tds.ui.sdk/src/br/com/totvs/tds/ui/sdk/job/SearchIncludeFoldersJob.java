@@ -141,7 +141,7 @@ public class SearchIncludeFoldersJob extends UIJob {
 	}
 
 	private Image getImage() {
-		return SdkUIIcons.getSearch().createImage();
+		return SdkUIIcons.getSearch().createImage(true);
 	}
 
 	private void searchFolders(final File folder, final IProgressMonitor monitor) {

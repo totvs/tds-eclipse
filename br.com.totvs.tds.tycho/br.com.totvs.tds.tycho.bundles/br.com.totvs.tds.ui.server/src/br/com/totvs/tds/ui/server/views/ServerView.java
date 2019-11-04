@@ -2,13 +2,13 @@ package br.com.totvs.tds.ui.server.views;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.IExecutionListener;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.ParameterizedCommand;
@@ -16,7 +16,6 @@ import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -24,6 +23,8 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,8 +40,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.ui.progress.IWorkbenchSiteProgressService;
 import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.server.ServerActivator;
@@ -50,7 +51,6 @@ import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerConstants;
 import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
-import br.com.totvs.tds.ui.server.nl.Messages;
 
 /**
  * Visão "Servidores".
@@ -60,18 +60,11 @@ import br.com.totvs.tds.ui.server.nl.Messages;
 public class ServerView extends ViewPart {
 
 	/**
-	 * new The ID of the view as specified by the extension.
+	 * The ID of the view as specified by the extension.
 	 */
 	public static final String VIEW_ID = "br.com.totvs.tds.ui.server.views.serverView"; //$NON-NLS-1$
 
-	private static final String ACTION_SELECT_MONITOR = "actionSelectMonitor"; // FIX: reavaliar o uso //$NON-NLS-1$
-	private static final String ACTIVE_SERVERS = "activeServers"; //$NON-NLS-1$
-	private static final String CURRENT_SERVER = "currenteServer"; //$NON-NLS-1$
-
-	private static final String SERVER = "server"; //$NON-NLS-1$
-	private final int CONNECT_ALL_SERVERS = 2;
-
-	private final int CONNECT_LAST_SERVER_ONLY = 1;
+	private static final String ACTION_SELECT_MONITOR = "actionSelectMonitor";
 
 	private IMemento memento = null;
 
@@ -83,6 +76,14 @@ public class ServerView extends ViewPart {
 	private TreeViewer viewer;
 
 	private PropertyChangeListener propertyChangeListener;
+
+	private Command actionSelectToMonitor;
+
+	private IDoubleClickListener doubleClickListener;
+
+	private Command sortTreeCommand;
+
+	private IExecutionListener sortTreeListener;
 
 	/**
 	 * The constructor.
@@ -122,41 +123,17 @@ public class ServerView extends ViewPart {
 
 		hookNotifications();
 		hookDoubleClickAction();
-		hookSelectionMode();
-		hookClickAction();
+		hookSortTree();
 
 		getSite().setSelectionProvider(viewer);
 
-		// restaura estado da sess�o�o anterior
+		// restaura estado da sessão anterior
 		if (memento != null) {
 			Boolean state = memento.getBoolean(ACTION_SELECT_MONITOR);
-			if (state != null) {
-				// actionSelectToMonitor.setChecked(state);
-			} else {
+			if (state == null) {
 				state = false;
 			}
-
-			if (!state) {
-				unhookClickAction();
-			}
-
-			IMemento mementoNode = memento.getChild(ACTIVE_SERVERS);
-			List<String> targetServers = new ArrayList<String>();
-
-			if (mementoNode != null) {
-				IMemento[] servers = mementoNode.getChildren();
-				for (int i = 0; i < servers.length; i++) {
-					IMemento serverMemento = servers[i];
-					targetServers.add(serverMemento.getString("name")); //$NON-NLS-1$
-				}
-			}
-
-			mementoNode = memento.getChild(CURRENT_SERVER);
-			String currentServer = (mementoNode == null) ? Messages.EMPTY_STRING : mementoNode.getString("name"); // $NON-NLS-2$ //$NON-NLS-1$
-			ServerStateLoaderJob serverStateLoaderJob = new ServerStateLoaderJob(targetServers, currentServer);
-
-			IWorkbenchSiteProgressService siteService = getSite().getAdapter(IWorkbenchSiteProgressService.class);
-			siteService.schedule(serverStateLoaderJob, 0 /* now */, true /* use the half-busy cursor in the part */);
+			actionSelectToMonitor.getState(RegistryToggleState.STATE_ID).setValue(state);
 		}
 	}
 
@@ -167,6 +144,9 @@ public class ServerView extends ViewPart {
 	 */
 	@Override
 	public void dispose() {
+		unhookSortTree();
+		unhookDoubleClickAction();
+		unhookSelectionMode();
 		unhookNotifications();
 
 		toolkit.dispose();
@@ -184,18 +164,15 @@ public class ServerView extends ViewPart {
 		if (adapter.equals(TreeViewer.class)) {
 			return viewer;
 		}
-		return super.getAdapter(adapter);
-	}
 
-	private void hookClickAction() {
-		viewer.addSelectionChangedListener(selectionListener);
+		return super.getAdapter(adapter);
 	}
 
 	/**
 	 * Define comportamento para o duplo-click.
 	 */
 	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
+		doubleClickListener = new IDoubleClickListener() {
 			@SuppressWarnings("unused")
 			@Override
 			public void doubleClick(final DoubleClickEvent event) {
@@ -257,7 +234,9 @@ public class ServerView extends ViewPart {
 					ServerUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 				}
 			}
-		});
+		};
+
+		viewer.addDoubleClickListener(doubleClickListener);
 	}
 
 	/**
@@ -348,18 +327,57 @@ public class ServerView extends ViewPart {
 		serverManager.addPropertyChangeListener(propertyChangeListener);
 	}
 
-	private void hookSelectionMode() {
-		selectionListener = new ISelectionChangedListener() {
+	private void hookSortTree() {
+		sortTreeListener = new IExecutionListener() {
+
 			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-//				try {
-////					monitor.setSelection(event.getSelection());
-////					monitor.execute(new ExecutionEvent());
-//				} catch (ExecutionException e) {
-//					e.printStackTrace();
-//				}
+			public void notHandled(final String commandId, final NotHandledException exception) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void postExecuteFailure(final String commandId, final ExecutionException exception) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void postExecuteSuccess(final String commandId, final Object returnValue) {
+				final Boolean selection = (Boolean) returnValue;
+
+				if (selection) {
+					ViewerComparator sorter = new ViewerComparator() {
+						/**
+						 * Returns a negative, zero, or positive number depending on whether the first
+						 * element is less than, equal to, or greater than the second element.
+						 */
+						@Override
+						public int compare(Viewer viewer, Object e1, Object e2) {
+							if (e1 instanceof IItemInfo) {
+								String str1 = (((IItemInfo) e1).getName());
+								String str2 = (((IItemInfo) e2).getName());
+								return getComparator().compare(str1, str2);
+							}
+
+							return 0;
+						}
+					};
+
+					viewer.setComparator(sorter);
+				} else {
+					viewer.setComparator(null);
+				}
+
+				viewer.refresh();
+			}
+
+			@Override
+			public void preExecute(final String commandId, final ExecutionEvent event) {
+				// TODO Auto-generated method stub
 			}
 		};
+
+		sortTreeCommand.addExecutionListener(sortTreeListener);
 	}
 
 	/*
@@ -379,19 +397,13 @@ public class ServerView extends ViewPart {
 	 * Initialize the actions.
 	 */
 	private void initializeActions() {
-//		actionSelectToMonitor = new Action(Messages.ServerView_1, IAction.AS_CHECK_BOX) {
-//
-//			@Override
-//			public void run() {
-//				if (this.isChecked()) {
-//					hookClickAction();
-//				} else {
-//					unhookClickAction();
-//				}
-//			}
-//		};
-//		actionSelectToMonitor.setImageDescriptor(ResourceManager.getPluginImageDescriptor("br.com.totvs.tds.ui.server", //$NON-NLS-1$
-//				"icons/selection.png")); //$NON-NLS-1$
+		IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		ICommandService commandService = serviceLocator.getService(ICommandService.class);
+
+		actionSelectToMonitor = commandService
+				.getCommand("br.com.totvs.tds.ui.server.commands.monitorSelectionCommand"); //$NON-NLS-1$
+
+		sortTreeCommand = commandService.getCommand("br.com.totvs.tds.ui.server.commands.sortTreeCommand"); //$NON-NLS-1$
 
 	}
 
@@ -419,38 +431,12 @@ public class ServerView extends ViewPart {
 	 */
 	@Override
 	public void saveState(IMemento memento) {
-		IPreferenceStore preferenceStore = ServerUIActivator.getDefault().getPreferenceStore();
-		int reconnect = preferenceStore.getInt(IServerConstants.RECONNECT_POLICIES);
-		List<IAppServerInfo> serversToSave = new ArrayList<IAppServerInfo>();
-		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
+//		IPreferenceStore preferenceStore = ServerUIActivator.getDefault().getPreferenceStore();
+//		int reconnect = preferenceStore.getInt(IServerConstants.RECONNECT_POLICIES);
 
-		memento.putBoolean(ACTION_SELECT_MONITOR, false); // actionSelectToMonitor.isChecked()
-		switch (reconnect) {
-		case CONNECT_LAST_SERVER_ONLY:
-			serversToSave.add(serverManager.getCurrentServer());
-			break;
-		case CONNECT_ALL_SERVERS:
-			serversToSave.addAll(serverManager.getActiveServers());
-			break;
-		default: // DONT_CONNECT_SERVERS
-			break;
-		}
-
-		if (!serversToSave.isEmpty()) {
-			IMemento activeServers = memento.createChild(ACTIVE_SERVERS);
-			for (IAppServerInfo serverInfo : serversToSave) {
-				IMemento server = activeServers.createChild(SERVER);
-
-				server.putString("id", serverInfo.getId().toString()); //$NON-NLS-1$
-				server.putString("name", serverInfo.getName()); //$NON-NLS-1$
-				server.putBoolean("connected", true); //$NON-NLS-1$
-			}
-
-			IAppServerInfo serverInfo = serverManager.getCurrentServer();
-			activeServers = memento.createChild(CURRENT_SERVER);
-			activeServers.putString("id", serverInfo.getId().toString()); //$NON-NLS-1$
-			activeServers.putString("name", serverInfo.getName()); //$NON-NLS-1$
-		}
+		boolean stateValue = ((Boolean) actionSelectToMonitor.getState(RegistryToggleState.STATE_ID).getValue())
+				.booleanValue();
+		memento.putBoolean(ACTION_SELECT_MONITOR, stateValue);
 
 		super.saveState(memento);
 	}
@@ -477,18 +463,28 @@ public class ServerView extends ViewPart {
 		getViewSite().getActionBars().updateActionBars();
 	}
 
-	private void unhookClickAction() {
-		viewer.removeSelectionChangedListener(selectionListener);
+	private void unhookDoubleClickAction() {
+		viewer.removeDoubleClickListener(doubleClickListener);
+		doubleClickListener = null;
 	}
 
-	/**
-	 * Cancela o tratamento de eventos.
-	 */
 	private void unhookNotifications() {
 		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 		serverManager.removePropertyChangeListener(propertyChangeListener);
 
 		propertyChangeListener = null;
+	}
+
+	private void unhookSelectionMode() {
+		viewer.removeSelectionChangedListener(selectionListener);
+		selectionListener = null;
+	}
+
+	private void unhookSortTree() {
+		viewer.setComparator(null);
+
+		sortTreeCommand.removeExecutionListener(sortTreeListener);
+		sortTreeCommand = null;
 	}
 
 }

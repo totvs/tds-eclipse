@@ -45,7 +45,8 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
-	private static final long CURRENT_SERIAL_VERSION = 2L;
+	private static final long VERSION_2 = 2L;
+	private static final long CURRENT_VERSION = VERSION_2;
 
 	/** Servidor corrente. */
 	private IAppServerInfo currentServer;
@@ -147,9 +148,9 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		final List<IAppServerInfo> servers = getActiveServers();
 
 		for (final IAppServerInfo si : servers) {
-			if (si.isMonitoring()) {
-				list.add(si);
-			}
+//			if (si.isMonitoring()) {
+//				list.add(si);
+//			}
 		}
 
 		return list;
@@ -287,13 +288,8 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 		try {
 			final ObjectInputStream ois = new ObjectInputStream(inputStream);
-			final long serialVerion = ois.readLong();
-
-			if (serialVerion != CURRENT_SERIAL_VERSION) {
-				ServerActivator.logStatus(IStatus.WARNING,
-						String.format(Messages.ServerManagerImpl_Server_manager_version_warning, CURRENT_SERIAL_VERSION,
-								serialVerion));
-			}
+			@SuppressWarnings("unused")
+			final long version = ois.readLong();
 
 			final IGroupInfo rootGroupAux = (IGroupInfo) ois.readObject();
 			if (rootGroupAux != null) {
@@ -472,10 +468,15 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	public void saveTo(final OutputStream outputStream) throws IOException {
 		final ObjectOutputStream oos = new ObjectOutputStream(outputStream);
 
-		oos.writeLong(CURRENT_SERIAL_VERSION);
+		oos.writeLong(CURRENT_VERSION);
 
 		oos.writeObject(rootGroupInfo);
-		oos.writeObject(currentServer.getName());
+
+		if (getCurrentServer() != null) {
+			oos.writeObject(getCurrentServer().getName());
+		} else {
+			oos.writeObject("");
+		}
 
 		final List<String> serversRunning = new ArrayList<String>();
 		for (final IAppServerInfo server : getServers()) {

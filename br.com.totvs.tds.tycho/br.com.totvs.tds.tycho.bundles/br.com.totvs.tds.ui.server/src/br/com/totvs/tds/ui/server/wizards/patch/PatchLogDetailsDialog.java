@@ -59,7 +59,7 @@ public class PatchLogDetailsDialog extends Dialog {
 	 */
 	private final class PatchLabelProvider implements ITableLabelProvider {
 
-		private final Image imgPgmAdvpl = ServerUIIcons.getPgmAdvpl().createImage();
+		private final Image imgPgmAdvpl = ServerUIIcons.getPgmAdvpl().createImage(true);
 
 		@Override
 		public void addListener(final ILabelProviderListener listener) {

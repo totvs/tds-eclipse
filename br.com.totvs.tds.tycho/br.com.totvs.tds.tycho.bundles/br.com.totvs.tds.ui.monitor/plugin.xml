@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="br.com.totvs.tds"
+            class="br.com.totvs.tds.ui.monitor.views.ServerMonitorView"
+            icon="icons/server_view.png"
+            id="br.com.totvs.tds.ui.monitor.views.serverMonitorView"
+            name="Monitor de Servidores"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="br.com.totvs.tds.ui.adminPerspective">
+         <view
+               id="br.com.totvs.tds.ui.server.views.serverView"
+               minimized="false"
+               ratio="0.2"
+               relationship="left"
+               relative="org.eclipse.ui.editorss"
+               showTitle="false">
+         </view>
+         <view
+               id="org.eclipse.ui.console.ConsoleView"
+               minimized="false"
+               ratio="0.70"
+               relationship="bottom"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               closeable="true"
+               id="br.com.totvs.tds.ui.monitor.views.serverMonitorView"
+               minimized="false"
+               ratio="0.4"
+               relationship="left"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <view
+               id="org.eclipse.ui.views.ContentOutline"
+               minimized="true"
+               relationship="right"
+               relative="org.eclipse.ui.editorss">
+         </view>
+         <viewShortcut
+               id="br.com.totvs.tds.ui.monitor.views.serverMonitorView">
+         </viewShortcut>
+         <viewShortcut
+               id="org.eclipse.ui.console.ConsoleView">
+         </viewShortcut>
+      </perspectiveExtension>
+   </extension>
+
+</plugin>

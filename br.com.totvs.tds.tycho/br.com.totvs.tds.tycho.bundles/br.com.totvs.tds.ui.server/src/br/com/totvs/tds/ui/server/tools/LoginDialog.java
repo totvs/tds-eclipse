@@ -88,7 +88,7 @@ public abstract class LoginDialog extends TitleAreaDialog implements ILoginDialo
 	@Override
 	protected final Control createDialogArea(Composite parent) {
 		setTitle(title);
-		setTitleImage(ServerUIIcons.getUser64().createImage());
+		setTitleImage(ServerUIIcons.getUser64().createImage(true));
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);

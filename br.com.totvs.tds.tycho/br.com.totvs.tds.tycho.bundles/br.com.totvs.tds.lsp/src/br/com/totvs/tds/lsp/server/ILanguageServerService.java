@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IStatus;
 
 import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
 
 /**
@@ -127,5 +128,7 @@ public interface ILanguageServerService {
 	InspectorFunctionsNode inspectorFunctions(String token, String environment);
 
 	void defragRPO(String token, String environment);
+
+	UsersInfoNode[] getUsersInfo(String token);
 
 }

@@ -81,11 +81,6 @@ public interface IAppServerInfo extends IItemInfo {
 	boolean isConsoleLog();
 
 	/**
-	 * @return estado de monitoramento
-	 */
-	boolean isMonitoring();
-
-	/**
 	 * @return çãoado de apresemyação do console do servidor.
 	 *
 	 */
@@ -125,13 +120,6 @@ public interface IAppServerInfo extends IItemInfo {
 	 * @param show apresenta ou não o log de console.
 	 */
 	void setConsoleLog(boolean show);
-
-	/**
-	 * Estado de monitoramento.
-	 *
-	 * @param monitoring
-	 */
-	void setMonitoring(boolean monitoring);
 
 	/**
 	 * Ajusta o tipo de SO do elemento.

@@ -10,9 +10,9 @@ import br.com.totvs.tds.server.interfaces.IRpoSource;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 public class RpoObjectLabelProvider extends LabelProvider {
-	protected static final Image SOURCE_ICON = ServerUIIcons.getSource().createImage();
-	protected static final Image RESOURCE_ICON = ServerUIIcons.getResource().createImage();
-	protected static final Image FUNCTION_ICON = ServerUIIcons.getFunction().createImage();
+	protected static final Image SOURCE_ICON = ServerUIIcons.getSource().createImage(true);
+	protected static final Image RESOURCE_ICON = ServerUIIcons.getResource().createImage(true);
+	protected static final Image FUNCTION_ICON = ServerUIIcons.getFunction().createImage(true);
 
 	/**
 	 * Construtor.

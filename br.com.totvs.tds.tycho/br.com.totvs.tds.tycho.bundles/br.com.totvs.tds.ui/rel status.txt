@@ -4,9 +4,14 @@
 * Melhorias
 - Inicialização de ambiente master/slave local
 
-* Falta
+* Andamento
 - Monitor
+
+* Falta
 - Assistentes AdvPL
 - Integração com Dicionários de Dados
 - Exemplos AdvPL
 - EGG (necessita refinar a interface e o processo)
+
+* Conversar
+- AD no login com demora???? (FW)

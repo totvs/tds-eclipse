@@ -164,11 +164,11 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 		menuItem.setData("server", server); //$NON-NLS-1$
 
 		if (activeServer != null && server.getName().equals(activeServer.getName())) {
-			menuItem.setImage(ServerUIIcons.getOk().createImage());
+			menuItem.setImage(ServerUIIcons.getOk().createImage(true));
 		} else if (server.isConnected()) {
-			menuItem.setImage(ServerUIIcons.getConnected().createImage());
+			menuItem.setImage(ServerUIIcons.getConnected().createImage(true));
 		} else {
-			menuItem.setImage(ServerUIIcons.getServer().createImage());
+			menuItem.setImage(ServerUIIcons.getServer().createImage(true));
 		}
 
 		try {
@@ -190,7 +190,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 					itemEnvironment.addSelectionListener(environmentMenuItemAction);
 					if (activeServer != null && server.getName().equals(activeServer.getName()) && environment != null
 							&& environment.equals(activeEnvironment)) {
-						itemEnvironment.setImage(ServerUIIcons.getOk().createImage());
+						itemEnvironment.setImage(ServerUIIcons.getOk().createImage(true));
 					}
 				}
 			} else {
@@ -222,7 +222,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				popupMenu.setVisible(true);
 			}
 		});
-		this.tbServerItem.setImage(ServerUIIcons.getServer().createImage());
+		this.tbServerItem.setImage(ServerUIIcons.getServer().createImage(true));
 
 		this.tbUserItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbUserItem.addSelectionListener(new SelectionAdapter() {
@@ -231,7 +231,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				System.out.println("StatusLineControl.fill(...).new SelectionAdapter() {...}.widgetSelected()"); //$NON-NLS-1$
 			}
 		});
-		this.tbUserItem.setImage(ServerUIIcons.getUser().createImage());
+		this.tbUserItem.setImage(ServerUIIcons.getUser().createImage(true));
 
 		this.tbCompileKeyItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbCompileKeyItem.addSelectionListener(new SelectionAdapter() {
@@ -243,8 +243,8 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 						null).open();
 			}
 		});
-		this.tbCompileKeyItem.setImage(ServerUIIcons.getCompileKeyUnlock().createImage());
-		this.tbCompileKeyItem.setDisabledImage(ServerUIIcons.getCompileKeyLock().createImage());
+		this.tbCompileKeyItem.setImage(ServerUIIcons.getCompileKeyUnlock().createImage(true));
+		this.tbCompileKeyItem.setDisabledImage(ServerUIIcons.getCompileKeyLock().createImage(true));
 
 		this.tbOrganizationItem = new ToolItem(this.toolBar, SWT.NONE);
 		this.tbOrganizationItem.addSelectionListener(new SelectionAdapter() {
@@ -253,7 +253,7 @@ public class StatusLineControl extends WorkbenchWindowControlContribution implem
 				openSelectOrganization();
 			}
 		});
-		this.tbOrganizationItem.setImage(ServerUIIcons.getOrganizations().createImage());
+		this.tbOrganizationItem.setImage(ServerUIIcons.getOrganizations().createImage(true));
 
 		updateStatusPanel();
 

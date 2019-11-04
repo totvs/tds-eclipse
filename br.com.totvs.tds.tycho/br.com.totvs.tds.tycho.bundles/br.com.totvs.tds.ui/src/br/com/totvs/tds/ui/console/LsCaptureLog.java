@@ -6,25 +6,58 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleListener;
 import org.eclipse.ui.console.MessageConsole;
 import org.json.JSONObject;
 
+import br.com.totvs.tds.lsp.server.LspActivator;
 import br.com.totvs.tds.ui.TDSUIActivator;
 
-public class LsCaptureLog implements IConsoleListener, IDocumentListener {
+public class LsCaptureLog implements ILsCaptureLog {
+//TODO: melhorar criando console próprio
 
-	private static final IConsoleListener INSTANCE = new LsCaptureLog();
+	private static IConsoleListener INSTANCE = null;
 
 	private LsCaptureLog() {
 
 	}
 
 	public static IConsoleListener getInstance() {
+		if (INSTANCE == null) {
+			if (!LspActivator.isDebug()) {
+				INSTANCE = new ILsCaptureLog() {
 
+					@Override
+					public void documentChanged(final DocumentEvent event) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void documentAboutToBeChanged(final DocumentEvent event) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void consolesRemoved(final IConsole[] consoles) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void consolesAdded(final IConsole[] consoles) {
+						// TODO Auto-generated method stub
+
+					}
+				};
+			} else {
+				INSTANCE = new LsCaptureLog();
+			}
+		}
 		return INSTANCE;
+
 	}
 
 	@Override
@@ -82,7 +115,7 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 						final JSONObject error = (JSONObject) json.get("error"); //$NON-NLS-1$
 						final int code = error.getInt("code"); //$NON-NLS-1$
 						final String msg = error.getString("message"); //$NON-NLS-1$
-						TDSUIActivator.logStatus(IStatus.ERROR, -1, Messages.LsCaptureLog_12, code,
+						TDSUIActivator.logStatus(IStatus.ERROR, Messages.LsCaptureLog_12, code,
 								msg.replace("\n", "\n\t")); // $NON-NLS-3$ //$NON-NLS-4$
 					} catch (final Exception e) {
 						System.out.println("ServerUIActivator.logging()"); //$NON-NLS-1$
@@ -111,7 +144,7 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 						i++;
 					}
 
-					TDSUIActivator.logStatus(type, -1, finalMsg.isEmpty() ? msg : finalMsg);
+					TDSUIActivator.logStatus(type, finalMsg.isEmpty() ? msg : finalMsg);
 				}
 			} else {
 				final String[] lines = message.split("\n"); //$NON-NLS-1$
@@ -155,13 +188,13 @@ public class LsCaptureLog implements IConsoleListener, IDocumentListener {
 
 	private void printText(final String level, final StringJoiner text) {
 		if (level.startsWith("[E")) { //$NON-NLS-1$
-			TDSUIActivator.logStatus(IStatus.ERROR, -1, text.toString());
+			TDSUIActivator.logStatus(IStatus.ERROR, "[LS] %s", text.toString());
 		} else if (level.startsWith("[I")) { //$NON-NLS-1$
-			TDSUIActivator.logStatus(IStatus.INFO, -1, text.toString());
+			TDSUIActivator.logStatus(IStatus.INFO, "[LS] %s", text.toString());
 		} else if (level.startsWith("[W")) { //$NON-NLS-1$
-			TDSUIActivator.logStatus(IStatus.WARNING, -1, text.toString());
+			TDSUIActivator.logStatus(IStatus.WARNING, "[LS] %s", text.toString());
 		} else {
-			TDSUIActivator.logStatus(IStatus.OK, -1, text.toString());
+			TDSUIActivator.logStatus(IStatus.OK, "[LS] %s", text.toString());
 		}
 	}
 

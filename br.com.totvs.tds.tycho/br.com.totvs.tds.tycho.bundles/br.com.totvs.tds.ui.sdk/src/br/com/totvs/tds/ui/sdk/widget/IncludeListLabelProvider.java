@@ -16,9 +16,9 @@ import br.com.totvs.tds.ui.sdk.SdkUIIcons;
  */
 class IncludeListLabelProvider extends StyledCellLabelProvider { // implements ILabelProvider {
 
-	private static final Image FOLDER = SdkUIIcons.getFolder().createImage();
-	private static final Image GLOBAL = SdkUIIcons.getGlobal().createImage();
-	private static final Image WORKSPACE = SdkUIIcons.getWorkspace().createImage();
+	private static final Image FOLDER = SdkUIIcons.getFolder().createImage(true);
+	private static final Image GLOBAL = SdkUIIcons.getGlobal().createImage(true);
+	private static final Image WORKSPACE = SdkUIIcons.getWorkspace().createImage(true);
 
 	@Override
 	public void update(final ViewerCell cell) {

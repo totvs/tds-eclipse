@@ -4,6 +4,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ResourceLocator;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.services.IServiceLocator;
@@ -97,19 +98,13 @@ public final class ServerUIActivator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * Returns an image descriptor for the image file at the given plug-in relative
-	 * path.
+	 * Return Server Manager service.
 	 *
-	 * @param path the path
-	 * @return the image descriptor
+	 * @return
 	 */
-	@SuppressWarnings("deprecation")
-	public ImageDescriptor getImageDescriptor(final String path) {
-		return imageDescriptorFromPlugin(PLUGIN_ID, path);
-	}
-
 	public IServerManager getServerManager() {
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+
 		return serviceLocator.getService(IServerManager.class);
 	}
 

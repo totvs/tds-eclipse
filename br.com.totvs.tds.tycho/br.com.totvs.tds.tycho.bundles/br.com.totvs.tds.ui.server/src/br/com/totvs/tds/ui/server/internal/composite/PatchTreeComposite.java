@@ -129,9 +129,9 @@ public class PatchTreeComposite extends Composite {
 		public Image getImage(final Object obj) {
 			Image igmNode = PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ETOOL_SAVE_EDIT);
 			if (obj instanceof IRpoInfo) {
-				return ServerUIIcons.getServer().createImage();
+				return ServerUIIcons.getServer().createImage(true);
 			} else if (obj instanceof PathRpoContainer) {
-				return ServerUIIcons.getDate().createImage();
+				return ServerUIIcons.getDate().createImage(true);
 			}
 			return igmNode;
 		}

@@ -226,9 +226,9 @@ public class RpoInspectorDialog extends FilteredItemsSelectionDialog implements 
 		}
 	}
 
-	private static final Image SOURCE_ICON = ServerUIIcons.getSource().createImage();
-	private static final Image RESOURCE_ICON = ServerUIIcons.getResource().createImage();
-	private static final Image FUNCTION_ICON = ServerUIIcons.getFunction().createImage();
+	private static final Image SOURCE_ICON = ServerUIIcons.getSource().createImage(true);
+	private static final Image RESOURCE_ICON = ServerUIIcons.getResource().createImage(true);
+	private static final Image FUNCTION_ICON = ServerUIIcons.getFunction().createImage(true);
 	private static final String NEW_LINE = System.getProperty("line.separator"); //$NON-NLS-1$
 	// leiaute do arquivo de exporta��o
 	private static final String HEADER_01 = "---< Informações Geraris >-----------------------------" + NEW_LINE;
