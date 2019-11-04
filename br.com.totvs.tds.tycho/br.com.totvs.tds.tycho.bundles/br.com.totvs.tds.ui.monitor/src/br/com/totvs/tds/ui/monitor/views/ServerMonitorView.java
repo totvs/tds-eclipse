@@ -26,8 +26,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TreeEvent;
-import org.eclipse.swt.events.TreeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -36,7 +34,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
@@ -75,6 +72,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 
 	private static final long SCHEDULER = 30000;
 
+	private static final int PROP_CONTENT_DESCRIPTION = 0;
+
 	private boolean recordLog = false;
 
 	public ServerMonitorView() {
@@ -86,40 +85,33 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		@Override
 		public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 			final String filter = textFilter.getText().trim().toUpperCase();
-			final IServerMonitor serverMonitor = (IServerMonitor) element;
-			final boolean ret = true;
-			searchPattern.setPattern(filter);
+			boolean result = true;
 
-//			if (serverMonitor.getMonitorType() == MonitorType.SERVER) {
-//				for (final IServerMonitor children : serverMonitor.getChildren()) {
-//					select(viewer, serverMonitor, children);
-//				}
-//			} else {
-//				if (!filter.isEmpty()) {
-//					ret = searchPattern.matches(serverMonitor.getComments().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getConection().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getDbThread().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getEnvironment().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getInstructions().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getInstructionsXSeconds().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getMachine().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getMemory().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getObservations().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getProcedure().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getProgram().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getRPO().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getSID().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getThreadId().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getTimeElapsed().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getTimeInactivity().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getTotalIos().toUpperCase())
-//							|| searchPattern.matches(serverMonitor.getUser().toUpperCase());
-//				}
-//
-//				serverMonitor.setVisible(ret);
-//			}
+			if (!(filter.isEmpty()) && (element instanceof IUserMonitor)) {
+				final IUserMonitor serverMonitor = (IUserMonitor) element;
 
-			return true;
+				searchPattern.setPattern(filter);
+				result = searchPattern.matches(serverMonitor.getClientType().toUpperCase());
+//						|| searchPattern.matches(serverMonitor.getConection().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getDbThread().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getEnvironment().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getInstructions().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getInstructionsXSeconds().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getMachine().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getMemory().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getObservations().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getProcedure().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getProgram().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getRPO().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getSID().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getThreadId().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getTimeElapsed().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getTimeInactivity().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getTotalIos().toUpperCase())
+//						|| searchPattern.matches(serverMonitor.getUser().toUpperCase());
+			}
+
+			return result;
 		}
 	}
 
@@ -128,6 +120,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	private Text textFilter;
 
 	private Map<String, IServerMonitor> itemsMonitor = new ConcurrentHashMap<String, IServerMonitor>();
+	private Map<String, IServerMonitor> pinItemsMonitor = new HashMap<String, IServerMonitor>();
 
 	private int ORDER_COLUMN = 0;
 
@@ -161,6 +154,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			public void keyPressed(final KeyEvent e) {
 			}
 		});
+
 		viewer = new TreeViewer(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.MULTI);
 		viewer.addFilter(new TableFilter());
 		treeMonitor = viewer.getTree();
@@ -173,18 +167,19 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		treeMonitor.setHeaderVisible(true);
 		treeMonitor.setLinesVisible(true);
 		treeMonitor.setEnabled(true);
-		treeMonitor.addTreeListener(new TreeListener() {
-			@Override
-			public void treeExpanded(final TreeEvent e) {
-				if (e.item instanceof TreeItem) {
-					((TreeItem) e.item).setExpanded(true);
-				}
-			}
 
-			@Override
-			public void treeCollapsed(final TreeEvent e) {
-			}
-		});
+//		treeMonitor.addTreeListener(new TreeListener() {
+//			@Override
+//			public void treeExpanded(final TreeEvent e) {
+//				if (e.item instanceof TreeItem) {
+//					((TreeItem) e.item).setExpanded(true);
+//				}
+//			}
+//
+//			@Override
+//			public void treeCollapsed(final TreeEvent e) {
+//			}
+//		});
 
 		final GridData gridData = new GridData();
 		gridData.verticalAlignment = GridData.FILL;
@@ -251,9 +246,6 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			hookSelectionService();
 		}
 
-		serverMonitorJob = new ServerMonitorJob(itemsMonitor);
-		serverMonitorJob.addJobChangeListener(this);
-		serverMonitorJob.schedule(SCHEDULER);
 	}
 
 	protected void unhookSelectionService() {
@@ -293,24 +285,21 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			updateItemsMonitor(selectedItems, item);
 		}
 
-		serverMonitorJob.cancelJobs();
-		serverMonitorJob.sleep();
+		stopMonitorJob();
 
 		itemsMonitor.clear();
-		if (!selectedItems.isEmpty()) {
-			// itemsMonitor.replaceAll(function); = selectedItems;
-			selectedItems.forEach((final String name, final IServerMonitor server) -> {
-				itemsMonitor.put(name, server);
-			});
-		}
+		selectedItems.forEach((final String name, final IServerMonitor server) -> {
+			itemsMonitor.put(name, server);
+		});
 
-		firePropertyChange(IWorkbenchPart.PROP_TITLE);
+		pinItemsMonitor.forEach((final String name, final IServerMonitor server) -> {
+			itemsMonitor.put(name, server);
+		});
+
 		viewer.setInput(itemsMonitor);
-		if (serverMonitorJob.getState() == Job.SLEEPING) {
-			Job.getJobManager().wakeUp(ServerMonitorJob.class);
-		} else {
-			serverMonitorJob.schedule();
-		}
+
+		startMonitorJob();
+		firePropertyChange(IWorkbenchPart.PROP_TITLE);
 	}
 
 	private void updateItemsMonitor(final Map<String, IServerMonitor> selectedItems, final IItemInfo itemInfo) {
@@ -436,6 +425,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		column.setText(monitorColumn.getName());
 		column.setResizable(true);
 		column.setMoveable(monitorColumn.isFixed());
+		column.setAlignment(monitorColumn.getAlignment());
 
 		return column;
 	}
@@ -507,7 +497,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 					}
 				}
 			}
-			item.removeChildrenAll();
+			// item.removeChildrenAll();
 
 			itemsMonitor.put(item.getServerName(), item);
 		}
@@ -584,4 +574,41 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			viewer.refresh();
 		});
 	}
+
+	public synchronized void startMonitorJob() {
+		if (serverMonitorJob == null) {
+			serverMonitorJob = new ServerMonitorJob(itemsMonitor);
+			serverMonitorJob.addJobChangeListener(this);
+		}
+
+		if (serverMonitorJob.getState() == Job.SLEEPING) {
+			serverMonitorJob.wakeUp();
+		} else {
+			serverMonitorJob.schedule();
+		}
+	}
+
+	public synchronized void stopMonitorJob() {
+		if (serverMonitorJob != null) {
+			serverMonitorJob.cancelJobs();
+			serverMonitorJob.sleep();
+		}
+	}
+
+	public void addServer(final IAppServerInfo serverInfo) {
+		if (!pinItemsMonitor.containsKey(serverInfo.getName())) {
+			addItem(pinItemsMonitor, serverInfo);
+
+			updateItemsMonitor(new TreePath[0]);
+		}
+	}
+
+	public void removeServer(final IAppServerInfo serverInfo) {
+		if (pinItemsMonitor.containsKey(serverInfo.getName())) {
+			pinItemsMonitor.remove(serverInfo.getName());
+
+			updateItemsMonitor(new TreePath[0]);
+		}
+	}
+
 }

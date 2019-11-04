@@ -10,8 +10,12 @@
             id="br.com.totvs.tds.ui.monitor.views.serverMonitorView"
             name="Monitor de Servidores"
             restorable="true">
+         <description>
+            Informações sobre conexões de um ou mais servidores, além de permitir efetuar operações de parada, bloqueio, notificações a usuários, entre outras.
+         </description>
       </view>
    </extension>
+   
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
@@ -54,4 +58,37 @@
       </perspectiveExtension>
    </extension>
 
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.ToggleServerMonitorHandler"
+          description="%command.description"
+          id="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
+          name="Monitorar">
+          <state
+             class="org.eclipse.ui.handlers.RegistryToggleState:true"
+             id="org.eclipse.ui.commands.toggleState">
+          </state>
+    </command>
+   </extension>
+
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="popup:br.com.totvs.tds.ui.server.views.serverView">
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
+             icon="icons/server_view.png"
+             style="toggle">
+          <visibleWhen checkEnabled="false">
+          	<or>
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+			</or>
+          </visibleWhen>
+       </command>
+    </menuContribution>
+   </extension>
+   
 </plugin>

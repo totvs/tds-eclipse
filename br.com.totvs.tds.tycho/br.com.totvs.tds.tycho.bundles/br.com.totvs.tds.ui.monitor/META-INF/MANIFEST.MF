@@ -16,6 +16,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: br.com.totvs.tds.ui.monitor
 Bundle-ActivationPolicy: lazy
 Import-Package: br.com.totvs.tds.ui,
+ br.com.totvs.tds.ui.server.handlers,
  br.com.totvs.tds.ui.server.views
 Export-Package: br.com.totvs.tds.ui.monitor;x-internal:=true,
  br.com.totvs.tds.ui.monitor.columns;x-internal:=true,

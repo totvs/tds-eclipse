@@ -21,7 +21,7 @@ public class ServerMonitorJob extends Job {
 	private IProgressMonitor progressGroup;
 
 	{
-		jobGroup = new JobGroup("Monitoramento", 3, JobGroup.ACTIVE);
+		jobGroup = new JobGroup("Monitoramento", 2, 4);
 		progressGroup = getJobManager().createProgressGroup();
 	}
 
@@ -60,6 +60,11 @@ public class ServerMonitorJob extends Job {
 			job.setJobGroup(jobGroup);
 			job.setProgressGroup(progressGroup, 3);
 			job.schedule();
+
+			if (monitor.isCanceled()) {
+				return Status.CANCEL_STATUS;
+			}
+
 		}
 
 		final String taskName = "Aguardando dados";
@@ -68,7 +73,7 @@ public class ServerMonitorJob extends Job {
 
 		do {
 			try {
-				jobGroup.join(15000, monitor);
+				jobGroup.join(3000, monitor);
 			} catch (final OperationCanceledException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -80,21 +85,22 @@ public class ServerMonitorJob extends Job {
 
 		} while (!jobGroup.getActiveJobs().isEmpty());
 
-		monitor.setTaskName("Atualizando");
+		if (!monitor.isCanceled()) {
+			monitor.setTaskName("Atualizando");
 
-		for (final Job job : jobs) {
-			monitor.worked(1);
+			for (final Job job : jobs) {
+				monitor.worked(1);
 
-			final IServerMonitor serverMonitor = job.getAdapter(IServerMonitor.class);
-			if (job.getResult() == null) {
-				serverMonitor.setStateString("(sem retono váldido");
-			}
-			if (job.getResult().isOK()) {
-				@SuppressWarnings("unchecked")
-				final List<IUserMonitor> userList = job.getAdapter(List.class);
-				serverMonitor.setChildren(userList);
-			} else {
-				serverMonitor.setStateString(job.getResult().toString());
+				final IServerMonitor serverMonitor = job.getAdapter(IServerMonitor.class);
+				if (job.getResult() == null) {
+					serverMonitor.setStateString("(sem retorno válido");
+				} else if (job.getResult().isOK()) {
+					@SuppressWarnings("unchecked")
+					final List<IUserMonitor> userList = job.getAdapter(List.class);
+					serverMonitor.setChildren(userList);
+				} else {
+					serverMonitor.setStateString(job.getResult().toString());
+				}
 			}
 		}
 
@@ -103,7 +109,7 @@ public class ServerMonitorJob extends Job {
 			status = Status.OK_STATUS;
 		}
 
-		return status;
+		return monitor.isCanceled() ? Status.CANCEL_STATUS : status;
 	}
 
 	/**

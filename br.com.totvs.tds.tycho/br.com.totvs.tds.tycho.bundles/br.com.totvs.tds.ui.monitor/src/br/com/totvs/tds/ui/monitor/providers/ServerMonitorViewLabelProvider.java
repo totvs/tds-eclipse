@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.Image;
 
 import br.com.totvs.tds.ui.monitor.MonitorUIIcons;
 import br.com.totvs.tds.ui.monitor.model.IServerMonitor;
+import br.com.totvs.tds.ui.monitor.model.IUserMonitor;
 
 /**
  * Label provider da visão "Monitor Sevidores".
@@ -38,19 +39,6 @@ public class ServerMonitorViewLabelProvider implements ITableLabelProvider {
 	private final int INACTIVITY = 14;
 	private final int TYPE_CONNECTION = 15;
 
-	// Colunas para server DBACCESS
-	// private final int SERVER_NAME = 0;
-	// private final int ENVIRONMENT = 1;
-//	private final int ID = 2;
-//	private final int USER = 3;
-//	private final int IOS_TOTALS = 4;
-//	private final int TABLES = 5;
-//	private final int COMMENTS = 6;
-//	private final int PROCEDURE = 7;
-//	private final int DBTHREAD = 8;
-//	private final int START = 9;
-//	private final int IP = 10;
-
 	@Override
 	public Image getColumnImage(final Object element, final int columnIndex) {
 		if (columnIndex == 0) {
@@ -80,96 +68,73 @@ public class ServerMonitorViewLabelProvider implements ITableLabelProvider {
 			switch (columnIndex) {
 			case SERVER_NAME:
 				returnValue = itemMonitor.getServerName();
-				// returnValue = itemMonitor.getUser();
 				break;
 			case ENVIRONMENT:
 				returnValue = String.format("%d threads", itemMonitor.getChildren().size());
-				// returnValue = itemMonitor.getEnvironment();
 				break;
 			case COMPUTER_NAME:
 				if (!itemMonitor.getStateString().isEmpty()) {
 					returnValue = String.format("(%s)", itemMonitor.getStateString().toLowerCase());
 				}
-				// returnValue = itemMonitor.getMachine();
-				break;
-			case THREAD_ID:
-				returnValue = itemMonitor.getThreadId();
-				break;
-			case USER_SERVER:
-				returnValue = itemMonitor.getUserServer();
-				break;
-			case PROGRAM:
-				returnValue = itemMonitor.getProgram();
-				break;
-			case CONECTION:
-				returnValue = itemMonitor.getConection();
-				break;
-			case TIME_ELAPSED:
-				returnValue = itemMonitor.getTimeElapsed();
-				break;
-			case INSTRUCTION:
-				returnValue = itemMonitor.getInstructions();
-				break;
-			case INSTRUCTION_PER_SECONDS:
-				returnValue = itemMonitor.getInstructionsXSeconds();
-				break;
-			case OBSERVATION:
-				returnValue = itemMonitor.getObservations();
-				break;
-			case MEMORY:
-				returnValue = itemMonitor.getMemory();
-				break;
-			case SID:
-				returnValue = itemMonitor.getSID();
-				break;
-			case RPO:
-				returnValue = itemMonitor.getRPO();
-				break;
-			case INACTIVITY:
-				returnValue = itemMonitor.getTimeInactivity();
-				break;
-			case TYPE_CONNECTION:
-				returnValue = itemMonitor.getTypeConnection();
 				break;
 			default:
-				break;
+				returnValue = "";
 			}
 		} else {
-//			switch (columnIndex) {
-//			case SERVER_NAME:
-//				returnValue = itemMonitor.getServerName();
-//				break;
-//			case ENVIRONMENT:
-//				returnValue = itemMonitor.getEnvironment();
-//				break;
-//			case ID:
-//				returnValue = itemMonitor.getThreadId();
-//				break;
-//			case USER:
-//				returnValue = itemMonitor.getUser();
-//				break;
-//			case IOS_TOTALS:
-//				returnValue = itemMonitor.getTotalIos();
-//				break;
-//			case TABLES:
-//				returnValue = itemMonitor.getTables();
-//				break;
-//			case COMMENTS:
-//				returnValue = itemMonitor.getComments();
-//				break;
-//			case PROCEDURE:
-//				returnValue = itemMonitor.getProcedure();
-//				break;
-//			case DBTHREAD:
-//				returnValue = itemMonitor.getDbThread();
-//				break;
-//			case START:
-//				returnValue = itemMonitor.getStart();
-//				break;
-//			case IP:
-//				returnValue = itemMonitor.getIP();
-//				break;
-			// }
+			final IUserMonitor itemMonitor = (IUserMonitor) obj;
+
+			switch (columnIndex) {
+			case SERVER_NAME:
+				returnValue = itemMonitor.getUsername();
+				break;
+			case ENVIRONMENT:
+				returnValue = itemMonitor.getEnvironment();
+				break;
+			case COMPUTER_NAME:
+				returnValue = itemMonitor.getComputerName();
+				break;
+			case THREAD_ID:
+				returnValue = Long.toString(itemMonitor.getThreadId());
+				break;
+			case USER_SERVER:
+				returnValue = itemMonitor.getUsername();
+				break;
+			case PROGRAM:
+				returnValue = itemMonitor.getMainName();
+				break;
+			case CONECTION:
+				returnValue = "CONECTION";
+				break;
+			case TIME_ELAPSED:
+				returnValue = itemMonitor.getElapsedTime();
+				break;
+			case INSTRUCTION:
+				returnValue = String.format("%,8d", itemMonitor.getTotalInstrCount());
+				break;
+			case INSTRUCTION_PER_SECONDS:
+				returnValue = String.format("%,8d", itemMonitor.getInstrCountPerSec());
+				break;
+			case OBSERVATION:
+				returnValue = itemMonitor.getRemark();
+				break;
+			case MEMORY:
+				returnValue = String.format("%,8d", itemMonitor.getMemUsed());
+				break;
+			case SID:
+				returnValue = itemMonitor.getSid();
+				break;
+			case RPO:
+				returnValue = "rpo";
+				break;
+			case INACTIVITY:
+				returnValue = itemMonitor.getInactiveTime();
+				break;
+			case TYPE_CONNECTION:
+				returnValue = itemMonitor.getClientType();
+				break;
+			default:
+				returnValue = "";
+			}
 		}
 
 		return returnValue;

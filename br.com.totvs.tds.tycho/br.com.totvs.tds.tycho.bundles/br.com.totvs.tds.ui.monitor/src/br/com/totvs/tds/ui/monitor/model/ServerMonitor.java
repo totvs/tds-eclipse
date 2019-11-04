@@ -9,7 +9,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
-import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 
 public class ServerMonitor implements IServerMonitor {
@@ -35,38 +35,17 @@ public class ServerMonitor implements IServerMonitor {
 
 	@Override
 	public List<IUserMonitor> getChildren() {
-		// TODO Auto-generated method stub
+
 		return users;
 	}
 
 	@Override
 	public void setChildren(final List<IUserMonitor> children) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void addChildren(final IUserMonitor itemUser) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void removeChildren(final IUserMonitor itemMonitor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void removeChildrenAll() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setParent(final IItemMonitor parent) {
-		// TODO Auto-generated method stub
-
+		if ((children == null) || (children.isEmpty())) {
+			users = Collections.emptyList();
+		} else {
+			users = children;
+		}
 	}
 
 	@Override
@@ -185,11 +164,30 @@ public class ServerMonitor implements IServerMonitor {
 	public List<IUserMonitor> getUsers() {
 		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
-		final UsersInfoNode[] userList = lsService.getUsersInfo(getToken());
+		final UsersInfoDataNode[] userList = lsService.getUsersInfo(getToken());
 		final List<IUserMonitor> result = new ArrayList<IUserMonitor>();
 
-		for (final UsersInfoNode usersInfo : userList) {
-			System.out.println(usersInfo);
+		for (final UsersInfoDataNode usersInfo : userList) {
+			final IUserMonitor userMonitor = new UserMonitor(this);
+
+			userMonitor.setUsername(usersInfo.getUsername());
+			userMonitor.setComputerName(usersInfo.getComputerName());
+			userMonitor.setThreadId(usersInfo.getThreadId());
+			userMonitor.setServer(usersInfo.getServer());
+			userMonitor.setMainName(usersInfo.getMainName());
+			userMonitor.setEnvironment(usersInfo.getEnvironment());
+			userMonitor.setLoginTime(usersInfo.getLoginTime());
+			userMonitor.setElapsedTime(usersInfo.getElapsedTime());
+			userMonitor.setTotalInstrCount(usersInfo.getTotalInstrCount());
+			userMonitor.setInstrCountPerSec(usersInfo.getInstrCountPerSec());
+			userMonitor.setRemark(usersInfo.getRemark());
+			userMonitor.setMemUsed(usersInfo.getMemUsed());
+			userMonitor.setSid(usersInfo.getSid());
+			userMonitor.setCtreeTaskId(usersInfo.getCtreeTaskId());
+			userMonitor.setClientType(usersInfo.getClientType());
+			userMonitor.setInactiveTime(usersInfo.getInactiveTime());
+
+			result.add(userMonitor);
 		}
 
 		return result;

@@ -48,27 +48,12 @@ public class RefreshServerJob extends Job {
 		}
 
 		monitor.beginTask(String.format("Monitorando %s", serverMonitor.getServerName()), 2);
-
+		monitor.worked(1);
 		monitor.setTaskName("Obtendo informações");
+		users = serverMonitor.getUsers();
 		monitor.worked(1);
 
-		users = serverMonitor.getUsers();
-
-		sleep2();
-
-		if (monitor.isCanceled()) {
-			return Status.CANCEL_STATUS;
-		}
-
-		return Status.OK_STATUS;
+		return monitor.isCanceled() ? Status.CANCEL_STATUS : Status.OK_STATUS;
 	}
 
-	private void sleep2() {
-		try {
-			getThread().sleep(5000);
-		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

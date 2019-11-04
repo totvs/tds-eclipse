@@ -19,6 +19,7 @@ import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
 import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 
@@ -292,17 +293,14 @@ public class ClientImpl extends LanguageClientImpl {
 		}
 	}
 
-	public UsersInfoNode[] usersInfo(final UsersInfoData usersInfoData) {
+	public UsersInfoDataNode[] usersInfo(final UsersInfoData usersInfoData) {
 		final ServerInterface server = (ServerInterface) getLanguageServer();
-		final CompletableFuture<UsersInfoNode[]> future = server.getUsers(usersInfoData);
-		UsersInfoNode[] result = new UsersInfoNode[0];
+		final CompletableFuture<UsersInfoNode> future = server.getUsers(usersInfoData);
+		UsersInfoDataNode[] result = new UsersInfoDataNode[0];
 
 		try {
-//			future.cancel(true);
-//			future.completeExceptionally((Throwable e) -> {
-//				System.out.println(e);
-//			});
-			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+			final UsersInfoNode infoNode = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+			result = infoNode.getMntUsers();
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

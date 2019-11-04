@@ -14,14 +14,6 @@ public interface IServerMonitor extends IItemMonitor {
 
 	void setChildren(List<IUserMonitor> children);
 
-	void addChildren(IUserMonitor itemUser);
-
-	void removeChildren(IUserMonitor itemMonitor);
-
-	void removeChildrenAll();
-
-	void setParent(IItemMonitor parent);
-
 	boolean isBlockedToConnection();
 
 	String getServerName();

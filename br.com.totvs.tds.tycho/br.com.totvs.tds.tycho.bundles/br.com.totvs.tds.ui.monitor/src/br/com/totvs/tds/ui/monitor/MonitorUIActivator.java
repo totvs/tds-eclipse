@@ -3,10 +3,16 @@ package br.com.totvs.tds.ui.monitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import br.com.totvs.tds.ui.TDSMessageHandler;
+import br.com.totvs.tds.ui.monitor.views.ServerMonitorView;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -29,6 +35,43 @@ public class MonitorUIActivator extends AbstractUIPlugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		final IPartService partService = window.getPartService();
+
+		final IPartListener listener = new IPartListener() {
+
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
+				if (part.getSite().getId().equals(ServerMonitorView.VIEW_ID)) {
+					final ServerMonitorView serverMonitorView = (ServerMonitorView) part;
+					serverMonitorView.startMonitorJob();
+				}
+
+			}
+
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
+				if (part.getSite().getId().equals(ServerMonitorView.VIEW_ID)) {
+					final ServerMonitorView serverMonitorView = (ServerMonitorView) part;
+					serverMonitorView.stopMonitorJob();
+				}
+			}
+
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
+			}
+
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
+			}
+		};
+
+		partService.addPartListener(listener);
 	}
 
 	@Override

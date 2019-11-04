@@ -23,7 +23,7 @@ import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
-import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
+import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationData;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationInfo;
@@ -389,12 +389,12 @@ public final class LsServiceImpl implements ILanguageServerService {
 	}
 
 	@Override
-	public UsersInfoNode[] getUsersInfo(final String token) {
+	public UsersInfoDataNode[] getUsersInfo(final String token) {
 		final UsersInfo usersInfo = new UsersInfo();
 		usersInfo.setConnectionToken(token);
 
 		final UsersInfoData usersInfoData = new UsersInfoData(usersInfo);
-		final UsersInfoNode[] usersInfoNodes = ClientImpl.getInstance().usersInfo(usersInfoData);
+		final UsersInfoDataNode[] usersInfoNodes = ClientImpl.getInstance().usersInfo(usersInfoData);
 
 		return usersInfoNodes;
 	}

@@ -3,6 +3,8 @@ package br.com.totvs.tds.ui.monitor.columns;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+
 /**
  * Colunas que estão sendo monitoradas pelo servidor.
  *
@@ -30,14 +32,29 @@ public final class MonitorColumn {
 	private static final int INACTIVITY = 14;
 	private static final int TYPE_CONNECTION = 15;
 
-	public MonitorColumn(final String name, final boolean fixed, final int order) {
-		this.name = name;
-		this.fixed = fixed;
-		this.order = order;
-		this.size = 150;
+	private int alignment;
+
+	public MonitorColumn(final String name, final int order) {
+		this(name, order, SWT.LEFT, false);
 	}
 
 	public MonitorColumn() {
+	}
+
+	public MonitorColumn(final String name, final int order, final int alignment) {
+		this(name, order, alignment, false);
+	}
+
+	public MonitorColumn(final String name, final int order, final int alignment, final boolean fixed) {
+		this.name = name;
+		this.alignment = alignment;
+		this.fixed = fixed;
+		this.order = order;
+		this.size = 75;
+	}
+
+	public MonitorColumn(final String name, final int order, final boolean fixed) {
+		this(name, order, SWT.LEFT, fixed);
 	}
 
 	/**
@@ -136,23 +153,43 @@ public final class MonitorColumn {
 		if (columnsToMonitor == null) {
 			columnsToMonitor = new ArrayList<MonitorColumn>();
 
-			columnsToMonitor.add(new MonitorColumn("Servidor", false, SERVER_NAME));
-			columnsToMonitor.add(new MonitorColumn("Ambiente", false, ENVIRONMENT));
-			columnsToMonitor.add(new MonitorColumn("Estação", false, COMPUTER_NAME));
-			columnsToMonitor.add(new MonitorColumn("THREAD_ID", false, THREAD_ID));
-			columnsToMonitor.add(new MonitorColumn("Usuário", false, USER_SERVER));
-			columnsToMonitor.add(new MonitorColumn("Programa", false, PROGRAM));
-			columnsToMonitor.add(new MonitorColumn("Conexão", false, CONECTION));
-			columnsToMonitor.add(new MonitorColumn("Tempo", false, TIME_ELAPSED));
-			columnsToMonitor.add(new MonitorColumn("Instruções", false, INSTRUCTION));
-			columnsToMonitor.add(new MonitorColumn("Instruções/seg", false, INSTRUCTION_PER_SECONDS));
-			columnsToMonitor.add(new MonitorColumn("Observação", false, OBSERVATION));
-			columnsToMonitor.add(new MonitorColumn("Memória", false, MEMORY));
-			columnsToMonitor.add(new MonitorColumn("SID", false, SID));
-			columnsToMonitor.add(new MonitorColumn("RPO", false, RPO));
-			columnsToMonitor.add(new MonitorColumn("Inatividade", false, INACTIVITY));
-			columnsToMonitor.add(new MonitorColumn("Conexão", false, TYPE_CONNECTION));
+			columnsToMonitor.add(new MonitorColumn("Servidor", SERVER_NAME, true));
+			columnsToMonitor.add(new MonitorColumn("Ambiente", ENVIRONMENT, true));
+			columnsToMonitor.add(new MonitorColumn("Estação", COMPUTER_NAME));
+			columnsToMonitor.add(new MonitorColumn("ID", THREAD_ID, SWT.RIGHT));
+			columnsToMonitor.add(new MonitorColumn("Usuário", USER_SERVER));
+			columnsToMonitor.add(new MonitorColumn("Programa", PROGRAM));
+			columnsToMonitor.add(new MonitorColumn("Conexão", CONECTION));
+			columnsToMonitor.add(new MonitorColumn("Tempo", TIME_ELAPSED, SWT.RIGHT));
+			columnsToMonitor.add(new MonitorColumn("Instruções", INSTRUCTION, SWT.RIGHT));
+			columnsToMonitor.add(new MonitorColumn("Instruções/seg", INSTRUCTION_PER_SECONDS, SWT.RIGHT));
+			columnsToMonitor.add(new MonitorColumn("Observação", OBSERVATION));
+			columnsToMonitor.add(new MonitorColumn("Memória", MEMORY, SWT.RIGHT));
+			columnsToMonitor.add(new MonitorColumn("SID", SID));
+			columnsToMonitor.add(new MonitorColumn("RPO", RPO));
+			columnsToMonitor.add(new MonitorColumn("Inatividade", INACTIVITY, SWT.RIGHT));
+			columnsToMonitor.add(new MonitorColumn("Conexão", TYPE_CONNECTION));
+
+			columnsToMonitor.get(SERVER_NAME).setSize(150);
+			columnsToMonitor.get(ENVIRONMENT).setSize(150);
+			columnsToMonitor.get(COMPUTER_NAME).setSize(150);
+			columnsToMonitor.get(OBSERVATION).setSize(250);
+
 		}
 		return columnsToMonitor;
+	}
+
+	/**
+	 * @return the alignment
+	 */
+	public int getAlignment() {
+		return alignment;
+	}
+
+	/**
+	 * @param alignment the align to set
+	 */
+	public void setAlignment(final int alignment) {
+		this.alignment = alignment;
 	}
 }

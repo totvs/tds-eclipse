@@ -64,6 +64,6 @@ public interface ServerInterface extends LanguageServer {
 	public CompletableFuture<?> defragRpo(DefragRpoData defragRPOData);
 
 	@JsonRequest("$totvsmonitor/getUsers")
-	public CompletableFuture<UsersInfoNode[]> getUsers(UsersInfoData usersInfoData);
+	public CompletableFuture<UsersInfoNode> getUsers(UsersInfoData usersInfoData);
 
 }

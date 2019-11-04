@@ -1,6 +1,5 @@
 package br.com.totvs.tds.ui.monitor.providers;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -43,13 +42,8 @@ public class ServerMonitorViewContentProvider implements ITreeContentProvider {
 	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof IServerMonitor) {
 			final IServerMonitor itemMonitor = (IServerMonitor) parentElement;
-			final ArrayList<IUserMonitor> children = new ArrayList<>();
 
-			for (final IUserMonitor users : itemMonitor.getChildren()) {
-				children.add(users);
-			}
-
-			return children.toArray();
+			return itemMonitor.getChildren().toArray();
 		}
 
 		return EMPTY_ARRAY;
