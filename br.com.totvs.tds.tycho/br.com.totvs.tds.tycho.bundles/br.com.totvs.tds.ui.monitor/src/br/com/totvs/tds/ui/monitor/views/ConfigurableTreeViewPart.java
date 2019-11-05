@@ -104,7 +104,7 @@ public abstract class ConfigurableTreeViewPart extends ViewPart implements IConf
 	}
 
 	@Override
-	public final void init(final IViewSite site, final IMemento memento) throws PartInitException {
+	public void init(final IViewSite site, final IMemento memento) throws PartInitException {
 		super.init(site, memento);
 
 		if (memento != null) {
@@ -135,7 +135,7 @@ public abstract class ConfigurableTreeViewPart extends ViewPart implements IConf
 	}
 
 	@Override
-	public final void saveState(final IMemento memento) {
+	public void saveState(final IMemento memento) {
 		super.saveState(memento);
 		IMemento columns = memento.getChild(IColumnInfo.CAN_BE_CONFIGURED);
 		if (columns == null) {

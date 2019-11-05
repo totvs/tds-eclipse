@@ -165,4 +165,6 @@ public interface IServerConstants {
 
 	public static final String PERMISSIONS_APPLY_PATCH_ALLOWED = "PERMISSIONS_APPLY_PATCH_ALLOWED"; //$NON-NLS-1$
 
+	public static final String PINNED = "pinned";
+
 }

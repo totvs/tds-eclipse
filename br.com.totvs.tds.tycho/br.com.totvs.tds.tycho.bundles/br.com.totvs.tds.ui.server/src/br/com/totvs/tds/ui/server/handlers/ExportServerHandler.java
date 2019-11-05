@@ -22,6 +22,8 @@ public class ExportServerHandler extends ServerHandler {
 //		impAttributes.selection = getSelection();
 //		impAttributes.setTotvsServers(null);
 //		ExportServersWizard wizard = new ExportServersWizard(impAttributes);
+		// Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
+
 //		WizardDialog dialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 //		dialog.setBlockOnOpen(true);
 //		dialog.open();

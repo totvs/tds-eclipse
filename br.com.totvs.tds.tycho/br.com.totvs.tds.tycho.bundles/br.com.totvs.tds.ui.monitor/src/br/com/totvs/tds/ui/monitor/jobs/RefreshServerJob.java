@@ -21,8 +21,8 @@ public class RefreshServerJob extends Job {
 
 	public RefreshServerJob(final IServerMonitor serverMonitor) {
 		super(String.format("Monitor %s", serverMonitor.getServerName()));
-		this.serverMonitor = serverMonitor;
 		setRule(ServerRules.monitorRule(serverMonitor.getServerInfo().getId()));
+		this.serverMonitor = serverMonitor;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -49,6 +49,7 @@ public class RefreshServerJob extends Job {
 
 		monitor.beginTask(String.format("Monitorando %s", serverMonitor.getServerName()), 2);
 		monitor.worked(1);
+
 		monitor.setTaskName("Obtendo informações");
 		users = serverMonitor.getUsers();
 		monitor.worked(1);

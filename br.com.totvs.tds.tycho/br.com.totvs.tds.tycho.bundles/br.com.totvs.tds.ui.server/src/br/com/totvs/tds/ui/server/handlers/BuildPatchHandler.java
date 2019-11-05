@@ -64,7 +64,7 @@ public class BuildPatchHandler extends ServerHandler {
 
 		try {
 			if (currentServer != null) {
-				Shell shell = new Shell(Display.getCurrent());
+				Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
 				WizardDialog dialog = new WizardDialog(shell, patchWizard);
 				dialog.setBlockOnOpen(true);
 				dialog.setHelpAvailable(true);

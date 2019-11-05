@@ -142,20 +142,6 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 		return rootGroupInfo;
 	}
 
-	@Override
-	public List<IAppServerInfo> getMonitoringServers() {
-		final List<IAppServerInfo> list = new ArrayList<IAppServerInfo>();
-		final List<IAppServerInfo> servers = getActiveServers();
-
-		for (final IAppServerInfo si : servers) {
-//			if (si.isMonitoring()) {
-//				list.add(si);
-//			}
-		}
-
-		return list;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 *
@@ -283,40 +269,40 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 
 		if (inputStream.available() == 0) {
 			ServerActivator.logStatus(IStatus.WARNING, "Arquivo de servidores vazio.");
-			return;
-		}
+		} else {
 
-		try {
-			final ObjectInputStream ois = new ObjectInputStream(inputStream);
-			@SuppressWarnings("unused")
-			final long version = ois.readLong();
+			try {
+				final ObjectInputStream ois = new ObjectInputStream(inputStream);
+				@SuppressWarnings("unused")
+				final long version = ois.readLong();
 
-			final IGroupInfo rootGroupAux = (IGroupInfo) ois.readObject();
-			if (rootGroupAux != null) {
-				final String rootName = rootGroupInfo.getName();
-				rootGroupInfo.setName(rootName);
+				final IGroupInfo rootGroupAux = (IGroupInfo) ois.readObject();
+				if (rootGroupAux != null) {
+					final String rootName = rootGroupInfo.getName();
+					rootGroupInfo.setName(rootName);
 
-				if (rootGroupAux instanceof IRootInfo) {
-					rootGroupInfo = rootGroupAux;
-				} else {
-					rootGroupAux.getChildren().stream().forEach(s -> rootGroupInfo.addChild(s));
+					if (rootGroupAux instanceof IRootInfo) {
+						rootGroupInfo = rootGroupAux;
+					} else {
+						rootGroupAux.getChildren().stream().forEach(s -> rootGroupInfo.addChild(s));
+					}
 				}
+
+				final String currentServerName = (String) ois.readObject();
+
+				@SuppressWarnings("unchecked")
+				final List<String> serversRunning = (ArrayList<String>) ois.readObject();
+				ois.close();
+
+				final List<IAppServerInfo> activeServers = getActiveServers();
+
+				startLocalServesAndConnections(currentServerName, serversRunning, activeServers, 3000);
+			} finally {
 			}
-
-			final String currentServerName = (String) ois.readObject();
-
-			@SuppressWarnings("unchecked")
-			final List<String> serversRunning = (ArrayList<String>) ois.readObject();
-			ois.close();
-
-			final List<IAppServerInfo> activeServers = getActiveServers();
-
-			startLocalServesAndConnections(currentServerName, serversRunning, activeServers, 3000);
-		} finally {
-			hookChangeListener(rootGroupInfo);
-			setLoading(false);
-			refresh();
 		}
+		hookChangeListener(rootGroupInfo);
+		setLoading(false);
+		refresh();
 	}
 
 	private void startLocalServesAndConnections(final String currentServerName, final List<String> serversRunning,
@@ -466,6 +452,8 @@ public final class ServerManagerImpl extends AbstractBean implements IServerMana
 	 */
 	@Override
 	public void saveTo(final OutputStream outputStream) throws IOException {
+//		  XMLMemento rootNode = XMLMemento.createReadRoot(new FileReader("XML sample.xml"));
+//		XMLMemento memento = new XMLMemento(document, element)
 		final ObjectOutputStream oos = new ObjectOutputStream(outputStream);
 
 		oos.writeLong(CURRENT_VERSION);

@@ -1,12 +1,10 @@
 package br.com.totvs.tds.ui.monitor.handlers;
 
-import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
@@ -20,8 +18,7 @@ public class ToggleServerMonitorHandler extends ServerHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final Command command = event.getCommand();
-		final boolean oldValue = HandlerUtil.toggleCommandState(command);
+		final String operation = event.getParameter("br.com.totvs.tds.ui.monitor.operationParameter");
 
 		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		serverMonitorView = (ServerMonitorView) page.findView(ServerMonitorView.VIEW_ID);
@@ -36,10 +33,17 @@ public class ToggleServerMonitorHandler extends ServerHandler {
 
 		final IItemInfo selection = getSelection();
 		if (selection != null) {
-			toggleServerMonitor(!oldValue, selection);
+			toggleServerMonitor(operation.equals("add"), selection);
 		}
 
-		return !oldValue;
+		return operation.equals("add");
+	}
+
+	@Override
+	public boolean isEnabled() {
+		final IAppServerInfo server = (IAppServerInfo) getSelection();
+
+		return server == null ? true : !server.isPinnedMonitor();
 	}
 
 	private void toggleServerMonitor(final boolean value, final IItemInfo selection) {

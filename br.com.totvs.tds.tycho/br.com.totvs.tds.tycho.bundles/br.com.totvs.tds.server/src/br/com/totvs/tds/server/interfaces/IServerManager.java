@@ -57,8 +57,6 @@ public interface IServerManager {
 	 */
 	IGroupInfo getItems();
 
-	List<IAppServerInfo> getMonitoringServers();
-
 	/**
 	 * Recupera um servidor a partir de seu nome.
 	 *

@@ -1,9 +1,10 @@
 package br.com.totvs.tds.ui.monitor.views;
 
-import java.util.Comparator;
+import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.core.commands.Command;
@@ -24,8 +25,6 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,9 +33,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.dialogs.SearchPattern;
@@ -47,7 +49,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.ui.monitor.LogSessionMonitor;
+import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.monitor.MonitorUIActivator;
 import br.com.totvs.tds.ui.monitor.columns.MonitorColumn;
 import br.com.totvs.tds.ui.monitor.jobs.ServerMonitorJob;
@@ -71,13 +73,6 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	public static final String VIEW_ID = "br.com.totvs.tds.ui.monitor.views.serverMonitorView"; //$NON-NLS-1$
 
 	private static final long SCHEDULER = 30000;
-
-	private static final int PROP_CONTENT_DESCRIPTION = 0;
-
-	private boolean recordLog = false;
-
-	public ServerMonitorView() {
-	}
 
 	private class TableFilter extends ViewerFilter {
 		private SearchPattern searchPattern = new SearchPattern();
@@ -122,8 +117,6 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	private Map<String, IServerMonitor> itemsMonitor = new ConcurrentHashMap<String, IServerMonitor>();
 	private Map<String, IServerMonitor> pinItemsMonitor = new HashMap<String, IServerMonitor>();
 
-	private int ORDER_COLUMN = 0;
-
 	private IExecutionListener executionListener;
 
 	private Command actionSelectToMonitor;
@@ -131,6 +124,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	private ISelectionListener selectionListener;
 
 	private ServerMonitorJob serverMonitorJob;
+
+	private PropertyChangeListener propertyChangeListener;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -196,9 +191,51 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		viewer.setInput(itemsMonitor);
 
 		initializeActions();
+		hookNotifications();
 		hookActions();
 
 		getSite().setSelectionProvider(viewer);
+	}
+
+	@Override
+	public final void init(final IViewSite site, final IMemento memento) throws PartInitException {
+		super.init(site, memento);
+
+		if (memento != null) {
+			final IMemento child = memento.getChild("pinnedServers");
+
+			if (child != null) {
+				final Boolean empty = child.getBoolean("empty");
+
+				if ((empty != null) && !empty) {
+					final IMemento[] pinnedServers = child.getChildren("server");
+					final IServerManager serverManager = MonitorUIActivator.getDefault().getServerManager();
+
+					for (final IMemento pinnedServer : pinnedServers) {
+						final String name = pinnedServer.getString("name");
+						final IAppServerInfo server = serverManager.getServer(name);
+
+						addItem(pinItemsMonitor, server);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public final void saveState(final IMemento memento) {
+		super.saveState(memento);
+
+		IMemento child = memento.getChild("pinnedServers");
+		if (child == null) {
+			child = memento.createChild("pinnedServers");
+		}
+		child.putBoolean("empty", pinItemsMonitor.isEmpty());
+		for (final Entry<String, IServerMonitor> monitor : pinItemsMonitor.entrySet()) {
+			final IMemento serverChild = child.createChild("server",
+					monitor.getValue().getServerInfo().getId().toString());
+			serverChild.putString("name", monitor.getKey());
+		}
 	}
 
 	private void initializeActions() {
@@ -207,6 +244,21 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 
 		actionSelectToMonitor = commandService
 				.getCommand("br.com.totvs.tds.ui.server.commands.monitorSelectionCommand"); //$NON-NLS-1$
+	}
+
+	private void hookNotifications() {
+		propertyChangeListener = evt -> {
+			if (evt.getPropertyName().equals("_refresh_")) { //$NON-NLS-1$
+				updateItemsMonitor(new TreePath[0]);
+			}
+
+			if (evt.getPropertyName().equals("remove_children")) { //$NON-NLS-1$
+				viewer.refresh();
+			}
+		};
+
+		final IServerManager serverManager = MonitorUIActivator.getDefault().getServerManager();
+		serverManager.addPropertyChangeListener(propertyChangeListener);
 	}
 
 	private void hookActions() {
@@ -292,7 +344,12 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			itemsMonitor.put(name, server);
 		});
 
-		pinItemsMonitor.forEach((final String name, final IServerMonitor server) -> {
+		pinItemsMonitor.forEach((final String name, IServerMonitor server) -> {
+			if (server == null) {
+				final IAppServerInfo serverInfo = MonitorUIActivator.getDefault().getServerManager().getServer(name);
+				server = new ServerMonitor(serverInfo, itemsMonitor);
+
+			}
 			itemsMonitor.put(name, server);
 		});
 
@@ -329,88 +386,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		final List<MonitorColumn> columns = MonitorColumn.getColumnsToMonitor();
 
 		for (final MonitorColumn monitorColumn : columns) {
-			final TreeColumn column = createTreeColumn(monitorColumn);
-			column.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					ORDER_COLUMN = monitorColumn.getOrder();
-					// orderColumn(ORDER_COLUMN);
-
-					if (itemsMonitor.size() > 0) {
-						treeMonitor.setSortColumn(column);
-						treeMonitor.setSortDirection(SWT.DOWN);
-					} else {
-						treeMonitor.setSortColumn(null);
-					}
-					viewer.refresh();
-				}
-			});
+			createTreeColumn(monitorColumn);
 		}
-	}
-
-//	private void orderColumn(final int columnNumber) {
-//		ArrayList<IServerMonitor> arrayUsuarios = new ArrayList<IServerMonitor>();
-//		final ArrayList<IServerMonitor> arrayServers = new ArrayList<IServerMonitor>();
-//		for (final IServerMonitor server : itemsMonitor) {
-//			arrayUsuarios = getChildrens(server.getChildren());
-//			Collections.sort(arrayUsuarios, Comparator(columnNumber));
-//			server.setChildren(arrayUsuarios);
-//			arrayServers.add(server);
-//		}
-//		itemsMonitor = new ArrayList<IServerMonitor>();
-//		for (final IServerMonitor server : arrayServers) {
-//			itemsMonitor.add(server);
-//		}
-//		viewer.refresh();
-//	}
-
-	private Comparator<? super IServerMonitor> Comparator(final int columnNumber) {
-		return (o1, o2) -> {
-
-			switch (columnNumber) {
-			case 0:
-				return (o1.getServerName().compareTo(o2.getServerName()));
-			case 1:
-				return (o1.getEnvironment().compareTo(o2.getEnvironment()));
-			case 2:
-				return (o1.getMachine().compareTo(o2.getMachine()));
-			case 3:
-				final Long o1ThreadId = Long.valueOf(o1.getThreadId());
-				final Long o2ThreadId = Long.valueOf(o2.getThreadId());
-				return (o1ThreadId.compareTo(o2ThreadId));
-			case 4:
-				return (o1.getUserServer().compareTo(o2.getUserServer()));
-			case 5:
-				return (o1.getProgram().compareTo(o2.getProgram()));
-			case 6:
-				return (o1.getConection().compareTo(o2.getConection()));
-			case 7:
-				return (o1.getTimeElapsed().compareTo(o2.getTimeElapsed()));
-			case 8:
-				final Long o1Instrucoes = new Long(Long.valueOf(o1.getInstructions()));
-				final Long o2Instrucoes = Long.valueOf(o2.getInstructions());
-				return (o1Instrucoes.compareTo(o2Instrucoes));
-			case 9:
-				final Long o1InstrucoesXSegundo = Long.valueOf(o1.getInstructionsXSeconds());
-				final Long o2InstrucoesXSegundo = Long.valueOf(o2.getInstructionsXSeconds());
-				return (o1InstrucoesXSegundo.compareTo(o2InstrucoesXSegundo));
-			case 10:
-				return (o1.getObservations().compareTo(o2.getObservations()));
-			case 11:
-				final Long o1Memoria = Long.valueOf(o1.getMemory());
-				final Long o2Memoria = Long.valueOf(o2.getMemory());
-				return (o1Memoria.compareTo(o2Memoria));
-			case 12:
-				return (o1.getSID().compareTo(o2.getSID()));
-			case 13:
-				return (o1.getRPO().compareTo(o2.getRPO()));
-			case 14:
-				return (o1.getTypeConnection().compareTo(o2.getTypeConnection()));
-			case 15:
-				return (o1.getTimeInactivity().compareTo(o2.getTimeInactivity()));
-			}
-			return 0;
-		};
 	}
 
 	/**
@@ -471,54 +448,10 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		return selectedItems.containsKey(element);
 	}
 
-	private List<IServerMonitor> refreshItems(final List<IServerMonitor> items)
-			throws IllegalArgumentException, Exception {
-		LogSessionMonitor logMonitor = null;
-
-		if (recordLog) {
-			logMonitor = new LogSessionMonitor();
-			logMonitor.open();
-		}
-
-		for (final IServerMonitor item : items) {
-			List<IUserMonitor> users = null;
-			final IAppServerInfo serverInfo = item.getServerInfo();
-
-			if (serverInfo.isConnected()) {
-				users = item.getChildren();
-				if (recordLog) {
-					if (users != null) {
-						logMonitor.header(serverInfo.getAddress().toString(), users.size());
-						// logMonitor.write(users);
-						logMonitor.footer();
-					} else {
-						logMonitor.write("< Informações não disponível. >\n".getBytes());
-						logMonitor.write("< Refaça a conexão.           >\n".getBytes());
-					}
-				}
-			}
-			// item.removeChildrenAll();
-
-			itemsMonitor.put(item.getServerName(), item);
-		}
-
-		if (recordLog) {
-			logMonitor.close();
-
-			MonitorUIActivator.logStatus(IStatus.WARNING, "Gerado log de sessões do monitor.\n\tArquivo: %s",
-					logMonitor.getFilename());
-
-			logMonitor = null;
-		}
-
-		return items;
-	}
-
 	@Override
 	public void dispose() {
 		unhookSelectionService();
 		unhookActions();
-		serverMonitorJob.cancelJobs();
 		serverMonitorJob.cancel();
 
 		super.dispose();
@@ -545,12 +478,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		final IStatus result = event.getResult();
 
 		if (result.isOK()) {
-			// update users
+			job.setProperty(ServerMonitorJob.WRITE_LOG, true); // TODO: finalizar
 			job.schedule(SCHEDULER);
-//		} else if (result.getSeverity() == IStatus.CANCEL) {
-//			itemsMonitor.remove(serverMonitor.getServerName());
-//			job.setProperty(ServerMonitorJob.CANCELED, true);
-//			serverMonitor.setStateString("Cancelado");
 		}
 
 		refresh();
@@ -598,6 +527,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	public void addServer(final IAppServerInfo serverInfo) {
 		if (!pinItemsMonitor.containsKey(serverInfo.getName())) {
 			addItem(pinItemsMonitor, serverInfo);
+			serverInfo.setPinnedMonitor(true);
 
 			updateItemsMonitor(new TreePath[0]);
 		}
@@ -606,6 +536,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	public void removeServer(final IAppServerInfo serverInfo) {
 		if (pinItemsMonitor.containsKey(serverInfo.getName())) {
 			pinItemsMonitor.remove(serverInfo.getName());
+			serverInfo.setPinnedMonitor(false);
 
 			updateItemsMonitor(new TreePath[0]);
 		}

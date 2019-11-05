@@ -9,8 +9,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.services.IServiceLocator;
 import org.osgi.framework.BundleContext;
 
+import br.com.totvs.tds.server.interfaces.IServerManager;
 import br.com.totvs.tds.ui.TDSMessageHandler;
 import br.com.totvs.tds.ui.monitor.views.ServerMonitorView;
 
@@ -24,6 +26,8 @@ public class MonitorUIActivator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static MonitorUIActivator plugin;
+
+	private IServerManager serverManager;
 
 	/**
 	 * The constructor
@@ -143,5 +147,13 @@ public class MonitorUIActivator extends AbstractUIPlugin {
 		}
 
 		return section;
+	}
+
+	public IServerManager getServerManager() {
+		if (serverManager == null) {
+			final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+			serverManager = serviceLocator.getService(IServerManager.class);
+		}
+		return serverManager;
 	}
 }

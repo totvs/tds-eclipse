@@ -4,8 +4,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
@@ -38,7 +38,7 @@ public class ApplyPatchHandler extends ServerHandler {
 
 			ApplyPatchWizard applyWizard = new ApplyPatchWizard(attributes);
 
-			Shell shell = new Shell(Display.getCurrent());
+			Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
 			WizardDialog dialog = new WizardDialog(shell, applyWizard);
 			dialog.setBlockOnOpen(true);
 			dialog.open();

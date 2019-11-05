@@ -410,4 +410,12 @@ public interface IAppServerInfo extends IItemInfo {
 	 */
 	void disconnect();
 
+	/**
+	 *
+	 * @return indica se esta com monitoramento fixo.
+	 */
+	boolean isPinnedMonitor();
+
+	void setPinnedMonitor(boolean b);
+
 }

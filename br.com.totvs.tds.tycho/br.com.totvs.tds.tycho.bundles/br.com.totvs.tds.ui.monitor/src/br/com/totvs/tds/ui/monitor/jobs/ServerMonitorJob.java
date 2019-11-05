@@ -1,5 +1,6 @@
 package br.com.totvs.tds.ui.monitor.jobs;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,14 +9,19 @@ import java.util.Map.Entry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobGroup;
 
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.ui.monitor.LogSessionMonitor;
 import br.com.totvs.tds.ui.monitor.model.IServerMonitor;
 import br.com.totvs.tds.ui.monitor.model.IUserMonitor;
 
 public class ServerMonitorJob extends Job {
+
+	public static final QualifiedName WRITE_LOG = new QualifiedName("RefreshServerJob", "write.log");
 
 	private static JobGroup jobGroup;
 	private IProgressMonitor progressGroup;
@@ -31,7 +37,7 @@ public class ServerMonitorJob extends Job {
 		super("Monitoramento");
 		this.serverMonitorMap = serverMonitors;
 		setUser(true);
-
+		setProperty(WRITE_LOG, false);
 	}
 
 	@Override
@@ -86,7 +92,14 @@ public class ServerMonitorJob extends Job {
 		} while (!jobGroup.getActiveJobs().isEmpty());
 
 		if (!monitor.isCanceled()) {
+
 			monitor.setTaskName("Atualizando");
+
+			LogSessionMonitor logMonitor = null;
+			if ((boolean) getProperty(WRITE_LOG)) {
+				logMonitor = new LogSessionMonitor();
+				// logMonitor.open();
+			}
 
 			for (final Job job : jobs) {
 				monitor.worked(1);
@@ -101,6 +114,10 @@ public class ServerMonitorJob extends Job {
 				} else {
 					serverMonitor.setStateString(job.getResult().toString());
 				}
+
+				if (logMonitor != null) {
+					// writeToFile(serverMonitor, logMonitor);
+				}
 			}
 		}
 
@@ -110,6 +127,19 @@ public class ServerMonitorJob extends Job {
 		}
 
 		return monitor.isCanceled() ? Status.CANCEL_STATUS : status;
+	}
+
+	private void writeToFile(final IServerMonitor serverMonitor, final LogSessionMonitor logMonitor2)
+			throws IOException {
+
+		final IAppServerInfo serverInfo = serverMonitor.getServerInfo();
+		final List<IUserMonitor> users = serverMonitor.getChildren();
+		final LogSessionMonitor logMonitor = new LogSessionMonitor();
+
+		logMonitor.header(serverInfo.getAddress().toString(), users.size());
+		// logMonitor.write(users);
+		logMonitor.footer();
+		logMonitor.close();
 	}
 
 	/**

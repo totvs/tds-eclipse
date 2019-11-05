@@ -997,4 +997,16 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 		}
 	}
 
+	@Override
+	public boolean isPinnedMonitor() {
+		final Boolean value = (Boolean) getProperty(IServerConstants.PINNED);
+
+		return ((value != null) && value.booleanValue());
+	}
+
+	@Override
+	public void setPinnedMonitor(final boolean pinnedMonitor) {
+		setProperty(IServerConstants.PINNED, pinnedMonitor);
+	}
+
 }

@@ -62,13 +62,14 @@
        point="org.eclipse.ui.commands">
     <command
           defaultHandler="br.com.totvs.tds.ui.monitor.handlers.ToggleServerMonitorHandler"
-          description="%command.description"
+          description="Adiciona o servidor para monitoramento fixo."
           id="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
           name="Monitorar">
-          <state
-             class="org.eclipse.ui.handlers.RegistryToggleState:true"
-             id="org.eclipse.ui.commands.toggleState">
-          </state>
+       <commandParameter
+             id="br.com.totvs.tds.ui.monitor.operationParameter"
+             name="Operação"
+             optional="false">
+       </commandParameter>
     </command>
    </extension>
 
@@ -76,18 +77,50 @@
        point="org.eclipse.ui.menus">
     <menuContribution
           allPopups="false"
-          locationURI="popup:br.com.totvs.tds.ui.server.views.serverView">
+          locationURI="popup:br.com.totvs.tds.ui.server.views.serverView?before=rpo">
        <command
              commandId="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
              icon="icons/server_view.png"
-             style="toggle">
+             label="Monitorar"
+             style="toggle"
+             tooltip="Colocar o servidor na lista de monitoramento.">
           <visibleWhen checkEnabled="false">
           	<or>
 				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
 				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
 			</or>
           </visibleWhen>
+          <parameter
+                name="br.com.totvs.tds.ui.monitor.operationParameter"
+                value="add">
+          </parameter>
        </command>
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
+             icon="icons/server_view.png"
+             label="Desguardar"
+             style="toggle"
+             tooltip="Retirar o servidor da lista de monitoramento.">
+          <visibleWhen
+                checkEnabled="false">
+             <or>
+                <reference
+                      definitionId="br.com.totvs.tds.ui.server.isAppServer">
+                </reference>
+                <reference
+                      definitionId="br.com.totvs.tds.ui.server.isGroup">
+                </reference>
+             </or>
+          </visibleWhen>
+          <parameter
+                name="br.com.totvs.tds.ui.monitor.operationParameter"
+                value="remove">
+          </parameter>
+       </command>
+       <separator
+             name="br.com.totvs.tds.ui.monitor.separator2"
+             visible="true">
+       </separator>
     </menuContribution>
    </extension>
    

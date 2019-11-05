@@ -6,7 +6,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
@@ -61,9 +62,10 @@ public class NewItemHandler extends ServerHandler {
 			return null;
 		}
 
-		// executa o assistente
 		wizard.setParentItem(element);
-		WizardDialog dlg = new WizardDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), wizard);
+
+		Shell shell = HandlerUtil.getActiveWorkbenchWindow(event).getShell();
+		WizardDialog dlg = new WizardDialog(shell, wizard);
 		dlg.open();
 
 		if (dlg.getReturnCode() == Window.OK) {
