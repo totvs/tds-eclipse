@@ -12,14 +12,12 @@ import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.ui.monitor.views.ServerMonitorView;
 import br.com.totvs.tds.ui.server.handlers.ServerHandler;
 
-public class ToggleServerMonitorHandler extends ServerHandler {
+public class AddServerMonitorHandler extends ServerHandler {
 
 	private ServerMonitorView serverMonitorView;
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final String operation = event.getParameter("br.com.totvs.tds.ui.monitor.operationParameter");
-
 		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		serverMonitorView = (ServerMonitorView) page.findView(ServerMonitorView.VIEW_ID);
 
@@ -33,10 +31,10 @@ public class ToggleServerMonitorHandler extends ServerHandler {
 
 		final IItemInfo selection = getSelection();
 		if (selection != null) {
-			toggleServerMonitor(operation.equals("add"), selection);
+			addServerMonitor(selection);
 		}
 
-		return operation.equals("add");
+		return null;
 	}
 
 	@Override
@@ -46,17 +44,13 @@ public class ToggleServerMonitorHandler extends ServerHandler {
 		return server == null ? true : !server.isPinnedMonitor();
 	}
 
-	private void toggleServerMonitor(final boolean value, final IItemInfo selection) {
+	private void addServerMonitor(final IItemInfo selection) {
 		if (selection instanceof IGroupInfo) {
 			((IGroupInfo) selection).getChildren().forEach((final IItemInfo element) -> {
-				toggleServerMonitor(value, element);
+				addServerMonitor(element);
 			});
 		} else if (selection instanceof IAppServerInfo) {
-			if (value) {
-				serverMonitorView.addServer((IAppServerInfo) selection);
-			} else {
-				serverMonitorView.removeServer((IAppServerInfo) selection);
-			}
+			serverMonitorView.addServer((IAppServerInfo) selection);
 		}
 	}
 }

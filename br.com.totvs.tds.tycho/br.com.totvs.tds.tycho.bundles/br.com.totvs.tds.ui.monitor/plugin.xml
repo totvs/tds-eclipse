@@ -61,15 +61,16 @@
  <extension
        point="org.eclipse.ui.commands">
     <command
-          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.ToggleServerMonitorHandler"
+          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.AddServerMonitorHandler"
           description="Adiciona o servidor para monitoramento fixo."
-          id="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
+          id="br.com.totvs.tds.ui.monitor.commands.addServerMonitor"
           name="Monitorar">
-       <commandParameter
-             id="br.com.totvs.tds.ui.monitor.operationParameter"
-             name="Operação"
-             optional="false">
-       </commandParameter>
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.RemoveServerMonitorHandler"
+          description="Remove o servidor do monitoramento fixo."
+          id="br.com.totvs.tds.ui.monitor.commands.removeServerMonitor"
+          name="Não Monitorar">
     </command>
    </extension>
 
@@ -79,28 +80,18 @@
           allPopups="false"
           locationURI="popup:br.com.totvs.tds.ui.server.views.serverView?before=rpo">
        <command
-             commandId="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
-             icon="icons/server_view.png"
-             label="Monitorar"
-             style="toggle"
-             tooltip="Colocar o servidor na lista de monitoramento.">
+             commandId="br.com.totvs.tds.ui.monitor.commands.addServerMonitor"
+             icon="icons/server_view.png">
           <visibleWhen checkEnabled="false">
           	<or>
 				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
 				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
 			</or>
           </visibleWhen>
-          <parameter
-                name="br.com.totvs.tds.ui.monitor.operationParameter"
-                value="add">
-          </parameter>
        </command>
        <command
-             commandId="br.com.totvs.tds.ui.monitor.commands.toggleServerMonitor"
-             icon="icons/server_view.png"
-             label="Desguardar"
-             style="toggle"
-             tooltip="Retirar o servidor da lista de monitoramento.">
+             commandId="br.com.totvs.tds.ui.monitor.commands.removeServerMonitor"
+             icon="icons/server_view.png">
           <visibleWhen
                 checkEnabled="false">
              <or>
@@ -112,10 +103,6 @@
                 </reference>
              </or>
           </visibleWhen>
-          <parameter
-                name="br.com.totvs.tds.ui.monitor.operationParameter"
-                value="remove">
-          </parameter>
        </command>
        <separator
              name="br.com.totvs.tds.ui.monitor.separator2"

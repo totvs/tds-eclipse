@@ -29,8 +29,6 @@
 		<module>br.com.totvs.tds.ui.editor.asp</module>
 		<module>br.com.totvs.tds.ui.sdk</module>
 		<module>br.com.totvs.tds.ui.sdk.advpl</module>
-		<module>
-			br.com.totvs.tds.tycho.bundles/br.com.totvs.tds.ui.monitor
-		</module>
+		<module>br.com.totvs.tds.ui.monitor</module>
 	</modules>
 </project>
