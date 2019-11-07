@@ -1,7 +1,7 @@
 package br.com.totvs.tds.ui.monitor.jobs;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,14 +14,15 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobGroup;
 
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.ui.monitor.LogSessionMonitor;
 import br.com.totvs.tds.ui.monitor.model.IServerMonitor;
 import br.com.totvs.tds.ui.monitor.model.IUserMonitor;
 
 public class ServerMonitorJob extends Job {
 
-	public static final QualifiedName WRITE_LOG = new QualifiedName("RefreshServerJob", "write.log");
+	public static final QualifiedName WRITE_LOG = new QualifiedName("RefreshServerJob", "write.log"); // terminar
+
+	public static final QualifiedName NEXT_RUN = new QualifiedName("RefreshServerJob", "next.run");;
 
 	private static JobGroup jobGroup;
 	private IProgressMonitor progressGroup;
@@ -37,7 +38,6 @@ public class ServerMonitorJob extends Job {
 		super("Monitoramento");
 		this.serverMonitorMap = serverMonitors;
 		setUser(true);
-		setProperty(WRITE_LOG, false);
 	}
 
 	@Override
@@ -52,6 +52,12 @@ public class ServerMonitorJob extends Job {
 			return Status.CANCEL_STATUS;
 		}
 
+		final Object nextRun = getProperty(NEXT_RUN);
+		if (nextRun != null) {
+			setName(String.format("Monitoramento (prox. exec. ~%tR)", ((Calendar) nextRun).getTime()));
+		} else {
+			setName("Monitoramento");
+		}
 		final int ticks = (serverMonitorMap.size() * 2) + 2;
 		setProgressGroup(progressGroup, ticks);
 
@@ -81,8 +87,7 @@ public class ServerMonitorJob extends Job {
 			try {
 				jobGroup.join(3000, monitor);
 			} catch (final OperationCanceledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				break;
 			} catch (final InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -96,7 +101,7 @@ public class ServerMonitorJob extends Job {
 			monitor.setTaskName("Atualizando");
 
 			LogSessionMonitor logMonitor = null;
-			if ((boolean) getProperty(WRITE_LOG)) {
+			if ((boolean) getProperty(ServerMonitorJob.WRITE_LOG)) { // terminar
 				logMonitor = new LogSessionMonitor();
 				// logMonitor.open();
 			}
@@ -127,19 +132,6 @@ public class ServerMonitorJob extends Job {
 		}
 
 		return monitor.isCanceled() ? Status.CANCEL_STATUS : status;
-	}
-
-	private void writeToFile(final IServerMonitor serverMonitor, final LogSessionMonitor logMonitor2)
-			throws IOException {
-
-		final IAppServerInfo serverInfo = serverMonitor.getServerInfo();
-		final List<IUserMonitor> users = serverMonitor.getChildren();
-		final LogSessionMonitor logMonitor = new LogSessionMonitor();
-
-		logMonitor.header(serverInfo.getAddress().toString(), users.size());
-		// logMonitor.write(users);
-		logMonitor.footer();
-		logMonitor.close();
 	}
 
 	/**

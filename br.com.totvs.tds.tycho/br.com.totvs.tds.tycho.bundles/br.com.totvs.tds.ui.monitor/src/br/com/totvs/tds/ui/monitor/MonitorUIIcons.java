@@ -21,7 +21,7 @@ public final class MonitorUIIcons {
 	 * @param path the path
 	 * @return the image descriptor
 	 */
-	public static ImageDescriptor getImageDescriptor(final String path) {
+	private static ImageDescriptor getImageDescriptor(final String path) {
 		return ResourceLocator.imageDescriptorFromBundle(MonitorUIActivator.PLUGIN_ID, path).get();
 	}
 
@@ -38,6 +38,11 @@ public final class MonitorUIIcons {
 	public static ImageDescriptor getUser() {
 
 		return getImageDescriptor("icons/user.png"); //$NON-NLS-1$
+	}
+
+	public static ImageDescriptor getSendMessage() {
+
+		return getImageDescriptor("icons/send_message_64.png"); //$NON-NLS-1$
 	}
 
 }

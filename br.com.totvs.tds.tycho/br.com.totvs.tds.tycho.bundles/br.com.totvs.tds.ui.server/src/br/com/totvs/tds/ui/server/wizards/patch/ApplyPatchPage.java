@@ -905,7 +905,7 @@ public class ApplyPatchPage extends WizardPage {
 
 			if (!currentAppServer.isConnected()) {
 				message = "O servidor selecionado não esta conectado.";
-			} else if (!currentAppServer.canPermission("APPLY_PATCH")) {
+			} else if (!currentAppServer.canDoOperation("APPLY_PATCH")) {
 				message = "O servidor selecionado n\u00E3o permite a aplica\u00E7\u00E3o de patchs por esta m\u00E1quina TDS.\n"
 						+ "Caso necessite, pe\u00E7a ao administrador que acrescente esta m\u00E1quina"
 						+ "\u00E0 lista com permiss\u00F5es de aplicar patch.";

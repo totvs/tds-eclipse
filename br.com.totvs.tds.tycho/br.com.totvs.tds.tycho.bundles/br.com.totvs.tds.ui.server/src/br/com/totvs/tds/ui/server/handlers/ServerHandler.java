@@ -2,54 +2,41 @@ package br.com.totvs.tds.ui.server.handlers;
 
 import java.util.List;
 
-import org.eclipse.core.commands.AbstractHandler;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import br.com.totvs.tds.server.interfaces.IItemInfo;
+import br.com.totvs.tds.ui.server.ServerUIActivator;
 
 /**
  * Classe abstrata de tratamento que utilizam ações para servidores
  *
  * @author acandido
  */
-public abstract class ServerHandler extends AbstractHandler {
+public abstract class ServerHandler extends AbstractServerHandler {
 
-	private static final IItemInfo[] EMPTY_ARRAY = new IItemInfo[0];
+	/**
+	 * @param exception Erro a ser registrado.
+	 */
+	@Override
+	protected void createThrow(final Exception exception) {
+		final Status status = new Status(IStatus.ERROR, ServerUIActivator.PLUGIN_ID, exception.getMessage(), exception); // $NON-NLS-1$
+		ServerUIActivator.logStatus(status);
+	}
 
 	/**
 	 * @return o primeiro elemento selecionado.
 	 */
 	protected IItemInfo getSelection() {
-		ISelectionService selectionService = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-		ISelection selection = selectionService.getSelection();
-		IItemInfo element = null;
-
-		if (selection != null) {
-			if (selection instanceof IStructuredSelection) {
-				element = (IItemInfo) ((IStructuredSelection) selection).getFirstElement();
-			}
-		}
-
-		return element;
+		return super.getSelection(IItemInfo.class);
 	}
 
 	/**
 	 * @return lista de elementos selecionados
 	 */
 	protected IItemInfo[] getSelections() {
-		ISelectionService selectionService = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
-		ISelection selection = selectionService.getSelection();
-		IItemInfo[] elements = EMPTY_ARRAY;
+		List<?> result = super.getSelections(IItemInfo.class);
 
-		if (selection != null & selection instanceof IStructuredSelection) {
-			List<?> list = ((IStructuredSelection) selection).toList();
-			elements = list.toArray(new IItemInfo[list.size()]);
-		}
-
-		return elements;
+		return result.toArray(new IItemInfo[result.size()]);
 	}
-
 }

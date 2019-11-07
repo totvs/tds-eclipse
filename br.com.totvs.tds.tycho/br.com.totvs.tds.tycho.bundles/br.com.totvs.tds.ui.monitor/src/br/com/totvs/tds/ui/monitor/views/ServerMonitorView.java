@@ -1,6 +1,7 @@
 package br.com.totvs.tds.ui.monitor.views;
 
 import java.beans.PropertyChangeListener;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,7 +73,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	// The view ID
 	public static final String VIEW_ID = "br.com.totvs.tds.ui.monitor.views.serverMonitorView"; //$NON-NLS-1$
 
-	private static final long SCHEDULER = 30000;
+	private static final TreePath[] TREE_PATH_EMPTY_ARRAY = new TreePath[0];
+	private static final int INTERVAL_DEFAULT = 30; // intervalo padrão 30 segundos
 
 	private class TableFilter extends ViewerFilter {
 		private SearchPattern searchPattern = new SearchPattern();
@@ -120,12 +122,14 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	private IExecutionListener executionListener;
 
 	private Command actionSelectToMonitor;
+	private Command actionRefreshMonitor;
 
 	private ISelectionListener selectionListener;
 
 	private ServerMonitorJob serverMonitorJob;
 
 	private PropertyChangeListener propertyChangeListener;
+	private int intervalScheduler = 30000; // valor inicial para 1a execução
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -218,6 +222,14 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 						addItem(pinItemsMonitor, server);
 					}
 				}
+
+				final Integer intervalScheduler = child.getInteger("intervalScheduler");
+
+				if ((intervalScheduler != null) && (intervalScheduler > 0)) {
+					this.intervalScheduler = intervalScheduler;
+				} else {
+					this.intervalScheduler = INTERVAL_DEFAULT;
+				}
 			}
 		}
 	}
@@ -231,6 +243,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			child = memento.createChild("pinnedServers");
 		}
 		child.putBoolean("empty", pinItemsMonitor.isEmpty());
+		child.putInteger("intervalScheduler", intervalScheduler);
+
 		for (final Entry<String, IServerMonitor> monitor : pinItemsMonitor.entrySet()) {
 			final IMemento serverChild = child.createChild("server",
 					monitor.getValue().getServerInfo().getId().toString());
@@ -244,16 +258,17 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 
 		actionSelectToMonitor = commandService
 				.getCommand("br.com.totvs.tds.ui.server.commands.monitorSelectionCommand"); //$NON-NLS-1$
+		actionRefreshMonitor = commandService.getCommand("br.com.totvs.tds.ui.monitor.commands.refreshMonitor"); //$NON-NLS-1$
 	}
 
 	private void hookNotifications() {
 		propertyChangeListener = evt -> {
 			if (evt.getPropertyName().equals("_refresh_")) { //$NON-NLS-1$
-				updateItemsMonitor(new TreePath[0]);
+				updateItemsMonitor();
 			}
 
 			if (evt.getPropertyName().equals("remove_children")) { //$NON-NLS-1$
-				viewer.refresh();
+				updateItemsMonitor();
 			}
 		};
 
@@ -271,12 +286,27 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 
 			@Override
 			public void postExecuteSuccess(final String commandId, final Object returnValue) {
-				final Boolean selection = (Boolean) returnValue;
+				if (commandId.equals("br.com.totvs.tds.ui.server.commands.monitorSelectionCommand")) {
+					final Boolean selection = (Boolean) returnValue;
+					if (selection) {
+						hookSelectionService();
+					} else {
+						unhookSelectionService();
+					}
+				} else if (commandId.equals("br.com.totvs.tds.ui.monitor.commands.refreshMonitor")) {
+					final Integer value = (Integer) returnValue;
 
-				if (selection) {
-					hookSelectionService();
-				} else {
-					unhookSelectionService();
+					if (value == 0) { // imediato
+						final int oldIntervalScheduler = intervalScheduler;
+						stopMonitorJob();
+						intervalScheduler = 0;
+						startMonitorJob();
+						intervalScheduler = oldIntervalScheduler;
+					} else if (value != intervalScheduler) {
+						stopMonitorJob();
+						intervalScheduler = value;
+						startMonitorJob();
+					}
 				}
 			}
 
@@ -293,6 +323,8 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		};
 
 		actionSelectToMonitor.addExecutionListener(executionListener);
+		actionRefreshMonitor.addExecutionListener(executionListener);
+
 		final Boolean state = (Boolean) actionSelectToMonitor.getState(RegistryToggleState.STATE_ID).getValue();
 		if (state) {
 			hookSelectionService();
@@ -329,15 +361,18 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		}
 	}
 
+	private void updateItemsMonitor() {
+		updateItemsMonitor(TREE_PATH_EMPTY_ARRAY);
+	}
+
 	private void updateItemsMonitor(final TreePath[] paths) {
 		final Map<String, IServerMonitor> selectedItems = new HashMap<String, IServerMonitor>();
+		stopMonitorJob();
 
 		for (final TreePath treePath : paths) {
 			final IItemInfo item = (IItemInfo) treePath.getLastSegment();
 			updateItemsMonitor(selectedItems, item);
 		}
-
-		stopMonitorJob();
 
 		itemsMonitor.clear();
 		selectedItems.forEach((final String name, final IServerMonitor server) -> {
@@ -452,6 +487,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 	public void dispose() {
 		unhookSelectionService();
 		unhookActions();
+		stopMonitorJob();
 		serverMonitorJob.cancel();
 
 		super.dispose();
@@ -459,12 +495,23 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 
 	private void unhookActions() {
 		actionSelectToMonitor.removeExecutionListener(executionListener);
+		actionRefreshMonitor.removeExecutionListener(executionListener);
+
 		executionListener = null;
 	}
 
 	@Override
 	public void aboutToRun(final IJobChangeEvent event) {
+		final Job job = event.getJob();
 
+		job.setProperty(ServerMonitorJob.WRITE_LOG, true); // finalizar
+		if (intervalScheduler == 0) {
+			job.setProperty(ServerMonitorJob.NEXT_RUN, null);
+		} else {
+			final Calendar now = Calendar.getInstance();
+			now.add(Calendar.SECOND, intervalScheduler);
+			job.setProperty(ServerMonitorJob.NEXT_RUN, now);
+		}
 	}
 
 	@Override
@@ -478,8 +525,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 		final IStatus result = event.getResult();
 
 		if (result.isOK()) {
-			job.setProperty(ServerMonitorJob.WRITE_LOG, true); // TODO: finalizar
-			job.schedule(SCHEDULER);
+			job.schedule(intervalScheduler * 1000);
 		}
 
 		refresh();
@@ -510,17 +556,14 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			serverMonitorJob.addJobChangeListener(this);
 		}
 
-		if (serverMonitorJob.getState() == Job.SLEEPING) {
-			serverMonitorJob.wakeUp();
-		} else {
-			serverMonitorJob.schedule();
+		if (!itemsMonitor.isEmpty()) {
+			serverMonitorJob.schedule(intervalScheduler);
 		}
 	}
 
 	public synchronized void stopMonitorJob() {
 		if (serverMonitorJob != null) {
-			serverMonitorJob.cancelJobs();
-			serverMonitorJob.sleep();
+			serverMonitorJob.cancel();
 		}
 	}
 
@@ -529,7 +572,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			addItem(pinItemsMonitor, serverInfo);
 			serverInfo.setPinnedMonitor(true);
 
-			updateItemsMonitor(new TreePath[0]);
+			updateItemsMonitor();
 		}
 	}
 
@@ -538,7 +581,7 @@ public final class ServerMonitorView extends ConfigurableTreeViewPart
 			pinItemsMonitor.remove(serverInfo.getName());
 			serverInfo.setPinnedMonitor(false);
 
-			updateItemsMonitor(new TreePath[0]);
+			updateItemsMonitor();
 		}
 	}
 

@@ -54,4 +54,8 @@ public interface IServerMonitor extends IItemMonitor {
 
 	List<IUserMonitor> getUsers();
 
+	boolean isConnected();
+
+	boolean isSendMessageEnabled();
+
 }

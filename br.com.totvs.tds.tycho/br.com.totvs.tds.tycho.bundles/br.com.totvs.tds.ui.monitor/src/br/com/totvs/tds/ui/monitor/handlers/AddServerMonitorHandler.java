@@ -39,9 +39,14 @@ public class AddServerMonitorHandler extends ServerHandler {
 
 	@Override
 	public boolean isEnabled() {
-		final IAppServerInfo server = (IAppServerInfo) getSelection();
+		final IItemInfo selection = getSelection();
+		IAppServerInfo server = null;
 
-		return server == null ? true : !server.isPinnedMonitor();
+		if (selection instanceof IAppServerInfo) {
+			server = (IAppServerInfo) selection;
+		}
+
+		return server == null ? true : server.isConnected() && !server.isPinnedMonitor();
 	}
 
 	private void addServerMonitor(final IItemInfo selection) {

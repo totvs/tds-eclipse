@@ -33,6 +33,7 @@ public class ActivateHandler extends ServerHandler {
 	@Override
 	public boolean isEnabled() {
 		IItemInfo itemInfo = getSelection();
+
 		return itemInfo != null && ((IAppServerInfo) itemInfo.getParent()).isConnected() && super.isEnabled();
 	}
 }

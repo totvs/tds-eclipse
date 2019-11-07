@@ -49,12 +49,6 @@
                relationship="right"
                relative="org.eclipse.ui.editorss">
          </view>
-         <viewShortcut
-               id="br.com.totvs.tds.ui.monitor.views.serverMonitorView">
-         </viewShortcut>
-         <viewShortcut
-               id="org.eclipse.ui.console.ConsoleView">
-         </viewShortcut>
       </perspectiveExtension>
    </extension>
 
@@ -71,6 +65,25 @@
           description="Remove o servidor do monitoramento fixo."
           id="br.com.totvs.tds.ui.monitor.commands.removeServerMonitor"
           name="Não Monitorar">
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.RefreshMonitorHandler"
+          id="br.com.totvs.tds.ui.monitor.commands.refreshMonitor"
+          name="Atualizar">
+       <commandParameter
+             id="br.com.totvs.tds.ui.monitor.intervalParameter"
+             name="Intervalo"
+             optional="true">
+       </commandParameter>
+       <state
+             id="br.com.totvs.tds.ui.monitor.intervalState">
+       </state>
+    </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.SendMessageHandler"
+          description="Envia mensagem de texto a usuários do servidor conectados."
+          id="br.com.totvs.tds.ui.monitor.commands.sendMessage"
+          name="Enviar Mensagem">
     </command>
    </extension>
 
@@ -89,26 +102,88 @@
 			</or>
           </visibleWhen>
        </command>
+
        <command
              commandId="br.com.totvs.tds.ui.monitor.commands.removeServerMonitor"
              icon="icons/server_view.png">
-          <visibleWhen
-                checkEnabled="false">
-             <or>
-                <reference
-                      definitionId="br.com.totvs.tds.ui.server.isAppServer">
-                </reference>
-                <reference
-                      definitionId="br.com.totvs.tds.ui.server.isGroup">
-                </reference>
-             </or>
+          <visibleWhen checkEnabled="false">
+          	<or>
+				<reference definitionId="br.com.totvs.tds.ui.server.isAppServer" />
+				<reference definitionId="br.com.totvs.tds.ui.server.isGroup" />
+			</or>
           </visibleWhen>
        </command>
+
        <separator
              name="br.com.totvs.tds.ui.monitor.separator2"
              visible="true">
        </separator>
     </menuContribution>
+
+    <menuContribution
+          allPopups="false"
+          locationURI="toolbar:br.com.totvs.tds.ui.monitor.views.serverMonitorView">
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.refreshMonitor"
+             icon="icons/refresh.png"
+             id="br.com.totvs.tds.ui.monitor.command.refresh0Monitor"
+             label="Atualizar"
+             tooltip="Atualizar visão de monitoramento assim que possível.">
+          <parameter
+                name="br.com.totvs.tds.ui.monitor.intervalParameter"
+                value="0">
+          </parameter>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.refreshMonitor"
+             icon="icons/clock_15.png"
+             id="br.com.totvs.tds.ui.monitor.command.refresh15Monitor"
+             label="Atualizar (15 seg)"
+             style="radio"
+             tooltip="Atualizar visão de monitoramento a cada 15 segundos.">
+          <parameter
+                name="br.com.totvs.tds.ui.monitor.intervalParameter"
+                value="15">
+          </parameter>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.refreshMonitor"
+             icon="icons/clock_30.png"
+             id="br.com.totvs.tds.ui.monitor.command.refresh30Monitor"
+             label="Atualizar (30 seg)"
+             style="radio"
+             tooltip="Atualizar visão de monitoramento a cada 30 segundos.">
+          <parameter
+                name="br.com.totvs.tds.ui.monitor.intervalParameter"
+                value="30">
+          </parameter>
+       </command>
+
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.refreshMonitor"
+             icon="icons/clock_60.png"
+             id="br.com.totvs.tds.ui.monitor.command.refresh60Monitor"
+             label="Atualizar (60 seg)"
+             style="radio"
+             tooltip="Atualizar visão de monitoramento a cada 60 segundos.">
+          <parameter
+                name="br.com.totvs.tds.ui.monitor.intervalParameter"
+                value="60">
+          </parameter>
+       </command>
+       <separator
+             name="br.com.totvs.tds.ui.monitor.separator1">
+       </separator>
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.commands.sendMessage"
+             icon="icons/message_user.png"
+             label="Mensagem"
+             style="push">
+       </command>
+    </menuContribution>
+    
    </extension>
    
 </plugin>

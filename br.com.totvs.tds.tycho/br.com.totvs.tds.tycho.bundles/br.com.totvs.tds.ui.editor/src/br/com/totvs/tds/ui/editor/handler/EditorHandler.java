@@ -68,7 +68,7 @@ public abstract class EditorHandler extends AbstractHandler {
 		final String environment = server.getCurrentEnvironment();
 		final String username = server.getUsername();
 
-		if (!server.canPermission("COMPILE")) { //$NON-NLS-1$
+		if (!server.canDoOperation("COMPILE")) { //$NON-NLS-1$
 			final IStatus status = EditorActivator.logStatus(IStatus.ERROR, Messages.EditorHandler_User_not_allowed_compile,
 					username, server.getName(), environment);
 			throw new ExecutionException(status.getMessage(), status.getException());

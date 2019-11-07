@@ -11,6 +11,7 @@ import org.eclipse.ui.services.IServiceLocator;
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.server.interfaces.IServerPermissions;
 
 public class ServerMonitor implements IServerMonitor {
 
@@ -195,6 +196,18 @@ public class ServerMonitor implements IServerMonitor {
 
 	private String getToken() {
 		return getServerInfo().getToken();
+	}
+
+	@Override
+	public boolean isConnected() {
+
+		return server.isConnected();
+	}
+
+	@Override
+	public boolean isSendMessageEnabled() {
+
+		return server.canDoOperation(IServerPermissions.OPER_SEND_MESSAGE);
 	}
 
 }

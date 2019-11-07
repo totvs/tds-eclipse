@@ -299,7 +299,7 @@ public interface IAppServerInfo extends IItemInfo {
 	 * @param string permissão a ser verificada
 	 * @return se tem ou permissão
 	 */
-	boolean canPermission(String string);
+	boolean canDoOperation(String string);
 
 	/**
 	 * Executável da aplicação Protheus
@@ -417,5 +417,4 @@ public interface IAppServerInfo extends IItemInfo {
 	boolean isPinnedMonitor();
 
 	void setPinnedMonitor(boolean b);
-
 }

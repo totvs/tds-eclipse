@@ -10,6 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import br.com.totvs.tds.server.interfaces.IAppServerInfo;
+import br.com.totvs.tds.ui.monitor.model.IServerMonitor;
+import br.com.totvs.tds.ui.monitor.model.IUserMonitor;
+
 /**
  * @author acandido
  *
@@ -30,6 +34,19 @@ public class LogSessionMonitor {
 		file.createNewFile();
 
 		fileOutputStream = new FileOutputStream(file);
+	}
+
+	private void writeToFile(final IServerMonitor serverMonitor, final LogSessionMonitor logMonitor2)
+			throws IOException {
+
+		final IAppServerInfo serverInfo = serverMonitor.getServerInfo();
+		final List<IUserMonitor> users = serverMonitor.getChildren();
+		final LogSessionMonitor logMonitor = new LogSessionMonitor();
+
+		logMonitor.header(serverInfo.getAddress().toString(), users.size());
+		// logMonitor.write(users);
+		logMonitor.footer();
+		logMonitor.close();
 	}
 
 	public void close() throws IOException {

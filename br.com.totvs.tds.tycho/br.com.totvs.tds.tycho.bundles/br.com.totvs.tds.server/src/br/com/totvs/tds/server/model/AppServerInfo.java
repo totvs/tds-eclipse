@@ -433,7 +433,7 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	}
 
 	@Override
-	public boolean canPermission(final String permission) {
+	public boolean canDoOperation(final String permission) {
 		return getPermissions().contains(permission);
 	}
 
