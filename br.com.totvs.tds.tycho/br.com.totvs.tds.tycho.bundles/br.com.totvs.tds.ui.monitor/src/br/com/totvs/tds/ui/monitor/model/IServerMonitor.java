@@ -2,6 +2,8 @@ package br.com.totvs.tds.ui.monitor.model;
 
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
+
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 
 public interface IServerMonitor extends IItemMonitor {
@@ -57,5 +59,11 @@ public interface IServerMonitor extends IItemMonitor {
 	boolean isConnected();
 
 	boolean isSendMessageEnabled();
+
+	IStatus sendMessageUser(String username, String computerName, long threadId, String server, String messageText);
+
+	IStatus killUser(boolean immediately, String username, String computerName, long threadId, String server);
+
+	boolean isDisconnectUserEnabled();
 
 }

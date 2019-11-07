@@ -11,9 +11,11 @@ import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
+import br.com.totvs.tds.lsp.server.model.node.KillUserNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
+import br.com.totvs.tds.lsp.server.model.node.SendMessageToUserNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoNode;
@@ -65,5 +67,14 @@ public interface ServerInterface extends LanguageServer {
 
 	@JsonRequest("$totvsmonitor/getUsers")
 	public CompletableFuture<UsersInfoNode> getUsers(UsersInfoData usersInfoData);
+
+	@JsonRequest("$totvsmonitor/sendUserMessage")
+	public CompletableFuture<SendMessageToUserNode> sendUserMessage(SendMessageToUserData sendMessageToUser);
+
+	@JsonRequest("$totvsmonitor/killUser")
+	public CompletableFuture<KillUserNode> killUser(KillUserData killUserData);
+
+	@JsonRequest("$totvsmonitor/appKillUser")
+	public CompletableFuture<KillUserNode> appKillUser(AppKillUserData appKillUserData);
 
 }

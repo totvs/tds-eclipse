@@ -45,4 +45,9 @@ public final class MonitorUIIcons {
 		return getImageDescriptor("icons/send_message_64.png"); //$NON-NLS-1$
 	}
 
+	public static ImageDescriptor getDisconnectUser() {
+
+		return getImageDescriptor("icons/disconnect_user_64.png"); //$NON-NLS-1$
+	}
+
 }

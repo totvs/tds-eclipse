@@ -85,6 +85,12 @@
           id="br.com.totvs.tds.ui.monitor.commands.sendMessage"
           name="Enviar Mensagem">
     </command>
+    <command
+          defaultHandler="br.com.totvs.tds.ui.monitor.handlers.DisconnectUserHandler"
+          description="Desconecta o usuário selecionado, imediatamente ou quando possível."
+          id="br.com.totvs.tds.ui.monitor.command.disconnectUser"
+          name="Desconectar">
+    </command>
    </extension>
 
  <extension
@@ -180,6 +186,11 @@
              commandId="br.com.totvs.tds.ui.monitor.commands.sendMessage"
              icon="icons/message_user.png"
              label="Mensagem"
+             style="push">
+       </command>
+       <command
+             commandId="br.com.totvs.tds.ui.monitor.command.disconnectUser"
+             icon="icons/disconnect_user.png"
              style="push">
        </command>
     </menuContribution>

@@ -5,13 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 
 import br.com.totvs.tds.lsp.server.ILanguageServerService;
+import br.com.totvs.tds.lsp.server.model.node.KillUserNode;
+import br.com.totvs.tds.lsp.server.model.node.SendMessageToUserNode;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerPermissions;
+import br.com.totvs.tds.ui.monitor.MonitorUIActivator;
 
 public class ServerMonitor implements IServerMonitor {
 
@@ -208,6 +212,48 @@ public class ServerMonitor implements IServerMonitor {
 	public boolean isSendMessageEnabled() {
 
 		return server.canDoOperation(IServerPermissions.OPER_SEND_MESSAGE);
+	}
+
+	@Override
+	public boolean isDisconnectUserEnabled() {
+
+		return server.canDoOperation(IServerPermissions.OPER_DISCONNECT_USER);
+	}
+
+	@Override
+	public IStatus sendMessageUser(final String username, final String computerName, final long threadId,
+			final String server, final String messageText) {
+
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+		final SendMessageToUserNode result = lsService.sendMessageUser(getToken(), username, computerName, threadId,
+				server, messageText);
+
+		if (result == null) {
+			return MonitorUIActivator.logStatus(IStatus.ERROR,
+					"Erro fatal ao enviar mensagem.\n\tServidor: %s\n\tUsuário: %s", server, username);
+		}
+
+		return MonitorUIActivator.logStatus(IStatus.INFO, "%s.\n\tServidor: %s\n\tUsuário: %s", result, server,
+				username);
+	}
+
+	@Override
+	public IStatus killUser(final boolean immediately, final String username, final String computerName,
+			final long threadId, final String server) {
+
+		final IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+		final ILanguageServerService lsService = serviceLocator.getService(ILanguageServerService.class);
+		final KillUserNode result = lsService.killUser(immediately, getToken(), username, computerName, threadId,
+				server);
+
+		if (result == null) {
+			return MonitorUIActivator.logStatus(IStatus.ERROR,
+					"Erro fatal ao desconectar usuário.\n\tServidor: %s\n\tUsuário: %s", server, username);
+		}
+
+		return MonitorUIActivator.logStatus(IStatus.INFO, "%s.\n\tServidor: %s\n\tUsuário: %s", result, server,
+				username);
 	}
 
 }

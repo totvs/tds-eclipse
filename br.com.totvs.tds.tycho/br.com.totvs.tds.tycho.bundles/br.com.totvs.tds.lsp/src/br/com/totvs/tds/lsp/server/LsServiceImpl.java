@@ -17,14 +17,18 @@ import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
+import br.com.totvs.tds.lsp.server.model.node.KillUserNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
+import br.com.totvs.tds.lsp.server.model.node.SendMessageToUserNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.lsp.server.model.node.ValidKeyNode;
+import br.com.totvs.tds.lsp.server.model.protocol.AppKillUserData;
+import br.com.totvs.tds.lsp.server.model.protocol.AppKillUserInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationData;
 import br.com.totvs.tds.lsp.server.model.protocol.AuthenticationInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.ClientImpl;
@@ -40,12 +44,16 @@ import br.com.totvs.tds.lsp.server.model.protocol.InspectorFunctionsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsData;
 import br.com.totvs.tds.lsp.server.model.protocol.InspectorObjectsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.KeyInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.KillUserData;
+import br.com.totvs.tds.lsp.server.model.protocol.KillUserInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchApplyData;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchApplyInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateData;
 import br.com.totvs.tds.lsp.server.model.protocol.PatchGenerateInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.PathDirListData;
 import br.com.totvs.tds.lsp.server.model.protocol.PathDirListInfo;
+import br.com.totvs.tds.lsp.server.model.protocol.SendMessageToUserData;
+import br.com.totvs.tds.lsp.server.model.protocol.SendMessageToUserInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsData;
 import br.com.totvs.tds.lsp.server.model.protocol.ServerPermissionsInfo;
 import br.com.totvs.tds.lsp.server.model.protocol.SlaveData;
@@ -398,4 +406,54 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 		return usersInfoNodes;
 	}
+
+	@Override
+	public SendMessageToUserNode sendMessageUser(final String token, final String userName, final String computerName,
+			final long threadId, final String serverName, final String messageText) {
+		final SendMessageToUserInfo sendMessageToUserInfo = new SendMessageToUserInfo();
+
+		sendMessageToUserInfo.setConnectionToken(token);
+		sendMessageToUserInfo.setComputerName(computerName);
+		sendMessageToUserInfo.setServerName(serverName);
+		sendMessageToUserInfo.setUserName(userName);
+		sendMessageToUserInfo.setThreadId(threadId);
+		sendMessageToUserInfo.setMessage(messageText);
+
+		final SendMessageToUserData sendMessageToUser = new SendMessageToUserData(sendMessageToUserInfo);
+
+		return ClientImpl.getInstance().sendMessageToUser(sendMessageToUser);
+	}
+
+	@Override
+	public KillUserNode killUser(final boolean immediately, final String token, final String userName,
+			final String computerName, final long threadId, final String serverName) {
+
+		if (immediately) {
+			final KillUserInfo killUserInfo = new KillUserInfo();
+
+			killUserInfo.setConnectionToken(token);
+			killUserInfo.setComputerName(computerName);
+			killUserInfo.setServerName(serverName);
+			killUserInfo.setUserName(userName);
+			killUserInfo.setThreadId(threadId);
+
+			final KillUserData killUserData = new KillUserData(killUserInfo);
+
+			return ClientImpl.getInstance().killUser(killUserData);
+		}
+
+		final AppKillUserInfo killUserInfo = new AppKillUserInfo();
+
+		killUserInfo.setConnectionToken(token);
+		killUserInfo.setComputerName(computerName);
+		killUserInfo.setServerName(serverName);
+		killUserInfo.setUserName(userName);
+		killUserInfo.setThreadId(threadId);
+
+		final AppKillUserData killUserData = new AppKillUserData(killUserInfo);
+
+		return ClientImpl.getInstance().appKillUser(killUserData);
+
+	}
+
 }

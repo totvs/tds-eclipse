@@ -14,9 +14,11 @@ import br.com.totvs.tds.lsp.server.model.node.DisconnectReturnInfo;
 import br.com.totvs.tds.lsp.server.model.node.IdNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
 import br.com.totvs.tds.lsp.server.model.node.InspectorObjectNode;
+import br.com.totvs.tds.lsp.server.model.node.KillUserNode;
 import br.com.totvs.tds.lsp.server.model.node.NodeInfo;
 import br.com.totvs.tds.lsp.server.model.node.PatchDirListNode;
 import br.com.totvs.tds.lsp.server.model.node.PatchGenerateNode;
+import br.com.totvs.tds.lsp.server.model.node.SendMessageToUserNode;
 import br.com.totvs.tds.lsp.server.model.node.ServerPermissionsNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveNode;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
@@ -301,6 +303,51 @@ public class ClientImpl extends LanguageClientImpl {
 		try {
 			final UsersInfoNode infoNode = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
 			result = infoNode.getMntUsers();
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public SendMessageToUserNode sendMessageToUser(final SendMessageToUserData sendMessageToUser) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+		final CompletableFuture<SendMessageToUserNode> future = server.sendUserMessage(sendMessageToUser);
+		SendMessageToUserNode result = null;
+
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public KillUserNode killUser(final KillUserData killUserData) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+		final CompletableFuture<KillUserNode> future = server.killUser(killUserData);
+		KillUserNode result = null;
+
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
+		} catch (final Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public KillUserNode appKillUser(final AppKillUserData appKillUserData) {
+		final ServerInterface server = (ServerInterface) getLanguageServer();
+		final CompletableFuture<KillUserNode> future = server.appKillUser(appKillUserData);
+		KillUserNode result = null;
+
+		try {
+			result = future.get(); // (LS_TIMEOUT, TimeUnit.SECONDS);
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

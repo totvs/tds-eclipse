@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.eclipse.core.runtime.IStatus;
 
 import br.com.totvs.tds.lsp.server.model.node.InspectorFunctionsNode;
+import br.com.totvs.tds.lsp.server.model.node.KillUserNode;
+import br.com.totvs.tds.lsp.server.model.node.SendMessageToUserNode;
 import br.com.totvs.tds.lsp.server.model.node.SlaveDataNode;
 import br.com.totvs.tds.lsp.server.model.node.UsersInfoDataNode;
 import br.com.totvs.tds.lsp.server.model.protocol.CompileOptions;
@@ -131,4 +133,9 @@ public interface ILanguageServerService {
 
 	UsersInfoDataNode[] getUsersInfo(String token);
 
+	SendMessageToUserNode sendMessageUser(final String token, final String userName, final String computerName,
+			final long threadId, final String serverName, final String messageText);
+
+	KillUserNode killUser(boolean immediately, String token, String username, String computerName, long threadId,
+			String server);
 }

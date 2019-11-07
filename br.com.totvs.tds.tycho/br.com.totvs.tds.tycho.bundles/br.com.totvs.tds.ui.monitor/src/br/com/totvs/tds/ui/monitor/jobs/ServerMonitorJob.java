@@ -54,7 +54,7 @@ public class ServerMonitorJob extends Job {
 
 		final Object nextRun = getProperty(NEXT_RUN);
 		if (nextRun != null) {
-			setName(String.format("Monitoramento (prox. exec. ~%tR)", ((Calendar) nextRun).getTime()));
+			setName(String.format("Monitoramento (prox. exec. ~%tT)", ((Calendar) nextRun).getTime()));
 		} else {
 			setName("Monitoramento");
 		}
