@@ -49,6 +49,7 @@ Export-Package: br.com.totvs.tds.ui;
    org.eclipse.swt.widgets,
    org.eclipse.jface.preference"
 Automatic-Module-Name: br.com.totvs.tds.ui
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/json-20190722.jar
 Bundle-ActivationPolicy: lazy
 Eclipse-RegisterBuddy: org.eclipse.swtbot.swt.finder

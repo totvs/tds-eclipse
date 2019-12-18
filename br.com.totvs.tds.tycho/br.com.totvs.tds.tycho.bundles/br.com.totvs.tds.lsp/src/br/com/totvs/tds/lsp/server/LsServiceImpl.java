@@ -83,7 +83,8 @@ public final class LsServiceImpl implements ILanguageServerService {
 
 	@Override
 	public String authentication(final String id, final URI address, final String buildVersion,
-			final String environment, final String user, final String password, final int serverType) {
+			final String environment, final String user, final String password, final int serverType,
+			final boolean secureConnection) {
 		final AuthenticationInfo authenticationInfo = new AuthenticationInfo();
 
 		authenticationInfo.setConnType(1);
@@ -96,6 +97,7 @@ public final class LsServiceImpl implements ILanguageServerService {
 		authenticationInfo.setPassword(password);
 		authenticationInfo.setAutoReconnect(true);
 		authenticationInfo.setServerType(serverType);
+		authenticationInfo.setbSecure(secureConnection ? 1 : 0);
 
 		AuthenticationNode result = null;
 		try {
@@ -121,10 +123,11 @@ public final class LsServiceImpl implements ILanguageServerService {
 	}
 
 	@Override
-	public String validation(final URI address) {
+	public String validation(final URI address, final boolean secureConnection) {
 		final ValidationInfo validationInfo = new ValidationInfo();
 		validationInfo.setServer(address.getHost());
 		validationInfo.setPort(address.getPort());
+		validationInfo.setbSecure(secureConnection ? 1 : 0);
 
 		final ValidationData validationData = new ValidationData(validationInfo);
 		final NodeInfo result = ClientImpl.getInstance().validation(validationData);

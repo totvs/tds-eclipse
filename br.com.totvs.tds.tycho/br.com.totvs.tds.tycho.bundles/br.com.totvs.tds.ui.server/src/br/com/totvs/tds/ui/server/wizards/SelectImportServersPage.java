@@ -35,12 +35,6 @@ import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.tools.ExportTool;
-import br.com.totvs.tds.server.tools.ImportTools;
-import br.com.totvs.tds.server.xml.Group;
-import br.com.totvs.tds.server.xml.ObjectFactory;
-import br.com.totvs.tds.server.xml.XMLServerRoot;
-import br.com.totvs.tds.server.xml.XMLVersionControl;
 import br.com.totvs.tds.ui.server.internal.provider.ImportServerDecoratingLabelProvider;
 import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.views.ServerViewContentProvider;
@@ -62,7 +56,7 @@ public class SelectImportServersPage extends WizardPage {
 	private Label lblDestino;
 	private Label lblSource;
 	private ArrayList<IItemInfo> nodeList;
-	private final ObjectFactory serverTreeFactory = new ObjectFactory();
+	// private final ObjectFactory serverTreeFactory = new ObjectFactory();
 	private Shell shell;
 	private Text txtCaminhoDoPatch;
 	protected List<IItemInfo> duplicatedItemsList = new ArrayList<IItemInfo>();
@@ -206,7 +200,7 @@ public class SelectImportServersPage extends WizardPage {
 			}
 		});
 		new Label(container, SWT.NONE);
-		ExportTool.initializeServerStructure(serverTreeFactory);
+		// ExportTool.initializeServerStructure(serverTreeFactory);
 		dialogChanged();
 	}
 
@@ -255,7 +249,7 @@ public class SelectImportServersPage extends WizardPage {
 
 		Object[] selectedItems = attributes.getSelectedItems();
 		duplicatedItemsList.clear();
-		duplicatedItemsList = ImportTools.findDuplicatedItems(selectedItems, serverManager);
+		duplicatedItemsList = null;// ImportTools.findDuplicatedItems(selectedItems, serverManager);
 
 		return duplicatedItemsList;
 	}
@@ -286,28 +280,28 @@ public class SelectImportServersPage extends WizardPage {
 		filePath = dialog.open();
 		if (filePath != null) {
 			txtCaminhoDoPatch.setText(changeExtension(filePath, "*.srv")); // Qual a finalidade? Alan //$NON-NLS-1$
-			XMLServerRoot xmlServerRoot = null;
-			try {
-				xmlServerRoot = readFile(filePath);
-				verifyXMLVersion(xmlServerRoot);
-				updateInput(xmlServerRoot);
-				dialogChanged();
-			} catch (IOException e) {
-				e.printStackTrace();
-				String exceptionMessage = e.getMessage();
-				if (exceptionMessage == null) {
-					exceptionMessage = Messages.SelectImportServersPage_file_read_error;
-				}
-				System.out.println("SelectImportServersPage.openDialogFile()"); //$NON-NLS-1$
-//				UiUtils.openMessageDialog(new Shell(Display.getDefault()), Messages.SelectImportServersPage_11, exceptionMessage,
-//						MessageDialog.ERROR, new String[] { Messages.SelectImportServersPage_12 });
-			}
+//			XMLServerRoot xmlServerRoot = null;
+//			try {
+//				xmlServerRoot = readFile(filePath);
+//				verifyXMLVersion(xmlServerRoot);
+//				updateInput(xmlServerRoot);
+//				dialogChanged();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				String exceptionMessage = e.getMessage();
+//				if (exceptionMessage == null) {
+//					exceptionMessage = Messages.SelectImportServersPage_file_read_error;
+//				}
+//				System.out.println("SelectImportServersPage.openDialogFile()"); //$NON-NLS-1$
+////				UiUtils.openMessageDialog(new Shell(Display.getDefault()), Messages.SelectImportServersPage_11, exceptionMessage,
+////						MessageDialog.ERROR, new String[] { Messages.SelectImportServersPage_12 });
+//			}
 		}
 	}
 
-	private XMLServerRoot readFile(final String filePath) {
-		return ImportTools.importXml(filePath);
-	}
+//	private XMLServerRoot readFile(final String filePath) {
+//		return ImportTools.importXml(filePath);
+//	}
 
 	private void readNodeTreeView(final IGroupInfo element, int level) {
 		if (level == 0) {
@@ -332,42 +326,42 @@ public class SelectImportServersPage extends WizardPage {
 		checkServersSelecionados(checkTreeViewerProjetos.getItems());
 	}
 
-	private void updateInput(final XMLServerRoot serverTree) {
-		if (serverTree == null) {
-			return;
-		}
-		attributes.setXMLServerRoot(serverTree);
-		Group serverTreeRoot = serverTree.getServerTreeRoot();
-		IGroupInfo groupInfo = ImportTools.toGroupInfo(serverTreeRoot);
-		Object[] input = (Object[]) checkboxTreeViewer.getInput();
-		if (input == null || input.length == 0) {
-			input = new Object[] { groupInfo };
-			checkboxTreeViewer.setInput(input);
-		} else {
-			input[0] = groupInfo;
-		}
-		checkboxTreeViewer.refresh();
-		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
-
-		ImportTools.findDuplicatedItems(groupInfo.getChildren().toArray(), serverManager);
-		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
-		String decoratorId = "br.com.totvs.tds.ui.server.views.decorator.importServer.duplicated"; //$NON-NLS-1$
-		decoratorManager.update(decoratorId);
-	}
+//	private void updateInput(final XMLServerRoot serverTree) {
+//		if (serverTree == null) {
+//			return;
+//		}
+//		attributes.setXMLServerRoot(serverTree);
+//		Group serverTreeRoot = serverTree.getServerTreeRoot();
+//		IGroupInfo groupInfo = ImportTools.toGroupInfo(serverTreeRoot);
+//		Object[] input = (Object[]) checkboxTreeViewer.getInput();
+//		if (input == null || input.length == 0) {
+//			input = new Object[] { groupInfo };
+//			checkboxTreeViewer.setInput(input);
+//		} else {
+//			input[0] = groupInfo;
+//		}
+//		checkboxTreeViewer.refresh();
+//		IServerManager serverManager = ServerActivator.getDefault().getServerManager();
+//
+//		ImportTools.findDuplicatedItems(groupInfo.getChildren().toArray(), serverManager);
+//		IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+//		String decoratorId = "br.com.totvs.tds.ui.server.views.decorator.importServer.duplicated"; //$NON-NLS-1$
+//		decoratorManager.update(decoratorId);
+//	}
 
 	private void updateStatus(final String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
 	}
 
-	private void verifyXMLVersion(final XMLServerRoot xmlServerRoot) throws IOException {
-		if (xmlServerRoot.getVersion() == null) {
-			throw new IOException(Messages.SelectImportServersPage_version_error);
-		}
-		if (!xmlServerRoot.getVersion().equals(XMLVersionControl.V_11_3_8)) {
-			throw new IOException(String.format(Messages.SelectImportServersPage_invalid_version_error,
-					xmlServerRoot.getVersion(), XMLVersionControl.V_11_3_8));
-		}
-	}
+//	private void verifyXMLVersion(final XMLServerRoot xmlServerRoot) throws IOException {
+//		if (xmlServerRoot.getVersion() == null) {
+//			throw new IOException(Messages.SelectImportServersPage_version_error);
+//		}
+//		if (!xmlServerRoot.getVersion().equals(XMLVersionControl.V_11_3_8)) {
+//			throw new IOException(String.format(Messages.SelectImportServersPage_invalid_version_error,
+//					xmlServerRoot.getVersion(), XMLVersionControl.V_11_3_8));
+//		}
+//	}
 
 }

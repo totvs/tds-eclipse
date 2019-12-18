@@ -7,14 +7,13 @@ import java.util.Set;
 
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.xml.ObjectFactory;
-import br.com.totvs.tds.server.xml.XMLServerRoot;
 
 public class ServerImporExportAttributesVO {
 
 	public enum ServerMergeOption {
 		KEEP, NONE, SUBSTITUTE
 	}
+
 	public IItemInfo selection;
 	private final HashMap<String, IItemInfo> mapServersSelecionados = new HashMap<String, IItemInfo>();
 	private Set<String> repeatedServerNames;
@@ -24,13 +23,14 @@ public class ServerImporExportAttributesVO {
 	private IGroupInfo targetNode;
 	private IGroupInfo totvsServers;
 
-	private XMLServerRoot xmlServerRoot;
+	// private XMLServerRoot xmlServerRoot;
 
 	/**
 	 * Retorna os servidores selecionados.<br>
-	 * Neste caso � necess�rio que o objeto retornado seja um HashMap ao inv�s do seu tipo primitivo (Map)<br>
+	 * Neste caso � necess�rio que o objeto retornado seja um HashMap ao inv�s do
+	 * seu tipo primitivo (Map)<br>
 	 * pois o HashMap Já oferece suporte � serialização.
-	 * 
+	 *
 	 * @return
 	 */
 	public HashMap<String, IItemInfo> getItemsSelected() {
@@ -69,12 +69,12 @@ public class ServerImporExportAttributesVO {
 		return totvsServers;
 	}
 
-	public XMLServerRoot getXMLServerRoot() {
-		if(xmlServerRoot == null) {
-			xmlServerRoot = new ObjectFactory().createXMLServerRoot();
-		}
-		return xmlServerRoot;
-	}
+//	public XMLServerRoot getXMLServerRoot() {
+//		if(xmlServerRoot == null) {
+//			xmlServerRoot = new ObjectFactory().createXMLServerRoot();
+//		}
+//		return xmlServerRoot;
+//	}
 
 	public void setRepeatedServerNames(Collection<String> list) {
 		this.repeatedServerNames = new HashSet<String>(list);
@@ -95,17 +95,17 @@ public class ServerImporExportAttributesVO {
 	public void setTargetNode(IGroupInfo target) {
 		targetNode = target;
 	}
-	
+
 	public void setTotvsServers(IGroupInfo totvsServers) {
 		this.totvsServers = totvsServers;
 	}
 
-	public void setXMLServerRoot(final XMLServerRoot xmlServerRoot) {
-		this.xmlServerRoot = xmlServerRoot;
-	}
+//	public void setXMLServerRoot(final XMLServerRoot xmlServerRoot) {
+//		this.xmlServerRoot = xmlServerRoot;
+//	}
 
 	public boolean validAttributes() {
 		return (mapServersSelecionados.size() > 0) && (!targetFile.isEmpty()) && (targetFile.endsWith(".srv")); //$NON-NLS-1$
 	}
-			
+
 }

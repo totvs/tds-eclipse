@@ -19,6 +19,7 @@ public class AuthenticationInfo {
 	private String server;
 	private String user;
 	private int serverType;
+	private int bSecure;
 
 	/*
 	 *
@@ -165,6 +166,20 @@ public class AuthenticationInfo {
 	 */
 	public void setServerType(final int serverType) {
 		this.serverType = serverType;
+	}
+
+	/**
+	 * @return the bSecure
+	 */
+	public int getbSecure() {
+		return bSecure;
+	}
+
+	/**
+	 * @param bSecure the bSecure to set
+	 */
+	public void setbSecure(final int bSecure) {
+		this.bSecure = bSecure;
 	}
 
 }

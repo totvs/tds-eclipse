@@ -55,6 +55,9 @@ public class NewServerWizardPage extends WizardPage {
 
 	private Button btnAppServerPathPath;
 	private Button btnLocalServer;
+	private Button btnSecureConnection;
+
+	private boolean dialogChanging = false;
 
 	/**
 	 * Construtor.
@@ -62,14 +65,14 @@ public class NewServerWizardPage extends WizardPage {
 	 * @param subTitle  Titulo do assistente.
 	 * @param newServer VO com informações utilizadas pelo assistente.
 	 * @wbp.parser.constructor
-	 * @wbp.eval.method.parameter subTitle "NewServer"
+	 * @wbp.eval.method.parameter newServer new NewServerVO()
 	 *
 	 */
 	public NewServerWizardPage(final NewServerVO newServer) {
 		super("newServerWizardPage", //$NON-NLS-1$
 				String.format(Messages.NewServerWizardPage_new_server_title_page,
 						newServer.getServer().getServerType().getTitle().toUpperCase()),
-				ServerUIIcons.getWizardServer());
+				null); // ServerUIIcons.getWizardServer());
 		setDescription(Messages.NewServerWizardPage_wizard_descrption);
 		this.newServer = newServer;
 	}
@@ -95,6 +98,19 @@ public class NewServerWizardPage extends WizardPage {
 			}
 		};
 
+		SelectionListener selectionListener = new SelectionListener() {
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				dialogChanged();
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				dialogChanged();
+			}
+		};
+
 		ModifyListener modifySmartClientListener = new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
@@ -103,6 +119,7 @@ public class NewServerWizardPage extends WizardPage {
 					String[] result = ServerUtils.doProcessSmartClientIni(text);
 					txtAddress.setText(result[0]);
 					txtPort.setText(result[1]);
+					btnSecureConnection.setSelection(result[2].equals("1"));
 				}
 
 				doValidateProcess();
@@ -194,6 +211,12 @@ public class NewServerWizardPage extends WizardPage {
 			txtParent.setText(newServer.getParent().getName());
 		}
 		new Label(topLevel, SWT.NONE);
+		new Label(topLevel, SWT.NONE);
+
+		btnSecureConnection = new Button(topLevel, SWT.CHECK);
+		btnSecureConnection.setText("Conexão segura (SSL)");
+		btnSecureConnection.addSelectionListener(selectionListener);
+		new Label(topLevel, SWT.NONE);
 
 		Label label_1 = new Label(topLevel, SWT.NONE);
 		label_1.setText(Messages.NewServerWizardPage_address);
@@ -223,6 +246,7 @@ public class NewServerWizardPage extends WizardPage {
 		btnDoValidate.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+				dialogChanged();
 				doValidateProcess();
 			}
 		});
@@ -262,6 +286,11 @@ public class NewServerWizardPage extends WizardPage {
 	 * �a* Processa a mudan�a no diálogo.
 	 */
 	private void dialogChanged() {
+		if (dialogChanging) {
+			return;
+		}
+		dialogChanging = true;
+
 		boolean isProcessValid = false;
 		boolean localServer = btnLocalServer.getSelection();
 		btnDoValidate.setEnabled(false);
@@ -270,10 +299,12 @@ public class NewServerWizardPage extends WizardPage {
 
 		//
 		newServer.setImmediateConnection(btnConnect.getSelection());
+		newServer.getServer().setSecureConnection(btnSecureConnection.getSelection());
 		//
 		String serverName = txtServerName.getText();
 		if (Messages.EMPTY_STRING.equals(serverName)) { // $NON-NLS-1$
 			updateStatus(Messages.NewServerWizardPage_server_name_required);
+			dialogChanging = false;
 			return;
 		}
 
@@ -285,16 +316,19 @@ public class NewServerWizardPage extends WizardPage {
 			String appServerPath = txtAppServerPath.getText().trim();
 			if (Messages.EMPTY_STRING.equals(appServerPath)) { // $NON-NLS-1$
 				updateStatus(Messages.NewServerWizardPage_Local_server_executable_required);
+				dialogChanging = false;
 				return;
 			}
 
 			File file = new File(appServerPath);
 			if (!file.exists()) {
 				updateStatus(Messages.NewServerWizardPage_Local_server_executable_not_found);
+				dialogChanging = false;
 				return;
 			}
 			if (!file.canExecute()) {
 				updateStatus(Messages.NewServerWizardPage_File_selected_cannot_executed);
+				dialogChanging = false;
 				return;
 			}
 			newServer.getServer().setAppServerPath(appServerPath);
@@ -306,6 +340,7 @@ public class NewServerWizardPage extends WizardPage {
 		IAppServerInfo server = serverManager.getServer(serverName);
 		if (server != null) {
 			updateStatus(Messages.NewServerWizardPage_server_name_invalid);
+			dialogChanging = false;
 			return;
 		}
 
@@ -315,9 +350,11 @@ public class NewServerWizardPage extends WizardPage {
 			String serverPort = txtPort.getText().trim();
 			if (Messages.EMPTY_STRING.equals(serverAddress)) { // $NON-NLS-1$
 				updateStatus(Messages.NewServerWizardPage_address_required);
+				dialogChanging = false;
 				return;
 			} else if (Messages.EMPTY_STRING.equals(serverPort)) { // $NON-NLS-1$
 				updateStatus(Messages.NewServerWizardPage_port_required);
+				dialogChanging = false;
 				return;
 			} else {
 				isProcessValid = true;
@@ -325,6 +362,7 @@ public class NewServerWizardPage extends WizardPage {
 			}
 		} catch (IllegalArgumentException e) {
 			updateStatus(e.getMessage());
+			dialogChanging = false;
 			return;
 		}
 
@@ -333,36 +371,43 @@ public class NewServerWizardPage extends WizardPage {
 		if (txtVersion.getText().isEmpty()) {
 			isProcessValid = false;
 			updateStatus(Messages.NewServerWizardPage_click_validate);
+			dialogChanging = false;
 			return;
 		}
 
 		if (txtSmartClientPath.getText().isEmpty()) {
 			updateStatus(Messages.NewServerWizardPage_smart_client_required);
+			dialogChanging = false;
 			return;
 		}
 
 		File file = new File(txtSmartClientPath.getText());
 		if (!file.exists()) {
 			updateStatus(Messages.NewServerWizardPage_smart_client_not_found);
+			dialogChanging = false;
 			return;
 		}
 		if (!file.canExecute()) {
 			updateStatus(Messages.NewServerWizardPage_smart_client_unnkonw);
+			dialogChanging = false;
 			return;
 		}
 
 		newServer.getServer().setSmartClientPath(txtSmartClientPath.getText());
+		newServer.getServer().setSecureConnection(btnSecureConnection.getSelection());
 
 		try {
 			isProcessValid = newServer.getServer().isValid();
 		} catch (Exception e) {
 			isProcessValid = false;
 			updateStatus(e.getMessage());
+			dialogChanging = false;
 			return;
 		}
 
 		if (!isProcessValid) {
 			updateStatus(Messages.NewServerWizardPage_21);
+			dialogChanging = false;
 			return;
 		}
 
@@ -384,7 +429,7 @@ public class NewServerWizardPage extends WizardPage {
 					server.start();
 				}
 
-				String version = lsService.validation(server.getAddress());
+				String version = lsService.validation(server.getAddress(), server.isSecureConnection());
 
 				if (version == null) {
 					String msg = String.format(Messages.NewServerWizardPage_connection_error,

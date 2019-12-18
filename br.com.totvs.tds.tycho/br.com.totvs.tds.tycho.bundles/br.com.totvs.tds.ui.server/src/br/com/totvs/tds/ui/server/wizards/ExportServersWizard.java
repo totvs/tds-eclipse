@@ -7,8 +7,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.Wizard;
 
-import br.com.totvs.tds.server.tools.ExportTool;
-import br.com.totvs.tds.server.xml.XMLServerRoot;
 import br.com.totvs.tds.ui.server.ServerUIActivator;
 import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.vo.ServerImporExportAttributesVO;
@@ -53,13 +51,14 @@ public class ExportServersWizard extends Wizard {
 		monitor.subTask(Messages.ExportServersWizard_file_created);
 		monitor.worked(1);
 
-		XMLServerRoot xmlServerRoot = expAttributes.getXMLServerRoot();
-		ExportTool.exportServers(xmlServerRoot, file, monitor);
+//		XMLServerRoot xmlServerRoot = expAttributes.getXMLServerRoot();
+//		ExportTool.exportServers(xmlServerRoot, file, monitor);
 		monitor.subTask(Messages.ExportServersWizard_exportation_ended);
 		monitor.worked(1);
 
 		monitor.done();
-		ServerUIActivator.logStatus(IStatus.WARNING, Messages.ExportServersWizard_server_exported_file_warning, file.getAbsoluteFile());
+		ServerUIActivator.logStatus(IStatus.WARNING, Messages.ExportServersWizard_server_exported_file_warning,
+				file.getAbsoluteFile());
 	}
 
 	// @Override

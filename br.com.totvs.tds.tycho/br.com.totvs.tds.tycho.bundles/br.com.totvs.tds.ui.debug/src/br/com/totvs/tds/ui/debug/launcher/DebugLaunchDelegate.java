@@ -140,7 +140,6 @@ public class DebugLaunchDelegate extends DSPLaunchDelegate {
 		params.put("environment", environment); //$NON-NLS-1$
 		params.put("serverName", server.getName()); //$NON-NLS-1$
 		params.put("token", server.getToken()); //$NON-NLS-1$
-		// params.put("publicKey", server.getToken());
 		params.put("noDebug", !mode.equals(ILaunchManager.DEBUG_MODE)); //$NON-NLS-1$
 		params.put("smartclientBin", server.getSmartClientPath()); //$NON-NLS-1$
 

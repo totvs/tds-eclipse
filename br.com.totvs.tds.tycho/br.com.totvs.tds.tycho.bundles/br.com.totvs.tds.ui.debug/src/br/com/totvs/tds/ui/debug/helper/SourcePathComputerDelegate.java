@@ -14,34 +14,38 @@ import org.eclipse.debug.core.sourcelookup.containers.ProjectSourceContainer;
 import br.com.totvs.tds.ui.sdk.builder.TotvsNature;
 
 /**
- * 
+ *
  * @author acandido
  *
  */
+@SuppressWarnings("restriction")
 public class SourcePathComputerDelegate implements ISourcePathComputerDelegate {
 
 	public static final String ID = "br.com.totvs.tds.ui.debug.sourcePathComputer"; //$NON-NLS-1$
 
-	private static final ISourceContainer[] EMPTY_ARRAY = new ISourceContainer[0];;
+	private static final ISourceContainer[] EMPTY_ARRAY = new ISourceContainer[0];
 
 	private ISourceContainer[] sourceContainers = EMPTY_ARRAY;
 
+	@SuppressWarnings("restriction")
 	@Override
-	public ISourceContainer[] computeSourceContainers(ILaunchConfiguration configuration, IProgressMonitor monitor)
-			throws CoreException {
+	public ISourceContainer[] computeSourceContainers(final ILaunchConfiguration configuration,
+			final IProgressMonitor monitor) throws CoreException {
 
 		if (sourceContainers.equals(EMPTY_ARRAY)) {
-			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-			ArrayList<ISourceContainer> sourceContainerList = new ArrayList<ISourceContainer>();
+			final IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			final ArrayList<ISourceContainer> sourceContainerList = new ArrayList<ISourceContainer>();
 
 			for (int i = 0; i < projects.length; i++) {
 				if (projects[i].isAccessible()) {
 					if (projects[i].hasNature(TotvsNature.NATURE_ID)) {
-						ProjectSourceContainer psc = new ProjectSourceContainer(projects[i], true);
+						final ProjectSourceContainer psc = new ProjectSourceContainer(projects[i], true);
 						sourceContainerList.add(psc);
 					}
 				}
 			}
+			// sourceContainerList.add(new AbsolutePathSourceContainer());
+
 			sourceContainers = sourceContainerList.toArray(new ISourceContainer[sourceContainerList.size()]);
 		}
 

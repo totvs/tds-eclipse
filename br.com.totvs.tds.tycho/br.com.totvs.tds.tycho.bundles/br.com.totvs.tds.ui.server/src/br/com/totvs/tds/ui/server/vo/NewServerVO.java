@@ -3,6 +3,7 @@ package br.com.totvs.tds.ui.server.vo;
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.ServerType;
+import br.com.totvs.tds.server.model.AppServerInfo;
 
 /**
  * informações utilizadas pelos assistentes.
@@ -16,6 +17,11 @@ public class NewServerVO {
 	private IAppServerInfo server;
 	private boolean immediateConnection = true;
 	private ServerType serverType;
+
+	public NewServerVO() {
+		server = new AppServerInfo("ForDesignOnly");
+		server.setServerType(ServerType.PROTHEUS);
+	}
 
 	public IGroupInfo getParent() {
 		return parent;

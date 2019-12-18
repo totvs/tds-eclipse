@@ -16,6 +16,7 @@ public interface IServerConstants {
 	static final String USERNAME = "username"; //$NON-NLS-1$
 	static final String PERMISSIONS = "permissions"; //$NON-NLS-1$
 	static final String SERVER_ADDRESS = "serverAddress"; //$NON-NLS-1$
+	static final String SECURE_CONNECTION = "secure.connection";//$NON-NLS-1$
 
 	/**
 	 * Limpa o repositório.

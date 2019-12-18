@@ -416,7 +416,7 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 		out.writeObject(multiEnvironmentSelection);
 		out.writeObject(currentOrganization);
 
-		out.writeBoolean(isConnected());
+		out.writeBoolean(isConnected() && isSecureStorage);
 		out.writeBoolean(isSecureStorage);
 
 		if (isSecureStorage) {
@@ -487,7 +487,7 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 				monitor.worked(1);
 
 				final String token = lsService.authentication(getId().toString(), getAddress(), getVersion(),
-						environment, user, password, getServerType().getCode());
+						environment, user, password, getServerType().getCode(), isSecureConnection());
 				final boolean isLogged = token != null;
 
 				monitor.setTaskName("Verificando permissões");
@@ -1007,6 +1007,16 @@ public class AppServerInfo extends ItemInfo implements IAppServerInfo {
 	@Override
 	public void setPinnedMonitor(final boolean pinnedMonitor) {
 		setProperty(IServerConstants.PINNED, pinnedMonitor);
+	}
+
+	@Override
+	public void setSecureConnection(final boolean secure) {
+		setPersistentProperty(IServerConstants.SECURE_CONNECTION, secure);
+	}
+
+	@Override
+	public boolean isSecureConnection() {
+		return getPersistentPropertyBoolean(IServerConstants.SECURE_CONNECTION);
 	}
 
 }

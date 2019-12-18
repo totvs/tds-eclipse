@@ -36,7 +36,27 @@ public class Banners {
 			sb.append(birthdayBanner[i]);
 			sb.append('\n');
 		}
+
+		sb.append(deprecatedBanner());
+
 		sb.append('\n');
+
+		return sb;
+	}
+
+	private static StringBuffer deprecatedBanner() {
+		final StringBuffer sb = new StringBuffer();
+		sb.append("IMPORTANTE:\n\tVisando a melhoria do nosso ambiente de desenvolvimento,\n");
+		sb.append("\tno decorrer do ano de 2020 o TDS-Eclipse entra em fase de descontinuidade.\n");
+		sb.append("\tO desenvolvimento passa a ser mantido através do TDS-VSCode, editor\n");
+		sb.append("\tlargamente usado para o desenvolvimento.\n");
+		sb.append("\tAssim, atualizações/correções do TDS-Eclipse se encerram em 31/12/2020.\n\n");
+		sb.append("Saiba mais em:\n");
+		sb.append("\thttps://marketplace.visualstudio.com/items?itemName=totvs.tds-vscode\n"); //$NON-NLS-1$
+		sb.append("\thttps://www.youtube.com/watch?v=MwIu01Ztfvg\n"); //$NON-NLS-1$
+		sb.append("\thttps://www.youtube.com/watch?v=Cz4N0XWCXHY\n"); //$NON-NLS-1$
+		sb.append("\thttps://github.com/totvs/tds-vscode\n"); //$NON-NLS-1$
+		sb.append("===============================================================================\n"); //$NON-NLS-1$
 
 		return sb;
 	}

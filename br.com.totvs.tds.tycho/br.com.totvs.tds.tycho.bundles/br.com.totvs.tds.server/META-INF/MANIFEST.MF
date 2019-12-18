@@ -28,6 +28,5 @@ Export-Package: br.com.totvs.tds.server;uses:="org.osgi.framework,org.eclipse.co
  br.com.totvs.tds.server.model;uses:="br.com.totvs.tds.server.interfaces,br.com.totvs.tds.server",
  br.com.totvs.tds.server.persistence,
  br.com.totvs.tds.server.rulers,
- br.com.totvs.tds.server.tools,
- br.com.totvs.tds.server.xml
+ br.com.totvs.tds.server.tools
 Import-Package: org.apache.commons.io

@@ -13,13 +13,7 @@ import org.eclipse.swt.widgets.Display;
 import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.tools.ExportTool;
-import br.com.totvs.tds.server.tools.ImportTools;
-import br.com.totvs.tds.server.xml.Group;
-import br.com.totvs.tds.server.xml.ObjectFactory;
-import br.com.totvs.tds.server.xml.Server;
 import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.vo.ServerImporExportAttributesVO;
 
@@ -39,22 +33,22 @@ public class ImportServersWizard extends Wizard {
 		impAttributes = attributes;
 	}
 
-	private void addGroupsToStructure(final Group targetGroup, final List<Group> groupInfoList) {
-		String targetGroupName = targetGroup.getName();
-		for (Group group : groupInfoList) {
-			String parentName = group.getParent();
-			if (parentName == null || parentName.isEmpty()) {
-				targetGroup.getGroupList().add(group);
-			}
-			Group parentGroup = findParent(groupInfoList, parentName);
-			if (parentGroup != null) {
-				parentGroup.getGroupList().add(group);
-			} else {
-				targetGroup.getGroupList().add(group);
-				group.setParent(targetGroupName);
-			}
-		}
-	}
+//	private void addGroupsToStructure(final Group targetGroup, final List<Group> groupInfoList) {
+//		String targetGroupName = targetGroup.getName();
+//		for (Group group : groupInfoList) {
+//			String parentName = group.getParent();
+//			if (parentName == null || parentName.isEmpty()) {
+//				targetGroup.getGroupList().add(group);
+//			}
+//			Group parentGroup = findParent(groupInfoList, parentName);
+//			if (parentGroup != null) {
+//				parentGroup.getGroupList().add(group);
+//			} else {
+//				targetGroup.getGroupList().add(group);
+//				group.setParent(targetGroupName);
+//			}
+//		}
+//	}
 
 	// @Override
 	@Override
@@ -65,24 +59,24 @@ public class ImportServersWizard extends Wizard {
 		addPage(merge);
 	}
 
-	private void addServersToStructure(final Group targetGroup, final List<Server> serverInfoList,
-			final List<Group> groupInfoList) {
-		String targetGroupName = targetGroup.getName();
-		for (Server server : serverInfoList) {
-			String parentName = server.getParentName();
-			if (parentName == null) {
-				targetGroup.getServer().add(server);
-			} else {
-				Group parentGroup = findParent(groupInfoList, parentName);
-				if (parentGroup != null) {
-					parentGroup.getServer().add(server);
-				} else {
-					targetGroup.getServer().add(server);
-					server.setParentName(targetGroupName);
-				}
-			}
-		}
-	}
+//	private void addServersToStructure(final Group targetGroup, final List<Server> serverInfoList,
+//			final List<Group> groupInfoList) {
+//		String targetGroupName = targetGroup.getName();
+//		for (Server server : serverInfoList) {
+//			String parentName = server.getParentName();
+//			if (parentName == null) {
+//				targetGroup.getServer().add(server);
+//			} else {
+//				Group parentGroup = findParent(groupInfoList, parentName);
+//				if (parentGroup != null) {
+//					parentGroup.getServer().add(server);
+//				} else {
+//					targetGroup.getServer().add(server);
+//					server.setParentName(targetGroupName);
+//				}
+//			}
+//		}
+//	}
 
 	@Override
 	public boolean canFinish() {
@@ -109,7 +103,7 @@ public class ImportServersWizard extends Wizard {
 						String name = itemInfo.getName();
 						IGroupInfo groupInfo = targetNode;
 						if (!targetNode.getName().equals(name)) {
-							groupInfo = ExportTool.findNode(targetNode, itemInfo.getName());
+							// groupInfo = ExportTool.findNode(targetNode, itemInfo.getName());
 						}
 						if (groupInfo != null) {
 							List<IItemInfo> children2 = ((IGroupInfo) itemInfo).getChildren();
@@ -128,30 +122,30 @@ public class ImportServersWizard extends Wizard {
 
 				IServerManager serverManager = ServerActivator.getDefault().getServerManager();
 				IGroupInfo targetNode = impAttributes.getTargetNode();
-				ObjectFactory factory = new ObjectFactory();
-				Group targetGroup = ExportTool.toGroup(factory, targetNode);
-				Object[] selectedItems = impAttributes.getSelectedItems();
-				targetGroup = mountSelectedStructure(targetGroup, selectedItems, factory);
-				IGroupInfo mainGroupInfo = ImportTools.toGroupInfo(targetGroup, true);
-				List<IItemInfo> children = mainGroupInfo.getChildren();
-				removeDuplicated(children, serverManager);
-				addChildren(targetNode, children);
-				serverManager.hookChangeListener(serverManager.getItems());
+//				ObjectFactory factory = new ObjectFactory();
+//				Group targetGroup = ExportTool.toGroup(factory, targetNode);
+//				Object[] selectedItems = impAttributes.getSelectedItems();
+//				targetGroup = mountSelectedStructure(targetGroup, selectedItems, factory);
+//				IGroupInfo mainGroupInfo = ImportTools.toGroupInfo(targetGroup, true);
+//				List<IItemInfo> children = mainGroupInfo.getChildren();
+//				removeDuplicated(children, serverManager);
+//				addChildren(targetNode, children);
+//				serverManager.hookChangeListener(serverManager.getItems());
 			}
 		});
 	}
 
-	private Group findParent(final List<Group> groupInfoList, final String parentName) {
-		Group groupFound = null;
-		for (Group group : groupInfoList) {
-			String groupName = group.getName();
-			if (groupName.equals(parentName)) {
-				groupFound = group;
-				break;
-			}
-		}
-		return groupFound;
-	}
+//	private Group findParent(final List<Group> groupInfoList, final String parentName) {
+//		Group groupFound = null;
+//		for (Group group : groupInfoList) {
+//			String groupName = group.getName();
+//			if (groupName.equals(parentName)) {
+//				groupFound = group;
+//				break;
+//			}
+//		}
+//		return groupFound;
+//	}
 
 	private Object[] getAllItemsAsArray(final List<IItemInfo> children, final ArrayList<IItemInfo> arrayListToReturn) {
 		for (IItemInfo child : children) {
@@ -170,24 +164,24 @@ public class ImportServersWizard extends Wizard {
 		return super.getNextPage(page);
 	}
 
-	protected Group mountSelectedStructure(final Group targetGroup, final Object[] selectedItems,
-			final ObjectFactory factory) {
-		List<Server> serverInfoList = new ArrayList<Server>();
-		List<Group> groupInfoList = new ArrayList<Group>();
-		for (Object object : selectedItems) {
-			if (object instanceof IAppServerInfo) {
-				Server server = ExportTool.toServer(factory, (IAppServerInfo) object);
-				serverInfoList.add(server);
-			} else if (object instanceof IGroupInfo) {
-				Group group = ExportTool.toGroup(factory, (IGroupInfo) object);
-				groupInfoList.add(group);
-			}
-		}
-		addServersToStructure(targetGroup, serverInfoList, groupInfoList);
-		addGroupsToStructure(targetGroup, groupInfoList);
-
-		return targetGroup;
-	}
+//	protected Group mountSelectedStructure(final Group targetGroup, final Object[] selectedItems,
+//			final ObjectFactory factory) {
+//		List<Server> serverInfoList = new ArrayList<Server>();
+//		List<Group> groupInfoList = new ArrayList<Group>();
+//		for (Object object : selectedItems) {
+//			if (object instanceof IAppServerInfo) {
+//				Server server = ExportTool.toServer(factory, (IAppServerInfo) object);
+//				serverInfoList.add(server);
+//			} else if (object instanceof IGroupInfo) {
+//				Group group = ExportTool.toGroup(factory, (IGroupInfo) object);
+//				groupInfoList.add(group);
+//			}
+//		}
+//		addServersToStructure(targetGroup, serverInfoList, groupInfoList);
+//		addGroupsToStructure(targetGroup, groupInfoList);
+//
+//		return targetGroup;
+//	}
 
 	// @Override
 	@Override
@@ -226,7 +220,7 @@ public class ImportServersWizard extends Wizard {
 		Object[] allItemsAsArray = getAllItemsAsArray(newItems, new ArrayList<IItemInfo>());
 		for (Object object : allItemsAsArray) {
 			IItemInfo item = (IItemInfo) object;
-			boolean itemFound = ImportTools.existsInServerView(item, serverManager);
+			boolean itemFound = false; // ImportTools.existsInServerView(item, serverManager);
 			if (itemFound) {
 				IItemInfo existentItem = null;
 				if (item instanceof IGroupInfo) {

@@ -30,26 +30,21 @@
 	<profiles>
 		<profile>
 			<!-- Para atualizar os binários do LS e DA -->
-			<!-- No executor maven, informe '-P updbin' (profile) -->
+			<!-- No executor maven, informe '-P updateLS' (profile) -->
 			<!-- Após execução envio para o repositório (commit) -->
-			<id>updbin</id>
+			<id>updateLS</id>
 			<modules>
 				<module>br.com.totvs.tds.tycho.updbin</module>
 			</modules>
 		</profile>
 
-		<profile>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-
-			<modules>
-				<module>br.com.totvs.tds.tycho.bundles</module>
-				<module>br.com.totvs.tds.tycho.features</module>
-				<module>br.com.totvs.tds.tycho.update</module>
-			</modules>
-		</profile>
 	</profiles>
+
+	<modules>
+		<module>br.com.totvs.tds.tycho.bundles</module>
+		<module>br.com.totvs.tds.tycho.features</module>
+		<module>br.com.totvs.tds.tycho.update</module>
+	</modules>
 
 </project>
 

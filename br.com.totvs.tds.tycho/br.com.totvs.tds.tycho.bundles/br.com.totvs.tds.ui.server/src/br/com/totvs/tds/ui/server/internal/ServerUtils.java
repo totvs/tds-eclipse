@@ -21,6 +21,7 @@ public class ServerUtils {
 
 		String serverAddress = Messages.EMPTY_STRING;
 		String port = Messages.EMPTY_STRING;
+		String secureConnection = Messages.EMPTY_STRING;
 
 		if (iniFile.exists()) {
 			INIFile ini = new INIFile(iniFile.getAbsolutePath());
@@ -31,9 +32,11 @@ public class ServerUtils {
 
 			serverAddress = driver.getProperty("SERVER").getPropValue(); //$NON-NLS-1$
 			port = (driver.getProperty("PORT").getPropValue()); //$NON-NLS-1$
+			INIProperty property = driver.getProperty("SECURECONNECTION"); //$NON-NLS-1$
+			secureConnection = property == null ? Messages.EMPTY_STRING : property.getPropValue();
 		}
 
-		String[] result = new String[] { serverAddress, port };
+		String[] result = new String[] { serverAddress, port, secureConnection };
 
 		return result;
 	}

@@ -3,6 +3,8 @@ package br.com.totvs.tds.ui.server.wizards.patch;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,8 +43,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
-
-import com.google.common.io.Files;
 
 import br.com.totvs.tds.server.interfaces.IAppServerInfo;
 import br.com.totvs.tds.server.interfaces.IEnvironmentInfo;
@@ -158,7 +158,7 @@ public class ApplyPatchPage extends WizardPage {
 
 	private void addPatchesFromZip(final String fullPathFile) throws IOException {
 		ZipFile zippedPatch = new ZipFile(fullPathFile);
-		File tempDir = Files.createTempDir();
+		File tempDir = Files.createTempDirectory("tds").toFile();
 		String destinationFolder = tempDir.getAbsolutePath();
 		List<File> unzipFiles = TDSUtil.unzipFile(zippedPatch, destinationFolder, true);
 		List<File> selectFiles = openSelectorPatches(zippedPatch.getName(), unzipFiles);

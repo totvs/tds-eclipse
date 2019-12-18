@@ -29,9 +29,6 @@ import br.com.totvs.tds.server.ServerActivator;
 import br.com.totvs.tds.server.interfaces.IGroupInfo;
 import br.com.totvs.tds.server.interfaces.IItemInfo;
 import br.com.totvs.tds.server.interfaces.IServerManager;
-import br.com.totvs.tds.server.tools.ExportTool;
-import br.com.totvs.tds.server.xml.ObjectFactory;
-import br.com.totvs.tds.server.xml.XMLServerRoot;
 import br.com.totvs.tds.ui.server.nl.Messages;
 import br.com.totvs.tds.ui.server.views.ServerViewContentProvider;
 import br.com.totvs.tds.ui.server.views.ServerViewLabelProvider;
@@ -49,10 +46,10 @@ public class SelectExportServersPage extends WizardPage {
 	private CheckboxTreeViewer checkboxTreeViewer;
 	private Tree checkTreeViewerProjetos;
 	private Label lblDestino;
-	private final ObjectFactory objectFactory = new ObjectFactory();
+//	private final ObjectFactory objectFactory = new ObjectFactory();
 	private Shell shell;
 	private Text txtCaminhoDoPatch;
-	private XMLServerRoot xmlServerRoot = null;
+//	private XMLServerRoot xmlServerRoot = null;
 
 	/**
 	 * Create the wizard.
@@ -188,8 +185,8 @@ public class SelectExportServersPage extends WizardPage {
 			}
 		});
 		btnAbrirDialog.setText("..."); //$NON-NLS-1$
-		xmlServerRoot = ExportTool.initializeServerStructure(objectFactory);
-		attributes.setXMLServerRoot(xmlServerRoot);
+//		xmlServerRoot = ExportTool.initializeServerStructure(objectFactory);
+//		attributes.setXMLServerRoot(xmlServerRoot);
 		dialogChanged();
 	}
 

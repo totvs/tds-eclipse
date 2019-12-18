@@ -1,22 +1,18 @@
 package br.com.totvs.tds.ui.debug.helper;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.core.sourcelookup.AbstractSourceLookupDirector;
 import org.eclipse.debug.core.sourcelookup.ISourceContainer;
 import org.eclipse.debug.core.sourcelookup.ISourceLookupParticipant;
-import org.eclipse.debug.core.sourcelookup.containers.ProjectSourceContainer;
 import org.eclipse.lsp4e.debug.debugmodel.DSPStackFrame;
 
 import br.com.totvs.tds.ui.debug.DebugUIActivator;
 
 /**
- * 
+ *
  * @author acandido
  *
  */
@@ -37,15 +33,15 @@ public class PersistableSourceLocator extends AbstractSourceLookupDirector {
 		Object ret = null;
 
 		try {
-			ISourceContainer[] csc = getSourcePathComputer().computeSourceContainers(getLaunchConfiguration(),
-					NULL_MONITOR);
-			for (ISourceContainer sc : csc) {
-				ret = searchElement(sc, (DSPStackFrame) element);
+			final ISourceContainer[] sourceContainers = getSourcePathComputer()
+					.computeSourceContainers(getLaunchConfiguration(), NULL_MONITOR);
+			for (final ISourceContainer sourceContainer : sourceContainers) {
+				ret = searchElement(sourceContainer, (DSPStackFrame) element);
 				if (ret != null) {
 					break;
 				}
 			}
-		} catch (CoreException e) {
+		} catch (final CoreException e) {
 			DebugUIActivator.logStatus(IStatus.ERROR, e.getMessage(), e);
 		}
 
@@ -56,22 +52,15 @@ public class PersistableSourceLocator extends AbstractSourceLookupDirector {
 		return ret;
 	}
 
-	private Object searchElement(ISourceContainer sourceContainer, DSPStackFrame element) {
+	private Object searchElement(final ISourceContainer sourceContainer, final DSPStackFrame element) {
 		Object result = null;
-		
-		if (sourceContainer instanceof ProjectSourceContainer) {
-			ProjectSourceContainer psc = (ProjectSourceContainer) sourceContainer;
-			IProject project = psc.getProject();
-			IPath projectLocation = project.getLocation();
-			IPath sourceLocation = Path.fromPortableString(element.getSourceName());
-			sourceLocation = sourceLocation.makeRelativeTo(projectLocation);
-			result = project.getFile(sourceLocation);
 
-			if (result == null) {
-				System.out.println(result);
-			}
+		try {
+			result = sourceContainer.findSourceElements(element.getSourceName());
+		} catch (final CoreException e) {
+			// TODO Auto-generated catch block
 		}
-		
+
 		return result;
 	}
 

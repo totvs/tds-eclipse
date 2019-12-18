@@ -25,11 +25,13 @@ public interface ILanguageServerService {
 	/**
 	 * Efetua a conexão e a autenticação do usuário/desenvolvedor.
 	 *
+	 * @param secureConnection
+	 *
 	 * @return token de segurança da conexão.
 	 *
 	 */
 	String authentication(String id, URI address, String buildVersion, String environment, String user, String password,
-			int serverType);
+			int serverType, boolean secureConnection);
 
 	/**
 	 * Efetua a desconexão com servidor Protheus.
@@ -43,9 +45,11 @@ public interface ILanguageServerService {
 
 	/**
 	 * Efetua a validação da conexão, retornando a versão do servidor.
+	 * 
+	 * @param secureConnection
 	 *
 	 */
-	String validation(URI address);
+	String validation(URI address, boolean secureConnection);
 
 	/**
 	 * Compila a lista de arquivos, conforme configurações informadas.
@@ -138,4 +142,5 @@ public interface ILanguageServerService {
 
 	KillUserNode killUser(boolean immediately, String token, String username, String computerName, long threadId,
 			String server);
+
 }

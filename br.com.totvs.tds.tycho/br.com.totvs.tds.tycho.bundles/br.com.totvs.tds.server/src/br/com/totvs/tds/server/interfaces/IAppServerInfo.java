@@ -417,4 +417,16 @@ public interface IAppServerInfo extends IItemInfo {
 	boolean isPinnedMonitor();
 
 	void setPinnedMonitor(boolean b);
+
+	/**
+	 * Liga/desliga coexão segura (SSL)
+	 */
+	void setSecureConnection(boolean connection);
+
+	/**
+	 *
+	 * @return indica conexão segura ou não.
+	 */
+	boolean isSecureConnection();
+
 }

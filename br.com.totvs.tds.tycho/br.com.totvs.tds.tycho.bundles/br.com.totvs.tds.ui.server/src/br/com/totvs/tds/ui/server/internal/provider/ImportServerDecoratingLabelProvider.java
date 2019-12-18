@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import br.com.totvs.tds.server.interfaces.IItemInfo;
-import br.com.totvs.tds.server.tools.ImportTools;
 import br.com.totvs.tds.ui.server.ServerUIIcons;
 
 public class ImportServerDecoratingLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
@@ -20,10 +19,10 @@ public class ImportServerDecoratingLabelProvider extends LabelProvider implement
 	public void decorate(Object element, IDecoration decoration) {
 		if (element instanceof IItemInfo) {
 			IItemInfo item = (IItemInfo) element;
-			Boolean isDuplicated = (Boolean) item.getProperty(ImportTools.IS_DUPLICATED);
-			if (isDuplicated != null && isDuplicated) {
-				decoration.addOverlay(ServerUIIcons.getWarningBigDecorator(), IDecoration.TOP_RIGHT);
-			}
+//			Boolean isDuplicated = (Boolean) item.getProperty(ImportTools.IS_DUPLICATED);
+//			if (isDuplicated != null && isDuplicated) {
+//				decoration.addOverlay(ServerUIIcons.getWarningBigDecorator(), IDecoration.TOP_RIGHT);
+//			}
 		}
 	}
 
